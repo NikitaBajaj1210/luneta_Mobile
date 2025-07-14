@@ -10,8 +10,8 @@ import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/country_input_field.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/customTextField.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/references_provider.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class ReferencesScreen extends StatefulWidget {
   const ReferencesScreen({super.key});

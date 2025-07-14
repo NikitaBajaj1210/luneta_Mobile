@@ -5,9 +5,10 @@ import 'package:luneta/const/font_size.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:luneta/custom-component/custom-button.dart';
+
 import '../../../../custom-component/back_button_with_title.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/cv_resume_provider.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/cv_resume_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class CVResumeScreen extends StatelessWidget {
   const CVResumeScreen({super.key});

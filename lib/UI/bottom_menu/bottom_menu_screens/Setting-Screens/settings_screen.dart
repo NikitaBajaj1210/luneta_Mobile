@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/settings_provider.dart';
+import '../../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/settings_provider.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../const/color.dart';
 import '../../../../custom-component/custom-button.dart';

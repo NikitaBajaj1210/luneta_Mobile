@@ -5,7 +5,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/notification_provider.dart'; // Import the provider
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/notification_provider.dart'; // Import the provider
 
 class NotificationSettingsScreen extends StatelessWidget {
   const NotificationSettingsScreen({super.key});

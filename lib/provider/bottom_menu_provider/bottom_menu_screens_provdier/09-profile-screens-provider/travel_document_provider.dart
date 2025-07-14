@@ -111,6 +111,43 @@ class TravelDocumentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String? passportCountry;
+  String? seamanIssuingCountry;
+  String? seamanNationality;
+  String? seafarerVisaIssuingCountry;
+  String? visaIssuingCountry;
+  String? residencePermitIssuingCountry;
+
+  void setPassportCountry(String country) {
+    passportCountry = country;
+    notifyListeners();
+  }
+
+  void setSeamanIssuingCountry(String country) {
+    seamanIssuingCountry = country;
+    notifyListeners();
+  }
+
+  void setSeamanNationality(String country) {
+    seamanNationality = country;
+    notifyListeners();
+  }
+
+  void setSeafarerVisaIssuingCountry(String country) {
+    seafarerVisaIssuingCountry = country;
+    notifyListeners();
+  }
+
+  void setVisaIssuingCountry(String country) {
+    visaIssuingCountry = country;
+    notifyListeners();
+  }
+
+  void setResidencePermitIssuingCountry(String country) {
+    residencePermitIssuingCountry = country;
+    notifyListeners();
+  }
+
   void setResidencePermitExpiryDate(DateTime date) {
     residencePermitExpiryDateController.text = "${date.toLocal()}".split(' ')[0];
     notifyListeners();

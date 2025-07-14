@@ -6,7 +6,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart'; // Adjust import as needed
 import '../../../../custom-component/custom-button.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/deactivate_account_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/deactivate_account_provider.dart';
 
 class DeactivateAccountScreen extends StatelessWidget {
   const DeactivateAccountScreen({super.key});

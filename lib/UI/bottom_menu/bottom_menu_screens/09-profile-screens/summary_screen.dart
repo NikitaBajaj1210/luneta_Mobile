@@ -7,8 +7,8 @@ import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/customMultiLineTextField.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/Summary_provider.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/Summary_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class SummaryScreen extends StatefulWidget {
   const SummaryScreen({super.key});

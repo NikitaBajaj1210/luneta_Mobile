@@ -6,7 +6,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/customTextField.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/help_center_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/help_center_provider.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});

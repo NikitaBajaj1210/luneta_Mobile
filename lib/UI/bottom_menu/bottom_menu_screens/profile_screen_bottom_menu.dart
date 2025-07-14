@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/Summary_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/Summary_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../const/color.dart';
 import '../../../const/font_size.dart';
-import '../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/expected_salary_provider.dart';
-import '../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/references_provider.dart';
-import '../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/skills_provider.dart';
-import '../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
+import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/expected_salary_provider.dart';
+import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
+import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/skills_provider.dart';
+import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 import 'package:luneta/route/route_constants.dart';
 
 class ProfileScreenBottomMenu extends StatefulWidget {
@@ -145,8 +145,22 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                       Navigator.of(context).pushNamed(ProfessionalExperience);
                                       break;
                                     case 2:
+                                      final provider =
+                                          Provider.of<ExpectedSalaryProvider>(
+                                              context,
+                                              listen: false);
+                                      // Set the values directly in the provider
+                                      provider.minSalaryController.text =
+                                          profileProvider.expectedSalaryMin ?? '';
+                                      provider.maxSalaryController.text =
+                                          profileProvider.expectedSalaryMax ?? '';
+                                      provider.selectedFrequency =
+                                          profileProvider.salaryFrequency ??
+                                              "per month";
+                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
+
                                       Navigator.of(context)
-                                          .pushNamed(TravelDocument);
+                                          .pushNamed(expectedSalaryScreen);
                                       break;
                                     case 3:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);

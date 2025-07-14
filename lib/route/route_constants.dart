@@ -24,7 +24,6 @@ const String applyJobProfile = '/applyJobProfile';
 const String editProfile = '/editProfile';
 const String personalInfo = '/personalInfo';
 const String ProfessionalExperience = '/ProfessionalExperience';
-const String TravelDocument = '/TravelDocument';
 const String expectedSalaryScreen = '/expectedSalaryScreen';
 const String workExperienceScreen = '/workExperienceScreen';
 const String educationScreen = '/educationScreen';
