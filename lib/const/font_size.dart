@@ -1,0 +1,43 @@
+import 'package:responsive_sizer/responsive_sizer.dart';
+
+class AppFontSize {
+  static double fontSize10 = 10.px;
+  static double fontSize11 = 11.px;
+  static double fontSize12 = 12.px;
+  static double fontSize13 = 13.px;
+  static double fontSize14 = 14.px;
+  static double fontSize15 = 15.px;
+  static double fontSize16 = 16.px;
+  static double fontSize17 = 17.px;
+  static double fontSize18 = 18.px;
+  static double fontSize19 = 19.px;
+  static double fontSize20 = 20.px;
+  static double fontSize21 = 21.px;
+  static double fontSize23 = 23.px;
+  static double fontSize24 = 24.px;
+  static double fontSize25 = 25.px;
+  static double fontSize26 = 26.px;
+  static double fontSize27 = 27.px;
+  static double fontSize28 = 28.px;
+  static double fontSize29 = 29.px;
+  static double fontSize30 = 30.px;
+  static double fontSize31 = 31.px;
+  static double fontSize33 = 33.px;
+  static double fontSize34 = 34.px;
+  static double fontSize35 = 35.px;
+  static double fontSize36 = 36.px;
+  static double fontSize37 = 37.px;
+  static double fontSize38 = 38.px;
+  static double fontSize39 = 39.px;
+  static double fontSize40 = 40.px;
+  static double fontSize41 = 41.px;
+  static double fontSize42 = 42.px;
+  static double fontSize43 = 43.px;
+  static double fontSize44 = 44.px;
+  static double fontSize45 = 45.px;
+  static double fontSize22 = 22.px;
+  static double fontSize32 = 32.px;
+  static double fontSize48 = 48.px;
+  static double fontSize49 = 49.px;
+  static double fontSize50 = 50.px;
+}
