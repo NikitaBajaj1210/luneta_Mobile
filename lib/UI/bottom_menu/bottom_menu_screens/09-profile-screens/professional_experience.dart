@@ -756,7 +756,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                               onTap:(){
                                                 provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
                                                 provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
-                                                provider.referenceIssuedByController.text =referenceDetail.issuedBy;
+                                                provider.setReferenceIssuedBy(referenceDetail.issuedBy);
                                                 provider.referenceDocumentController.text=referenceDetail.documentUrl;
                                                 provider.setReferenceVisibility(true);
                                                 provider.reference_Edit_Index=index;
@@ -992,16 +992,16 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             child: customButton(
                               voidCallback: () async {
                                 if (provider.referenceVesselController.text.isNotEmpty &&
-                                    provider.referenceIssuedByController.text.isNotEmpty &&
+                                    provider.referenceIssuedBy != null &&
                                     provider.referenceIssuedDate.text.isNotEmpty &&
                                     provider.referenceDocumentController.text.isNotEmpty) {
                                   if (!provider.reference_IsEdit) {
-                                    await provider.addReference(Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedByController.text, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                    await provider.addReference(Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
                                   } else {
-                                    await provider.updateReference(provider.reference_Edit_Index!,Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedByController.text, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                    await provider.updateReference(provider.reference_Edit_Index!,Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
                                   }
                                   provider.referenceVesselController.clear();
-                                  provider.referenceIssuedByController.clear();
+                                  provider.referenceIssuedBy = null;
                                   provider.referenceIssuedDate.clear();
                                   provider.referenceDocumentController.clear();
                                   provider.reference_IsEdit=false;
