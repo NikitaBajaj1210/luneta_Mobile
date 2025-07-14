@@ -100,6 +100,16 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     }
   }
 
+  void setStartDate(DateTime date) {
+    startDate.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
+
+  void setEndDate(DateTime date) {
+    endDate.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
+
   // Set Vessel Type Experience (Multiselect)
   void setVesselTypeExperience(List<String> vessels) {
     _vesselTypeExperience = vessels;

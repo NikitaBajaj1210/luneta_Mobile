@@ -514,23 +514,38 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                           ),
                         ),
-                        customTextField(
-                          context: context,
-                          controller: provider.startDate,
-                          hintText: 'Select Start Date',
-                          textInputType: TextInputType.datetime,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.startDateFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (picked != null) {
+                              provider.setStartDate(picked);
+                            }
+                          },
+                          child: AbsorbPointer(
+                            child: customTextField(
+                              context: context,
+                              controller: provider.startDate,
+                              hintText: 'Select Start Date',
+                              textInputType: TextInputType.datetime,
+                              obscureText: false,
+                              voidCallback: (value) {},
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
+                              backgroundColor: AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
+                              labelColor: AppColors.Color_9E9E9E,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: provider.startDateFocusNode.hasFocus
+                                  ? AppColors.activeFieldBgColor
+                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            ),
+                          ),
                         ),
 
                         Padding(
@@ -545,23 +560,38 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                           ),
                         ),
-                        customTextField(
-                          context: context,
-                          controller: provider.endDate,
-                          hintText: 'Select End Date',
-                          textInputType: TextInputType.datetime,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.endDateFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (picked != null) {
+                              provider.setEndDate(picked);
+                            }
+                          },
+                          child: AbsorbPointer(
+                            child: customTextField(
+                              context: context,
+                              controller: provider.endDate,
+                              hintText: 'Select End Date',
+                              textInputType: TextInputType.datetime,
+                              obscureText: false,
+                              voidCallback: (value) {},
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
+                              backgroundColor: AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
+                              labelColor: AppColors.Color_9E9E9E,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: provider.endDateFocusNode.hasFocus
+                                  ? AppColors.activeFieldBgColor
+                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            ),
+                          ),
                         ),
 
                         Padding(
