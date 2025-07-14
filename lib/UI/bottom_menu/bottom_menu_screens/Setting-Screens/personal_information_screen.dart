@@ -11,7 +11,7 @@
 // import '../../../../custom-component/custom-button.dart';
 // import '../../../../custom-component/customTextField.dart';
 // import '../../../../custom-component/custom_datePicker.dart';
-// import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/personalInfo_provider.dart';  // For phone number input
+// import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/personalInfo_provider.dart';  // For phone number input
 //
 // class PersonalInformationScreen extends StatefulWidget {
 //   const PersonalInformationScreen({super.key});

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/travel_document_provider.dart';
+import '../../../../custom-component/country_dropdown.dart';
 
 class TravelDocumentScreen extends StatefulWidget {
   const TravelDocumentScreen({super.key});
@@ -115,6 +116,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     // Passport UI
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Passport No.',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     customTextField(
                       context: context,
                       controller: provider.passportNoController,
@@ -134,8 +147,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                     ),
                     SizedBox(height: 1.h),
-                    // Country Dropdown
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Country',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
+                    CountryDropdown(
+                      selectedCountry: provider.passportCountry,
+                      onCountryChanged: (country) {
+                        provider.setPassportCountry(country.name);
+                      },
+                    ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issue Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -170,6 +212,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Expiry Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -204,6 +258,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Attach Document',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         provider.pickPassportDocument();
@@ -244,6 +310,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     // Seaman’s Book UI
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Seaman’s Book No.',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     customTextField(
                       context: context,
                       controller: provider.seamanBookNoController,
@@ -263,8 +341,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                     ),
                     SizedBox(height: 1.h),
-                    // Issuing Country Dropdown
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issuing Country',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
+                    CountryDropdown(
+                      selectedCountry: provider.seamanIssuingCountry,
+                      onCountryChanged: (country) {
+                        provider.setSeamanIssuingCountry(country.name);
+                      },
+                    ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issuing Authority',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     customTextField(
                       context: context,
                       controller: provider.seamanIssuingAuthorityController,
@@ -284,6 +391,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issue Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -318,6 +437,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Expiry Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -364,8 +495,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ],
                     ),
                     SizedBox(height: 1.h),
-                    // Nationality Dropdown
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Nationality',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
+                    CountryDropdown(
+                      selectedCountry: provider.seamanNationality,
+                      onCountryChanged: (country) {
+                        provider.setSeamanNationality(country.name);
+                      },
+                    ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Attach Document',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         provider.pickSeamanDocument();
@@ -430,8 +590,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       Column(
                         children: [
                           SizedBox(height: 1.h),
-                          // Issuing Country Dropdown
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Issuing Country',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          CountryDropdown(
+                            selectedCountry: provider.seafarerVisaIssuingCountry,
+                            onCountryChanged: (country) {
+                              provider.setSeafarerVisaIssuingCountry(country.name);
+                            },
+                          ),
                           SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Visa No.',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
                           customTextField(
                             context: context,
                             controller: provider.seafarerVisaNoController,
@@ -451,6 +640,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                 : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                           ),
                           SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Issue Date',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
                           GestureDetector(
                             onTap: () async {
                               final DateTime? picked = await showDatePicker(
@@ -485,6 +686,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                             ),
                           ),
                           SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Expiry Date',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
                           GestureDetector(
                             onTap: () async {
                               final DateTime? picked = await showDatePicker(
@@ -519,6 +732,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                             ),
                           ),
                           SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Attach Document',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
                           GestureDetector(
                             onTap: () {
                               provider.pickSeafarerVisaDocument();
@@ -561,8 +786,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     // Visa UI
-                    // Issuing Country Dropdown
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issuing Country',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
+                    CountryDropdown(
+                      selectedCountry: provider.visaIssuingCountry,
+                      onCountryChanged: (country) {
+                        provider.setVisaIssuingCountry(country.name);
+                      },
+                    ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Visa No.',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     customTextField(
                       context: context,
                       controller: provider.visaNoController,
@@ -582,6 +836,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issue Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -616,6 +882,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Expiry Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -650,6 +928,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Attach Document',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         provider.pickVisaDocument();
@@ -690,8 +980,37 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     // Residence Permit UI
-                    // Issuing Country Dropdown
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issuing Country',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
+                    CountryDropdown(
+                      selectedCountry: provider.residencePermitIssuingCountry,
+                      onCountryChanged: (country) {
+                        provider.setResidencePermitIssuingCountry(country.name);
+                      },
+                    ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'No.',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     customTextField(
                       context: context,
                       controller: provider.residencePermitNoController,
@@ -711,6 +1030,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Issue Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -745,6 +1076,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Expiry Date',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -779,6 +1122,18 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Text(
+                        'Attach Document',
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: AppColors.fontFamilyMedium,
+                          color: AppColors.Color_424242,
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         provider.pickResidencePermitDocument();

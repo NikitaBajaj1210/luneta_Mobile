@@ -6,7 +6,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/custom-button.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/security_provider.dart'; // Import the provider
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/security_provider.dart'; // Import the provider
 
 class SecuritySettingsScreen extends StatelessWidget {
   const SecuritySettingsScreen({super.key});
