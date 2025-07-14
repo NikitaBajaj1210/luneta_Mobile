@@ -209,7 +209,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0,top:10.0),
+                          padding: EdgeInsets.only(right: 10.0),
                           child: GestureDetector(
                             onTap: (){
                               provider.setEmploymentHistoryVisibility(true);
@@ -299,22 +299,36 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                     .fontFamilyBold,
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap:(){
-                                               provider.companyController.text =empDetail.companyName;
-                                               provider.setEmpHisPositionsHeld(empDetail.position);
-                                               provider.startDate.text =empDetail.startDate ;
-                                               provider.endDate.text =empDetail.endDate;
-                                               provider.responsibilitiesController.text=empDetail.responsibilities;
-                                               provider.setEmploymentHistoryVisibility(true);
-                                               provider.employment_Edit_Index=index;
-                                               provider.employment_IsEdit=true;
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                              ),
-                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap:(){
+                                                   provider.companyController.text =empDetail.companyName;
+                                                   provider.setEmpHisPositionsHeld(empDetail.position);
+                                                   provider.startDate.text =empDetail.startDate ;
+                                                   provider.endDate.text =empDetail.endDate;
+                                                   provider.responsibilitiesController.text=empDetail.responsibilities;
+                                                   provider.setEmploymentHistoryVisibility(true);
+                                                   provider.employment_Edit_Index=index;
+                                                   provider.employment_IsEdit=true;
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/Edit.png",
+                                                    height: 2.h,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                GestureDetector(
+                                                  onTap:(){
+                                                    provider.removeEmploymentHistory(index);
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/Delete.png",
+                                                    height: 2.h,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                         SizedBox(height: 0.5.h),
@@ -693,7 +707,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0,top:10.0),
+                          padding: EdgeInsets.only(right: 10.0),
                           child: GestureDetector(
                             onTap: (){
                               provider.setReferenceVisibility(true);
@@ -782,21 +796,35 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                     .fontFamilyBold,
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap:(){
-                                                provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
-                                                provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
-                                                provider.setReferenceIssuedBy(referenceDetail.issuedBy);
-                                                provider.referenceDocumentController.text=referenceDetail.documentUrl;
-                                                provider.setReferenceVisibility(true);
-                                                provider.reference_Edit_Index=index;
-                                                provider.reference_IsEdit=true;
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                              ),
-                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap:(){
+                                                    provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
+                                                    provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
+                                                    provider.setReferenceIssuedBy(referenceDetail.issuedBy);
+                                                    provider.referenceDocumentController.text=referenceDetail.documentUrl;
+                                                    provider.setReferenceVisibility(true);
+                                                    provider.reference_Edit_Index=index;
+                                                    provider.reference_IsEdit=true;
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/Edit.png",
+                                                    height: 2.h,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                GestureDetector(
+                                                  onTap:(){
+                                                    provider.removeReference(index);
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/Delete.png",
+                                                    height: 2.h,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                         SizedBox(height: 0.5.h),
@@ -1096,7 +1124,7 @@ class ReferenceField extends StatelessWidget {
               children: [
                 Text("Issued By: ${reference.issuedBy}"),
                 Text("Vessel/Company: ${reference.vesselOrCompanyName}"),
-                Text("Issued On: ${reference.issuingDate}"),
+                Text("Issued On: ${reference.issuingDate.toLocal()}"),
                 SizedBox(height: 1.h),
                 Text("Document: ${reference.documentUrl}"),
               ],
