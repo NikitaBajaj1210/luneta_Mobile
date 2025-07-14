@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
   // Controllers
@@ -159,6 +162,63 @@ class TravelDocumentProvider extends ChangeNotifier {
       }
     }
     return null;
+  }
+
+  final picker = ImagePicker();
+
+  Future pickPassportDocument() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      passportDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future pickSeamanDocument() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      seamanDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future pickSeafarerVisaDocument() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      seafarerVisaDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future pickVisaDocument() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      visaDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future pickResidencePermitDocument() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      residencePermitDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
   }
 }
 
