@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfessionalExperienceProvider extends ChangeNotifier {
   // Controllers for text fields
@@ -6,7 +9,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   // final TextEditingController positionController = TextEditingController();
   final TextEditingController responsibilitiesController = TextEditingController();
   final TextEditingController referenceVesselController = TextEditingController();
-  final TextEditingController referenceIssuedByController = TextEditingController();
+  String? referenceIssuedBy;
   final TextEditingController referenceDocumentController = TextEditingController();
   final TextEditingController startDate = TextEditingController();
   final TextEditingController endDate = TextEditingController();
@@ -70,6 +73,31 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   void setReferenceVisibility(bool value){
     _showAddSection_reference=value;
     notifyListeners();
+  }
+
+  void setReferenceIssuedBy(String value) {
+    referenceIssuedBy = value;
+    notifyListeners();
+  }
+
+  void setReferenceIssuingDate(DateTime date) {
+    referenceIssuedDate.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      referenceDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
   }
 
   // Set Vessel Type Experience (Multiselect)
