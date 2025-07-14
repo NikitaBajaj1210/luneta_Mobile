@@ -41,6 +41,7 @@ import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provide
 import 'package:luneta/route/route_constants.dart';
 
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_experience.dart';
+import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_document.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_documents.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/help_center_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/job_seeking_status_screen.dart';
@@ -200,7 +201,7 @@ class NavRouter {
         );
         case TravelDocument:
         return MaterialPageRoute(
-          builder: (context) => const TravelDocuments(),
+          builder: (context) => const TravelDocumentScreen(),
         );
         case expectedSalaryScreen:
         return MaterialPageRoute(
