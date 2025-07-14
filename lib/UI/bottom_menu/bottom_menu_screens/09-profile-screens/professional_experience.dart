@@ -870,23 +870,35 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
 
-                        customTextField(
-                          context: context,
-                          controller: provider.referenceIssuedByController,
-                          hintText: 'Enter Issued By',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.referenceIssuedByFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        Container(
+                          width: 90.w,
+                          padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                          decoration: BoxDecoration(
+                            color: AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: DropdownButton<String>(
+                              value: provider.referenceIssuedBy,
+                              isExpanded: true,
+                              hint: Text("Select Issued By"),
+                              onChanged: (newValue) {
+                                provider.setReferenceIssuedBy(newValue!);
+                              },
+                              items: ['Company', 'Vessel'].map((value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              underline: SizedBox(),
+                            ),
+                          ),
                         ),
 
                         Padding(
@@ -901,23 +913,38 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                           ),
                         ),
-                        customTextField(
-                          context: context,
-                          controller: provider.referenceIssuedDate,
-                          hintText: 'Select Issued Date',
-                          textInputType: TextInputType.datetime,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.referenceIssuedDateFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (picked != null) {
+                              provider.setReferenceIssuingDate(picked);
+                            }
+                          },
+                          child: AbsorbPointer(
+                            child: customTextField(
+                              context: context,
+                              controller: provider.referenceIssuedDate,
+                              hintText: 'Select Issued Date',
+                              textInputType: TextInputType.datetime,
+                              obscureText: false,
+                              voidCallback: (value) {},
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
+                              backgroundColor: AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
+                              labelColor: AppColors.Color_9E9E9E,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: provider.referenceIssuedDateFocusNode.hasFocus
+                                  ? AppColors.activeFieldBgColor
+                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            ),
+                          ),
                         ),
 
                         Padding(
@@ -932,23 +959,30 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                           ),
                         ),
-                        customTextField(
-                          context: context,
-                          controller: provider.referenceDocumentController,
-                          hintText: 'Enter Document',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.referenceDocumentFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        GestureDetector(
+                          onTap: () {
+                            provider.pickImage();
+                          },
+                          child: AbsorbPointer(
+                            child: customTextField(
+                              context: context,
+                              controller: provider.referenceDocumentController,
+                              hintText: 'Attach Document',
+                              textInputType: TextInputType.text,
+                              obscureText: false,
+                              voidCallback: (value) {},
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
+                              backgroundColor: AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
+                              labelColor: AppColors.Color_9E9E9E,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: provider.referenceDocumentFocusNode.hasFocus
+                                  ? AppColors.activeFieldBgColor
+                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            ),
+                          ),
                         ),
 
                         Align(
