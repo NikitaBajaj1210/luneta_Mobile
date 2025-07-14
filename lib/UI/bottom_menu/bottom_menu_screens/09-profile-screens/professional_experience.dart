@@ -1095,7 +1095,7 @@ class ReferenceField extends StatelessWidget {
               children: [
                 Text("Issued By: ${reference.issuedBy}"),
                 Text("Vessel/Company: ${reference.vesselOrCompanyName}"),
-                Text("Issued On: ${reference.issuingDate.toLocal()}"),
+                Text("Issued On: ${reference.issuingDate}"),
                 SizedBox(height: 1.h),
                 Text("Document: ${reference.documentUrl}"),
               ],
