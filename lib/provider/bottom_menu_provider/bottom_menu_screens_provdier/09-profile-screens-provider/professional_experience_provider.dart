@@ -1,19 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfessionalExperienceProvider extends ChangeNotifier {
   // Controllers for text fields
   final TextEditingController companyController = TextEditingController();
   // final TextEditingController positionController = TextEditingController();
   final TextEditingController responsibilitiesController = TextEditingController();
-  // final TextEditingController referenceCompanyController = TextEditingController();
-  // final TextEditingController referencePositionController = TextEditingController();
+  final TextEditingController referenceVesselController = TextEditingController();
+  String? referenceIssuedBy;
+  final TextEditingController referenceDocumentController = TextEditingController();
   final TextEditingController startDate = TextEditingController();
   final TextEditingController endDate = TextEditingController();
+  final TextEditingController referenceIssuedDate = TextEditingController();
 
   final FocusNode companyFocusNode = FocusNode();
   final FocusNode responsibilitiesFocusNode = FocusNode();
   final FocusNode startDateFocusNode = FocusNode();
   final FocusNode endDateFocusNode = FocusNode();
+  final FocusNode referenceVesselFocusNode = FocusNode();
+  final FocusNode referenceIssuedByFocusNode = FocusNode();
+  final FocusNode referenceIssuedDateFocusNode = FocusNode();
+  final FocusNode referenceDocumentFocusNode = FocusNode();
 
   // Employment History List (Repeater)
   List<EmploymentHistory> _employmentHistory = [];
@@ -39,6 +48,11 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   bool employment_IsEdit=false;
   int? employment_Edit_Index;
 
+  bool _showAddSection_reference=false;
+  bool get showAddSection_reference=>_showAddSection_reference;
+  bool reference_IsEdit=false;
+  int? reference_Edit_Index;
+
   // Set Positions Held (Multiselect)
   void setPositionsHeld(List<String> positions) {
     _positionsHeld = positions;
@@ -53,6 +67,46 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   void setEmploymentHistoryVisibility(bool value){
     _showAddSection_employmentHistory=value;
+    notifyListeners();
+  }
+
+  void setReferenceVisibility(bool value){
+    _showAddSection_reference=value;
+    notifyListeners();
+  }
+
+  void setReferenceIssuedBy(String value) {
+    referenceIssuedBy = value;
+    notifyListeners();
+  }
+
+  void setReferenceIssuingDate(DateTime date) {
+    referenceIssuedDate.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      referenceDocumentController.text = pickedFile.path.split('/').last;
+      notifyListeners();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  void setStartDate(DateTime date) {
+    startDate.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
+
+  void setEndDate(DateTime date) {
+    endDate.text = "${date.toLocal()}".split(' ')[0];
     notifyListeners();
   }
 
@@ -81,13 +135,13 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   }
 
   // Add Reference
-  void addReference(Reference reference) {
+   addReference(Reference reference) {
     _references.add(reference);
     notifyListeners();
   }
 
   // Update Reference
-  void updateReference(int index, Reference updatedReference) {
+   updateReference(int index, Reference updatedReference) {
     _references[index] = updatedReference;
     notifyListeners();
   }
@@ -127,7 +181,7 @@ class EmploymentHistory {
 
 class Reference {
   String issuedBy;
-  DateTime issuingDate;
+  String issuingDate;
   String vesselOrCompanyName;
   String documentUrl;
 
