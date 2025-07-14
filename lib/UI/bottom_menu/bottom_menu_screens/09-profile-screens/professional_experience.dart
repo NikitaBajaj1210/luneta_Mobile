@@ -741,142 +741,113 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       itemCount: provider.references.length,
                       itemBuilder: (context, index) {
                         Reference referenceDetail = provider.references[index];
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.1.h,
-                                            color: AppColors
-                                                .Color_EEEEEE),
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            2.h)),
-                                    padding: EdgeInsets.all(1.2.h),
-                                    child: Image.asset(
-                                      "assets/images/companyLogo.png",
-                                      height: 5.h,
-                                      width: 5.h,
-                                    ),
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 1.h),
+                          child: Row(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 15.w,
+                                height: 15.w,
+                                decoration: BoxDecoration(
+                                  color: AppColors.cardIconBgColour,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Image.asset(
+                                    "assets/images/profileActive.png",
+                                    height: 6.w,
+                                    width: 6.w,
+                                    color: AppColors.buttonColor,
                                   ),
-                                  SizedBox(width: 3.w),
-                                  Container(
-                                    // color:Colors.red,
-                                    width: 64.w,
-                                    margin:
-                                    EdgeInsets.only(bottom: 2.h),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            Text(referenceDetail.vesselOrCompanyName,
-                                              style: TextStyle(
-                                                fontSize: AppFontSize
-                                                    .fontSize20,
-                                                fontWeight:
-                                                FontWeight.w700,
-                                                color: AppColors
-                                                    .Color_212121,
-                                                fontFamily: AppColors
-                                                    .fontFamilyBold,
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap:(){
-                                                    provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
-                                                    provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
-                                                    provider.setReferenceIssuedBy(referenceDetail.issuedBy);
-                                                    provider.referenceDocumentController.text=referenceDetail.documentUrl;
-                                                    provider.setReferenceVisibility(true);
-                                                    provider.reference_Edit_Index=index;
-                                                    provider.reference_IsEdit=true;
-                                                  },
-                                                  child: Image.asset(
-                                                    "assets/images/Edit.png",
-                                                    height: 2.h,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 2.w),
-                                                GestureDetector(
-                                                  onTap:(){
-                                                    provider.removeReference(index);
-                                                  },
-                                                  child: Image.asset(
-                                                    "assets/images/Delete.png",
-                                                    height: 2.h,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(height: 0.5.h),
-
-                                        SizedBox(height: 0.5.h),
-                                        Text(referenceDetail.issuingDate,
-                                          style: TextStyle(
-                                            fontSize: AppFontSize
-                                                .fontSize14,
-                                            fontWeight:
-                                            FontWeight.w500,
-                                            color: AppColors
-                                                .Color_212121,
-                                            fontFamily: AppColors
-                                                .fontFamilyMedium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Issued By: ",
-                                  style: TextStyle(
-                                      fontSize: AppFontSize.fontSize16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.Color_212121,
-                                      fontFamily:
-                                      AppColors.fontFamilyMedium),
-                                ),
-                                Expanded(
-                                  child: Text(referenceDetail.issuedBy,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: AppFontSize.fontSize16,
-                                        fontWeight: FontWeight.w500,
+                              SizedBox(width: 3.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      referenceDetail.vesselOrCompanyName,
+                                      style: TextStyle(
+                                        fontSize:
+                                        AppFontSize.fontSize20,
+                                        fontWeight: FontWeight.w700,
                                         color: AppColors.Color_212121,
-                                        fontFamily:
-                                        AppColors.fontFamilyMedium),
-                                  ),
+                                        fontFamily: AppColors
+                                            .fontFamilyBold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.8.h),
+                                    Text(referenceDetail.issuedBy,
+                                      style: TextStyle(
+                                        fontSize:
+                                        AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors
+                                            .Color_424242,
+                                        fontFamily: AppColors
+                                            .fontFamilyMedium,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.8.h),
+                                    Text(
+                                      referenceDetail.issuingDate,
+                                      style: TextStyle(
+                                        fontSize:
+                                        AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors
+                                            .Color_424242,
+                                        fontFamily: AppColors
+                                            .fontFamilyMedium,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.8.h),
+                                    Text(
+                                      referenceDetail.documentUrl,
+                                      style: TextStyle(
+                                        fontSize:
+                                        AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors
+                                            .Color_424242,
+                                        fontFamily: AppColors
+                                            .fontFamilyMedium,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: 3.h),
-                          ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
+                                  provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
+                                  provider.setReferenceIssuedBy(referenceDetail.issuedBy);
+                                  provider.referenceDocumentController.text=referenceDetail.documentUrl;
+                                  provider.setReferenceVisibility(true);
+                                  provider.reference_Edit_Index=index;
+                                  provider.reference_IsEdit=true;
+                                },
+                                child: Image.asset(
+                                  "assets/images/Edit.png",
+                                  height: 2.h,
+                                ),
+                              ),
+                              SizedBox(width: 2.w),
+                              GestureDetector(
+                                onTap:(){
+                                  provider.removeReference(index);
+                                },
+                                child: Image.asset(
+                                  "assets/images/Delete.png",
+                                  height: 2.h,
+                                ),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
