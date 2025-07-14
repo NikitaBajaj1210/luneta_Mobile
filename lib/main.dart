@@ -10,33 +10,34 @@ import 'package:luneta/provider/authentication-provider/login_provider.dart';
 import 'package:luneta/provider/authentication-provider/otp_screen_provider.dart';
 import 'package:luneta/provider/authentication-provider/signup_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/Summary_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/affiliations_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/awards_achievements_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/certification_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/personal_information_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/cv_resume_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_screen_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/expected_salary_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/languages_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/organization_activities_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_exam_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_experience_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/projects_screen_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/seminars_trainings_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/skills_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/work_experience_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/deactivate_account_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/help_center_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/job_seeking_status_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/language_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/linked_account_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/security_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/settings_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/home_screen_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/Summary_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/affiliations_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/awards_achievements_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/certification_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/personal_information_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/cv_resume_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/education_screen_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/expected_salary_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/languages_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/organization_activities_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/professional_exam_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/professional_experience_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/projects_screen_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/references_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/seminars_trainings_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/skills_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/travel_document_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/volunteering_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/work_experience_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/deactivate_account_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/help_center_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/job_seeking_status_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/language_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/linked_account_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/security_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/settings_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/home_screen_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/filter_screen_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/notification_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/recent_job_provider.dart';
@@ -110,6 +111,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_)=>  CertificationProvider()),
         ChangeNotifierProvider(create: (_)=>  ProjectsProfileScreenProvider()),
         ChangeNotifierProvider(create: (_)=>  ProfessionalExperienceProvider()),
+        ChangeNotifierProvider(create: (_)=>  TravelDocumentProvider()),
 
       ],
       child:  InitRoutes(),

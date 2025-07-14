@@ -7,7 +7,7 @@ import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/customTextField.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/edit_profile_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/edit_profile_provider.dart';
 
 class ProfileEditScreen extends StatelessWidget {
   const ProfileEditScreen({super.key});

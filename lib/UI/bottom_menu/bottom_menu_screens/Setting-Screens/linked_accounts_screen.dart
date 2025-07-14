@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';  // For CupertinoSwitch
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/linked_account_provider.dart'; // Import the provider
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/linked_account_provider.dart'; // Import the provider
 
 class LinkedAccountsScreen extends StatelessWidget {
   const LinkedAccountsScreen({super.key});

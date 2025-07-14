@@ -37,10 +37,11 @@ import 'package:luneta/UI/job-deatils-application-screens/apply_job_cv_screen.da
 import 'package:luneta/UI/job-deatils-application-screens/apply_job_profile_screen.dart';
 import 'package:luneta/UI/job-deatils-application-screens/job_details_screen.dart';
 import 'package:luneta/UI/landing-screen/LandingScreen.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_exam_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/professional_exam_provider.dart';
 import 'package:luneta/route/route_constants.dart';
 
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_experience.dart';
+import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_documents.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/help_center_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/job_seeking_status_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_screen.dart';
@@ -53,13 +54,13 @@ import '../UI/intro/IntroScreen.dart';
 import '../UI/splash/SplashScreen.dart';
 import '../UI/welcomeScreen/WelcomeScreen.dart';
 import 'package:provider/provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/certification_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/personal_information_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_screen_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/projects_screen_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/work_experience_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/certification_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/personal_information_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/education_screen_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/projects_screen_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/volunteering_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/work_experience_provider.dart';
 
 class NavRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -196,6 +197,10 @@ class NavRouter {
       case ProfessionalExperience:
         return MaterialPageRoute(
           builder: (context) => const ProfessionalExperienceScreen(),
+        );
+        case TravelDocument:
+        return MaterialPageRoute(
+          builder: (context) => const TravelDocuments(),
         );
         case expectedSalaryScreen:
         return MaterialPageRoute(

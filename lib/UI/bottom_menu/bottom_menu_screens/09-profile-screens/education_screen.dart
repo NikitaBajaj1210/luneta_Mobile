@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_screen_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/education_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -13,7 +13,7 @@ import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/customMultiLineTextField.dart';
 import '../../../../custom-component/customTextField.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
 
 class EducationScreen extends StatefulWidget {
   const EducationScreen({super.key});

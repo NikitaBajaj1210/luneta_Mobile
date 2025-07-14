@@ -6,7 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../const/font_size.dart';
 import '../../../custom-component/customTextField.dart';
-import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/home_screen_provider.dart';
+import '../../../provider/bottom_menu_provider/bottom_menu_screens_provider/home_screen_provider.dart';
 import '../../../route/route_constants.dart';
 
 class HomeScreen extends StatefulWidget {

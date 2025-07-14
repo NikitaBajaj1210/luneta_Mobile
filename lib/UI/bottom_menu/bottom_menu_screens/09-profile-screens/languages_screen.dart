@@ -5,8 +5,8 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../custom-component/custom-button.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/languages_provider.dart';
-import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/languages_provider.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/profile_bottommenu_provider.dart';
 
 class LanguagesScreen extends StatefulWidget {
   const LanguagesScreen({super.key});

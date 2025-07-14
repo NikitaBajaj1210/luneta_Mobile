@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/job_seeking_status_provider.dart';
+import '../../../../../provider/bottom_menu_provider/bottom_menu_screens_provider/Setting-Screen-Provider/job_seeking_status_provider.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/back_button_with_title.dart';

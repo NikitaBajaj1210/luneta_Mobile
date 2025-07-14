@@ -3,7 +3,7 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_experience_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provider/09-profile-screens-provider/professional_experience_provider.dart';
 import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
