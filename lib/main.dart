@@ -26,6 +26,7 @@ import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdie
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/seminars_trainings_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/skills_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/work_experience_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/deactivate_account_provider.dart';
@@ -110,6 +111,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_)=>  CertificationProvider()),
         ChangeNotifierProvider(create: (_)=>  ProjectsProfileScreenProvider()),
         ChangeNotifierProvider(create: (_)=>  ProfessionalExperienceProvider()),
+        ChangeNotifierProvider(create: (_)=>  TravelDocumentProvider()),
 
       ],
       child:  InitRoutes(),

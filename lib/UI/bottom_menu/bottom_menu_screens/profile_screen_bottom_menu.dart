@@ -145,22 +145,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                       Navigator.of(context).pushNamed(ProfessionalExperience);
                                       break;
                                     case 2:
-                                      final provider =
-                                          Provider.of<ExpectedSalaryProvider>(
-                                              context,
-                                              listen: false);
-                                      // Set the values directly in the provider
-                                      provider.minSalaryController.text =
-                                          profileProvider.expectedSalaryMin ?? '';
-                                      provider.maxSalaryController.text =
-                                          profileProvider.expectedSalaryMax ?? '';
-                                      provider.selectedFrequency =
-                                          profileProvider.salaryFrequency ??
-                                              "per month";
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
-
                                       Navigator.of(context)
-                                          .pushNamed(expectedSalaryScreen);
+                                          .pushNamed(travelDocument);
                                       break;
                                     case 3:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);
