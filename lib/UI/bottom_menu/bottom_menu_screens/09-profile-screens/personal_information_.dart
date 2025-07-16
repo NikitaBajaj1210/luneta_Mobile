@@ -250,6 +250,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         });
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
 
                     Padding(
@@ -279,6 +295,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         provider.religionController.text = value as String;
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -359,6 +391,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         });
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
 
                     // Contact Information
@@ -521,6 +569,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         });
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
 
                     Padding(

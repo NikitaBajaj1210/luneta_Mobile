@@ -173,6 +173,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         provider.setPassportCountry(value as String);
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -376,6 +392,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         provider.setSeamanIssuingCountry(value as String);
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -539,6 +571,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         provider.setSeamanNationality(value as String);
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -643,6 +691,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                               provider.setSeafarerVisaIssuingCountry(value as String);
                             },
                             isExpanded: true,
+                            underline: SizedBox(),
+                            displayItem: (item, selected) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                  borderRadius: BorderRadius.circular(2.h),
+                                  border: Border.all(
+                                    color: AppColors.transparent,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: ListTile(
+                                  title: Text(item.child.data),
+                                ),
+                              );
+                            },
                           ),
                           SizedBox(height: 1.h),
                           Padding(
@@ -848,6 +912,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         provider.setVisaIssuingCountry(value as String);
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -1051,6 +1131,22 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         provider.setResidencePermitIssuingCountry(value as String);
                       },
                       isExpanded: true,
+                      underline: SizedBox(),
+                      displayItem: (item, selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(item.child.data),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 1.h),
                     Padding(
