@@ -233,17 +233,21 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     SearchChoices.single(
-                      items: provider.countries.map((country) {
-                        return DropdownMenuItem(
-                          child: Text(country),
+                      items: provider.countries.map((String country) {
+                        return DropdownMenuItem<String>(
                           value: country,
+                          child: Text(country),
                         );
                       }).toList(),
-                      value: provider.countryOfBirthController.text.isEmpty ? null : provider.countryOfBirthController.text,
+                      value: provider.countryOfBirthController.text.isEmpty
+                          ? null
+                          : provider.countryOfBirthController.text,
                       hint: "Select Country of Birth",
                       searchHint: "Search for a country",
                       onChanged: (value) {
-                        provider.countryOfBirthController.text = value as String;
+                        setState(() {
+                          provider.countryOfBirthController.text = value as String;
+                        });
                       },
                       isExpanded: true,
                     ),
@@ -338,17 +342,21 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     SearchChoices.single(
-                      items: provider.countries.map((country) {
-                        return DropdownMenuItem(
-                          child: Text(country),
+                      items: provider.countries.map((String country) {
+                        return DropdownMenuItem<String>(
                           value: country,
+                          child: Text(country),
                         );
                       }).toList(),
-                      value: provider.nationalityController.text.isEmpty ? null : provider.nationalityController.text,
+                      value: provider.nationalityController.text.isEmpty
+                          ? null
+                          : provider.nationalityController.text,
                       hint: "Select Nationality",
                       searchHint: "Search for a nationality",
                       onChanged: (value) {
-                        provider.nationalityController.text = value as String;
+                        setState(() {
+                          provider.nationalityController.text = value as String;
+                        });
                       },
                       isExpanded: true,
                     ),
