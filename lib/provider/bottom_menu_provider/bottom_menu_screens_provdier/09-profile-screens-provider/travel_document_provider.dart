@@ -2,8 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:country_picker/country_picker.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
+  List<String> countries = [];
+
+  TravelDocumentProvider() {
+    countries = CountryService().getAll().map((country) => country.name).toList();
+  }
   // Controllers
   final TextEditingController seafarerRegistrationNoController = TextEditingController();
   final TextEditingController passportNoController = TextEditingController();

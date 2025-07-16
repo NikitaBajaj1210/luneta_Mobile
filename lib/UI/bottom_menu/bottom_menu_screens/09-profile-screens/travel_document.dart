@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:search_choices/search_choices.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
-import '../../../../custom-component/country_dropdown.dart';
 
 class TravelDocumentScreen extends StatefulWidget {
   const TravelDocumentScreen({super.key});
@@ -159,11 +159,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                       ),
                     ),
-                    CountryDropdown(
-                      selectedCountry: provider.passportCountry,
-                      onCountryChanged: (country) {
-                        provider.setPassportCountry(country.name);
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.passportCountry,
+                      hint: "Select Country",
+                      searchHint: "Search for a country",
+                      onChanged: (value) {
+                        provider.setPassportCountry(value as String);
                       },
+                      isExpanded: true,
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -353,11 +362,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                       ),
                     ),
-                    CountryDropdown(
-                      selectedCountry: provider.seamanIssuingCountry,
-                      onCountryChanged: (country) {
-                        provider.setSeamanIssuingCountry(country.name);
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.seamanIssuingCountry,
+                      hint: "Select Country",
+                      searchHint: "Search for a country",
+                      onChanged: (value) {
+                        provider.setSeamanIssuingCountry(value as String);
                       },
+                      isExpanded: true,
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -507,11 +525,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                       ),
                     ),
-                    CountryDropdown(
-                      selectedCountry: provider.seamanNationality,
-                      onCountryChanged: (country) {
-                        provider.setSeamanNationality(country.name);
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.seamanNationality,
+                      hint: "Select Nationality",
+                      searchHint: "Search for a nationality",
+                      onChanged: (value) {
+                        provider.setSeamanNationality(value as String);
                       },
+                      isExpanded: true,
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -602,11 +629,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                               ),
                             ),
                           ),
-                          CountryDropdown(
-                            selectedCountry: provider.seafarerVisaIssuingCountry,
-                            onCountryChanged: (country) {
-                              provider.setSeafarerVisaIssuingCountry(country.name);
+                          SearchChoices.single(
+                            items: provider.countries.map((country) {
+                              return DropdownMenuItem(
+                                child: Text(country),
+                                value: country,
+                              );
+                            }).toList(),
+                            value: provider.seafarerVisaIssuingCountry,
+                            hint: "Select Country",
+                            searchHint: "Search for a country",
+                            onChanged: (value) {
+                              provider.setSeafarerVisaIssuingCountry(value as String);
                             },
+                            isExpanded: true,
                           ),
                           SizedBox(height: 1.h),
                           Padding(
@@ -798,11 +834,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                       ),
                     ),
-                    CountryDropdown(
-                      selectedCountry: provider.visaIssuingCountry,
-                      onCountryChanged: (country) {
-                        provider.setVisaIssuingCountry(country.name);
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.visaIssuingCountry,
+                      hint: "Select Country",
+                      searchHint: "Search for a country",
+                      onChanged: (value) {
+                        provider.setVisaIssuingCountry(value as String);
                       },
+                      isExpanded: true,
                     ),
                     SizedBox(height: 1.h),
                     Padding(
@@ -992,11 +1037,20 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                       ),
                     ),
-                    CountryDropdown(
-                      selectedCountry: provider.residencePermitIssuingCountry,
-                      onCountryChanged: (country) {
-                        provider.setResidencePermitIssuingCountry(country.name);
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.residencePermitIssuingCountry,
+                      hint: "Select Country",
+                      searchHint: "Search for a country",
+                      onChanged: (value) {
+                        provider.setResidencePermitIssuingCountry(value as String);
                       },
+                      isExpanded: true,
                     ),
                     SizedBox(height: 1.h),
                     Padding(
