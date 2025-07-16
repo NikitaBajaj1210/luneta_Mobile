@@ -12,6 +12,7 @@ const String profile = '/profile';
 const String createPin = '/createPin';
 const String forgotPassword = '/forgotPassword';
 const String otpScreen = '/otpScreen';
+const String travelDocument = '/travelDocument';
 const String createPassword = '/createPassword';
 const String bottomMenu = '/bottomMenu';
 const String jobDetails = '/jobDetails';

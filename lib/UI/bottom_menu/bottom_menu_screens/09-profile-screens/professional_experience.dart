@@ -209,7 +209,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0),
+                          padding: EdgeInsets.only(right: 10.0,top:10),
                           child: GestureDetector(
                             onTap: (){
                               provider.setEmploymentHistoryVisibility(true);
@@ -707,7 +707,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0),
+                          padding: EdgeInsets.only(right: 10.0,top:10),
                           child: GestureDetector(
                             onTap: (){
                               provider.setReferenceVisibility(true);
@@ -1095,7 +1095,7 @@ class ReferenceField extends StatelessWidget {
               children: [
                 Text("Issued By: ${reference.issuedBy}"),
                 Text("Vessel/Company: ${reference.vesselOrCompanyName}"),
-                Text("Issued On: ${reference.issuingDate.toLocal()}"),
+                Text("Issued On: ${reference.issuingDate}"),
                 SizedBox(height: 1.h),
                 Text("Document: ${reference.documentUrl}"),
               ],

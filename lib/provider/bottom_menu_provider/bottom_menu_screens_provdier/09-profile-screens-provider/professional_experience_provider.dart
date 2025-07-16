@@ -135,13 +135,13 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   }
 
   // Add Reference
-  void addReference(Reference reference) {
+   addReference(Reference reference) {
     _references.add(reference);
     notifyListeners();
   }
 
   // Update Reference
-  void updateReference(int index, Reference updatedReference) {
+   updateReference(int index, Reference updatedReference) {
     _references[index] = updatedReference;
     notifyListeners();
   }
