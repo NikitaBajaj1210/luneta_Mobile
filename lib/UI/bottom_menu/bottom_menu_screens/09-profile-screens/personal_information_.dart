@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:search_choices/search_choices.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -25,6 +26,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<PersonalInformationProvider>(context);
     return Consumer<PersonalInformationProvider>(
       builder: (context, provider, child) {
         return SafeArea(
@@ -127,7 +129,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'First Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      voidCallback: validateName,
+                      voidCallback: (value) {},
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.firstNameFocusNode.hasFocus
@@ -162,7 +164,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Last Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      voidCallback: validateName,
+                      voidCallback: (value) {},
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.lastNameFocusNode.hasFocus
@@ -198,7 +200,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Date of Birth',
                       textInputType: TextInputType.datetime,
                       obscureText: false,
-                      voidCallback: validateName,
+                      voidCallback: (value) {},
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.dobFocusNode.hasFocus
@@ -230,41 +232,20 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      width: 90.w,
-                      padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                        border: Border.all(
-                          color: AppColors.transparent, // Set the border color here
-                          width: 1, // You can adjust the width of the border
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<dynamic>(
-                          focusNode: provider.countryOfBirthFocusNode,
-                          value: provider.countryOfBirthController.text.isEmpty ? null : provider.countryOfBirthController.text,
-                          onChanged: (dynamic newValue) {
-                            setState(() {
-                              provider.countryOfBirthController.text = newValue!;
-                            });
-                          },
-                          items: nationalityList.map((value) {
-                            return DropdownMenuItem<dynamic>(
-                                value: value["key"],
-                                child: Text(
-                                  // value.Type!,
-                                  value["value"].toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                ));
-                          }).toList(),
-                          hint: Text('Country Of Birth'),
-                          isExpanded: true, // Make the dropdown take up the full width
-                          underline: SizedBox(), // Remove the default underline
-                        ),
-                      ),
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.countryOfBirthController.text.isEmpty ? null : provider.countryOfBirthController.text,
+                      hint: "Select Country of Birth",
+                      searchHint: "Search for a country",
+                      onChanged: (value) {
+                        provider.countryOfBirthController.text = value as String;
+                      },
+                      isExpanded: true,
                     ),
 
                     Padding(
@@ -280,29 +261,20 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
 
-                    // Religion
-                    customTextField(
-                      context: context,
-                      controller: provider.religionController,
-                      hintText: 'Religion',
-                      textInputType: TextInputType.text,
-                      obscureText: false,
-                      voidCallback: validateName,
-                      fontSize: AppFontSize.fontSize16,
-                      inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.religionFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
-                      borderColor: AppColors.buttonColor,
-                      textColor: Colors.black,
-                      labelColor: AppColors.Color_9E9E9E,
-                      cursorColor: AppColors.Color_212121,
-                      fillColor: provider.religionFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
-                      onFieldSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(provider.sexFocusNode);
+                    SearchChoices.single(
+                      items: provider.religions.map((religion) {
+                        return DropdownMenuItem(
+                          child: Text(religion),
+                          value: religion,
+                        );
+                      }).toList(),
+                      value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
+                      hint: "Select Religion",
+                      searchHint: "Search for a religion",
+                      onChanged: (value) {
+                        provider.religionController.text = value as String;
                       },
+                      isExpanded: true,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -365,40 +337,20 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      width: 90.w,
-                      padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                        border: Border.all(
-                          color: AppColors.transparent, // Set the border color here
-                          width: 1, // You can adjust the width of the border
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<dynamic>(
-                          value: provider.nationalityController.text.isEmpty ? null : provider.nationalityController.text,
-                          onChanged: (dynamic newValue) {
-                            setState(() {
-                              provider.nationalityController.text = newValue!;
-                            });
-                          },
-                          items: nationalityList.map((value) {
-                            return DropdownMenuItem<dynamic>(
-                                value: value["key"],
-                                child: Text(
-                                  // value.Type!,
-                                  value["value"].toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                ));
-                          }).toList(),
-                          isExpanded: true,
-                          underline: SizedBox(), // Remove the default underline
-                          hint: Text('Select Nationality'),
-                        ),
-                      ),
+                    SearchChoices.single(
+                      items: provider.countries.map((country) {
+                        return DropdownMenuItem(
+                          child: Text(country),
+                          value: country,
+                        );
+                      }).toList(),
+                      value: provider.nationalityController.text.isEmpty ? null : provider.nationalityController.text,
+                      hint: "Select Nationality",
+                      searchHint: "Search for a nationality",
+                      onChanged: (value) {
+                        provider.nationalityController.text = value as String;
+                      },
+                      isExpanded: true,
                     ),
 
                     // Contact Information
@@ -434,7 +386,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
-                      voidCallback: validateEmail,
+                      voidCallback: (value) {},
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.emailFocusNode.hasFocus
@@ -545,40 +497,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     // Marital Status and Children Number (Dropdown)
-                    Container(
-                      width: 90.w,
-                      padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                        border: Border.all(
-                          color: AppColors.transparent, // Set the border color here
-                          width: 1, // You can adjust the width of the border
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<dynamic>(
-                          value: provider.nearestAirport,
-                          isExpanded: true,
-                          underline: SizedBox(),
-                          hint: Text('Select Airport'),
-                          onChanged: (dynamic newValue) {
-                            setState(() {
-                              provider.nearestAirport = newValue!;
-                            });
-                          },
-                          items: nearestAirportList.map((value) {
-                            return DropdownMenuItem<dynamic>(
-                                value: value["key"],
-                                child: Text(
-                                  // value.Type!,
-                                  value["value"].toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                ));
-                          }).toList(),
-                        ),
-                      ),
+                    SearchChoices.single(
+                      items: provider.nearestAirportList.map((airport) {
+                        return DropdownMenuItem(
+                          child: Text(airport),
+                          value: airport,
+                        );
+                      }).toList(),
+                      value: provider.nearestAirport,
+                      hint: "Select Nearest Airport",
+                      searchHint: "Search for an airport",
+                      onChanged: (value) {
+                        setState(() {
+                          provider.nearestAirport = value as String;
+                        });
+                      },
+                      isExpanded: true,
                     ),
 
                     Padding(
