@@ -109,7 +109,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         'Passport',
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           fontFamily: AppColors.fontFamilyMedium,
                           color: AppColors.Color_424242,
                         ),
@@ -328,7 +328,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         'Seaman’s Book',
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           fontFamily: AppColors.fontFamilyMedium,
                           color: AppColors.Color_424242,
                         ),
@@ -634,7 +634,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         'Valid Seafarer’s Visa',
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           fontFamily: AppColors.fontFamilyMedium,
                           color: AppColors.Color_424242,
                         ),
@@ -644,6 +644,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                     Row(
                       children: [
                         Radio(
+                          activeColor: AppColors.buttonColor,
                           value: true,
                           groupValue: provider.validSeafarerVisa,
                           onChanged: (value) {
@@ -652,6 +653,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         ),
                         Text('Yes'),
                         Radio(
+                          activeColor: AppColors.buttonColor,
                           value: false,
                           groupValue: provider.validSeafarerVisa,
                           onChanged: (value) {
@@ -663,6 +665,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                     ),
                     if (provider.validSeafarerVisa)
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 1.h),
                           Padding(
@@ -879,7 +882,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         'Visa',
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           fontFamily: AppColors.fontFamilyMedium,
                           color: AppColors.Color_424242,
                         ),
@@ -1098,7 +1101,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         'Residence Permit',
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           fontFamily: AppColors.fontFamilyMedium,
                           color: AppColors.Color_424242,
                         ),
