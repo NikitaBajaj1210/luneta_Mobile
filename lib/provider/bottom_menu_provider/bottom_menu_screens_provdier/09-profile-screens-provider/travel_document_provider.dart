@@ -15,6 +15,12 @@ class TravelDocumentProvider extends ChangeNotifier {
   final TextEditingController passportNoController = TextEditingController();
   final TextEditingController passportIssueDateController = TextEditingController();
   final TextEditingController passportExpiryDateController = TextEditingController();
+  File? passportDocument;
+  File? seamanDocument;
+  File? seafarerVisaDocument;
+  File? visaDocument;
+  File? residencePermitDocument;
+
   final TextEditingController passportDocumentController = TextEditingController();
   final TextEditingController seamanBookNoController = TextEditingController();
   final TextEditingController seamanIssuingAuthorityController = TextEditingController();
@@ -209,59 +215,80 @@ class TravelDocumentProvider extends ChangeNotifier {
 
   final picker = ImagePicker();
 
-  Future pickPassportDocument() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> showAttachmentOptions(BuildContext context, String type) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from gallery'),
+                onTap: () {
+                  _pickImage(ImageSource.gallery, type);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a picture'),
+                onTap: () {
+                  _pickImage(ImageSource.camera, type);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
+  Future<void> _pickImage(ImageSource source, String type) async {
+    final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      passportDocumentController.text = pickedFile.path.split('/').last;
+      final file = File(pickedFile.path);
+      switch (type) {
+        case 'passport':
+          passportDocument = file;
+          break;
+        case 'seaman':
+          seamanDocument = file;
+          break;
+        case 'seafarer_visa':
+          seafarerVisaDocument = file;
+          break;
+        case 'visa':
+          visaDocument = file;
+          break;
+        case 'residence_permit':
+          residencePermitDocument = file;
+          break;
+      }
       notifyListeners();
-    } else {
-      print('No image selected.');
     }
   }
 
-  Future pickSeamanDocument() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      seamanDocumentController.text = pickedFile.path.split('/').last;
-      notifyListeners();
-    } else {
-      print('No image selected.');
+  void removeAttachment(String type) {
+    switch (type) {
+      case 'passport':
+        passportDocument = null;
+        break;
+      case 'seaman':
+        seamanDocument = null;
+        break;
+      case 'seafarer_visa':
+        seafarerVisaDocument = null;
+        break;
+      case 'visa':
+        visaDocument = null;
+        break;
+      case 'residence_permit':
+        residencePermitDocument = null;
+        break;
     }
-  }
-
-  Future pickSeafarerVisaDocument() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      seafarerVisaDocumentController.text = pickedFile.path.split('/').last;
-      notifyListeners();
-    } else {
-      print('No image selected.');
-    }
-  }
-
-  Future pickVisaDocument() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      visaDocumentController.text = pickedFile.path.split('/').last;
-      notifyListeners();
-    } else {
-      print('No image selected.');
-    }
-  }
-
-  Future pickResidencePermitDocument() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      residencePermitDocumentController.text = pickedFile.path.split('/').last;
-      notifyListeners();
-    } else {
-      print('No image selected.');
-    }
+    notifyListeners();
   }
 }
 
