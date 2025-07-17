@@ -167,29 +167,67 @@ class PersonalInformationProvider extends ChangeNotifier {
     }
   }
 
-  String? validate() {
+  String? firstNameError;
+  String? lastNameError;
+  String? dobError;
+  String? sexError;
+  String? nationalityError;
+  String? emailError;
+  String? phoneError;
+
+  bool validate() {
+    bool isValid = true;
     if (firstNameController.text.isEmpty) {
-      return 'First Name is required';
+      firstNameError = 'First Name is required';
+      isValid = false;
+    } else {
+      firstNameError = null;
     }
+
     if (lastNameController.text.isEmpty) {
-      return 'Last Name is required';
+      lastNameError = 'Last Name is required';
+      isValid = false;
+    } else {
+      lastNameError = null;
     }
+
     if (dobController.text.isEmpty) {
-      return 'Date of Birth is required';
+      dobError = 'Date of Birth is required';
+      isValid = false;
+    } else {
+      dobError = null;
     }
+
     if (sex.isEmpty) {
-      return 'Sex is required';
+      sexError = 'Sex is required';
+      isValid = false;
+    } else {
+      sexError = null;
     }
+
     if (nationalityController.text.isEmpty) {
-      return 'Nationality is required';
+      nationalityError = 'Nationality is required';
+      isValid = false;
+    } else {
+      nationalityError = null;
     }
+
     if (emailController.text.isEmpty) {
-      return 'Email is required';
+      emailError = 'Email is required';
+      isValid = false;
+    } else {
+      emailError = null;
     }
+
     if (phoneController.text.isEmpty) {
-      return 'Mobile Phone is required';
+      phoneError = 'Mobile Phone is required';
+      isValid = false;
+    } else {
+      phoneError = null;
     }
-    return null;
+
+    notifyListeners();
+    return isValid;
   }
 }
 
