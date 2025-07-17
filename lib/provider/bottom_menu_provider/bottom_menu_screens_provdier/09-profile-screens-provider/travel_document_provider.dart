@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
@@ -238,11 +239,47 @@ class TravelDocumentProvider extends ChangeNotifier {
                   Navigator.of(context).pop();
                 },
               ),
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text('Choose a document'),
+                onTap: () {
+                  _pickDocument(type);
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
           ),
         );
       },
     );
+  }
+
+  Future<void> _pickDocument(String type) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      switch (type) {
+        case 'passport':
+          passportDocument = file;
+          break;
+        case 'seaman':
+          seamanDocument = file;
+          break;
+        case 'seafarer_visa':
+          seafarerVisaDocument = file;
+          break;
+        case 'visa':
+          visaDocument = file;
+          break;
+        case 'residence_permit':
+          residencePermitDocument = file;
+          break;
+      }
+      notifyListeners();
+    }
   }
 
   Future<void> _pickImage(ImageSource source, String type) async {
