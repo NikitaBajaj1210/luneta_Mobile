@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfessionalExperienceProvider extends ChangeNotifier {
+  File? referenceDocument;
   // Controllers for text fields
   final TextEditingController companyController = TextEditingController();
   // final TextEditingController positionController = TextEditingController();
@@ -88,16 +90,66 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   File? _image;
   final picker = ImagePicker();
 
-  Future pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> showAttachmentOptions(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from gallery'),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a picture'),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text('Choose a document'),
+                onTap: () {
+                  _pickDocument();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      _image = File(pickedFile.path);
-      referenceDocumentController.text = pickedFile.path.split('/').last;
+      referenceDocument = File(pickedFile.path);
       notifyListeners();
-    } else {
-      print('No image selected.');
     }
+  }
+
+  Future<void> _pickDocument() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      referenceDocument = File(result.files.single.path!);
+      notifyListeners();
+    }
+  }
+
+  void removeAttachment() {
+    referenceDocument = null;
+    notifyListeners();
   }
 
   void setStartDate(DateTime date) {
