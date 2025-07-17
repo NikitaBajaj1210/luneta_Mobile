@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
 import '../../../../const/color.dart';
@@ -296,30 +297,101 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        provider.pickPassportDocument();
+                      onTap: () async {
+                        await provider.showAttachmentOptions(context, 'passport');
                       },
-                      child: AbsorbPointer(
-                        child: customTextField(
-                          context: context,
-                          controller: provider.passportDocumentController,
-                          hintText: 'Attach Document',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.passportDocumentFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: Radius.circular(15),
+                        dashPattern: [10, 10],
+                        color: AppColors.buttonColor,
+                        strokeWidth: 1,
+                        child: Container(
+                          width: 100.w,
+                          padding: EdgeInsets.symmetric(vertical: 3.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.h),
+                            color: AppColors.Color_FAFAFA,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/Upload.png", height: 5.h),
+                              SizedBox(height: 1.h),
+                              Text(
+                                "Browse File",
+                                style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: AppColors.fontFamilySemiBold,
+                                    color: AppColors.Color_9E9E9E),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 3.h),
+                    if (provider.passportDocument != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade100,
+                          borderRadius: BorderRadius.circular(1.h),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                            SizedBox(width: 2.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    provider.passportDocument!.path.split('/').last,
+                                    style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.Color_212121,
+                                        fontFamily:
+                                        AppColors.fontFamilyBold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  FutureBuilder<int>(
+                                    future: provider.passportDocument!.length(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize12,
+                                              color: AppColors.Color_616161,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily:
+                                              AppColors.fontFamilyMedium),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                provider.removeAttachment('passport');
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                     // Seaman’s Book
                     Padding(
@@ -602,30 +674,101 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        provider.pickSeamanDocument();
+                      onTap: () async {
+                        await provider.showAttachmentOptions(context, 'seaman');
                       },
-                      child: AbsorbPointer(
-                        child: customTextField(
-                          context: context,
-                          controller: provider.seamanDocumentController,
-                          hintText: 'Attach Document',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.seamanDocumentFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: Radius.circular(15),
+                        dashPattern: [10, 10],
+                        color: AppColors.buttonColor,
+                        strokeWidth: 1,
+                        child: Container(
+                          width: 100.w,
+                          padding: EdgeInsets.symmetric(vertical: 3.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.h),
+                            color: AppColors.Color_FAFAFA,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/Upload.png", height: 5.h),
+                              SizedBox(height: 1.h),
+                              Text(
+                                "Browse File",
+                                style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: AppColors.fontFamilySemiBold,
+                                    color: AppColors.Color_9E9E9E),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 3.h),
+                    if (provider.seamanDocument != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade100,
+                          borderRadius: BorderRadius.circular(1.h),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                            SizedBox(width: 2.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    provider.seamanDocument!.path.split('/').last,
+                                    style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.Color_212121,
+                                        fontFamily:
+                                        AppColors.fontFamilyBold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  FutureBuilder<int>(
+                                    future: provider.seamanDocument!.length(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize12,
+                                              color: AppColors.Color_616161,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily:
+                                              AppColors.fontFamilyMedium),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                provider.removeAttachment('seaman');
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                     // Valid Seafarer’s Visa
                     Padding(
@@ -848,30 +991,101 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              provider.pickSeafarerVisaDocument();
+                            onTap: () async {
+                              await provider.showAttachmentOptions(context, 'seafarer_visa');
                             },
-                            child: AbsorbPointer(
-                              child: customTextField(
-                                context: context,
-                                controller: provider.seafarerVisaDocumentController,
-                                hintText: 'Attach Document',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                voidCallback: (value) {},
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: provider.seafarerVisaDocumentFocusNode.hasFocus
-                                    ? AppColors.activeFieldBgColor
-                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(15),
+                              dashPattern: [10, 10],
+                              color: AppColors.buttonColor,
+                              strokeWidth: 1,
+                              child: Container(
+                                width: 100.w,
+                                padding: EdgeInsets.symmetric(vertical: 3.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1.h),
+                                  color: AppColors.Color_FAFAFA,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/images/Upload.png", height: 5.h),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      "Browse File",
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: AppColors.fontFamilySemiBold,
+                                          color: AppColors.Color_9E9E9E),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
+                          SizedBox(height: 3.h),
+                          if (provider.seafarerVisaDocument != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.w, vertical: 2.h),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade100,
+                                borderRadius: BorderRadius.circular(1.h),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                  SizedBox(width: 2.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          provider.seafarerVisaDocument!.path.split('/').last,
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize16,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.Color_212121,
+                                              fontFamily:
+                                              AppColors.fontFamilyBold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        FutureBuilder<int>(
+                                          future: provider.seafarerVisaDocument!.length(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                style: TextStyle(
+                                                    fontSize: AppFontSize.fontSize12,
+                                                    color: AppColors.Color_616161,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily:
+                                                    AppColors.fontFamilyMedium),
+                                              );
+                                            }
+                                            return SizedBox();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      provider.removeAttachment('seafarer_visa');
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                         ],
                       ),
 
@@ -1069,30 +1283,101 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        provider.pickVisaDocument();
+                      onTap: () async {
+                        await provider.showAttachmentOptions(context, 'visa');
                       },
-                      child: AbsorbPointer(
-                        child: customTextField(
-                          context: context,
-                          controller: provider.visaDocumentController,
-                          hintText: 'Attach Document',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.visaDocumentFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: Radius.circular(15),
+                        dashPattern: [10, 10],
+                        color: AppColors.buttonColor,
+                        strokeWidth: 1,
+                        child: Container(
+                          width: 100.w,
+                          padding: EdgeInsets.symmetric(vertical: 3.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.h),
+                            color: AppColors.Color_FAFAFA,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/Upload.png", height: 5.h),
+                              SizedBox(height: 1.h),
+                              Text(
+                                "Browse File",
+                                style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: AppColors.fontFamilySemiBold,
+                                    color: AppColors.Color_9E9E9E),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 3.h),
+                    if (provider.visaDocument != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade100,
+                          borderRadius: BorderRadius.circular(1.h),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                            SizedBox(width: 2.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    provider.visaDocument!.path.split('/').last,
+                                    style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.Color_212121,
+                                        fontFamily:
+                                        AppColors.fontFamilyBold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  FutureBuilder<int>(
+                                    future: provider.visaDocument!.length(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize12,
+                                              color: AppColors.Color_616161,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily:
+                                              AppColors.fontFamilyMedium),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                provider.removeAttachment('visa');
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                     // Residence Permit
                     Padding(
@@ -1288,30 +1573,101 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        provider.pickResidencePermitDocument();
+                      onTap: () async {
+                        await provider.showAttachmentOptions(context, 'residence_permit');
                       },
-                      child: AbsorbPointer(
-                        child: customTextField(
-                          context: context,
-                          controller: provider.residencePermitDocumentController,
-                          hintText: 'Attach Document',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.residencePermitDocumentFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: Radius.circular(15),
+                        dashPattern: [10, 10],
+                        color: AppColors.buttonColor,
+                        strokeWidth: 1,
+                        child: Container(
+                          width: 100.w,
+                          padding: EdgeInsets.symmetric(vertical: 3.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.h),
+                            color: AppColors.Color_FAFAFA,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/Upload.png", height: 5.h),
+                              SizedBox(height: 1.h),
+                              Text(
+                                "Browse File",
+                                style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: AppColors.fontFamilySemiBold,
+                                    color: AppColors.Color_9E9E9E),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 3.h),
+                    if (provider.residencePermitDocument != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade100,
+                          borderRadius: BorderRadius.circular(1.h),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                            SizedBox(width: 2.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    provider.residencePermitDocument!.path.split('/').last,
+                                    style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.Color_212121,
+                                        fontFamily:
+                                        AppColors.fontFamilyBold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  FutureBuilder<int>(
+                                    future: provider.residencePermitDocument!.length(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize12,
+                                              color: AppColors.Color_616161,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily:
+                                              AppColors.fontFamilyMedium),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                provider.removeAttachment('residence_permit');
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
