@@ -63,6 +63,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 fontSize: AppFontSize.fontSize18,
                 showShadow: true,
               ),
+                    if (provider.nationalityError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.nationalityError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
             ),
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
@@ -118,6 +129,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
+                    if (provider.sexError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.sexError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
                     customTextField(
                       context: context,
                       controller: provider.firstNameController,
@@ -141,6 +163,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.lastNameFocusNode);
                       },
                     ),
+                    if (provider.firstNameError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.firstNameError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Text(
@@ -176,6 +209,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.dobFocusNode);
                       },
                     ),
+                    if (provider.lastNameError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.lastNameError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Text(
@@ -212,6 +256,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.countryOfBirthFocusNode);
                       },
                     ),
+                    if (provider.dobError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.dobError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     // Country of Birth
 
@@ -454,6 +509,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.phoneFocusNode);
                       },
                     ),
+                    if (provider.emailError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.emailError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -476,6 +542,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         });
                       }, onFieldSubmitted: (String ) {  },
                     ),
+                    if (provider.phoneError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.phoneError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
