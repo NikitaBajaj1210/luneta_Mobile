@@ -41,22 +41,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () {
-                  // Validate fields
-                  if (provider.addressController.text.isNotEmpty &&
-                      provider.phoneNumber.phoneNumber != null &&
-                      provider.emailController.text.isNotEmpty) {
-
-                    // Save the data in provider or update the profile here
-                    // Add validation or API call as needed
-
-                    Navigator.pop(context);
-                  } else {
+                  final error = provider.validate();
+                  if (error != null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Please fill in all required fields'),
+                        content: Text(error),
                         duration: Duration(seconds: 2),
                       ),
                     );
+                  } else {
+                    // Save the data in provider or update the profile here
+                    Navigator.pop(context);
                   }
                 },
                 buttonText: "Save",
