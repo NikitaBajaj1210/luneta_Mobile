@@ -166,7 +166,30 @@ class PersonalInformationProvider extends ChangeNotifier {
     }
   }
 
-
+  String? validate() {
+    if (firstNameController.text.isEmpty) {
+      return 'First Name is required';
+    }
+    if (lastNameController.text.isEmpty) {
+      return 'Last Name is required';
+    }
+    if (dobController.text.isEmpty) {
+      return 'Date of Birth is required';
+    }
+    if (sex.isEmpty) {
+      return 'Sex is required';
+    }
+    if (nationalityController.text.isEmpty) {
+      return 'Nationality is required';
+    }
+    if (emailController.text.isEmpty) {
+      return 'Email is required';
+    }
+    if (phoneController.text.isEmpty) {
+      return 'Mobile Phone is required';
+    }
+    return null;
+  }
 }
 
 class PlatformEntry {
