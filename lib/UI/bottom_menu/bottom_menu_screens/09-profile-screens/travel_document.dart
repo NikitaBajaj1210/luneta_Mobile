@@ -182,7 +182,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         hint: "Select Country",
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
-                          if (value == null || value.isEmpty) {
+                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
                             return '      Please select Country';
                           }
                           return null;
@@ -361,6 +361,16 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
+                      if (provider.passportDocument == null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text("Please select Passport",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 3.h),
                       if (provider.passportDocument != null)
                         Container(
@@ -497,7 +507,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         hint: "Select Country",
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
-                          if (value == null || value.isEmpty) {
+                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
                             return '      Please select Country';
                           }
                           return null;
@@ -701,8 +711,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         hint: "Select Nationality",
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
-                          if (value == null || value.isEmpty) {
-                            return '      Please select Country';
+                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                            return '      Please select Nationality';
                           }
                           return null;
                         },
@@ -776,6 +786,16 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
+                      if (provider.seamanDocument == null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text("Please select Seaman Document",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 3.h),
                       if (provider.seamanDocument != null)
                         Container(
@@ -902,7 +922,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                               hint: "Select Country",
                               autovalidateMode: provider.autovalidateMode,
                               validator: (value){
-                                if (value == null || value.isEmpty) {
+                                if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
                                   return '      Please select Country';
                                 }
                                 return null;
@@ -1118,6 +1138,16 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                 ),
                               ),
                             ),
+                            if (provider.seafarerVisaDocument == null)
+                              Padding(
+                                padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                child: Text("Please select Seafarer Visa Document",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: AppFontSize.fontSize12,
+                                  ),
+                                ),
+                              ),
                             SizedBox(height: 3.h),
                             if (provider.seafarerVisaDocument != null)
                               Container(
@@ -1219,7 +1249,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         hint: "Select Country",
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
-                          if (value == null || value.isEmpty) {
+                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
                             return '      Please select Country';
                           }
                           return null;
@@ -1435,6 +1465,16 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
+                      if (provider.visaDocument == null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text("Please select Visa Document",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 3.h),
                       if (provider.visaDocument != null)
                         Container(
@@ -1534,7 +1574,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         hint: "Select Country",
                          autovalidateMode: provider.autovalidateMode,
                          validator: (value){
-                          if (value == null || value.isEmpty) {
+                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
                           return '      Please select Country';
                           }
                           return null;
@@ -1751,6 +1791,16 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
+                      if (provider.residencePermitDocument == null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text("Please select Residence Permit Document",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 3.h),
                       if (provider.residencePermitDocument != null)
                         Container(
