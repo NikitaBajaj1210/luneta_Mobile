@@ -7,6 +7,9 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
+  final formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   List<String> countries = [];
 
   List<String> religions = [
@@ -167,60 +170,6 @@ class PersonalInformationProvider extends ChangeNotifier {
     }
   }
 
-  String? firstNameError;
-  String? dobError;
-  String? sexError;
-  String? nationalityError;
-  String? emailError;
-  String? phoneError;
-
-  bool validate() {
-    bool isValid = true;
-    if (firstNameController.text.isEmpty) {
-      firstNameError = 'First Name is required';
-      isValid = false;
-    } else {
-      firstNameError = null;
-    }
-
-    if (dobController.text.isEmpty) {
-      dobError = 'Date of Birth is required';
-      isValid = false;
-    } else {
-      dobError = null;
-    }
-
-    if (sex.isEmpty) {
-      sexError = 'Sex is required';
-      isValid = false;
-    } else {
-      sexError = null;
-    }
-
-    if (nationalityController.text.isEmpty) {
-      nationalityError = 'Nationality is required';
-      isValid = false;
-    } else {
-      nationalityError = null;
-    }
-
-    if (emailController.text.isEmpty) {
-      emailError = 'Email is required';
-      isValid = false;
-    } else {
-      emailError = null;
-    }
-
-    if (phoneController.text.isEmpty) {
-      phoneError = 'Mobile Phone is required';
-      isValid = false;
-    } else {
-      phoneError = null;
-    }
-
-    notifyListeners();
-    return isValid;
-  }
 }
 
 class PlatformEntry {

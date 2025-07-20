@@ -40,9 +40,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () {
-                  if (provider.validate()) {
+                  if (provider.formKey.currentState!.validate()) {
                     // Save the data in provider or update the profile here
                     Navigator.pop(context);
+                  } else {
+                    setState(() {
+                      provider.autovalidateMode = AutovalidateMode.always;
+                    });
                   }
                 },
                 buttonText: "Save",
@@ -58,7 +62,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
               child: SingleChildScrollView(
-                child: Column(
+                child: Form(
+                  key: provider.formKey,
+                  autovalidateMode: provider.autovalidateMode,
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Back Button and Title
@@ -115,7 +122,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'First Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      voidCallback: (value) {},
+                      autovalidateMode: provider.autovalidateMode,
+                      voidCallback: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter First Name';
+                        }
+                        return null;
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.firstNameFocusNode.hasFocus
@@ -132,17 +145,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.lastNameFocusNode);
                       },
                     ),
-                    if (provider.firstNameError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.firstNameError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Text(
@@ -161,7 +163,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Last Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      voidCallback: (value) {},
+                      autovalidateMode: provider.autovalidateMode,
+                      voidCallback: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Last Name';
+                        }
+                        return null;
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.lastNameFocusNode.hasFocus
@@ -197,7 +205,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Date of Birth',
                       textInputType: TextInputType.datetime,
                       obscureText: false,
-                      voidCallback: (value) {},
+                      autovalidateMode: provider.autovalidateMode,
+                      voidCallback: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Date of Birth';
+                        }
+                        return null;
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.dobFocusNode.hasFocus
@@ -214,17 +228,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.countryOfBirthFocusNode);
                       },
                     ),
-                    if (provider.dobError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.dobError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
 
                     // Country of Birth
 
@@ -252,6 +255,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           : provider.countryOfBirthController.text,
                       hint: "Select Country of Birth",
                       searchHint: "Search for a country",
+                      autovalidateMode: provider.autovalidateMode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '      Please select Country of Birth';
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         setState(() {
                           provider.countryOfBirthController.text = value as String;
@@ -299,6 +309,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
                       hint: "Select Religion",
                       searchHint: "Search for a religion",
+                      autovalidateMode: provider.autovalidateMode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '      Please select Religion';
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         provider.religionController.text = value as String;
                       },
@@ -346,7 +363,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<dynamic>(
+                        child: DropdownButtonFormField<dynamic>(
                           value: provider.sex,
                           onChanged: (dynamic newValue) {
                             setState(() {
@@ -354,6 +371,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             });
                           },
                           isExpanded: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select a gender';
+                            }
+                            return null;
+                          },
                           underline: SizedBox(), // Remove the default underline
                           items: sexList.map((value) {
                             return DropdownMenuItem<dynamic>(
@@ -367,17 +393,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    if (provider.sexError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.sexError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
 
                     // Nationality (Dropdown for Country)
                     Padding(
@@ -404,6 +419,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           : provider.nationalityController.text,
                       hint: "Select Nationality",
                       searchHint: "Search for a nationality",
+                      autovalidateMode: provider.autovalidateMode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '      Please select Nationality';
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         setState(() {
                           provider.nationalityController.text = value as String;
@@ -427,17 +449,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         );
                       },
                     ),
-                    if (provider.nationalityError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.nationalityError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
 
                     // Contact Information
                     // Email, Phone Number, Address, Nearest Airport (Phone number inputs)
@@ -472,7 +483,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
-                      voidCallback: (value) {},
+                      autovalidateMode: provider.autovalidateMode,
+                      voidCallback: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Email Address';
+                        }
+                        if (!Validation.isValidEmail(value)) {
+                          return 'Please enter a valid Email Address';
+                        }
+                        return null;
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.emailFocusNode.hasFocus
@@ -489,17 +509,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.phoneFocusNode);
                       },
                     ),
-                    if (provider.emailError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.emailError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -520,19 +529,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         setState(() {
                           provider.phoneNumber = newNumber; // Update provider with new number
                         });
-                      }, onFieldSubmitted: (String ) {  },
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Phone Number';
+                        }
+                        return null;
+                      },
+                      onFieldSubmitted: (String ) {  },
                     ),
-                    if (provider.phoneError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.phoneError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
