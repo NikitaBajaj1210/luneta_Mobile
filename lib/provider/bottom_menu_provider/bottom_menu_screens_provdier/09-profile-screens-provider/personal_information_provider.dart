@@ -170,6 +170,10 @@ class PersonalInformationProvider extends ChangeNotifier {
     }
   }
 
+  void setDOB(DateTime date) {
+    dobController.text = "${date.toLocal()}".split(' ')[0];
+    notifyListeners();
+  }
 }
 
 class PlatformEntry {

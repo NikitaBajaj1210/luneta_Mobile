@@ -165,9 +165,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       obscureText: false,
                       autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Last Name';
-                        }
                         return null;
                       },
                       fontSize: AppFontSize.fontSize16,
@@ -199,34 +196,49 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     // Date of Birth
-                    customTextField(
-                      context: context,
-                      controller: provider.dobController,
-                      hintText: 'Date of Birth',
-                      textInputType: TextInputType.datetime,
-                      obscureText: false,
-                      autovalidateMode: provider.autovalidateMode,
-                      voidCallback: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Date of Birth';
+                    GestureDetector(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          provider.setDOB(picked);
                         }
-                        return null;
                       },
-                      fontSize: AppFontSize.fontSize16,
-                      inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.dobFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
-                      borderColor: AppColors.buttonColor,
-                      textColor: Colors.black,
-                      labelColor: AppColors.Color_9E9E9E,
-                      cursorColor: AppColors.Color_212121,
-                      fillColor: provider.dobFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
-                      onFieldSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(provider.countryOfBirthFocusNode);
-                      },
+                      child: AbsorbPointer(
+                        child: customTextField(
+                          context: context,
+                          controller: provider.dobController,
+                          hintText: 'Date of Birth',
+                          textInputType: TextInputType.datetime,
+                          obscureText: false,
+                          autovalidateMode: provider.autovalidateMode,
+                          voidCallback: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter Date of Birth';
+                            }
+                            return null;
+                          },
+                          fontSize: AppFontSize.fontSize16,
+                          inputFontSize: AppFontSize.fontSize16,
+                          backgroundColor: provider.dobFocusNode.hasFocus
+                              ? AppColors.activeFieldBgColor
+                              : AppColors.Color_FAFAFA,
+                          borderColor: AppColors.buttonColor,
+                          textColor: Colors.black,
+                          labelColor: AppColors.Color_9E9E9E,
+                          cursorColor: AppColors.Color_212121,
+                          fillColor: provider.dobFocusNode.hasFocus
+                              ? AppColors.activeFieldBgColor
+                              : AppColors.Color_FAFAFA,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).requestFocus(provider.countryOfBirthFocusNode);
+                          },
+                        ),
+                      ),
                     ),
 
                     // Country of Birth
