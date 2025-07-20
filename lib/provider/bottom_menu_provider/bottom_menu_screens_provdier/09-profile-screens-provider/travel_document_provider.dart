@@ -71,13 +71,6 @@ class TravelDocumentProvider extends ChangeNotifier {
   // Seaman's Book
   bool seamanNeverExpire = false;
   bool validSeafarerVisa = false;
-  void validate() {
-    if (formKey.currentState!.validate()) {
-    } else {
-      autovalidateMode = AutovalidateMode.always;
-      notifyListeners();
-    }
-  }
 
   void setSeamanNeverExpire(bool value) {
     seamanNeverExpire = value;

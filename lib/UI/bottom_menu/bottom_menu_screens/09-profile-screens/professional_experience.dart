@@ -35,9 +35,13 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
               ),
               child: customButton(
                 voidCallback: () {
-                  if (provider.validate()) {
+                  if (provider.formKey.currentState!.validate()) {
                     // Save the data in provider or update the profile here
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                  } else {
+                    setState(() {
+                      provider.autovalidateMode = AutovalidateMode.always;
+                    });
                   }
                 },
                 buttonText: "Save",
@@ -53,93 +57,36 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Back Button and Title
-                    backButtonWithTitle(
-                      title: "Professional Experience",
-                      onBackPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-
-                    // Positions Held (Multiselect Dropdown)
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 1.h),
-                      child: Text(
-                        'Positions Held',
-                        style: TextStyle(
-                          fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: AppColors.fontFamilyMedium,
-                          color: AppColors.Color_424242,
-                        ),
+                child: Form(
+                  key: provider.formKey,
+                  autovalidateMode: provider.autovalidateMode,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Back Button and Title
+                      backButtonWithTitle(
+                        title: "Professional Experience",
+                        onBackPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                    ),
+                      SizedBox(height: 2.h),
 
-                    Container(
-                      width: 90.w,
-                      padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                        border: Border.all(
-                          color: AppColors.transparent,
-                          width: 1,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: MultiSelectDialogField(
-                          searchable: true,
-                          searchHint: 'Search Position',
-                          dialogHeight: 30.h,
-                          items: predefinedPositionList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
-                          title: Text("Positions"),
-                          selectedColor: AppColors.buttonColor,
-                          decoration: BoxDecoration(
-                            color: AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.buttonColor, width: 1),
-                          ),
-                          buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
-                          buttonText: Text("Select Positions"),
-                          onConfirm: (values) {
-                            setState(() {
-                              provider.setPositionsHeld(values.cast<String>());
-                            });
-                          },
-                        ),
-                      )
-                    ),
-                    if (provider.positionsHeldError != null)
+                      // Positions Held (Multiselect Dropdown)
                       Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          provider.positionsHeldError!,
+                          'Positions Held',
                           style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
+                            fontSize: AppFontSize.fontSize16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: AppColors.fontFamilyMedium,
+                            color: AppColors.Color_424242,
                           ),
                         ),
                       ),
 
-                    // Vessel Type Experience (Multiselect Dropdown)
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 1.h),
-                      child: Text(
-                        'Vessel Type Experience',
-                        style: TextStyle(
-                          fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: AppColors.fontFamilyMedium,
-                          color: AppColors.Color_424242,
-                        ),
-                      ),
-                    ),
-                    Container(
+                      Container(
                         width: 90.w,
                         padding: EdgeInsets.symmetric(horizontal: 0.1.w),
                         decoration: BoxDecoration(
@@ -151,13 +98,20 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(20.0),
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: MultiSelectDialogField(
                             searchable: true,
+                            searchHint: 'Search Position',
                             dialogHeight: 30.h,
-                            searchHint: 'Search Vessel Type',
-                            items: vesselTypeList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
-                            title: Text('Vessel Type'),
+                            autovalidateMode: provider.autovalidateMode,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select Position';
+                              }
+                              return null;
+                            },
+                            items: predefinedPositionList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
+                            title: Text("Positions"),
                             selectedColor: AppColors.buttonColor,
                             decoration: BoxDecoration(
                               color: AppColors.Color_FAFAFA,
@@ -165,766 +119,30 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               border: Border.all(color: AppColors.buttonColor, width: 1),
                             ),
                             buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
-                            buttonText: Text('Select Vessel Type'),
+                            buttonText: Text("Select Positions"),
                             onConfirm: (values) {
                               setState(() {
-                                provider.setVesselTypeExperience(values.cast<String>());
+                                provider.setPositionsHeld(values.cast<String>());
                               });
                             },
                           ),
                         )
-                    ),
-                    if (provider.vesselTypeExperienceError != null)
+                      ),
+
+                      // Vessel Type Experience (Multiselect Dropdown)
                       Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          provider.vesselTypeExperienceError!,
+                          'Vessel Type Experience',
                           style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
+                            fontSize: AppFontSize.fontSize16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: AppColors.fontFamilyMedium,
+                            color: AppColors.Color_424242,
                           ),
                         ),
                       ),
-
-                    // Container(
-                    //   width: 90.w,
-                    //   padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                    //   decoration: BoxDecoration(
-                    //     color: AppColors.Color_FAFAFA,
-                    //     borderRadius: BorderRadius.circular(2.h),
-                    //     border: Border.all(
-                    //       color: AppColors.transparent,
-                    //       width: 1,
-                    //     ),
-                    //   ),
-                    //   child: Padding(
-                    //     padding: EdgeInsets.only(left: 8.0),
-                    //     child: DropdownButton<String>(
-                    //       value: provider.vesselTypeExperience,
-                    //       isExpanded: true,
-                    //       hint: Text(),
-                    //       onChanged: (newValue) {
-                    //         provider.setVesselTypeExperience(newValue!);
-                    //       },
-                    //       items: ['Bulk Carrier', 'Tanker', 'Cargo Ship'].map((value) {
-                    //         return DropdownMenuItem<String>(
-                    //           value: value,
-                    //           child: Text(value),
-                    //         );
-                    //       }).toList(),
-                    //       underline: SizedBox(),
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // Employment History (Repeater)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Employment History',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0,top:10),
-                          child: GestureDetector(
-                            onTap: (){
-                              provider.setEmploymentHistoryVisibility(true);
-                              provider.employment_Edit_Index=null;
-                              provider.employment_IsEdit=false;
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(2.5.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.buttonColor,
-                                borderRadius: BorderRadius.circular(150),
-                                border: Border.all(
-                                  color: AppColors.transparent, // Set the border color here
-                                  width: 1, // You can adjust the width of the border
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                size: 2.5.h,
-                                color: AppColors.buttonTextWhiteColor,
-                              )
-                              ,),
-                          ),
-                        )
-                      ],
-                    ),
-                    ListView.builder(
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: provider.employmentHistory.length,
-                      itemBuilder: (context, index) {
-                        EmploymentHistory empDetail = provider.employmentHistory[index];
-                        print("position at index => ${empDetail.position}");
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.1.h,
-                                            color: AppColors
-                                                .Color_EEEEEE),
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            2.h)),
-                                    padding: EdgeInsets.all(1.2.h),
-                                    child: Image.asset(
-                                      "assets/images/companyLogo.png",
-                                      height: 5.h,
-                                      width: 5.h,
-                                    ),
-                                  ),
-                                  SizedBox(width: 3.w),
-                                  Container(
-                                    // color:Colors.red,
-                                    width: 64.w,
-                                    margin:
-                                    EdgeInsets.only(bottom: 2.h),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            Text(empDetail.companyName,
-                                              style: TextStyle(
-                                                fontSize: AppFontSize
-                                                    .fontSize20,
-                                                fontWeight:
-                                                FontWeight.w700,
-                                                color: AppColors
-                                                    .Color_212121,
-                                                fontFamily: AppColors
-                                                    .fontFamilyBold,
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap:(){
-                                                   provider.companyController.text =empDetail.companyName;
-                                                   provider.setEmpHisPositionsHeld(empDetail.position);
-                                                   provider.startDate.text =empDetail.startDate ;
-                                                   provider.endDate.text =empDetail.endDate;
-                                                   provider.responsibilitiesController.text=empDetail.responsibilities;
-                                                   provider.setEmploymentHistoryVisibility(true);
-                                                   provider.employment_Edit_Index=index;
-                                                   provider.employment_IsEdit=true;
-                                                  },
-                                                  child: Image.asset(
-                                                    "assets/images/Edit.png",
-                                                    height: 2.h,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 2.w),
-                                                GestureDetector(
-                                                  onTap:(){
-                                                    provider.removeEmploymentHistory(index);
-                                                  },
-                                                  child: Image.asset(
-                                                    "assets/images/Delete.png",
-                                                    height: 2.h,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(height: 0.5.h),
-                                        Wrap(
-                                          spacing: 2.w,
-                                          // Space between chips horizontally
-                                          runSpacing: 1.h,
-                                          // Space between chips vertically
-                                          children: empDetail.position
-                                              .map((position) => Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 4.w, vertical: 1.h),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(50.h),
-                                              border: Border.all(
-                                                  color: AppColors.buttonColor,
-                                                  width: 0.15.h),
-                                            ),
-                                            child: Text(
-                                              position,
-                                              style: TextStyle(
-                                                fontSize:
-                                                AppFontSize.fontSize14,
-                                                fontWeight: FontWeight.w600,
-                                                color: AppColors.buttonColor,
-                                                fontFamily: AppColors
-                                                    .fontFamilySemiBold,
-                                              ),
-                                            ),
-                                          ))
-                                              .toList(),
-                                        ),
-                                        SizedBox(height: 0.5.h),
-                                        Text(empDetail.startDate +" - "+empDetail.endDate,
-                                          style: TextStyle(
-                                            fontSize: AppFontSize
-                                                .fontSize14,
-                                            fontWeight:
-                                            FontWeight.w500,
-                                            color: AppColors
-                                                .Color_212121,
-                                            fontFamily: AppColors
-                                                .fontFamilyMedium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Image.asset(IconPath,
-                                //   height: 2.h,
-                                // ),
-                                // SizedBox(width: 3.w),
-                                Text("Responsibilities: ",
-                                  style: TextStyle(
-                                      fontSize: AppFontSize.fontSize16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.Color_212121,
-                                      fontFamily:
-                                      AppColors.fontFamilyMedium),
-                                ),
-                                Expanded(
-                                  child: Text(empDetail.responsibilities,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: AppFontSize.fontSize16,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.Color_212121,
-                                        fontFamily:
-                                        AppColors.fontFamilyMedium),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 3.h),
-                          ],
-                        );
-
-                        //   EmploymentHistoryField(
-                        //   onEdit: (updatedHistory) {
-                        //     provider.updateEmploymentHistory(index, updatedHistory);
-                        //   },
-                        //   onDelete: () {
-                        //     provider.removeEmploymentHistory(index);
-                        //   }, history: provider.employmentHistory[index],
-                        // );
-                      },
-                    ),
-
-
-
-                    // Button to Add/Edit Employment History
-                    provider.showAddSection_employmentHistory ? Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Company Name',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        customTextField(
-                          context: context,
-                          controller: provider.companyController,
-                          hintText: 'Enter Company Name',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.companyFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Position',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-
-
-
-                        Container(
-                            width: 90.w,
-                            padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                            decoration: BoxDecoration(
-                              color: AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: MultiSelectDialogField(
-                                searchable: true,
-                                dialogHeight: 30.h,
-                                searchHint: 'Search Position',
-                                initialValue: provider.empHisPositionsHeld,
-                                items: vesselTypeList.map((e) => MultiSelectItem(e["value"], e["key"]!)).toList(),
-                                title: Text('Position'),
-                                selectedColor: AppColors.buttonColor,
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: AppColors.buttonColor, width: 1),
-                                ),
-                                buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
-                                buttonText: Text('Select Position'),
-                                onConfirm: (values) {
-                                    print("values ${values}");
-                                    provider.setEmpHisPositionsHeld(values.cast<String>());
-                                },
-                              ),
-                            )
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Start Date',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (picked != null) {
-                              provider.setStartDate(picked);
-                            }
-                          },
-                          child: AbsorbPointer(
-                            child: customTextField(
-                              context: context,
-                              controller: provider.startDate,
-                              hintText: 'Select Start Date',
-                              textInputType: TextInputType.datetime,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: provider.startDateFocusNode.hasFocus
-                                  ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'End Date',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (picked != null) {
-                              provider.setEndDate(picked);
-                            }
-                          },
-                          child: AbsorbPointer(
-                            child: customTextField(
-                              context: context,
-                              controller: provider.endDate,
-                              hintText: 'Select End Date',
-                              textInputType: TextInputType.datetime,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: provider.endDateFocusNode.hasFocus
-                                  ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Responsibilities',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        customTextField(
-                          context: context,
-                          controller: provider.responsibilitiesController,
-                          hintText: 'Enter Responsibilities',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.responsibilitiesFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                        ),
-
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                            child: customButton(
-                              voidCallback: () async {
-                                print("click => ${provider.empHisPositionsHeld}");
-                                // Validate fields and add employment history
-                                if (provider.companyController.text.isNotEmpty &&
-                                    provider.empHisPositionsHeld.isNotEmpty &&
-                                    provider.startDate.text.isNotEmpty &&
-                                    provider.endDate.text.isNotEmpty &&
-                                    provider.responsibilitiesController.text.isNotEmpty) {
-                                  if (!provider.employment_IsEdit) {
-                                    await provider.addEmploymentHistory(EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
-                                  } else {
-                                    await provider.updateEmploymentHistory(provider.employment_Edit_Index!,EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
-                                  }
-                                  provider.companyController.clear();
-                                  provider.startDate.clear();
-                                  provider.endDate.clear();
-                                  provider.responsibilitiesController.clear();
-                                  // provider.empHisPositionsHeld.clear();
-                                  provider.employment_IsEdit=false;
-                                  provider.employment_Edit_Index=null;
-                                  provider.setEmploymentHistoryVisibility(false);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Please fill in all required fields'),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              },
-                              buttonText: provider.employment_IsEdit ? "Update" : "Add",
-                              width: 30.w,
-                              height: 10.w,
-                              color: AppColors.buttonColor,
-                              buttonTextColor: AppColors.buttonTextWhiteColor,
-                              shadowColor: AppColors.buttonBorderColor,
-                              fontSize: AppFontSize.fontSize18,
-                              showShadow: true,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ) : Container(),
-
-
-
-                    // References (Repeater)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'References',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0,top:10),
-                          child: GestureDetector(
-                            onTap: (){
-                              provider.setReferenceVisibility(true);
-                              provider.reference_Edit_Index=null;
-                              provider.reference_IsEdit=false;
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(2.5.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.buttonColor,
-                                borderRadius: BorderRadius.circular(150),
-                                border: Border.all(
-                                  color: AppColors.transparent, // Set the border color here
-                                  width: 1, // You can adjust the width of the border
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                size: 2.5.h,
-                                color: AppColors.buttonTextWhiteColor,
-                              )
-                              ,),
-                          ),
-                        )
-                      ],
-                    ),
-                    ListView.builder(
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: provider.references.length,
-                      itemBuilder: (context, index) {
-                        Reference referenceDetail = provider.references[index];
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 1.h),
-                          child: Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 15.w,
-                                height: 15.w,
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardIconBgColour,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Image.asset(
-                                    "assets/images/profileActive.png",
-                                    height: 6.w,
-                                    width: 6.w,
-                                    color: AppColors.buttonColor,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 3.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      referenceDetail.vesselOrCompanyName,
-                                      style: TextStyle(
-                                        fontSize:
-                                        AppFontSize.fontSize20,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.Color_212121,
-                                        fontFamily: AppColors
-                                            .fontFamilyBold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 0.8.h),
-                                    Text(referenceDetail.issuedBy,
-                                      style: TextStyle(
-                                        fontSize:
-                                        AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors
-                                            .Color_424242,
-                                        fontFamily: AppColors
-                                            .fontFamilyMedium,
-                                      ),
-                                    ),
-                                    SizedBox(height: 0.8.h),
-                                    Text(
-                                      referenceDetail.issuingDate,
-                                      style: TextStyle(
-                                        fontSize:
-                                        AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors
-                                            .Color_424242,
-                                        fontFamily: AppColors
-                                            .fontFamilyMedium,
-                                      ),
-                                    ),
-                                    SizedBox(height: 0.8.h),
-                                    Text(
-                                      referenceDetail.documentUrl,
-                                      style: TextStyle(
-                                        fontSize:
-                                        AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors
-                                            .Color_424242,
-                                        fontFamily: AppColors
-                                            .fontFamilyMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
-                                  provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
-                                  provider.setReferenceIssuedBy(referenceDetail.issuedBy);
-                                  provider.referenceDocumentController.text=referenceDetail.documentUrl;
-                                  provider.setReferenceVisibility(true);
-                                  provider.reference_Edit_Index=index;
-                                  provider.reference_IsEdit=true;
-                                },
-                                child: Image.asset(
-                                  "assets/images/Edit.png",
-                                  height: 2.h,
-                                ),
-                              ),
-                              SizedBox(width: 2.w),
-                              GestureDetector(
-                                onTap:(){
-                                  provider.removeReference(index);
-                                },
-                                child: Image.asset(
-                                  "assets/images/Delete.png",
-                                  height: 2.h,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    provider.showAddSection_reference ? Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Vessel/Company Name',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        customTextField(
-                          context: context,
-                          controller: provider.referenceVesselController,
-                          hintText: 'Enter Vessel/Company Name',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: provider.referenceVesselFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Issued By',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-
-                        Container(
+                      Container(
                           width: 90.w,
                           padding: EdgeInsets.symmetric(horizontal: 0.1.w),
                           decoration: BoxDecoration(
@@ -936,225 +154,1007 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: DropdownButton<String>(
-                              value: provider.referenceIssuedBy,
-                              isExpanded: true,
-                              hint: Text("Select Issued By"),
-                              onChanged: (newValue) {
-                                provider.setReferenceIssuedBy(newValue!);
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: MultiSelectDialogField(
+                              searchable: true,
+                              dialogHeight: 30.h,
+                              searchHint: 'Search Vessel Type',
+                              autovalidateMode: provider.autovalidateMode,
+                              validator: (value){
+                                if ((value == null || value.isEmpty) && provider.autovalidateMode== AutovalidateMode.always) {
+                                  return '      Please select Vessel Type';
+                                }
+                                return null;
                               },
-                              items: ['Company', 'Vessel'].map((value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              underline: SizedBox(),
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Issued Date',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (picked != null) {
-                              provider.setReferenceIssuingDate(picked);
-                            }
-                          },
-                          child: AbsorbPointer(
-                            child: customTextField(
-                              context: context,
-                              controller: provider.referenceIssuedDate,
-                              hintText: 'Select Issued Date',
-                              textInputType: TextInputType.datetime,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: provider.referenceIssuedDateFocusNode.hasFocus
-                                  ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Document',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            await provider.showAttachmentOptions(context);
-                          },
-                          child: DottedBorder(
-                            borderType: BorderType.RRect,
-                            radius: Radius.circular(15),
-                            dashPattern: [10, 10],
-                            color: AppColors.buttonColor,
-                            strokeWidth: 1,
-                            child: Container(
-                              width: 100.w,
-                              padding: EdgeInsets.symmetric(vertical: 3.h),
+                              items: vesselTypeList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
+                              title: Text('Vessel Type'),
+                              selectedColor: AppColors.buttonColor,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(1.h),
                                 color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: AppColors.buttonColor, width: 1),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
+                              buttonText: Text('Select Vessel Type'),
+                              onConfirm: (values) {
+                                setState(() {
+                                  provider.setVesselTypeExperience(values.cast<String>());
+                                });
+                              },
+                            ),
+                          )
+                      ),
+
+                      // Container(
+                      //   width: 90.w,
+                      //   padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                      //   decoration: BoxDecoration(
+                      //     color: AppColors.Color_FAFAFA,
+                      //     borderRadius: BorderRadius.circular(2.h),
+                      //     border: Border.all(
+                      //       color: AppColors.transparent,
+                      //       width: 1,
+                      //     ),
+                      //   ),
+                      //   child: Padding(
+                      //     padding: EdgeInsets.only(left: 8.0),
+                      //     child: DropdownButton<String>(
+                      //       value: provider.vesselTypeExperience,
+                      //       isExpanded: true,
+                      //       hint: Text(),
+                      //       onChanged: (newValue) {
+                      //         provider.setVesselTypeExperience(newValue!);
+                      //       },
+                      //       items: ['Bulk Carrier', 'Tanker', 'Cargo Ship'].map((value) {
+                      //         return DropdownMenuItem<String>(
+                      //           value: value,
+                      //           child: Text(value),
+                      //         );
+                      //       }).toList(),
+                      //       underline: SizedBox(),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      // Employment History (Repeater)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Employment History',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0,top:10),
+                            child: GestureDetector(
+                              onTap: (){
+                                provider.setEmploymentHistoryVisibility(true);
+                                provider.employment_Edit_Index=null;
+                                provider.employment_IsEdit=false;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(2.5.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.buttonColor,
+                                  borderRadius: BorderRadius.circular(150),
+                                  border: Border.all(
+                                    color: AppColors.transparent, // Set the border color here
+                                    width: 1, // You can adjust the width of the border
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 2.5.h,
+                                  color: AppColors.buttonTextWhiteColor,
+                                )
+                                ,),
+                            ),
+                          )
+                        ],
+                      ),
+                      ListView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: provider.employmentHistory.length,
+                        itemBuilder: (context, index) {
+                          EmploymentHistory empDetail = provider.employmentHistory[index];
+                          print("position at index => ${empDetail.position}");
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Row(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.1.h,
+                                              color: AppColors
+                                                  .Color_EEEEEE),
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              2.h)),
+                                      padding: EdgeInsets.all(1.2.h),
+                                      child: Image.asset(
+                                        "assets/images/companyLogo.png",
+                                        height: 5.h,
+                                        width: 5.h,
+                                      ),
+                                    ),
+                                    SizedBox(width: 3.w),
+                                    Container(
+                                      // color:Colors.red,
+                                      width: 64.w,
+                                      margin:
+                                      EdgeInsets.only(bottom: 2.h),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                            children: [
+                                              Text(empDetail.companyName,
+                                                style: TextStyle(
+                                                  fontSize: AppFontSize
+                                                      .fontSize20,
+                                                  fontWeight:
+                                                  FontWeight.w700,
+                                                  color: AppColors
+                                                      .Color_212121,
+                                                  fontFamily: AppColors
+                                                      .fontFamilyBold,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap:(){
+                                                     provider.companyController.text =empDetail.companyName;
+                                                     provider.setEmpHisPositionsHeld(empDetail.position);
+                                                     provider.startDate.text =empDetail.startDate ;
+                                                     provider.endDate.text =empDetail.endDate;
+                                                     provider.responsibilitiesController.text=empDetail.responsibilities;
+                                                     provider.setEmploymentHistoryVisibility(true);
+                                                     provider.employment_Edit_Index=index;
+                                                     provider.employment_IsEdit=true;
+                                                    },
+                                                    child: Image.asset(
+                                                      "assets/images/Edit.png",
+                                                      height: 2.h,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 2.w),
+                                                  GestureDetector(
+                                                    onTap:(){
+                                                      provider.removeEmploymentHistory(index);
+                                                    },
+                                                    child: Image.asset(
+                                                      "assets/images/Delete.png",
+                                                      height: 2.h,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(height: 0.5.h),
+                                          Wrap(
+                                            spacing: 2.w,
+                                            // Space between chips horizontally
+                                            runSpacing: 1.h,
+                                            // Space between chips vertically
+                                            children: empDetail.position
+                                                .map((position) => Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 4.w, vertical: 1.h),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(50.h),
+                                                border: Border.all(
+                                                    color: AppColors.buttonColor,
+                                                    width: 0.15.h),
+                                              ),
+                                              child: Text(
+                                                position,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                  AppFontSize.fontSize14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.buttonColor,
+                                                  fontFamily: AppColors
+                                                      .fontFamilySemiBold,
+                                                ),
+                                              ),
+                                            ))
+                                                .toList(),
+                                          ),
+                                          SizedBox(height: 0.5.h),
+                                          Text(empDetail.startDate +" - "+empDetail.endDate,
+                                            style: TextStyle(
+                                              fontSize: AppFontSize
+                                                  .fontSize14,
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: AppColors
+                                                  .Color_212121,
+                                              fontFamily: AppColors
+                                                  .fontFamilyMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset("assets/images/Upload.png", height: 5.h),
-                                  SizedBox(height: 1.h),
-                                  Text(
-                                    "Browse File",
+                                  // Image.asset(IconPath,
+                                  //   height: 2.h,
+                                  // ),
+                                  // SizedBox(width: 3.w),
+                                  Text("Responsibilities: ",
                                     style: TextStyle(
-                                        fontSize: AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: AppColors.fontFamilySemiBold,
-                                        color: AppColors.Color_9E9E9E),
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.Color_212121,
+                                        fontFamily:
+                                        AppColors.fontFamilyMedium),
+                                  ),
+                                  Expanded(
+                                    child: Text(empDetail.responsibilities,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.Color_212121,
+                                          fontFamily:
+                                          AppColors.fontFamilyMedium),
+                                    ),
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 3.h),
+                            ],
+                          );
+
+                          //   EmploymentHistoryField(
+                          //   onEdit: (updatedHistory) {
+                          //     provider.updateEmploymentHistory(index, updatedHistory);
+                          //   },
+                          //   onDelete: () {
+                          //     provider.removeEmploymentHistory(index);
+                          //   }, history: provider.employmentHistory[index],
+                          // );
+                        },
+                      ),
+
+
+
+                      // Button to Add/Edit Employment History
+                      provider.showAddSection_employmentHistory ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Company Name',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 3.h),
-                        if (provider.referenceDocument != null)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: Colors.red.shade100,
-                              borderRadius: BorderRadius.circular(1.h),
+                          customTextField(
+                            context: context,
+                            controller: provider.companyController,
+                            hintText: 'Enter Company Name',
+                            textInputType: TextInputType.text,
+                            obscureText: false,
+                            voidCallback: (value) {},
+                            fontSize: AppFontSize.fontSize16,
+                            inputFontSize: AppFontSize.fontSize16,
+                            backgroundColor: AppColors.Color_FAFAFA,
+                            borderColor: AppColors.buttonColor,
+                            textColor: Colors.black,
+                            labelColor: AppColors.Color_9E9E9E,
+                            cursorColor: AppColors.Color_212121,
+                            fillColor: provider.companyFocusNode.hasFocus
+                                ? AppColors.activeFieldBgColor
+                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Position',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
                             ),
+                          ),
+
+
+
+                          Container(
+                              width: 90.w,
+                              padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                child: MultiSelectDialogField(
+                                  searchable: true,
+                                  dialogHeight: 30.h,
+                                  searchHint: 'Search Position',
+                                  initialValue: provider.empHisPositionsHeld,
+                                  items: vesselTypeList.map((e) => MultiSelectItem(e["value"], e["key"]!)).toList(),
+                                  title: Text('Position'),
+                                  selectedColor: AppColors.buttonColor,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.Color_FAFAFA,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                                  ),
+                                  buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
+                                  buttonText: Text('Select Position'),
+                                  onConfirm: (values) {
+                                      print("values ${values}");
+                                      provider.setEmpHisPositionsHeld(values.cast<String>());
+                                  },
+                                ),
+                              )
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Start Date',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                provider.setStartDate(picked);
+                              }
+                            },
+                            child: AbsorbPointer(
+                              child: customTextField(
+                                context: context,
+                                controller: provider.startDate,
+                                hintText: 'Select Start Date',
+                                textInputType: TextInputType.datetime,
+                                obscureText: false,
+                                voidCallback: (value) {},
+                                fontSize: AppFontSize.fontSize16,
+                                inputFontSize: AppFontSize.fontSize16,
+                                backgroundColor: AppColors.Color_FAFAFA,
+                                borderColor: AppColors.buttonColor,
+                                textColor: Colors.black,
+                                labelColor: AppColors.Color_9E9E9E,
+                                cursorColor: AppColors.Color_212121,
+                                fillColor: provider.startDateFocusNode.hasFocus
+                                    ? AppColors.activeFieldBgColor
+                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'End Date',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                provider.setEndDate(picked);
+                              }
+                            },
+                            child: AbsorbPointer(
+                              child: customTextField(
+                                context: context,
+                                controller: provider.endDate,
+                                hintText: 'Select End Date',
+                                textInputType: TextInputType.datetime,
+                                obscureText: false,
+                                voidCallback: (value) {},
+                                fontSize: AppFontSize.fontSize16,
+                                inputFontSize: AppFontSize.fontSize16,
+                                backgroundColor: AppColors.Color_FAFAFA,
+                                borderColor: AppColors.buttonColor,
+                                textColor: Colors.black,
+                                labelColor: AppColors.Color_9E9E9E,
+                                cursorColor: AppColors.Color_212121,
+                                fillColor: provider.endDateFocusNode.hasFocus
+                                    ? AppColors.activeFieldBgColor
+                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Responsibilities',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          customTextField(
+                            context: context,
+                            controller: provider.responsibilitiesController,
+                            hintText: 'Enter Responsibilities',
+                            textInputType: TextInputType.text,
+                            obscureText: false,
+                            voidCallback: (value) {},
+                            fontSize: AppFontSize.fontSize16,
+                            inputFontSize: AppFontSize.fontSize16,
+                            backgroundColor: AppColors.Color_FAFAFA,
+                            borderColor: AppColors.buttonColor,
+                            textColor: Colors.black,
+                            labelColor: AppColors.Color_9E9E9E,
+                            cursorColor: AppColors.Color_212121,
+                            fillColor: provider.responsibilitiesFocusNode.hasFocus
+                              ? AppColors.activeFieldBgColor
+                              : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                          ),
+
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                              child: customButton(
+                                voidCallback: () async {
+                                  print("click => ${provider.empHisPositionsHeld}");
+                                  // Validate fields and add employment history
+                                  if (provider.companyController.text.isNotEmpty &&
+                                      provider.empHisPositionsHeld.isNotEmpty &&
+                                      provider.startDate.text.isNotEmpty &&
+                                      provider.endDate.text.isNotEmpty &&
+                                      provider.responsibilitiesController.text.isNotEmpty) {
+                                    if (!provider.employment_IsEdit) {
+                                      await provider.addEmploymentHistory(EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
+                                    } else {
+                                      await provider.updateEmploymentHistory(provider.employment_Edit_Index!,EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
+                                    }
+                                    provider.companyController.clear();
+                                    provider.startDate.clear();
+                                    provider.endDate.clear();
+                                    provider.responsibilitiesController.clear();
+                                    // provider.empHisPositionsHeld.clear();
+                                    provider.employment_IsEdit=false;
+                                    provider.employment_Edit_Index=null;
+                                    provider.setEmploymentHistoryVisibility(false);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please fill in all required fields'),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                },
+                                buttonText: provider.employment_IsEdit ? "Update" : "Add",
+                                width: 30.w,
+                                height: 10.w,
+                                color: AppColors.buttonColor,
+                                buttonTextColor: AppColors.buttonTextWhiteColor,
+                                shadowColor: AppColors.buttonBorderColor,
+                                fontSize: AppFontSize.fontSize18,
+                                showShadow: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ) : Container(),
+
+
+
+                      // References (Repeater)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'References',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0,top:10),
+                            child: GestureDetector(
+                              onTap: (){
+                                provider.setReferenceVisibility(true);
+                                provider.reference_Edit_Index=null;
+                                provider.reference_IsEdit=false;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(2.5.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.buttonColor,
+                                  borderRadius: BorderRadius.circular(150),
+                                  border: Border.all(
+                                    color: AppColors.transparent, // Set the border color here
+                                    width: 1, // You can adjust the width of the border
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 2.5.h,
+                                  color: AppColors.buttonTextWhiteColor,
+                                )
+                                ,),
+                            ),
+                          )
+                        ],
+                      ),
+                      ListView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: provider.references.length,
+                        itemBuilder: (context, index) {
+                          Reference referenceDetail = provider.references[index];
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 1.h),
                             child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                SizedBox(width: 2.w),
+                                Container(
+                                  width: 15.w,
+                                  height: 15.w,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.cardIconBgColour,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Image.asset(
+                                      "assets/images/profileActive.png",
+                                      height: 6.w,
+                                      width: 6.w,
+                                      color: AppColors.buttonColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 3.w),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        provider.referenceDocument!.path.split('/').last,
+                                        referenceDetail.vesselOrCompanyName,
                                         style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
+                                          fontSize:
+                                          AppFontSize.fontSize20,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.Color_212121,
+                                          fontFamily: AppColors
+                                              .fontFamilyBold,
+                                        ),
                                       ),
-                                      FutureBuilder<int>(
-                                        future: provider.referenceDocument!.length(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                              style: TextStyle(
-                                                  fontSize: AppFontSize.fontSize12,
-                                                  color: AppColors.Color_616161,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily:
-                                                  AppColors.fontFamilyMedium),
-                                            );
-                                          }
-                                          return SizedBox();
-                                        },
+                                      SizedBox(height: 0.8.h),
+                                      Text(referenceDetail.issuedBy,
+                                        style: TextStyle(
+                                          fontSize:
+                                          AppFontSize.fontSize14,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors
+                                              .Color_424242,
+                                          fontFamily: AppColors
+                                              .fontFamilyMedium,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.8.h),
+                                      Text(
+                                        referenceDetail.issuingDate,
+                                        style: TextStyle(
+                                          fontSize:
+                                          AppFontSize.fontSize14,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors
+                                              .Color_424242,
+                                          fontFamily: AppColors
+                                              .fontFamilyMedium,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.8.h),
+                                      Text(
+                                        referenceDetail.documentUrl,
+                                        style: TextStyle(
+                                          fontSize:
+                                          AppFontSize.fontSize14,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors
+                                              .Color_424242,
+                                          fontFamily: AppColors
+                                              .fontFamilyMedium,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    provider.removeAttachment();
+                                    provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
+                                    provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
+                                    provider.setReferenceIssuedBy(referenceDetail.issuedBy);
+                                    provider.referenceDocumentController.text=referenceDetail.documentUrl;
+                                    provider.setReferenceVisibility(true);
+                                    provider.reference_Edit_Index=index;
+                                    provider.reference_IsEdit=true;
                                   },
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.red,
-                                    size: 24,
+                                  child: Image.asset(
+                                    "assets/images/Edit.png",
+                                    height: 2.h,
+                                  ),
+                                ),
+                                SizedBox(width: 2.w),
+                                GestureDetector(
+                                  onTap:(){
+                                    provider.removeReference(index);
+                                  },
+                                  child: Image.asset(
+                                    "assets/images/Delete.png",
+                                    height: 2.h,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                            child: customButton(
-                              voidCallback: () async {
-                                if (provider.referenceVesselController.text.isNotEmpty &&
-                                    provider.referenceIssuedBy != null &&
-                                    provider.referenceIssuedDate.text.isNotEmpty &&
-                                    provider.referenceDocumentController.text.isNotEmpty) {
-                                  if (!provider.reference_IsEdit) {
-                                    await provider.addReference(Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
-                                  } else {
-                                    await provider.updateReference(provider.reference_Edit_Index!,Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
-                                  }
-                                  provider.referenceVesselController.clear();
-                                  provider.referenceIssuedBy = null;
-                                  provider.referenceIssuedDate.clear();
-                                  provider.referenceDocumentController.clear();
-                                  provider.reference_IsEdit=false;
-                                  provider.reference_Edit_Index=null;
-                                  provider.setReferenceVisibility(false);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Please fill in all required fields'),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              },
-                              buttonText: provider.reference_IsEdit ? "Update" : "Add",
-                              width: 30.w,
-                              height: 10.w,
-                              color: AppColors.buttonColor,
-                              buttonTextColor: AppColors.buttonTextWhiteColor,
-                              shadowColor: AppColors.buttonBorderColor,
-                              fontSize: AppFontSize.fontSize18,
-                              showShadow: true,
+                          );
+                        },
+                      ),
+                      provider.showAddSection_reference ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Vessel/Company Name',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ) : Container(),
-                  ],
+                          customTextField(
+                            context: context,
+                            controller: provider.referenceVesselController,
+                            hintText: 'Enter Vessel/Company Name',
+                            textInputType: TextInputType.text,
+                            obscureText: false,
+                            voidCallback: (value) {},
+                            fontSize: AppFontSize.fontSize16,
+                            inputFontSize: AppFontSize.fontSize16,
+                            backgroundColor: AppColors.Color_FAFAFA,
+                            borderColor: AppColors.buttonColor,
+                            textColor: Colors.black,
+                            labelColor: AppColors.Color_9E9E9E,
+                            cursorColor: AppColors.Color_212121,
+                            fillColor: provider.referenceVesselFocusNode.hasFocus
+                                ? AppColors.activeFieldBgColor
+                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Issued By',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            width: 90.w,
+                            padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                            decoration: BoxDecoration(
+                              color: AppColors.Color_FAFAFA,
+                              borderRadius: BorderRadius.circular(2.h),
+                              border: Border.all(
+                                color: AppColors.transparent,
+                                width: 1,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: DropdownButton<String>(
+                                value: provider.referenceIssuedBy,
+                                isExpanded: true,
+                                hint: Text("Select Issued By"),
+                                onChanged: (newValue) {
+                                  provider.setReferenceIssuedBy(newValue!);
+                                },
+                                items: ['Company', 'Vessel'].map((value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                underline: SizedBox(),
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Issued Date',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                provider.setReferenceIssuingDate(picked);
+                              }
+                            },
+                            child: AbsorbPointer(
+                              child: customTextField(
+                                context: context,
+                                controller: provider.referenceIssuedDate,
+                                hintText: 'Select Issued Date',
+                                textInputType: TextInputType.datetime,
+                                obscureText: false,
+                                voidCallback: (value) {},
+                                fontSize: AppFontSize.fontSize16,
+                                inputFontSize: AppFontSize.fontSize16,
+                                backgroundColor: AppColors.Color_FAFAFA,
+                                borderColor: AppColors.buttonColor,
+                                textColor: Colors.black,
+                                labelColor: AppColors.Color_9E9E9E,
+                                cursorColor: AppColors.Color_212121,
+                                fillColor: provider.referenceIssuedDateFocusNode.hasFocus
+                                    ? AppColors.activeFieldBgColor
+                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Document',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              await provider.showAttachmentOptions(context);
+                            },
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(15),
+                              dashPattern: [10, 10],
+                              color: AppColors.buttonColor,
+                              strokeWidth: 1,
+                              child: Container(
+                                width: 100.w,
+                                padding: EdgeInsets.symmetric(vertical: 3.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1.h),
+                                  color: AppColors.Color_FAFAFA,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/images/Upload.png", height: 5.h),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      "Browse File",
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: AppColors.fontFamilySemiBold,
+                                          color: AppColors.Color_9E9E9E),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 3.h),
+                          if (provider.referenceDocument != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.w, vertical: 2.h),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade100,
+                                borderRadius: BorderRadius.circular(1.h),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                  SizedBox(width: 2.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          provider.referenceDocument!.path.split('/').last,
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize16,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.Color_212121,
+                                              fontFamily:
+                                              AppColors.fontFamilyBold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        FutureBuilder<int>(
+                                          future: provider.referenceDocument!.length(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                style: TextStyle(
+                                                    fontSize: AppFontSize.fontSize12,
+                                                    color: AppColors.Color_616161,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily:
+                                                    AppColors.fontFamilyMedium),
+                                              );
+                                            }
+                                            return SizedBox();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      provider.removeAttachment();
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                              child: customButton(
+                                voidCallback: () async {
+                                  if (provider.referenceVesselController.text.isNotEmpty &&
+                                      provider.referenceIssuedBy != null &&
+                                      provider.referenceIssuedDate.text.isNotEmpty &&
+                                      provider.referenceDocumentController.text.isNotEmpty) {
+                                    if (!provider.reference_IsEdit) {
+                                      await provider.addReference(Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                    } else {
+                                      await provider.updateReference(provider.reference_Edit_Index!,Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                    }
+                                    provider.referenceVesselController.clear();
+                                    provider.referenceIssuedBy = null;
+                                    provider.referenceIssuedDate.clear();
+                                    provider.referenceDocumentController.clear();
+                                    provider.reference_IsEdit=false;
+                                    provider.reference_Edit_Index=null;
+                                    provider.setReferenceVisibility(false);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please fill in all required fields'),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                },
+                                buttonText: provider.reference_IsEdit ? "Update" : "Add",
+                                width: 30.w,
+                                height: 10.w,
+                                color: AppColors.buttonColor,
+                                buttonTextColor: AppColors.buttonTextWhiteColor,
+                                shadowColor: AppColors.buttonBorderColor,
+                                fontSize: AppFontSize.fontSize18,
+                                showShadow: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ) : Container(),
+                    ],
+                  ),
                 ),
               ),
             ),
