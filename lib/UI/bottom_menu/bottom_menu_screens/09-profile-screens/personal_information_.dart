@@ -264,12 +264,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           : provider.countryOfBirthController.text,
                       hint: "Select Country of Birth",
                       searchHint: "Search for a country",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '      Please select Country of Birth';
-                        }
-                        return null;
-                      },
                       onChanged: (value) {
                         setState(() {
                           provider.countryOfBirthController.text = value as String;
@@ -317,12 +311,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
                       hint: "Select Religion",
                       searchHint: "Search for a religion",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '      Please select Religion';
-                        }
-                        return null;
-                      },
                       onChanged: (value) {
                         provider.religionController.text = value as String;
                       },
