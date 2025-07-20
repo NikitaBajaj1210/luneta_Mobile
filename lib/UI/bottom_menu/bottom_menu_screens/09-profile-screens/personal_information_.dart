@@ -528,6 +528,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }
                         return null;
                       },
+                      autovalidateMode: provider.autovalidateMode,
                       onFieldSubmitted: (String ) {  },
                     ),
 
