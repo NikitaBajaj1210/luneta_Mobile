@@ -90,6 +90,29 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   File? _image;
   final picker = ImagePicker();
 
+  String? positionsHeldError;
+  String? vesselTypeExperienceError;
+
+  bool validate() {
+    bool isValid = true;
+    if (_positionsHeld.isEmpty) {
+      positionsHeldError = 'Positions Held is required';
+      isValid = false;
+    } else {
+      positionsHeldError = null;
+    }
+
+    if (_vesselTypeExperience.isEmpty) {
+      vesselTypeExperienceError = 'Vessel Type Experience is required';
+      isValid = false;
+    } else {
+      vesselTypeExperienceError = null;
+    }
+
+    notifyListeners();
+    return isValid;
+  }
+
   Future<void> showAttachmentOptions(BuildContext context) async {
     showModalBottomSheet(
       context: context,

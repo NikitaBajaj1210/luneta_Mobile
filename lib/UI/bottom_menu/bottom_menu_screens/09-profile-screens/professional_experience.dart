@@ -35,8 +35,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
               ),
               child: customButton(
                 voidCallback: () {
-                  // Save the data in provider or update the profile here
-                  Navigator.pop(context);
+                  if (provider.validate()) {
+                    // Save the data in provider or update the profile here
+                    Navigator.pop(context);
+                  }
                 },
                 buttonText: "Save",
                 width: 90.w,
@@ -112,6 +114,17 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                         ),
                       )
                     ),
+                    if (provider.positionsHeldError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.positionsHeldError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     // Vessel Type Experience (Multiselect Dropdown)
                     Padding(
@@ -161,6 +174,17 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         )
                     ),
+                    if (provider.vesselTypeExperienceError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.vesselTypeExperienceError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     // Container(
                     //   width: 90.w,

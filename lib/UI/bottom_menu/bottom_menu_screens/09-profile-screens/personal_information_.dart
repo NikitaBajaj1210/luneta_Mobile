@@ -41,15 +41,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () {
-                  final error = provider.validate();
-                  if (error != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(error),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  } else {
+                  if (provider.validate()) {
                     // Save the data in provider or update the profile here
                     Navigator.pop(context);
                   }
@@ -63,17 +55,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 fontSize: AppFontSize.fontSize18,
                 showShadow: true,
               ),
-                    if (provider.nationalityError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.nationalityError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
             ),
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
@@ -129,17 +110,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    if (provider.sexError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.sexError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
                     customTextField(
                       context: context,
                       controller: provider.firstNameController,
@@ -409,6 +379,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
+                    if (provider.sexError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.sexError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     // Nationality (Dropdown for Country)
                     Padding(
@@ -458,6 +439,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         );
                       },
                     ),
+                    if (provider.nationalityError != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                        child: Text(
+                          provider.nationalityError!,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: AppFontSize.fontSize12,
+                          ),
+                        ),
+                      ),
 
                     // Contact Information
                     // Email, Phone Number, Address, Nearest Airport (Phone number inputs)
@@ -693,11 +685,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                     width: 1, // You can adjust the width of the border
                                   ),
                                 ),
-                              child: Icon(
-                                Icons.add,
-                                size: 2.5.h,
-                                color: AppColors.buttonTextWhiteColor,
-                              )
+                                child: Icon(
+                                  Icons.add,
+                                  size: 2.5.h,
+                                  color: AppColors.buttonTextWhiteColor,
+                                )
                                 ,),
                             ),
                           )
@@ -816,7 +808,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                 if (provider.NumberOrIDController.text.isNotEmpty &&
                                     provider.platform != null) {
                                   if(!provider.communication_IsEdit){
-                                  provider.addCommunicationChannel(PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
+                                    provider.addCommunicationChannel(PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
                                   }else{
                                     provider.updateCommunicationChannel(provider.communication_Edit_Index!, PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
                                   }

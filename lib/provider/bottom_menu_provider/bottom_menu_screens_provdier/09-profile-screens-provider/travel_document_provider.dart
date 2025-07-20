@@ -6,6 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
+  final formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   List<String> countries = [];
 
   TravelDocumentProvider() {
@@ -68,6 +71,13 @@ class TravelDocumentProvider extends ChangeNotifier {
   // Seaman's Book
   bool seamanNeverExpire = false;
   bool validSeafarerVisa = false;
+  void validate() {
+    if (formKey.currentState!.validate()) {
+    } else {
+      autovalidateMode = AutovalidateMode.always;
+      notifyListeners();
+    }
+  }
 
   void setSeamanNeverExpire(bool value) {
     seamanNeverExpire = value;
@@ -129,7 +139,9 @@ class TravelDocumentProvider extends ChangeNotifier {
   String? seamanNationality;
   String? seafarerVisaIssuingCountry;
   String? visaIssuingCountry;
-  String? residencePermitIssuingCountry;
+
+  String? _residencePermitIssuingCountry;
+  String? get residencePermitIssuingCountry=>_residencePermitIssuingCountry;
 
   void setPassportCountry(String country) {
     passportCountry = country;
@@ -157,7 +169,7 @@ class TravelDocumentProvider extends ChangeNotifier {
   }
 
   void setResidencePermitIssuingCountry(String country) {
-    residencePermitIssuingCountry = country;
+    _residencePermitIssuingCountry = country;
     notifyListeners();
   }
 
@@ -166,7 +178,7 @@ class TravelDocumentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? validate() {
+  String? validateManual() {
     if (seafarerRegistrationNoController.text.isEmpty) {
       return 'Seafarer’s Registration No. is required';
     }
