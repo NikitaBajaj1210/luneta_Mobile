@@ -26,7 +26,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PersonalInformationProvider>(context);
     return Consumer<PersonalInformationProvider>(
       builder: (context, provider, child) {
         return SafeArea(
