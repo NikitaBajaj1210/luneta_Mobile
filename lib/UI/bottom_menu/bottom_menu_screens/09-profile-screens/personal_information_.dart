@@ -64,7 +64,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: provider.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  autovalidateMode: provider.autovalidateMode,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
