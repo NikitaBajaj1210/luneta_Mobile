@@ -168,7 +168,6 @@ class PersonalInformationProvider extends ChangeNotifier {
   }
 
   String? firstNameError;
-  String? lastNameError;
   String? dobError;
   String? sexError;
   String? nationalityError;
@@ -182,13 +181,6 @@ class PersonalInformationProvider extends ChangeNotifier {
       isValid = false;
     } else {
       firstNameError = null;
-    }
-
-    if (lastNameController.text.isEmpty) {
-      lastNameError = 'Last Name is required';
-      isValid = false;
-    } else {
-      lastNameError = null;
     }
 
     if (dobController.text.isEmpty) {

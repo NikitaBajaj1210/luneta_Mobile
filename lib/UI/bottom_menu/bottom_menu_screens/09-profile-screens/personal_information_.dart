@@ -178,17 +178,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         FocusScope.of(context).requestFocus(provider.dobFocusNode);
                       },
                     ),
-                    if (provider.lastNameError != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                        child: Text(
-                          provider.lastNameError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: AppFontSize.fontSize12,
-                          ),
-                        ),
-                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Text(
