@@ -380,7 +380,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             }
                             return null;
                           },
-                          underline: SizedBox(), // Remove the default underline
                           items: sexList.map((value) {
                             return DropdownMenuItem<dynamic>(
                                 value: value["key"],
@@ -488,7 +487,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter Email Address';
                         }
-                        if (!Validation.isValidEmail(value)) {
+                        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
                           return 'Please enter a valid Email Address';
                         }
                         return null;
@@ -926,6 +925,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                   ],
+                ),
                 ),
               ),
             ),
