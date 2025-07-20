@@ -64,7 +64,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: provider.formKey,
-                  autovalidateMode: provider.autovalidateMode,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -122,7 +122,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'First Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter First Name';
@@ -163,7 +162,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Last Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
-                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         return null;
                       },
@@ -215,7 +213,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           hintText: 'Date of Birth',
                           textInputType: TextInputType.datetime,
                           obscureText: false,
-                          autovalidateMode: provider.autovalidateMode,
                           voidCallback: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter Date of Birth';
@@ -267,7 +264,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           : provider.countryOfBirthController.text,
                       hint: "Select Country of Birth",
                       searchHint: "Search for a country",
-                      autovalidateMode: provider.autovalidateMode,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return '      Please select Country of Birth';
@@ -321,7 +317,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
                       hint: "Select Religion",
                       searchHint: "Search for a religion",
-                      autovalidateMode: provider.autovalidateMode,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return '      Please select Religion';
@@ -430,7 +425,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           : provider.nationalityController.text,
                       hint: "Select Nationality",
                       searchHint: "Search for a nationality",
-                      autovalidateMode: provider.autovalidateMode,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return '      Please select Nationality';
@@ -494,7 +488,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
-                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter Email Address';
