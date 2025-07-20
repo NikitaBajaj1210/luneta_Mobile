@@ -62,7 +62,7 @@ Widget countryPhoneInput({
         children: [
           Container(
             width: width,
-            height: 7.2.h, // Match the height of other fields
+            // height: 7.28.h, // Match the height of other fields
             decoration: BoxDecoration(
               color: backgroundColor ?? AppColors.Color_FAFAFA,
               borderRadius: BorderRadius.circular(2.h),

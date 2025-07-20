@@ -414,7 +414,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hint: "Select Nationality",
                       searchHint: "Search for a nationality",
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
                           return '      Please select Nationality';
                         }
                         return null;
