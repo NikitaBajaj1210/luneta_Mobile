@@ -149,9 +149,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                           .pushNamed(travelDocument);
                                       break;
                                     case 3:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
-                                          .pushNamed(workExperienceScreen);
+                                          .pushNamed(medicalDocument);
                                       break;
                                     case 4:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);

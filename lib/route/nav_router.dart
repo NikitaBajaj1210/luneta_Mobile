@@ -42,6 +42,7 @@ import 'package:luneta/route/route_constants.dart';
 
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_experience.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_document.dart';
+import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/medical_document.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/help_center_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/job_seeking_status_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_screen.dart';
@@ -121,6 +122,10 @@ class NavRouter {
         case travelDocument:
         return MaterialPageRoute(
           builder: (context) => const TravelDocumentScreen(),
+        );
+        case medicalDocument:
+        return MaterialPageRoute(
+          builder: (context) => const MedicalDocumentScreen(),
         );
         case createPassword:
         return MaterialPageRoute(
