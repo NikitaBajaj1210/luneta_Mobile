@@ -514,6 +514,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
+
                     countryPhoneInput(
                       phoneNumber: provider.phoneNumber,
                       controller: provider.phoneController,
@@ -523,14 +524,21 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         });
                       },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Phone Number';
+                        if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                          return '      Please enter Phone Number';
                         }
                         return null;
                       },
                       autovalidateMode: provider.autovalidateMode,
                       onFieldSubmitted: (String ) {  },
                     ),
+                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty) && provider.autovalidateMode == AutovalidateMode.always)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
+                        child: Text('Please enter Phone Number',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
