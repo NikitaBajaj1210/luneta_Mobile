@@ -339,113 +339,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                   .fontFamilyBold,
                                                             ),
                                                           ),
-                                                          GestureDetector(
-                                                            // onTap: () {
-                                                            //   final provider = Provider
-                                                            //       .of<WorkExperienceProvider>(
-                                                            //       context,
-                                                            //       listen:
-                                                            //       false);
-                                                            //
-                                                            //   // Parse dates
-                                                            //   DateTime? startDate;
-                                                            //   DateTime? endDate;
-                                                            //
-                                                            //   if (experience[
-                                                            //   'startDate'] !=
-                                                            //       null) {
-                                                            //     try {
-                                                            //       startDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'startDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing start date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   if (experience[
-                                                            //   'endDate'] !=
-                                                            //       null &&
-                                                            //       experience[
-                                                            //       'endDate'] !=
-                                                            //           'Present') {
-                                                            //     try {
-                                                            //       endDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'endDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing end date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   // Initialize provider with work experience data
-                                                            //   provider
-                                                            //       .initializeWithData(
-                                                            //     title: experience[
-                                                            //     'title'] ??
-                                                            //         '',
-                                                            //     company: experience[
-                                                            //     'company'] ??
-                                                            //         '',
-                                                            //     location:
-                                                            //     experience[
-                                                            //     'location'],
-                                                            //     description:
-                                                            //     experience[
-                                                            //     'description'],
-                                                            //     employmentType:
-                                                            //     experience[
-                                                            //     'employmentType'],
-                                                            //     jobLevel:
-                                                            //     experience[
-                                                            //     'jobLevel'],
-                                                            //     jobFunction:
-                                                            //     experience[
-                                                            //     'jobFunction'],
-                                                            //     startDate:
-                                                            //     startDate,
-                                                            //     endDate: endDate,
-                                                            //     isCurrentlyWorking:
-                                                            //     experience[
-                                                            //     'endDate'] ==
-                                                            //         'Present',
-                                                            //     index:
-                                                            //     index, // Pass the index for updating the correct item
-                                                            //   );
-                                                            //
-                                                            //   // Navigate to work experience screen using named route
-                                                            //   Navigator.push(
-                                                            //     context,
-                                                            //     MaterialPageRoute(
-                                                            //       builder: (context) =>
-                                                            //           MultiProvider(
-                                                            //             providers: [
-                                                            //               ChangeNotifierProvider
-                                                            //                   .value(
-                                                            //                   value:
-                                                            //                   provider),
-                                                            //               ChangeNotifierProvider.value(
-                                                            //                   value: Provider.of<
-                                                            //                       ProfileBottommenuProvider>(
-                                                            //                       context,
-                                                            //                       listen:
-                                                            //                       false)),
-                                                            //             ],
-                                                            //             child:
-                                                            //             const WorkExperienceScreen(),
-                                                            //           ),
-                                                            //     ),
-                                                            //   );
-                                                            // },
-                                                            child: Image.asset(
-                                                              "assets/images/Edit.png",
-                                                              height: 2.h,
-                                                            ),
-                                                          ),
+                                                          // GestureDetector(
+                                                          //   // onTap: () {
+                                                          //   //   final provider = Provider
+                                                          //   //       .of<WorkExperienceProvider>(
+                                                          //   //       context,
+                                                          //   //       listen:
+                                                          //   //       false);
+                                                          //   //
+                                                          //   //   // Parse dates
+                                                          //   //   DateTime? startDate;
+                                                          //   //   DateTime? endDate;
+                                                          //   //
+                                                          //   //   if (experience[
+                                                          //   //   'startDate'] !=
+                                                          //   //       null) {
+                                                          //   //     try {
+                                                          //   //       startDate = DateFormat(
+                                                          //   //           'MM/yyyy')
+                                                          //   //           .parse(experience[
+                                                          //   //       'startDate']);
+                                                          //   //     } catch (e) {
+                                                          //   //       print(
+                                                          //   //           'Error parsing start date: $e');
+                                                          //   //     }
+                                                          //   //   }
+                                                          //   //
+                                                          //   //   if (experience[
+                                                          //   //   'endDate'] !=
+                                                          //   //       null &&
+                                                          //   //       experience[
+                                                          //   //       'endDate'] !=
+                                                          //   //           'Present') {
+                                                          //   //     try {
+                                                          //   //       endDate = DateFormat(
+                                                          //   //           'MM/yyyy')
+                                                          //   //           .parse(experience[
+                                                          //   //       'endDate']);
+                                                          //   //     } catch (e) {
+                                                          //   //       print(
+                                                          //   //           'Error parsing end date: $e');
+                                                          //   //     }
+                                                          //   //   }
+                                                          //   //
+                                                          //   //   // Initialize provider with work experience data
+                                                          //   //   provider
+                                                          //   //       .initializeWithData(
+                                                          //   //     title: experience[
+                                                          //   //     'title'] ??
+                                                          //   //         '',
+                                                          //   //     company: experience[
+                                                          //   //     'company'] ??
+                                                          //   //         '',
+                                                          //   //     location:
+                                                          //   //     experience[
+                                                          //   //     'location'],
+                                                          //   //     description:
+                                                          //   //     experience[
+                                                          //   //     'description'],
+                                                          //   //     employmentType:
+                                                          //   //     experience[
+                                                          //   //     'employmentType'],
+                                                          //   //     jobLevel:
+                                                          //   //     experience[
+                                                          //   //     'jobLevel'],
+                                                          //   //     jobFunction:
+                                                          //   //     experience[
+                                                          //   //     'jobFunction'],
+                                                          //   //     startDate:
+                                                          //   //     startDate,
+                                                          //   //     endDate: endDate,
+                                                          //   //     isCurrentlyWorking:
+                                                          //   //     experience[
+                                                          //   //     'endDate'] ==
+                                                          //   //         'Present',
+                                                          //   //     index:
+                                                          //   //     index, // Pass the index for updating the correct item
+                                                          //   //   );
+                                                          //   //
+                                                          //   //   // Navigate to work experience screen using named route
+                                                          //   //   Navigator.push(
+                                                          //   //     context,
+                                                          //   //     MaterialPageRoute(
+                                                          //   //       builder: (context) =>
+                                                          //   //           MultiProvider(
+                                                          //   //             providers: [
+                                                          //   //               ChangeNotifierProvider
+                                                          //   //                   .value(
+                                                          //   //                   value:
+                                                          //   //                   provider),
+                                                          //   //               ChangeNotifierProvider.value(
+                                                          //   //                   value: Provider.of<
+                                                          //   //                       ProfileBottommenuProvider>(
+                                                          //   //                       context,
+                                                          //   //                       listen:
+                                                          //   //                       false)),
+                                                          //   //             ],
+                                                          //   //             child:
+                                                          //   //             const WorkExperienceScreen(),
+                                                          //   //           ),
+                                                          //   //     ),
+                                                          //   //   );
+                                                          //   // },
+                                                          //   child: Image.asset(
+                                                          //     "assets/images/Edit.png",
+                                                          //     height: 2.h,
+                                                          //   ),
+                                                          // ),
                                                         ],
                                                       ),
                                                       SizedBox(height: 0.5.h),
@@ -617,23 +617,23 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                   ],
                                                 ),
                                               ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  final provider = Provider.of<ReferencesProvider>(context, listen: false);
-                                                  final reference = profileProvider.references[index];
-
-                                                  // Initialize the provider with the reference data
-                                                  provider.initializeWithData(reference);
-
-                                                  // Navigate to References Screen
-                                                  Navigator.of(context).pushNamed(referencesScreen);
-                                                },
-                                                child: Image.asset(
-                                                  "assets/images/Edit.png",
-                                                  height: 2.h,
-                                                  color: AppColors.buttonColor,
-                                                ),
-                                              ),
+                                              // GestureDetector(
+                                              //   onTap: () {
+                                              //     final provider = Provider.of<ReferencesProvider>(context, listen: false);
+                                              //     final reference = profileProvider.references[index];
+                                              //
+                                              //     // Initialize the provider with the reference data
+                                              //     provider.initializeWithData(reference);
+                                              //
+                                              //     // Navigate to References Screen
+                                              //     Navigator.of(context).pushNamed(referencesScreen);
+                                              //   },
+                                              //   child: Image.asset(
+                                              //     "assets/images/Edit.png",
+                                              //     height: 2.h,
+                                              //     color: AppColors.buttonColor,
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                         );
@@ -754,113 +754,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      GestureDetector(
-                                                        // onTap: () {
-                                                        //   final provider = Provider
-                                                        //       .of<WorkExperienceProvider>(
-                                                        //       context,
-                                                        //       listen:
-                                                        //       false);
-                                                        //
-                                                        //   // Parse dates
-                                                        //   DateTime? startDate;
-                                                        //   DateTime? endDate;
-                                                        //
-                                                        //   if (experience[
-                                                        //   'startDate'] !=
-                                                        //       null) {
-                                                        //     try {
-                                                        //       startDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'startDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing start date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   if (experience[
-                                                        //   'endDate'] !=
-                                                        //       null &&
-                                                        //       experience[
-                                                        //       'endDate'] !=
-                                                        //           'Present') {
-                                                        //     try {
-                                                        //       endDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'endDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing end date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   // Initialize provider with work experience data
-                                                        //   provider
-                                                        //       .initializeWithData(
-                                                        //     title: experience[
-                                                        //     'title'] ??
-                                                        //         '',
-                                                        //     company: experience[
-                                                        //     'company'] ??
-                                                        //         '',
-                                                        //     location:
-                                                        //     experience[
-                                                        //     'location'],
-                                                        //     description:
-                                                        //     experience[
-                                                        //     'description'],
-                                                        //     employmentType:
-                                                        //     experience[
-                                                        //     'employmentType'],
-                                                        //     jobLevel:
-                                                        //     experience[
-                                                        //     'jobLevel'],
-                                                        //     jobFunction:
-                                                        //     experience[
-                                                        //     'jobFunction'],
-                                                        //     startDate:
-                                                        //     startDate,
-                                                        //     endDate: endDate,
-                                                        //     isCurrentlyWorking:
-                                                        //     experience[
-                                                        //     'endDate'] ==
-                                                        //         'Present',
-                                                        //     index:
-                                                        //     index, // Pass the index for updating the correct item
-                                                        //   );
-                                                        //
-                                                        //   // Navigate to work experience screen using named route
-                                                        //   Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           MultiProvider(
-                                                        //             providers: [
-                                                        //               ChangeNotifierProvider
-                                                        //                   .value(
-                                                        //                   value:
-                                                        //                   provider),
-                                                        //               ChangeNotifierProvider.value(
-                                                        //                   value: Provider.of<
-                                                        //                       ProfileBottommenuProvider>(
-                                                        //                       context,
-                                                        //                       listen:
-                                                        //                       false)),
-                                                        //             ],
-                                                        //             child:
-                                                        //             const WorkExperienceScreen(),
-                                                        //           ),
-                                                        //     ),
-                                                        //   );
-                                                        // },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                        ),
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   // onTap: () {
+                                                      //   //   final provider = Provider
+                                                      //   //       .of<WorkExperienceProvider>(
+                                                      //   //       context,
+                                                      //   //       listen:
+                                                      //   //       false);
+                                                      //   //
+                                                      //   //   // Parse dates
+                                                      //   //   DateTime? startDate;
+                                                      //   //   DateTime? endDate;
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'startDate'] !=
+                                                      //   //       null) {
+                                                      //   //     try {
+                                                      //   //       startDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'startDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing start date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'endDate'] !=
+                                                      //   //       null &&
+                                                      //   //       experience[
+                                                      //   //       'endDate'] !=
+                                                      //   //           'Present') {
+                                                      //   //     try {
+                                                      //   //       endDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'endDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing end date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   // Initialize provider with work experience data
+                                                      //   //   provider
+                                                      //   //       .initializeWithData(
+                                                      //   //     title: experience[
+                                                      //   //     'title'] ??
+                                                      //   //         '',
+                                                      //   //     company: experience[
+                                                      //   //     'company'] ??
+                                                      //   //         '',
+                                                      //   //     location:
+                                                      //   //     experience[
+                                                      //   //     'location'],
+                                                      //   //     description:
+                                                      //   //     experience[
+                                                      //   //     'description'],
+                                                      //   //     employmentType:
+                                                      //   //     experience[
+                                                      //   //     'employmentType'],
+                                                      //   //     jobLevel:
+                                                      //   //     experience[
+                                                      //   //     'jobLevel'],
+                                                      //   //     jobFunction:
+                                                      //   //     experience[
+                                                      //   //     'jobFunction'],
+                                                      //   //     startDate:
+                                                      //   //     startDate,
+                                                      //   //     endDate: endDate,
+                                                      //   //     isCurrentlyWorking:
+                                                      //   //     experience[
+                                                      //   //     'endDate'] ==
+                                                      //   //         'Present',
+                                                      //   //     index:
+                                                      //   //     index, // Pass the index for updating the correct item
+                                                      //   //   );
+                                                      //   //
+                                                      //   //   // Navigate to work experience screen using named route
+                                                      //   //   Navigator.push(
+                                                      //   //     context,
+                                                      //   //     MaterialPageRoute(
+                                                      //   //       builder: (context) =>
+                                                      //   //           MultiProvider(
+                                                      //   //             providers: [
+                                                      //   //               ChangeNotifierProvider
+                                                      //   //                   .value(
+                                                      //   //                   value:
+                                                      //   //                   provider),
+                                                      //   //               ChangeNotifierProvider.value(
+                                                      //   //                   value: Provider.of<
+                                                      //   //                       ProfileBottommenuProvider>(
+                                                      //   //                       context,
+                                                      //   //                       listen:
+                                                      //   //                       false)),
+                                                      //   //             ],
+                                                      //   //             child:
+                                                      //   //             const WorkExperienceScreen(),
+                                                      //   //           ),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // },
+                                                      //   child: Image.asset(
+                                                      //     "assets/images/Edit.png",
+                                                      //     height: 2.h,
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -966,113 +966,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      GestureDetector(
-                                                        // onTap: () {
-                                                        //   final provider = Provider
-                                                        //       .of<WorkExperienceProvider>(
-                                                        //       context,
-                                                        //       listen:
-                                                        //       false);
-                                                        //
-                                                        //   // Parse dates
-                                                        //   DateTime? startDate;
-                                                        //   DateTime? endDate;
-                                                        //
-                                                        //   if (experience[
-                                                        //   'startDate'] !=
-                                                        //       null) {
-                                                        //     try {
-                                                        //       startDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'startDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing start date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   if (experience[
-                                                        //   'endDate'] !=
-                                                        //       null &&
-                                                        //       experience[
-                                                        //       'endDate'] !=
-                                                        //           'Present') {
-                                                        //     try {
-                                                        //       endDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'endDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing end date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   // Initialize provider with work experience data
-                                                        //   provider
-                                                        //       .initializeWithData(
-                                                        //     title: experience[
-                                                        //     'title'] ??
-                                                        //         '',
-                                                        //     company: experience[
-                                                        //     'company'] ??
-                                                        //         '',
-                                                        //     location:
-                                                        //     experience[
-                                                        //     'location'],
-                                                        //     description:
-                                                        //     experience[
-                                                        //     'description'],
-                                                        //     employmentType:
-                                                        //     experience[
-                                                        //     'employmentType'],
-                                                        //     jobLevel:
-                                                        //     experience[
-                                                        //     'jobLevel'],
-                                                        //     jobFunction:
-                                                        //     experience[
-                                                        //     'jobFunction'],
-                                                        //     startDate:
-                                                        //     startDate,
-                                                        //     endDate: endDate,
-                                                        //     isCurrentlyWorking:
-                                                        //     experience[
-                                                        //     'endDate'] ==
-                                                        //         'Present',
-                                                        //     index:
-                                                        //     index, // Pass the index for updating the correct item
-                                                        //   );
-                                                        //
-                                                        //   // Navigate to work experience screen using named route
-                                                        //   Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           MultiProvider(
-                                                        //             providers: [
-                                                        //               ChangeNotifierProvider
-                                                        //                   .value(
-                                                        //                   value:
-                                                        //                   provider),
-                                                        //               ChangeNotifierProvider.value(
-                                                        //                   value: Provider.of<
-                                                        //                       ProfileBottommenuProvider>(
-                                                        //                       context,
-                                                        //                       listen:
-                                                        //                       false)),
-                                                        //             ],
-                                                        //             child:
-                                                        //             const WorkExperienceScreen(),
-                                                        //           ),
-                                                        //     ),
-                                                        //   );
-                                                        // },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                        ),
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   // onTap: () {
+                                                      //   //   final provider = Provider
+                                                      //   //       .of<WorkExperienceProvider>(
+                                                      //   //       context,
+                                                      //   //       listen:
+                                                      //   //       false);
+                                                      //   //
+                                                      //   //   // Parse dates
+                                                      //   //   DateTime? startDate;
+                                                      //   //   DateTime? endDate;
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'startDate'] !=
+                                                      //   //       null) {
+                                                      //   //     try {
+                                                      //   //       startDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'startDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing start date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'endDate'] !=
+                                                      //   //       null &&
+                                                      //   //       experience[
+                                                      //   //       'endDate'] !=
+                                                      //   //           'Present') {
+                                                      //   //     try {
+                                                      //   //       endDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'endDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing end date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   // Initialize provider with work experience data
+                                                      //   //   provider
+                                                      //   //       .initializeWithData(
+                                                      //   //     title: experience[
+                                                      //   //     'title'] ??
+                                                      //   //         '',
+                                                      //   //     company: experience[
+                                                      //   //     'company'] ??
+                                                      //   //         '',
+                                                      //   //     location:
+                                                      //   //     experience[
+                                                      //   //     'location'],
+                                                      //   //     description:
+                                                      //   //     experience[
+                                                      //   //     'description'],
+                                                      //   //     employmentType:
+                                                      //   //     experience[
+                                                      //   //     'employmentType'],
+                                                      //   //     jobLevel:
+                                                      //   //     experience[
+                                                      //   //     'jobLevel'],
+                                                      //   //     jobFunction:
+                                                      //   //     experience[
+                                                      //   //     'jobFunction'],
+                                                      //   //     startDate:
+                                                      //   //     startDate,
+                                                      //   //     endDate: endDate,
+                                                      //   //     isCurrentlyWorking:
+                                                      //   //     experience[
+                                                      //   //     'endDate'] ==
+                                                      //   //         'Present',
+                                                      //   //     index:
+                                                      //   //     index, // Pass the index for updating the correct item
+                                                      //   //   );
+                                                      //   //
+                                                      //   //   // Navigate to work experience screen using named route
+                                                      //   //   Navigator.push(
+                                                      //   //     context,
+                                                      //   //     MaterialPageRoute(
+                                                      //   //       builder: (context) =>
+                                                      //   //           MultiProvider(
+                                                      //   //             providers: [
+                                                      //   //               ChangeNotifierProvider
+                                                      //   //                   .value(
+                                                      //   //                   value:
+                                                      //   //                   provider),
+                                                      //   //               ChangeNotifierProvider.value(
+                                                      //   //                   value: Provider.of<
+                                                      //   //                       ProfileBottommenuProvider>(
+                                                      //   //                       context,
+                                                      //   //                       listen:
+                                                      //   //                       false)),
+                                                      //   //             ],
+                                                      //   //             child:
+                                                      //   //             const WorkExperienceScreen(),
+                                                      //   //           ),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // },
+                                                      //   child: Image.asset(
+                                                      //     "assets/images/Edit.png",
+                                                      //     height: 2.h,
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1202,113 +1202,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      GestureDetector(
-                                                        // onTap: () {
-                                                        //   final provider = Provider
-                                                        //       .of<WorkExperienceProvider>(
-                                                        //       context,
-                                                        //       listen:
-                                                        //       false);
-                                                        //
-                                                        //   // Parse dates
-                                                        //   DateTime? startDate;
-                                                        //   DateTime? endDate;
-                                                        //
-                                                        //   if (experience[
-                                                        //   'startDate'] !=
-                                                        //       null) {
-                                                        //     try {
-                                                        //       startDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'startDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing start date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   if (experience[
-                                                        //   'endDate'] !=
-                                                        //       null &&
-                                                        //       experience[
-                                                        //       'endDate'] !=
-                                                        //           'Present') {
-                                                        //     try {
-                                                        //       endDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'endDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing end date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   // Initialize provider with work experience data
-                                                        //   provider
-                                                        //       .initializeWithData(
-                                                        //     title: experience[
-                                                        //     'title'] ??
-                                                        //         '',
-                                                        //     company: experience[
-                                                        //     'company'] ??
-                                                        //         '',
-                                                        //     location:
-                                                        //     experience[
-                                                        //     'location'],
-                                                        //     description:
-                                                        //     experience[
-                                                        //     'description'],
-                                                        //     employmentType:
-                                                        //     experience[
-                                                        //     'employmentType'],
-                                                        //     jobLevel:
-                                                        //     experience[
-                                                        //     'jobLevel'],
-                                                        //     jobFunction:
-                                                        //     experience[
-                                                        //     'jobFunction'],
-                                                        //     startDate:
-                                                        //     startDate,
-                                                        //     endDate: endDate,
-                                                        //     isCurrentlyWorking:
-                                                        //     experience[
-                                                        //     'endDate'] ==
-                                                        //         'Present',
-                                                        //     index:
-                                                        //     index, // Pass the index for updating the correct item
-                                                        //   );
-                                                        //
-                                                        //   // Navigate to work experience screen using named route
-                                                        //   Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           MultiProvider(
-                                                        //             providers: [
-                                                        //               ChangeNotifierProvider
-                                                        //                   .value(
-                                                        //                   value:
-                                                        //                   provider),
-                                                        //               ChangeNotifierProvider.value(
-                                                        //                   value: Provider.of<
-                                                        //                       ProfileBottommenuProvider>(
-                                                        //                       context,
-                                                        //                       listen:
-                                                        //                       false)),
-                                                        //             ],
-                                                        //             child:
-                                                        //             const WorkExperienceScreen(),
-                                                        //           ),
-                                                        //     ),
-                                                        //   );
-                                                        // },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                        ),
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   // onTap: () {
+                                                      //   //   final provider = Provider
+                                                      //   //       .of<WorkExperienceProvider>(
+                                                      //   //       context,
+                                                      //   //       listen:
+                                                      //   //       false);
+                                                      //   //
+                                                      //   //   // Parse dates
+                                                      //   //   DateTime? startDate;
+                                                      //   //   DateTime? endDate;
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'startDate'] !=
+                                                      //   //       null) {
+                                                      //   //     try {
+                                                      //   //       startDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'startDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing start date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'endDate'] !=
+                                                      //   //       null &&
+                                                      //   //       experience[
+                                                      //   //       'endDate'] !=
+                                                      //   //           'Present') {
+                                                      //   //     try {
+                                                      //   //       endDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'endDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing end date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   // Initialize provider with work experience data
+                                                      //   //   provider
+                                                      //   //       .initializeWithData(
+                                                      //   //     title: experience[
+                                                      //   //     'title'] ??
+                                                      //   //         '',
+                                                      //   //     company: experience[
+                                                      //   //     'company'] ??
+                                                      //   //         '',
+                                                      //   //     location:
+                                                      //   //     experience[
+                                                      //   //     'location'],
+                                                      //   //     description:
+                                                      //   //     experience[
+                                                      //   //     'description'],
+                                                      //   //     employmentType:
+                                                      //   //     experience[
+                                                      //   //     'employmentType'],
+                                                      //   //     jobLevel:
+                                                      //   //     experience[
+                                                      //   //     'jobLevel'],
+                                                      //   //     jobFunction:
+                                                      //   //     experience[
+                                                      //   //     'jobFunction'],
+                                                      //   //     startDate:
+                                                      //   //     startDate,
+                                                      //   //     endDate: endDate,
+                                                      //   //     isCurrentlyWorking:
+                                                      //   //     experience[
+                                                      //   //     'endDate'] ==
+                                                      //   //         'Present',
+                                                      //   //     index:
+                                                      //   //     index, // Pass the index for updating the correct item
+                                                      //   //   );
+                                                      //   //
+                                                      //   //   // Navigate to work experience screen using named route
+                                                      //   //   Navigator.push(
+                                                      //   //     context,
+                                                      //   //     MaterialPageRoute(
+                                                      //   //       builder: (context) =>
+                                                      //   //           MultiProvider(
+                                                      //   //             providers: [
+                                                      //   //               ChangeNotifierProvider
+                                                      //   //                   .value(
+                                                      //   //                   value:
+                                                      //   //                   provider),
+                                                      //   //               ChangeNotifierProvider.value(
+                                                      //   //                   value: Provider.of<
+                                                      //   //                       ProfileBottommenuProvider>(
+                                                      //   //                       context,
+                                                      //   //                       listen:
+                                                      //   //                       false)),
+                                                      //   //             ],
+                                                      //   //             child:
+                                                      //   //             const WorkExperienceScreen(),
+                                                      //   //           ),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // },
+                                                      //   child: Image.asset(
+                                                      //     "assets/images/Edit.png",
+                                                      //     height: 2.h,
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1414,113 +1414,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      GestureDetector(
-                                                        // onTap: () {
-                                                        //   final provider = Provider
-                                                        //       .of<WorkExperienceProvider>(
-                                                        //       context,
-                                                        //       listen:
-                                                        //       false);
-                                                        //
-                                                        //   // Parse dates
-                                                        //   DateTime? startDate;
-                                                        //   DateTime? endDate;
-                                                        //
-                                                        //   if (experience[
-                                                        //   'startDate'] !=
-                                                        //       null) {
-                                                        //     try {
-                                                        //       startDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'startDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing start date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   if (experience[
-                                                        //   'endDate'] !=
-                                                        //       null &&
-                                                        //       experience[
-                                                        //       'endDate'] !=
-                                                        //           'Present') {
-                                                        //     try {
-                                                        //       endDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'endDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing end date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   // Initialize provider with work experience data
-                                                        //   provider
-                                                        //       .initializeWithData(
-                                                        //     title: experience[
-                                                        //     'title'] ??
-                                                        //         '',
-                                                        //     company: experience[
-                                                        //     'company'] ??
-                                                        //         '',
-                                                        //     location:
-                                                        //     experience[
-                                                        //     'location'],
-                                                        //     description:
-                                                        //     experience[
-                                                        //     'description'],
-                                                        //     employmentType:
-                                                        //     experience[
-                                                        //     'employmentType'],
-                                                        //     jobLevel:
-                                                        //     experience[
-                                                        //     'jobLevel'],
-                                                        //     jobFunction:
-                                                        //     experience[
-                                                        //     'jobFunction'],
-                                                        //     startDate:
-                                                        //     startDate,
-                                                        //     endDate: endDate,
-                                                        //     isCurrentlyWorking:
-                                                        //     experience[
-                                                        //     'endDate'] ==
-                                                        //         'Present',
-                                                        //     index:
-                                                        //     index, // Pass the index for updating the correct item
-                                                        //   );
-                                                        //
-                                                        //   // Navigate to work experience screen using named route
-                                                        //   Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           MultiProvider(
-                                                        //             providers: [
-                                                        //               ChangeNotifierProvider
-                                                        //                   .value(
-                                                        //                   value:
-                                                        //                   provider),
-                                                        //               ChangeNotifierProvider.value(
-                                                        //                   value: Provider.of<
-                                                        //                       ProfileBottommenuProvider>(
-                                                        //                       context,
-                                                        //                       listen:
-                                                        //                       false)),
-                                                        //             ],
-                                                        //             child:
-                                                        //             const WorkExperienceScreen(),
-                                                        //           ),
-                                                        //     ),
-                                                        //   );
-                                                        // },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                        ),
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   // onTap: () {
+                                                      //   //   final provider = Provider
+                                                      //   //       .of<WorkExperienceProvider>(
+                                                      //   //       context,
+                                                      //   //       listen:
+                                                      //   //       false);
+                                                      //   //
+                                                      //   //   // Parse dates
+                                                      //   //   DateTime? startDate;
+                                                      //   //   DateTime? endDate;
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'startDate'] !=
+                                                      //   //       null) {
+                                                      //   //     try {
+                                                      //   //       startDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'startDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing start date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'endDate'] !=
+                                                      //   //       null &&
+                                                      //   //       experience[
+                                                      //   //       'endDate'] !=
+                                                      //   //           'Present') {
+                                                      //   //     try {
+                                                      //   //       endDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'endDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing end date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   // Initialize provider with work experience data
+                                                      //   //   provider
+                                                      //   //       .initializeWithData(
+                                                      //   //     title: experience[
+                                                      //   //     'title'] ??
+                                                      //   //         '',
+                                                      //   //     company: experience[
+                                                      //   //     'company'] ??
+                                                      //   //         '',
+                                                      //   //     location:
+                                                      //   //     experience[
+                                                      //   //     'location'],
+                                                      //   //     description:
+                                                      //   //     experience[
+                                                      //   //     'description'],
+                                                      //   //     employmentType:
+                                                      //   //     experience[
+                                                      //   //     'employmentType'],
+                                                      //   //     jobLevel:
+                                                      //   //     experience[
+                                                      //   //     'jobLevel'],
+                                                      //   //     jobFunction:
+                                                      //   //     experience[
+                                                      //   //     'jobFunction'],
+                                                      //   //     startDate:
+                                                      //   //     startDate,
+                                                      //   //     endDate: endDate,
+                                                      //   //     isCurrentlyWorking:
+                                                      //   //     experience[
+                                                      //   //     'endDate'] ==
+                                                      //   //         'Present',
+                                                      //   //     index:
+                                                      //   //     index, // Pass the index for updating the correct item
+                                                      //   //   );
+                                                      //   //
+                                                      //   //   // Navigate to work experience screen using named route
+                                                      //   //   Navigator.push(
+                                                      //   //     context,
+                                                      //   //     MaterialPageRoute(
+                                                      //   //       builder: (context) =>
+                                                      //   //           MultiProvider(
+                                                      //   //             providers: [
+                                                      //   //               ChangeNotifierProvider
+                                                      //   //                   .value(
+                                                      //   //                   value:
+                                                      //   //                   provider),
+                                                      //   //               ChangeNotifierProvider.value(
+                                                      //   //                   value: Provider.of<
+                                                      //   //                       ProfileBottommenuProvider>(
+                                                      //   //                       context,
+                                                      //   //                       listen:
+                                                      //   //                       false)),
+                                                      //   //             ],
+                                                      //   //             child:
+                                                      //   //             const WorkExperienceScreen(),
+                                                      //   //           ),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // },
+                                                      //   child: Image.asset(
+                                                      //     "assets/images/Edit.png",
+                                                      //     height: 2.h,
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1626,113 +1626,113 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      GestureDetector(
-                                                        // onTap: () {
-                                                        //   final provider = Provider
-                                                        //       .of<WorkExperienceProvider>(
-                                                        //       context,
-                                                        //       listen:
-                                                        //       false);
-                                                        //
-                                                        //   // Parse dates
-                                                        //   DateTime? startDate;
-                                                        //   DateTime? endDate;
-                                                        //
-                                                        //   if (experience[
-                                                        //   'startDate'] !=
-                                                        //       null) {
-                                                        //     try {
-                                                        //       startDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'startDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing start date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   if (experience[
-                                                        //   'endDate'] !=
-                                                        //       null &&
-                                                        //       experience[
-                                                        //       'endDate'] !=
-                                                        //           'Present') {
-                                                        //     try {
-                                                        //       endDate = DateFormat(
-                                                        //           'MM/yyyy')
-                                                        //           .parse(experience[
-                                                        //       'endDate']);
-                                                        //     } catch (e) {
-                                                        //       print(
-                                                        //           'Error parsing end date: $e');
-                                                        //     }
-                                                        //   }
-                                                        //
-                                                        //   // Initialize provider with work experience data
-                                                        //   provider
-                                                        //       .initializeWithData(
-                                                        //     title: experience[
-                                                        //     'title'] ??
-                                                        //         '',
-                                                        //     company: experience[
-                                                        //     'company'] ??
-                                                        //         '',
-                                                        //     location:
-                                                        //     experience[
-                                                        //     'location'],
-                                                        //     description:
-                                                        //     experience[
-                                                        //     'description'],
-                                                        //     employmentType:
-                                                        //     experience[
-                                                        //     'employmentType'],
-                                                        //     jobLevel:
-                                                        //     experience[
-                                                        //     'jobLevel'],
-                                                        //     jobFunction:
-                                                        //     experience[
-                                                        //     'jobFunction'],
-                                                        //     startDate:
-                                                        //     startDate,
-                                                        //     endDate: endDate,
-                                                        //     isCurrentlyWorking:
-                                                        //     experience[
-                                                        //     'endDate'] ==
-                                                        //         'Present',
-                                                        //     index:
-                                                        //     index, // Pass the index for updating the correct item
-                                                        //   );
-                                                        //
-                                                        //   // Navigate to work experience screen using named route
-                                                        //   Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           MultiProvider(
-                                                        //             providers: [
-                                                        //               ChangeNotifierProvider
-                                                        //                   .value(
-                                                        //                   value:
-                                                        //                   provider),
-                                                        //               ChangeNotifierProvider.value(
-                                                        //                   value: Provider.of<
-                                                        //                       ProfileBottommenuProvider>(
-                                                        //                       context,
-                                                        //                       listen:
-                                                        //                       false)),
-                                                        //             ],
-                                                        //             child:
-                                                        //             const WorkExperienceScreen(),
-                                                        //           ),
-                                                        //     ),
-                                                        //   );
-                                                        // },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                        ),
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   // onTap: () {
+                                                      //   //   final provider = Provider
+                                                      //   //       .of<WorkExperienceProvider>(
+                                                      //   //       context,
+                                                      //   //       listen:
+                                                      //   //       false);
+                                                      //   //
+                                                      //   //   // Parse dates
+                                                      //   //   DateTime? startDate;
+                                                      //   //   DateTime? endDate;
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'startDate'] !=
+                                                      //   //       null) {
+                                                      //   //     try {
+                                                      //   //       startDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'startDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing start date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   if (experience[
+                                                      //   //   'endDate'] !=
+                                                      //   //       null &&
+                                                      //   //       experience[
+                                                      //   //       'endDate'] !=
+                                                      //   //           'Present') {
+                                                      //   //     try {
+                                                      //   //       endDate = DateFormat(
+                                                      //   //           'MM/yyyy')
+                                                      //   //           .parse(experience[
+                                                      //   //       'endDate']);
+                                                      //   //     } catch (e) {
+                                                      //   //       print(
+                                                      //   //           'Error parsing end date: $e');
+                                                      //   //     }
+                                                      //   //   }
+                                                      //   //
+                                                      //   //   // Initialize provider with work experience data
+                                                      //   //   provider
+                                                      //   //       .initializeWithData(
+                                                      //   //     title: experience[
+                                                      //   //     'title'] ??
+                                                      //   //         '',
+                                                      //   //     company: experience[
+                                                      //   //     'company'] ??
+                                                      //   //         '',
+                                                      //   //     location:
+                                                      //   //     experience[
+                                                      //   //     'location'],
+                                                      //   //     description:
+                                                      //   //     experience[
+                                                      //   //     'description'],
+                                                      //   //     employmentType:
+                                                      //   //     experience[
+                                                      //   //     'employmentType'],
+                                                      //   //     jobLevel:
+                                                      //   //     experience[
+                                                      //   //     'jobLevel'],
+                                                      //   //     jobFunction:
+                                                      //   //     experience[
+                                                      //   //     'jobFunction'],
+                                                      //   //     startDate:
+                                                      //   //     startDate,
+                                                      //   //     endDate: endDate,
+                                                      //   //     isCurrentlyWorking:
+                                                      //   //     experience[
+                                                      //   //     'endDate'] ==
+                                                      //   //         'Present',
+                                                      //   //     index:
+                                                      //   //     index, // Pass the index for updating the correct item
+                                                      //   //   );
+                                                      //   //
+                                                      //   //   // Navigate to work experience screen using named route
+                                                      //   //   Navigator.push(
+                                                      //   //     context,
+                                                      //   //     MaterialPageRoute(
+                                                      //   //       builder: (context) =>
+                                                      //   //           MultiProvider(
+                                                      //   //             providers: [
+                                                      //   //               ChangeNotifierProvider
+                                                      //   //                   .value(
+                                                      //   //                   value:
+                                                      //   //                   provider),
+                                                      //   //               ChangeNotifierProvider.value(
+                                                      //   //                   value: Provider.of<
+                                                      //   //                       ProfileBottommenuProvider>(
+                                                      //   //                       context,
+                                                      //   //                       listen:
+                                                      //   //                       false)),
+                                                      //   //             ],
+                                                      //   //             child:
+                                                      //   //             const WorkExperienceScreen(),
+                                                      //   //           ),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // },
+                                                      //   child: Image.asset(
+                                                      //     "assets/images/Edit.png",
+                                                      //     height: 2.h,
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1855,113 +1855,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                       .fontFamilyBold,
                                                                 ),
                                                               ),
-                                                              GestureDetector(
-                                                                // onTap: () {
-                                                                //   final provider = Provider
-                                                                //       .of<WorkExperienceProvider>(
-                                                                //       context,
-                                                                //       listen:
-                                                                //       false);
-                                                                //
-                                                                //   // Parse dates
-                                                                //   DateTime? startDate;
-                                                                //   DateTime? endDate;
-                                                                //
-                                                                //   if (experience[
-                                                                //   'startDate'] !=
-                                                                //       null) {
-                                                                //     try {
-                                                                //       startDate = DateFormat(
-                                                                //           'MM/yyyy')
-                                                                //           .parse(experience[
-                                                                //       'startDate']);
-                                                                //     } catch (e) {
-                                                                //       print(
-                                                                //           'Error parsing start date: $e');
-                                                                //     }
-                                                                //   }
-                                                                //
-                                                                //   if (experience[
-                                                                //   'endDate'] !=
-                                                                //       null &&
-                                                                //       experience[
-                                                                //       'endDate'] !=
-                                                                //           'Present') {
-                                                                //     try {
-                                                                //       endDate = DateFormat(
-                                                                //           'MM/yyyy')
-                                                                //           .parse(experience[
-                                                                //       'endDate']);
-                                                                //     } catch (e) {
-                                                                //       print(
-                                                                //           'Error parsing end date: $e');
-                                                                //     }
-                                                                //   }
-                                                                //
-                                                                //   // Initialize provider with work experience data
-                                                                //   provider
-                                                                //       .initializeWithData(
-                                                                //     title: experience[
-                                                                //     'title'] ??
-                                                                //         '',
-                                                                //     company: experience[
-                                                                //     'company'] ??
-                                                                //         '',
-                                                                //     location:
-                                                                //     experience[
-                                                                //     'location'],
-                                                                //     description:
-                                                                //     experience[
-                                                                //     'description'],
-                                                                //     employmentType:
-                                                                //     experience[
-                                                                //     'employmentType'],
-                                                                //     jobLevel:
-                                                                //     experience[
-                                                                //     'jobLevel'],
-                                                                //     jobFunction:
-                                                                //     experience[
-                                                                //     'jobFunction'],
-                                                                //     startDate:
-                                                                //     startDate,
-                                                                //     endDate: endDate,
-                                                                //     isCurrentlyWorking:
-                                                                //     experience[
-                                                                //     'endDate'] ==
-                                                                //         'Present',
-                                                                //     index:
-                                                                //     index, // Pass the index for updating the correct item
-                                                                //   );
-                                                                //
-                                                                //   // Navigate to work experience screen using named route
-                                                                //   Navigator.push(
-                                                                //     context,
-                                                                //     MaterialPageRoute(
-                                                                //       builder: (context) =>
-                                                                //           MultiProvider(
-                                                                //             providers: [
-                                                                //               ChangeNotifierProvider
-                                                                //                   .value(
-                                                                //                   value:
-                                                                //                   provider),
-                                                                //               ChangeNotifierProvider.value(
-                                                                //                   value: Provider.of<
-                                                                //                       ProfileBottommenuProvider>(
-                                                                //                       context,
-                                                                //                       listen:
-                                                                //                       false)),
-                                                                //             ],
-                                                                //             child:
-                                                                //             const WorkExperienceScreen(),
-                                                                //           ),
-                                                                //     ),
-                                                                //   );
-                                                                // },
-                                                                child: Image.asset(
-                                                                  "assets/images/Edit.png",
-                                                                  height: 2.h,
-                                                                ),
-                                                              ),
                                                             ],
                                                           ),
                                                           SizedBox(height: 0.5.h),
@@ -2075,113 +1968,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                   .fontFamilyBold,
                                                             ),
                                                           ),
-                                                          GestureDetector(
-                                                            // onTap: () {
-                                                            //   final provider = Provider
-                                                            //       .of<WorkExperienceProvider>(
-                                                            //       context,
-                                                            //       listen:
-                                                            //       false);
-                                                            //
-                                                            //   // Parse dates
-                                                            //   DateTime? startDate;
-                                                            //   DateTime? endDate;
-                                                            //
-                                                            //   if (experience[
-                                                            //   'startDate'] !=
-                                                            //       null) {
-                                                            //     try {
-                                                            //       startDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'startDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing start date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   if (experience[
-                                                            //   'endDate'] !=
-                                                            //       null &&
-                                                            //       experience[
-                                                            //       'endDate'] !=
-                                                            //           'Present') {
-                                                            //     try {
-                                                            //       endDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'endDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing end date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   // Initialize provider with work experience data
-                                                            //   provider
-                                                            //       .initializeWithData(
-                                                            //     title: experience[
-                                                            //     'title'] ??
-                                                            //         '',
-                                                            //     company: experience[
-                                                            //     'company'] ??
-                                                            //         '',
-                                                            //     location:
-                                                            //     experience[
-                                                            //     'location'],
-                                                            //     description:
-                                                            //     experience[
-                                                            //     'description'],
-                                                            //     employmentType:
-                                                            //     experience[
-                                                            //     'employmentType'],
-                                                            //     jobLevel:
-                                                            //     experience[
-                                                            //     'jobLevel'],
-                                                            //     jobFunction:
-                                                            //     experience[
-                                                            //     'jobFunction'],
-                                                            //     startDate:
-                                                            //     startDate,
-                                                            //     endDate: endDate,
-                                                            //     isCurrentlyWorking:
-                                                            //     experience[
-                                                            //     'endDate'] ==
-                                                            //         'Present',
-                                                            //     index:
-                                                            //     index, // Pass the index for updating the correct item
-                                                            //   );
-                                                            //
-                                                            //   // Navigate to work experience screen using named route
-                                                            //   Navigator.push(
-                                                            //     context,
-                                                            //     MaterialPageRoute(
-                                                            //       builder: (context) =>
-                                                            //           MultiProvider(
-                                                            //             providers: [
-                                                            //               ChangeNotifierProvider
-                                                            //                   .value(
-                                                            //                   value:
-                                                            //                   provider),
-                                                            //               ChangeNotifierProvider.value(
-                                                            //                   value: Provider.of<
-                                                            //                       ProfileBottommenuProvider>(
-                                                            //                       context,
-                                                            //                       listen:
-                                                            //                       false)),
-                                                            //             ],
-                                                            //             child:
-                                                            //             const WorkExperienceScreen(),
-                                                            //           ),
-                                                            //     ),
-                                                            //   );
-                                                            // },
-                                                            child: Image.asset(
-                                                              "assets/images/Edit.png",
-                                                              height: 2.h,
-                                                            ),
-                                                          ),
                                                         ],
                                                       ),
                                                       SizedBox(height: 0.5.h),
@@ -2293,113 +2079,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                   .Color_212121,
                                                               fontFamily: AppColors
                                                                   .fontFamilyBold,
-                                                            ),
-                                                          ),
-                                                          GestureDetector(
-                                                            // onTap: () {
-                                                            //   final provider = Provider
-                                                            //       .of<WorkExperienceProvider>(
-                                                            //       context,
-                                                            //       listen:
-                                                            //       false);
-                                                            //
-                                                            //   // Parse dates
-                                                            //   DateTime? startDate;
-                                                            //   DateTime? endDate;
-                                                            //
-                                                            //   if (experience[
-                                                            //   'startDate'] !=
-                                                            //       null) {
-                                                            //     try {
-                                                            //       startDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'startDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing start date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   if (experience[
-                                                            //   'endDate'] !=
-                                                            //       null &&
-                                                            //       experience[
-                                                            //       'endDate'] !=
-                                                            //           'Present') {
-                                                            //     try {
-                                                            //       endDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'endDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing end date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   // Initialize provider with work experience data
-                                                            //   provider
-                                                            //       .initializeWithData(
-                                                            //     title: experience[
-                                                            //     'title'] ??
-                                                            //         '',
-                                                            //     company: experience[
-                                                            //     'company'] ??
-                                                            //         '',
-                                                            //     location:
-                                                            //     experience[
-                                                            //     'location'],
-                                                            //     description:
-                                                            //     experience[
-                                                            //     'description'],
-                                                            //     employmentType:
-                                                            //     experience[
-                                                            //     'employmentType'],
-                                                            //     jobLevel:
-                                                            //     experience[
-                                                            //     'jobLevel'],
-                                                            //     jobFunction:
-                                                            //     experience[
-                                                            //     'jobFunction'],
-                                                            //     startDate:
-                                                            //     startDate,
-                                                            //     endDate: endDate,
-                                                            //     isCurrentlyWorking:
-                                                            //     experience[
-                                                            //     'endDate'] ==
-                                                            //         'Present',
-                                                            //     index:
-                                                            //     index, // Pass the index for updating the correct item
-                                                            //   );
-                                                            //
-                                                            //   // Navigate to work experience screen using named route
-                                                            //   Navigator.push(
-                                                            //     context,
-                                                            //     MaterialPageRoute(
-                                                            //       builder: (context) =>
-                                                            //           MultiProvider(
-                                                            //             providers: [
-                                                            //               ChangeNotifierProvider
-                                                            //                   .value(
-                                                            //                   value:
-                                                            //                   provider),
-                                                            //               ChangeNotifierProvider.value(
-                                                            //                   value: Provider.of<
-                                                            //                       ProfileBottommenuProvider>(
-                                                            //                       context,
-                                                            //                       listen:
-                                                            //                       false)),
-                                                            //             ],
-                                                            //             child:
-                                                            //             const WorkExperienceScreen(),
-                                                            //           ),
-                                                            //     ),
-                                                            //   );
-                                                            // },
-                                                            child: Image.asset(
-                                                              "assets/images/Edit.png",
-                                                              height: 2.h,
                                                             ),
                                                           ),
                                                         ],
@@ -2527,113 +2206,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              GestureDetector(
-                                                                // onTap: () {
-                                                                //   final provider = Provider
-                                                                //       .of<WorkExperienceProvider>(
-                                                                //       context,
-                                                                //       listen:
-                                                                //       false);
-                                                                //
-                                                                //   // Parse dates
-                                                                //   DateTime? startDate;
-                                                                //   DateTime? endDate;
-                                                                //
-                                                                //   if (experience[
-                                                                //   'startDate'] !=
-                                                                //       null) {
-                                                                //     try {
-                                                                //       startDate = DateFormat(
-                                                                //           'MM/yyyy')
-                                                                //           .parse(experience[
-                                                                //       'startDate']);
-                                                                //     } catch (e) {
-                                                                //       print(
-                                                                //           'Error parsing start date: $e');
-                                                                //     }
-                                                                //   }
-                                                                //
-                                                                //   if (experience[
-                                                                //   'endDate'] !=
-                                                                //       null &&
-                                                                //       experience[
-                                                                //       'endDate'] !=
-                                                                //           'Present') {
-                                                                //     try {
-                                                                //       endDate = DateFormat(
-                                                                //           'MM/yyyy')
-                                                                //           .parse(experience[
-                                                                //       'endDate']);
-                                                                //     } catch (e) {
-                                                                //       print(
-                                                                //           'Error parsing end date: $e');
-                                                                //     }
-                                                                //   }
-                                                                //
-                                                                //   // Initialize provider with work experience data
-                                                                //   provider
-                                                                //       .initializeWithData(
-                                                                //     title: experience[
-                                                                //     'title'] ??
-                                                                //         '',
-                                                                //     company: experience[
-                                                                //     'company'] ??
-                                                                //         '',
-                                                                //     location:
-                                                                //     experience[
-                                                                //     'location'],
-                                                                //     description:
-                                                                //     experience[
-                                                                //     'description'],
-                                                                //     employmentType:
-                                                                //     experience[
-                                                                //     'employmentType'],
-                                                                //     jobLevel:
-                                                                //     experience[
-                                                                //     'jobLevel'],
-                                                                //     jobFunction:
-                                                                //     experience[
-                                                                //     'jobFunction'],
-                                                                //     startDate:
-                                                                //     startDate,
-                                                                //     endDate: endDate,
-                                                                //     isCurrentlyWorking:
-                                                                //     experience[
-                                                                //     'endDate'] ==
-                                                                //         'Present',
-                                                                //     index:
-                                                                //     index, // Pass the index for updating the correct item
-                                                                //   );
-                                                                //
-                                                                //   // Navigate to work experience screen using named route
-                                                                //   Navigator.push(
-                                                                //     context,
-                                                                //     MaterialPageRoute(
-                                                                //       builder: (context) =>
-                                                                //           MultiProvider(
-                                                                //             providers: [
-                                                                //               ChangeNotifierProvider
-                                                                //                   .value(
-                                                                //                   value:
-                                                                //                   provider),
-                                                                //               ChangeNotifierProvider.value(
-                                                                //                   value: Provider.of<
-                                                                //                       ProfileBottommenuProvider>(
-                                                                //                       context,
-                                                                //                       listen:
-                                                                //                       false)),
-                                                                //             ],
-                                                                //             child:
-                                                                //             const WorkExperienceScreen(),
-                                                                //           ),
-                                                                //     ),
-                                                                //   );
-                                                                // },
-                                                                child: Image.asset(
-                                                                  "assets/images/Edit.png",
-                                                                  height: 2.h,
-                                                                ),
-                                                              ),
                                                             ],
                                                           ),
                                                           SizedBox(height: 0.5.h),
@@ -2748,113 +2320,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                 fontFamily: AppColors
                                                                     .fontFamilyBold,
                                                               ),
-                                                            ),
-                                                          ),
-                                                          GestureDetector(
-                                                            // onTap: () {
-                                                            //   final provider = Provider
-                                                            //       .of<WorkExperienceProvider>(
-                                                            //       context,
-                                                            //       listen:
-                                                            //       false);
-                                                            //
-                                                            //   // Parse dates
-                                                            //   DateTime? startDate;
-                                                            //   DateTime? endDate;
-                                                            //
-                                                            //   if (experience[
-                                                            //   'startDate'] !=
-                                                            //       null) {
-                                                            //     try {
-                                                            //       startDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'startDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing start date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   if (experience[
-                                                            //   'endDate'] !=
-                                                            //       null &&
-                                                            //       experience[
-                                                            //       'endDate'] !=
-                                                            //           'Present') {
-                                                            //     try {
-                                                            //       endDate = DateFormat(
-                                                            //           'MM/yyyy')
-                                                            //           .parse(experience[
-                                                            //       'endDate']);
-                                                            //     } catch (e) {
-                                                            //       print(
-                                                            //           'Error parsing end date: $e');
-                                                            //     }
-                                                            //   }
-                                                            //
-                                                            //   // Initialize provider with work experience data
-                                                            //   provider
-                                                            //       .initializeWithData(
-                                                            //     title: experience[
-                                                            //     'title'] ??
-                                                            //         '',
-                                                            //     company: experience[
-                                                            //     'company'] ??
-                                                            //         '',
-                                                            //     location:
-                                                            //     experience[
-                                                            //     'location'],
-                                                            //     description:
-                                                            //     experience[
-                                                            //     'description'],
-                                                            //     employmentType:
-                                                            //     experience[
-                                                            //     'employmentType'],
-                                                            //     jobLevel:
-                                                            //     experience[
-                                                            //     'jobLevel'],
-                                                            //     jobFunction:
-                                                            //     experience[
-                                                            //     'jobFunction'],
-                                                            //     startDate:
-                                                            //     startDate,
-                                                            //     endDate: endDate,
-                                                            //     isCurrentlyWorking:
-                                                            //     experience[
-                                                            //     'endDate'] ==
-                                                            //         'Present',
-                                                            //     index:
-                                                            //     index, // Pass the index for updating the correct item
-                                                            //   );
-                                                            //
-                                                            //   // Navigate to work experience screen using named route
-                                                            //   Navigator.push(
-                                                            //     context,
-                                                            //     MaterialPageRoute(
-                                                            //       builder: (context) =>
-                                                            //           MultiProvider(
-                                                            //             providers: [
-                                                            //               ChangeNotifierProvider
-                                                            //                   .value(
-                                                            //                   value:
-                                                            //                   provider),
-                                                            //               ChangeNotifierProvider.value(
-                                                            //                   value: Provider.of<
-                                                            //                       ProfileBottommenuProvider>(
-                                                            //                       context,
-                                                            //                       listen:
-                                                            //                       false)),
-                                                            //             ],
-                                                            //             child:
-                                                            //             const WorkExperienceScreen(),
-                                                            //           ),
-                                                            //     ),
-                                                            //   );
-                                                            // },
-                                                            child: Image.asset(
-                                                              "assets/images/Edit.png",
-                                                              height: 2.h,
                                                             ),
                                                           ),
                                                         ],
@@ -2975,26 +2440,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                                // final language = profileProvider.languages[index];
-                                                                //
-                                                                // // Reset and initialize with data
-                                                                // provider.resetForm();
-                                                                //
-                                                                // // Set language and proficiency
-                                                                // provider.setLanguage(language['language'] ?? '');
-                                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                                //
-                                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                                              },
-                                                              child: Image.asset(
-                                                                "assets/images/Edit.png",
-                                                                height: 2.h,
-                                                                color: AppColors.buttonColor,
-                                                              ),
-                                                            ),
                                                           ],
                                                         ),
                                                       );
@@ -3087,26 +2532,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     ),
                                                   ),
                                                 ],
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                // final language = profileProvider.languages[index];
-                                                //
-                                                // // Reset and initialize with data
-                                                // provider.resetForm();
-                                                //
-                                                // // Set language and proficiency
-                                                // provider.setLanguage(language['language'] ?? '');
-                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                //
-                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                                color: AppColors.buttonColor,
                                               ),
                                             ),
                                           ],
@@ -3215,26 +2640,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 ],
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                // final language = profileProvider.languages[index];
-                                                //
-                                                // // Reset and initialize with data
-                                                // provider.resetForm();
-                                                //
-                                                // // Set language and proficiency
-                                                // provider.setLanguage(language['language'] ?? '');
-                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                //
-                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                                color: AppColors.buttonColor,
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       );
@@ -3318,26 +2723,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 ],
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                // final language = profileProvider.languages[index];
-                                                //
-                                                // // Reset and initialize with data
-                                                // provider.resetForm();
-                                                //
-                                                // // Set language and proficiency
-                                                // provider.setLanguage(language['language'] ?? '');
-                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                //
-                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                                color: AppColors.buttonColor,
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       );
@@ -3390,18 +2775,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                               ),
                                             ))
                                                 .toList(),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            final provider = Provider.of<SkillsProvider>(context, listen: false);
-                                            provider.initializeWithData(skills: profileProvider.skills);
-                                            Navigator.of(context).pushNamed(skillsScreen);
-                                          },
-                                          child: Image.asset(
-                                            "assets/images/Edit.png",
-                                            height: 2.h,
-                                            color: AppColors.buttonColor,
                                           ),
                                         ),
                                       ],
@@ -3495,26 +2868,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     ),
                                                   ),
                                                 ],
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                // final language = profileProvider.languages[index];
-                                                //
-                                                // // Reset and initialize with data
-                                                // provider.resetForm();
-                                                //
-                                                // // Set language and proficiency
-                                                // provider.setLanguage(language['language'] ?? '');
-                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                //
-                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                                color: AppColors.buttonColor,
                                               ),
                                             ),
                                           ],
@@ -3612,26 +2965,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 ],
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // final provider = Provider.of<LanguagesProvider>(context, listen: false);
-                                                // final language = profileProvider.languages[index];
-                                                //
-                                                // // Reset and initialize with data
-                                                // provider.resetForm();
-                                                //
-                                                // // Set language and proficiency
-                                                // provider.setLanguage(language['language'] ?? '');
-                                                // provider.setProficiency(language['proficiency'] ?? '');
-                                                //
-                                                // Navigator.of(context).pushNamed(languagesScreen);
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/Edit.png",
-                                                height: 2.h,
-                                                color: AppColors.buttonColor,
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       );
@@ -3684,18 +3017,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                               ),
                                             ))
                                                 .toList(),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            final provider = Provider.of<SkillsProvider>(context, listen: false);
-                                            provider.initializeWithData(skills: profileProvider.skills);
-                                            Navigator.of(context).pushNamed(skillsScreen);
-                                          },
-                                          child: Image.asset(
-                                            "assets/images/Edit.png",
-                                            height: 2.h,
-                                            color: AppColors.buttonColor,
                                           ),
                                         ),
                                       ],
@@ -3765,18 +3086,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                               ),
                                             ))
                                                 .toList(),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            final provider = Provider.of<SkillsProvider>(context, listen: false);
-                                            provider.initializeWithData(skills: profileProvider.skills);
-                                            Navigator.of(context).pushNamed(skillsScreen);
-                                          },
-                                          child: Image.asset(
-                                            "assets/images/Edit.png",
-                                            height: 2.h,
-                                            color: AppColors.buttonColor,
                                           ),
                                         ),
                                       ],
@@ -3859,18 +3168,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                                     ),
                                                                   ))
                                                               .toList(),
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          final provider = Provider.of<SkillsProvider>(context, listen: false);
-                                                          provider.initializeWithData(skills: profileProvider.skills);
-                                                          Navigator.of(context).pushNamed(skillsScreen);
-                                                        },
-                                                        child: Image.asset(
-                                                          "assets/images/Edit.png",
-                                                          height: 2.h,
-                                                          color: AppColors.buttonColor,
                                                         ),
                                                       ),
                                                     ],
