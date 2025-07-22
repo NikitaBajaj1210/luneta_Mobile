@@ -673,6 +673,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                         provider.medicalFitnessExpiryDateController.clear();
                                         provider.medicalFitnessNeverExpire = false;
                                         provider.medicalFitnessDocument = null;
+                                      } else {
+                                        setState(() {
+                                          provider.autovalidateMode = AutovalidateMode.always;
+                                        });
                                       }
                                     },
                                     buttonText: provider.medicalFitness_IsEdit ? "Update" : "Add",
@@ -1534,3 +1538,5 @@ class backButtonWithTitle extends StatelessWidget {
     );
   }
 }
+
+[end of lib/UI/bottom_menu/bottom_menu_screens/09-profile-screens/medical_document.dart]
