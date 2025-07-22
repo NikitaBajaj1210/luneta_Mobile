@@ -26,7 +26,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
   final TextEditingController drugAndAlcoholTestCertificateNoController = TextEditingController();
   final TextEditingController drugAndAlcoholTestIssuingAuthorityController = TextEditingController();
   final TextEditingController drugAndAlcoholTestIssueDateController = TextEditingController();
-  final TextEditing-Controller drugAndAlcoholTestExpiryDateController = TextEditingController();
+  final TextEditingController drugAndAlcoholTestExpiryDateController = TextEditingController();
   File? drugAndAlcoholTestDocument;
   final TextEditingController vaccinationCertificateIssuingAuthorityController = TextEditingController();
   final TextEditingController vaccinationCertificateIssueDateController = TextEditingController();
