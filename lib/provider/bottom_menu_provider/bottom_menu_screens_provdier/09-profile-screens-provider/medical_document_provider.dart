@@ -47,6 +47,31 @@ class MedicalDocumentProvider extends ChangeNotifier {
   final FocusNode vaccinationCertificateExpiryDateFocusNode = FocusNode();
 
   // Medical Fitness
+  List<MedicalFitness> medicalFitnessList = [];
+  bool showAddSection_medicalFitness = false;
+  int? medicalFitness_Edit_Index;
+  bool medicalFitness_IsEdit = false;
+
+  void setMedicalFitnessVisibility(bool value) {
+    showAddSection_medicalFitness = value;
+    notifyListeners();
+  }
+
+  void addMedicalFitness(MedicalFitness medicalFitness) {
+    medicalFitnessList.add(medicalFitness);
+    notifyListeners();
+  }
+
+  void updateMedicalFitness(int index, MedicalFitness medicalFitness) {
+    medicalFitnessList[index] = medicalFitness;
+    notifyListeners();
+  }
+
+  void removeMedicalFitness(int index) {
+    medicalFitnessList.removeAt(index);
+    notifyListeners();
+  }
+
   bool medicalFitnessNeverExpire = false;
   String? medicalFitnessDocumentType;
   String? medicalFitnessIssuingCountry;
@@ -225,4 +250,26 @@ class MedicalDocumentProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+}
+
+class MedicalFitness {
+  String documentType;
+  String certificateNo;
+  String issuingCountry;
+  String issuingAuthority;
+  String issueDate;
+  String expiryDate;
+  bool neverExpire;
+  File? document;
+
+  MedicalFitness({
+    required this.documentType,
+    required this.certificateNo,
+    required this.issuingCountry,
+    required this.issuingAuthority,
+    required this.issueDate,
+    required this.expiryDate,
+    required this.neverExpire,
+    this.document,
+  });
 }
