@@ -7,6 +7,7 @@ import 'package:country_picker/country_picker.dart';
 
 class MedicalDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
+  final medicalFitnessFormKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   List<String> countries = [];
