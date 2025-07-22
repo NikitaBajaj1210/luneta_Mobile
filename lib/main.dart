@@ -14,6 +14,7 @@ import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdie
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/affiliations_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/awards_achievements_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/certification_provider.dart';
+import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/medical_document_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/personal_information_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/cv_resume_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_screen_provider.dart';
@@ -112,6 +113,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_)=>  ProjectsProfileScreenProvider()),
         ChangeNotifierProvider(create: (_)=>  ProfessionalExperienceProvider()),
         ChangeNotifierProvider(create: (_)=>  TravelDocumentProvider()),
+        ChangeNotifierProvider(create: (_)=>  MedicalDocumentProvider()),
 
       ],
       child:  InitRoutes(),

@@ -9,6 +9,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   final medicalFitnessFormKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  AutovalidateMode autovalidateModeMedical = AutovalidateMode.disabled;
 
   List<String> countries = [];
   List<String> medicalFitnessDocumentTypes = ["PEME", "HMO", "Standard Medical Exam"];

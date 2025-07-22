@@ -233,6 +233,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       if (provider.showAddSection_medicalFitness)
                         Form(
                           key: provider.medicalFitnessFormKey,
+                          autovalidateMode: provider.autovalidateModeMedical,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -256,10 +257,13 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   );
                                 }).toList(),
                                 value: provider.medicalFitnessDocumentType,
+                                onClear: (){
+                                  provider.setMedicalFitnessDocumentType('');
+                                },
                                 hint: "Select Document Type",
                                 autovalidateMode: provider.autovalidateMode,
                                 validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                                  if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
                                     return '      Please select Document Type';
                                   }
                                   return null;
@@ -343,10 +347,13 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   );
                                 }).toList(),
                                 value: provider.medicalFitnessIssuingCountry,
+                                onClear: (){
+                                  provider.setMedicalFitnessIssuingCountry('');
+                                },
                                 hint: "Select Country",
                                 autovalidateMode: provider.autovalidateMode,
                                 validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                                  if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
                                     return '      Please select Country';
                                   }
                                   return null;
@@ -572,7 +579,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   ),
                                 ),
                               ),
-                              if (provider.medicalFitnessDocument == null)
+                              if (provider.medicalFitnessDocument == null && provider.autovalidateModeMedical == AutovalidateMode.always)
                                 Padding(
                                   padding: EdgeInsets.only(top: 1.h, left: 4.w),
                                   child: Text(
@@ -648,7 +655,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                   child: customButton(
                                     voidCallback: () {
-                                      if (provider.medicalFitnessFormKey.currentState!.validate()) {
+                                      if (provider.medicalFitnessFormKey.currentState!.validate() && provider.medicalFitnessDocument!=null) {
                                         MedicalFitness medicalFitness = MedicalFitness(
                                           documentType: provider.medicalFitnessDocumentType!,
                                           certificateNo: provider.medicalFitnessCertificateNoController.text,
@@ -673,9 +680,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                         provider.medicalFitnessExpiryDateController.clear();
                                         provider.medicalFitnessNeverExpire = false;
                                         provider.medicalFitnessDocument = null;
+                                        provider.autovalidateModeMedical= AutovalidateMode.disabled;
                                       } else {
                                         setState(() {
-                                          provider.autovalidateMode = AutovalidateMode.always;
+                                          provider.autovalidateModeMedical = AutovalidateMode.always;
                                         });
                                       }
                                     },
@@ -1539,4 +1547,3 @@ class backButtonWithTitle extends StatelessWidget {
   }
 }
 
-[end of lib/UI/bottom_menu/bottom_menu_screens/09-profile-screens/medical_document.dart]
