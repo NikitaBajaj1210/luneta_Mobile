@@ -180,6 +180,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         }).toList(),
                         value: provider.passportCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setPassportCountry('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -361,7 +364,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.passportDocument == null)
+                      if (provider.passportDocument == null && provider.autovalidateMode == AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Passport",
@@ -505,6 +508,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         }).toList(),
                         value: provider.seamanIssuingCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setSeamanIssuingCountry('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -709,6 +715,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         }).toList(),
                         value: provider.seamanNationality,
                         hint: "Select Nationality",
+                        onClear: (){
+                          provider.setSeamanNationality('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -786,7 +795,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.seamanDocument == null)
+                      if (provider.seamanDocument == null && provider.autovalidateMode== AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Seaman Document",
@@ -920,6 +929,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                               }).toList(),
                               value: provider.seafarerVisaIssuingCountry,
                               hint: "Select Country",
+                              onClear: (){
+                                provider.setSeafarerVisaIssuingCountry('');
+                              },
                               autovalidateMode: provider.autovalidateMode,
                               validator: (value){
                                 if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1138,7 +1150,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                 ),
                               ),
                             ),
-                            if (provider.seafarerVisaDocument == null)
+                            if (provider.seafarerVisaDocument == null && provider.autovalidateMode == AutovalidateMode.always)
                               Padding(
                                 padding: EdgeInsets.only(top: 1.h, left: 4.w),
                                 child: Text("Please select Seafarer Visa Document",
@@ -1247,6 +1259,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         }).toList(),
                         value: provider.visaIssuingCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setVisaIssuingCountry('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1465,7 +1480,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.visaDocument == null)
+                      if (provider.visaDocument == null && provider.autovalidateMode==AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Visa Document",
@@ -1572,6 +1587,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         }).toList(),
                         value: provider.residencePermitIssuingCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setResidencePermitIssuingCountry('');
+                        },
                          autovalidateMode: provider.autovalidateMode,
                          validator: (value){
                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1791,7 +1809,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.residencePermitDocument == null)
+                      if (provider.residencePermitDocument == null && provider.autovalidateMode == AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Residence Permit Document",

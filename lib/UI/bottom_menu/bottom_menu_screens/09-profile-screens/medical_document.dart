@@ -737,6 +737,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         }).toList(),
                         value: provider.drugAndAlcoholTestDocumentType,
                         hint: "Select Document Type",
+                        onClear: (){
+                          provider.setDrugAndAlcoholTestDocumentType('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -825,6 +828,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         }).toList(),
                         value: provider.drugAndAlcoholTestIssuingCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setDrugAndAlcoholTestIssuingCountry('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1043,7 +1049,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.drugAndAlcoholTestDocument == null)
+                      if (provider.drugAndAlcoholTestDocument == null && provider.autovalidateMode==AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Drug & Alcohol Test Document",
@@ -1150,6 +1156,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         }).toList(),
                         value: provider.vaccinationCertificateDocumentType,
                         hint: "Select Document Type",
+                        onClear: (){
+                          provider.setVaccinationCertificateDocumentType('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1201,6 +1210,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         }).toList(),
                         value: provider.vaccinationCertificateIssuingCountry,
                         hint: "Select Country",
+                        onClear: (){
+                          provider.setVaccinationCertificateIssuingCountry('');
+                        },
                         autovalidateMode: provider.autovalidateMode,
                         validator: (value){
                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
@@ -1431,7 +1443,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.vaccinationCertificateDocument == null)
+                      if (provider.vaccinationCertificateDocument == null  && provider.autovalidateMode==AutovalidateMode.always)
                         Padding(
                           padding: EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text("Please select Vaccination Certificate Document",
