@@ -157,21 +157,25 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                           .pushNamed(educationScreen);
                                       break;
                                     case 5:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
-                                          .pushNamed(projectScreen);
+                                          .pushNamed(professionalSkillsScreen);
                                       break;
                                     case 6:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
-                                          .pushNamed(certificationScreen);
+                                          .pushNamed(projectScreen);
                                       break;
                                     case 7:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
-                                          .pushNamed(volunteeringScreen);
+                                          .pushNamed(certificationScreen);
                                       break;
                                     case 8:
+                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
+                                      Navigator.of(context)
+                                          .pushNamed(volunteeringScreen);
+                                      break;
+                                    case 9:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
                                           .pushNamed(professionalExamScreen);

@@ -28,6 +28,7 @@ import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/org
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/languages_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/skills_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/references_screen.dart';
+import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_skills_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/Setting-Screens/deactivate_account_screen.dart';
 import 'package:luneta/UI/bottom_menu/filter_screen.dart';
 import 'package:luneta/UI/bottom_menu/notification_screen.dart';
@@ -295,6 +296,10 @@ class NavRouter {
         case referencesScreen:
         return MaterialPageRoute(
           builder: (context) => const ReferencesScreen(),
+        );
+      case professionalSkillsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const ProfessionalSkillsScreen(),
         );
         case cvResumeScreen:
         return MaterialPageRoute(

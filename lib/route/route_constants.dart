@@ -40,6 +40,7 @@ const String languagesScreen = '/languagesScreen';
 const String skillsScreen = '/skillsScreen';
 const String affiliationsScreen = '/affiliationsScreen';
 const String referencesScreen = '/referencesScreen';
+const String professionalSkillsScreen = '/professionalSkillsScreen';
 const String cvResumeScreen = '/cvResumeScreen';
 const String settingsScreen = '/settingsScreen';
 const String jobSeekingStatusScreen = '/jobJobSeekingStatusScreen';
