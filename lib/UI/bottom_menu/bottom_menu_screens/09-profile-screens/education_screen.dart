@@ -262,12 +262,16 @@ class _EducationScreenState extends State<EducationScreen> {
                                   }).toList(),
                                   value: provider.educationalDegree,
                                   hint: "Select Degree",
+                                  onClear: (){
+                                    provider.setEducationalDegree('');
+                                  },
                                   searchHint: "Search for a degree",
                                   onChanged: (value) {
                                     provider.setEducationalDegree(value as String);
                                   },
                                   isExpanded: true,
                                   underline: SizedBox(),
+                                  autovalidateMode: provider.autovalidateModeAcademic,
                                   displayItem: (item, selected) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -284,7 +288,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     );
                                   },
                                   validator: (value) {
-                                    if (value == null) {
+                                    if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
                                       return 'Please select a degree';
                                     }
                                     return null;
@@ -390,6 +394,10 @@ class _EducationScreenState extends State<EducationScreen> {
                                   }).toList(),
                                   value: provider.country,
                                   hint: "Select Country",
+                                  autovalidateMode: provider.autovalidateModeAcademic,
+                                  onClear: (){
+                                    provider.setCountry('');
+                                  },
                                   searchHint: "Search for a country",
                                   onChanged: (value) {
                                     provider.setCountry(value as String);
@@ -412,7 +420,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     );
                                   },
                                   validator: (value) {
-                                    if (value == null) {
+                                    if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
                                       return 'Please select a country';
                                     }
                                     return null;
@@ -1154,6 +1162,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 items: provider.allLanguages.map((e) => MultiSelectItem(e, e)).toList(),
                                 title: Text("Native Languages"),
                                 selectedColor: AppColors.buttonColor,
+                                searchable: true,
                                 decoration: BoxDecoration(
                                   color: AppColors.Color_FAFAFA,
                                   borderRadius: BorderRadius.circular(10),
@@ -1200,10 +1209,20 @@ class _EducationScreenState extends State<EducationScreen> {
                                 value: provider.additionalLanguage,
                                 hint: "Select Language",
                                 searchHint: "Search for a language",
+                                validator: (value) {
+                                  if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
+                                    return 'Please select language';
+                                  }
+                                  return null;
+                                },
+                                autovalidateMode: provider.autovalidateModeLanguages,
                                 onChanged: (value) {
                                   provider.setAdditionalLanguage(value as String);
                                 },
                                 isExpanded: true,
+                                onClear: (){
+                                  provider.setAdditionalLanguage('');
+                                },
                                 underline: SizedBox(),
                                 displayItem: (item, selected) {
                                   return Container(
@@ -1249,7 +1268,11 @@ class _EducationScreenState extends State<EducationScreen> {
                                 }).toList(),
                                 value: provider.additionalLanguageLevel,
                                 hint: "Select Level",
+                                onClear: (){
+                                  provider.setAdditionalLanguageLevel('');
+                                },
                                 searchHint: "Search for a level",
+                           autovalidateMode: provider.autovalidateModeLanguages,
                                 onChanged: (value) {
                                   provider.setAdditionalLanguageLevel(value as String);
                                 },
@@ -1271,7 +1294,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   );
                                 },
                                 validator: (value) {
-                                  if (provider.additionalLanguage != null && value == null) {
+                                  if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
                                     return 'Please select a level';
                                   }
                                   return null;

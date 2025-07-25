@@ -153,7 +153,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                           .pushNamed(medicalDocument);
                                       break;
                                     case 4:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
                                           .pushNamed(educationScreen);
                                       break;
