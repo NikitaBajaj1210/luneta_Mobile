@@ -279,49 +279,135 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Bulk Cargo"),
-              MultiSelectDialogField(
-                items: provider.bulkCargoList
-                    .map((e) => MultiSelectItem(e, e))
-                    .toList(),
-                onConfirm: (values) {
-                  provider.bulkCargo = values.cast<String>();
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: MultiSelectDialogField(
+                  items: provider.bulkCargoList
+                      .map((e) => MultiSelectItem(e, e))
+                      .toList(),
+                  title: Text("Bulk Cargo"),
+                  selectedColor: AppColors.buttonColor,
+                  searchable: true,
+                  decoration: BoxDecoration(
+                    color: AppColors.Color_FAFAFA,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                  ),
+                  buttonIcon:
+                      Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                  buttonText: Text("Select Bulk Cargo"),
+                  onConfirm: (values) {
+                    provider.bulkCargo = values.cast<String>();
+                  },
+                ),
               ),
               Text("Tanker Cargo"),
-              MultiSelectDialogField(
-                items: provider.tankerCargoList
-                    .map((e) => MultiSelectItem(e, e))
-                    .toList(),
-                onConfirm: (values) {
-                  provider.tankerCargo = values.cast<String>();
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: MultiSelectDialogField(
+                  items: provider.tankerCargoList
+                      .map((e) => MultiSelectItem(e, e))
+                      .toList(),
+                  title: Text("Tanker Cargo"),
+                  selectedColor: AppColors.buttonColor,
+                  searchable: true,
+                  decoration: BoxDecoration(
+                    color: AppColors.Color_FAFAFA,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                  ),
+                  buttonIcon:
+                      Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                  buttonText: Text("Select Tanker Cargo"),
+                  onConfirm: (values) {
+                    provider.tankerCargo = values.cast<String>();
+                  },
+                ),
               ),
               Text("General Cargo"),
-              MultiSelectDialogField(
-                items: provider.generalCargoList
-                    .map((e) => MultiSelectItem(e, e))
-                    .toList(),
-                onConfirm: (values) {
-                  provider.generalCargo = values.cast<String>();
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: MultiSelectDialogField(
+                  items: provider.generalCargoList
+                      .map((e) => MultiSelectItem(e, e))
+                      .toList(),
+                  title: Text("General Cargo"),
+                  selectedColor: AppColors.buttonColor,
+                  searchable: true,
+                  decoration: BoxDecoration(
+                    color: AppColors.Color_FAFAFA,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                  ),
+                  buttonIcon:
+                      Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                  buttonText: Text("Select General Cargo"),
+                  onConfirm: (values) {
+                    provider.generalCargo = values.cast<String>();
+                  },
+                ),
               ),
               Text("Wood Products"),
-              MultiSelectDialogField(
-                items: provider.woodProductsList
-                    .map((e) => MultiSelectItem(e, e))
-                    .toList(),
-                onConfirm: (values) {
-                  provider.woodProducts = values.cast<String>();
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: MultiSelectDialogField(
+                  items: provider.woodProductsList
+                      .map((e) => MultiSelectItem(e, e))
+                      .toList(),
+                  title: Text("Wood Products"),
+                  selectedColor: AppColors.buttonColor,
+                  searchable: true,
+                  decoration: BoxDecoration(
+                    color: AppColors.Color_FAFAFA,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                  ),
+                  buttonIcon:
+                      Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                  buttonText: Text("Select Wood Products"),
+                  onConfirm: (values) {
+                    provider.woodProducts = values.cast<String>();
+                  },
+                ),
               ),
               Text("Stowage and Lashing Experience"),
-              MultiSelectDialogField(
-                items: provider.stowageAndLashingExperienceList
-                    .map((e) => MultiSelectItem(e, e))
-                    .toList(),
-                onConfirm: (values) {
-                  provider.stowageAndLashingExperience = values.cast<String>();
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: MultiSelectDialogField(
+                  items: provider.stowageAndLashingExperienceList
+                      .map((e) => MultiSelectItem(e, e))
+                      .toList(),
+                  title: Text("Stowage and Lashing Experience"),
+                  selectedColor: AppColors.buttonColor,
+                  searchable: true,
+                  decoration: BoxDecoration(
+                    color: AppColors.Color_FAFAFA,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.buttonColor, width: 1),
+                  ),
+                  buttonIcon:
+                      Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                  buttonText: Text("Select Stowage and Lashing Experience"),
+                  onConfirm: (values) {
+                    provider.stowageAndLashingExperience =
+                        values.cast<String>();
+                  },
+                ),
               ),
             ],
           ),
@@ -420,7 +506,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           );
                         }).toList(),
                         value: provider.cargoGearType,
-                        hint: "Select Type",
+                        hint: Text("Select Type"),
                         searchHint: "Search for a type",
                         onChanged: (value) {
                           provider.setCargoGearType(value as String);
@@ -1114,13 +1200,30 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Trading Area Experience"),
-        MultiSelectDialogField(
-          items: provider.tradingAreaList
-              .map((e) => MultiSelectItem(e, e))
-              .toList(),
-          onConfirm: (values) {
-            provider.tradingAreaExperience = values.cast<String>();
-          },
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.Color_FAFAFA,
+            borderRadius: BorderRadius.circular(2.h),
+          ),
+          child: MultiSelectDialogField(
+            items: provider.tradingAreaList
+                .map((e) => MultiSelectItem(e, e))
+                .toList(),
+            title: Text("Trading Area"),
+            selectedColor: AppColors.buttonColor,
+            searchable: true,
+            decoration: BoxDecoration(
+              color: AppColors.Color_FAFAFA,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.buttonColor, width: 1),
+            ),
+            buttonIcon:
+                Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+            buttonText: Text("Select Trading Area"),
+            onConfirm: (values) {
+              provider.tradingAreaExperience = values.cast<String>();
+            },
+          ),
         ),
       ],
     );
