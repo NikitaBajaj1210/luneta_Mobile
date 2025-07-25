@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
 
 class EducationProvider with ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -12,6 +13,9 @@ class EducationProvider with ChangeNotifier {
 
   final certificationFormKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateModeCertification = AutovalidateMode.disabled;
+
+  final languagesSpokenFormKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateModeLanguages = AutovalidateMode.disabled;
 
   // Academic Qualification
   List<AcademicQualification> academicQualificationList = [];
@@ -153,23 +157,31 @@ class EducationProvider with ChangeNotifier {
   Future<void> showAttachmentOptions(BuildContext context, String type) async {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext bc) {
+      builder: (BuildContext context) {
         return SafeArea(
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Photo Library'),
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from gallery'),
                 onTap: () {
                   _pickImage(ImageSource.gallery, type);
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a picture'),
                 onTap: () {
                   _pickImage(ImageSource.camera, type);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text('Choose a document'),
+                onTap: () {
+                  _pickDocument(type);
                   Navigator.of(context).pop();
                 },
               ),
@@ -180,13 +192,29 @@ class EducationProvider with ChangeNotifier {
     );
   }
 
+  Future<void> _pickDocument(String type) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      if (type == 'academic') {
+        setAcademicDocument(file);
+      } else if (type == 'certification') {
+        setCertificationDocument(file);
+      }
+    }
+  }
+
   Future<void> _pickImage(ImageSource source, String type) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
+      final file = File(pickedFile.path);
       if (type == 'academic') {
-        setAcademicDocument(File(pickedFile.path));
+        setAcademicDocument(file);
       } else if (type == 'certification') {
-        setCertificationDocument(File(pickedFile.path));
+        setCertificationDocument(file);
       }
     }
   }

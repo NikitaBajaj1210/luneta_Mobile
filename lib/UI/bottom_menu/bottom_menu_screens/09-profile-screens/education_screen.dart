@@ -34,12 +34,12 @@ class _EducationScreenState extends State<EducationScreen> {
               ),
               child: customButton(
                 voidCallback: () {
-                  if (provider.formKey.currentState!.validate()) {
+                  if (provider.languagesSpokenFormKey.currentState!.validate()) {
                     // Save the data in provider or update the profile here
                     Navigator.pop(context);
                   } else {
                     setState(() {
-                      provider.autovalidateMode = AutovalidateMode.always;
+                      provider.autovalidateModeLanguages = AutovalidateMode.always;
                     });
                   }
                 },
@@ -239,7 +239,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
                                 child: Text(
-                                  'Educational Degree*',
+                                  'Educational Degree',
                                   style: TextStyle(
                                     fontSize: AppFontSize.fontSize16,
                                     fontWeight: FontWeight.w500,
@@ -295,7 +295,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
                                 child: Text(
-                                  'Field of Study*',
+                                  'Field of Study',
                                   style: TextStyle(
                                     fontSize: AppFontSize.fontSize16,
                                     fontWeight: FontWeight.w500,
@@ -331,7 +331,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
                                 child: Text(
-                                  'Educational Institution*',
+                                  'Educational Institution',
                                   style: TextStyle(
                                     fontSize: AppFontSize.fontSize16,
                                     fontWeight: FontWeight.w500,
@@ -367,7 +367,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
                                 child: Text(
-                                  'Country*',
+                                  'Country',
                                   style: TextStyle(
                                     fontSize: AppFontSize.fontSize16,
                                     fontWeight: FontWeight.w500,
@@ -423,7 +423,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
                                 child: Text(
-                                  'Graduation Date*',
+                                  'Graduation Date',
                                   style: TextStyle(
                                     fontSize: AppFontSize.fontSize16,
                                     fontWeight: FontWeight.w500,
@@ -519,6 +519,18 @@ class _EducationScreenState extends State<EducationScreen> {
                                   ),
                                 ),
                               ),
+                              if (provider.academicDocument == null && provider.autovalidateModeAcademic == AutovalidateMode.always)
+                                Padding(
+                                  padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                  child: Text(
+                                    "Please select a document",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: AppFontSize.fontSize12,
+                                    ),
+                                  ),
+                                ),
+                              SizedBox(height: 3.h),
                               if (provider.academicDocument != null)
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
@@ -583,6 +595,9 @@ class _EducationScreenState extends State<EducationScreen> {
                                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                   child: customButton(
                                     voidCallback: () {
+                                      setState(() {
+                                        provider.autovalidateModeAcademic = AutovalidateMode.always;
+                                      });
                                       if (provider.academicQualificationFormKey.currentState!.validate()) {
                                         AcademicQualification qualification = AcademicQualification(
                                           educationalDegree: provider.educationalDegree!,
@@ -605,10 +620,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                         provider.graduationDateController.clear();
                                         provider.academicDocument = null;
                                         provider.autovalidateModeAcademic = AutovalidateMode.disabled;
-                                      } else {
-                                        setState(() {
-                                          provider.autovalidateModeAcademic = AutovalidateMode.always;
-                                        });
                                       }
                                     },
                                     buttonText: provider.academicQualification_IsEdit ? "Update" : "Add",
@@ -1104,157 +1115,172 @@ class _EducationScreenState extends State<EducationScreen> {
                         ),
 
                       // Languages Spoken
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Text(
-                          'Languages Spoken*',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppColors.fontFamilyMedium,
-                            color: AppColors.Color_424242,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Text(
-                          'Native',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppColors.fontFamilyMedium,
-                            color: AppColors.Color_424242,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.Color_FAFAFA,
-                          borderRadius: BorderRadius.circular(2.h),
-                        ),
-                        child: MultiSelectDialogField(
-                          items: provider.allLanguages.map((e) => MultiSelectItem(e, e)).toList(),
-                          title: Text("Native Languages"),
-                          selectedColor: AppColors.buttonColor,
-                          decoration: BoxDecoration(
-                            color: AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.buttonColor, width: 1),
-                          ),
-                          buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                          buttonText: Text("Select Native Languages"),
-                          onConfirm: (values) {
-                            provider.setNativeLanguages(values.cast<String>());
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select at least one native language';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 1.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Text(
-                          'Additional Language',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppColors.fontFamilyMedium,
-                            color: AppColors.Color_424242,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.Color_FAFAFA,
-                          borderRadius: BorderRadius.circular(2.h),
-                        ),
-                        child: SearchChoices.single(
-                          items: provider.allLanguages.map((language) {
-                            return DropdownMenuItem(
-                              child: Text(language),
-                              value: language,
-                            );
-                          }).toList(),
-                          value: provider.additionalLanguage,
-                          hint: "Select Language",
-                          searchHint: "Search for a language",
-                          onChanged: (value) {
-                            provider.setAdditionalLanguage(value as String);
-                          },
-                          isExpanded: true,
-                          underline: SizedBox(),
-                          displayItem: (item, selected) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                borderRadius: BorderRadius.circular(2.h),
-                                border: Border.all(
-                                  color: AppColors.transparent,
-                                  width: 1,
+                      Form(
+                        key: provider.languagesSpokenFormKey,
+                        autovalidateMode: provider.autovalidateModeLanguages,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Languages Spoken',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
                                 ),
                               ),
-                              child: ListTile(
-                                title: Text(item.child.data),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 1.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Text(
-                          'Level',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppColors.fontFamilyMedium,
-                            color: AppColors.Color_424242,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.Color_FAFAFA,
-                          borderRadius: BorderRadius.circular(2.h),
-                        ),
-                        child: SearchChoices.single(
-                          items: provider.languageLevels.map((level) {
-                            return DropdownMenuItem(
-                              child: Text(level),
-                              value: level,
-                            );
-                          }).toList(),
-                          value: provider.additionalLanguageLevel,
-                          hint: "Select Level",
-                          searchHint: "Search for a level",
-                          onChanged: (value) {
-                            provider.setAdditionalLanguageLevel(value as String);
-                          },
-                          isExpanded: true,
-                          underline: SizedBox(),
-                          displayItem: (item, selected) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                borderRadius: BorderRadius.circular(2.h),
-                                border: Border.all(
-                                  color: AppColors.transparent,
-                                  width: 1,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Native',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
                                 ),
                               ),
-                              child: ListTile(
-                                title: Text(item.child.data),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
                               ),
-                            );
-                          },
+                              child: MultiSelectDialogField(
+                                items: provider.allLanguages.map((e) => MultiSelectItem(e, e)).toList(),
+                                title: Text("Native Languages"),
+                                selectedColor: AppColors.buttonColor,
+                                decoration: BoxDecoration(
+                                  color: AppColors.Color_FAFAFA,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: AppColors.buttonColor, width: 1),
+                                ),
+                                buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                                buttonText: Text("Select Native Languages"),
+                                onConfirm: (values) {
+                                  provider.setNativeLanguages(values.cast<String>());
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select at least one native language';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Additional Language',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                              ),
+                              child: SearchChoices.single(
+                                items: provider.allLanguages.map((language) {
+                                  return DropdownMenuItem(
+                                    child: Text(language),
+                                    value: language,
+                                  );
+                                }).toList(),
+                                value: provider.additionalLanguage,
+                                hint: "Select Language",
+                                searchHint: "Search for a language",
+                                onChanged: (value) {
+                                  provider.setAdditionalLanguage(value as String);
+                                },
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                displayItem: (item, selected) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                      border: Border.all(
+                                        color: AppColors.transparent,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(item.child.data),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Level',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                              ),
+                              child: SearchChoices.single(
+                                items: provider.languageLevels.map((level) {
+                                  return DropdownMenuItem(
+                                    child: Text(level),
+                                    value: level,
+                                  );
+                                }).toList(),
+                                value: provider.additionalLanguageLevel,
+                                hint: "Select Level",
+                                searchHint: "Search for a level",
+                                onChanged: (value) {
+                                  provider.setAdditionalLanguageLevel(value as String);
+                                },
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                displayItem: (item, selected) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                      border: Border.all(
+                                        color: AppColors.transparent,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(item.child.data),
+                                    ),
+                                  );
+                                },
+                                validator: (value) {
+                                  if (provider.additionalLanguage != null && value == null) {
+                                    return 'Please select a level';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
