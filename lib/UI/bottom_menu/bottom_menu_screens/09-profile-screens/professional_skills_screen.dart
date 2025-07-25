@@ -155,13 +155,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onTap: () {
+                    onPressed: () {
                       provider.editComputerAndSoftware(index);
                     },
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
-                    onTap: () {
+                    onPressed: () {
                       provider.removeComputerAndSoftware(index);
                     },
                   ),
