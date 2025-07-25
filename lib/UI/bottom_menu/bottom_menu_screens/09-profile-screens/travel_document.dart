@@ -171,46 +171,52 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.passportCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setPassportCountry('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setPassportCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.passportCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setPassportCountry('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setPassportCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -499,46 +505,52 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.seamanIssuingCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setSeamanIssuingCountry('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setSeamanIssuingCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.seamanIssuingCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setSeamanIssuingCountry('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setSeamanIssuingCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -706,46 +718,52 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.seamanNationality,
-                        hint: "Select Nationality",
-                        onClear: (){
-                          provider.setSeamanNationality('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Nationality';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a nationality",
-                        onChanged: (value) {
-                          provider.setSeamanNationality(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.seamanNationality,
+                          hint: "Select Nationality",
+                          onClear: (){
+                            provider.setSeamanNationality('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Nationality';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a nationality",
+                          onChanged: (value) {
+                            provider.setSeamanNationality(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -920,46 +938,52 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                 ),
                               ),
                             ),
-                            SearchChoices.single(
-                              items: provider.countries.map((country) {
-                                return DropdownMenuItem(
-                                  child: Text(country),
-                                  value: country,
-                                );
-                              }).toList(),
-                              value: provider.seafarerVisaIssuingCountry,
-                              hint: "Select Country",
-                              onClear: (){
-                                provider.setSeafarerVisaIssuingCountry('');
-                              },
-                              autovalidateMode: provider.autovalidateMode,
-                              validator: (value){
-                                if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                                  return '      Please select Country';
-                                }
-                                return null;
-                              },
-                              searchHint: "Search for a country",
-                              onChanged: (value) {
-                                provider.setSeafarerVisaIssuingCountry(value as String);
-                              },
-                              isExpanded: true,
-                              underline: SizedBox(),
-                              displayItem: (item, selected) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                    borderRadius: BorderRadius.circular(2.h),
-                                    border: Border.all(
-                                      color: AppColors.transparent,
-                                      width: 1,
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                              ),
+                              child: SearchChoices.single(
+                                items: provider.countries.map((country) {
+                                  return DropdownMenuItem(
+                                    child: Text(country),
+                                    value: country,
+                                  );
+                                }).toList(),
+                                value: provider.seafarerVisaIssuingCountry,
+                                hint: "Select Country",
+                                onClear: (){
+                                  provider.setSeafarerVisaIssuingCountry('');
+                                },
+                                autovalidateMode: provider.autovalidateMode,
+                                validator: (value){
+                                  if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                                    return '      Please select Country';
+                                  }
+                                  return null;
+                                },
+                                searchHint: "Search for a country",
+                                onChanged: (value) {
+                                  provider.setSeafarerVisaIssuingCountry(value as String);
+                                },
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                displayItem: (item, selected) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                      border: Border.all(
+                                        color: AppColors.transparent,
+                                        width: 1,
+                                      ),
                                     ),
-                                  ),
-                                  child: ListTile(
-                                    title: Text(item.child.data),
-                                  ),
-                                );
-                              },
+                                    child: ListTile(
+                                      title: Text(item.child.data),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             SizedBox(height: 1.h),
                             Padding(
@@ -1250,46 +1274,52 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.visaIssuingCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setVisaIssuingCountry('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setVisaIssuingCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.visaIssuingCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setVisaIssuingCountry('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setVisaIssuingCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1578,47 +1608,53 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.residencePermitIssuingCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setResidencePermitIssuingCountry('');
-                        },
-                         autovalidateMode: provider.autovalidateMode,
-                         validator: (value){
-                           if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                          return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        // padding:EdgeInsets.only(top: 1.h, left: 4.w),
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setResidencePermitIssuingCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.residencePermitIssuingCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setResidencePermitIssuingCountry('');
+                          },
+                           autovalidateMode: provider.autovalidateMode,
+                           validator: (value){
+                             if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                            return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          // padding:EdgeInsets.only(top: 1.h, left: 4.w),
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setResidencePermitIssuingCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
