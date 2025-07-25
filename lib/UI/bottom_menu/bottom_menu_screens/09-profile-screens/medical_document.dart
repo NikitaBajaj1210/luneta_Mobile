@@ -249,46 +249,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   ),
                                 ),
                               ),
-                              SearchChoices.single(
-                                items: provider.medicalFitnessDocumentTypes.map((type) {
-                                  return DropdownMenuItem(
-                                    child: Text(type),
-                                    value: type,
-                                  );
-                                }).toList(),
-                                value: provider.medicalFitnessDocumentType,
-                                onClear: (){
-                                  provider.setMedicalFitnessDocumentType('');
-                                },
-                                hint: "Select Document Type",
-                                autovalidateMode: provider.autovalidateMode,
-                                validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                    return '      Please select Document Type';
-                                  }
-                                  return null;
-                                },
-                                searchHint: "Search for a document type",
-                                onChanged: (value) {
-                                  provider.setMedicalFitnessDocumentType(value as String);
-                                },
-                                isExpanded: true,
-                                underline: SizedBox(),
-                                displayItem: (item, selected) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                      borderRadius: BorderRadius.circular(2.h),
-                                      border: Border.all(
-                                        color: AppColors.transparent,
-                                        width: 1,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.Color_FAFAFA,
+                                  borderRadius: BorderRadius.circular(2.h),
+                                ),
+                                child: SearchChoices.single(
+                                  items: provider.medicalFitnessDocumentTypes.map((type) {
+                                    return DropdownMenuItem(
+                                      child: Text(type),
+                                      value: type,
+                                    );
+                                  }).toList(),
+                                  value: provider.medicalFitnessDocumentType,
+                                  onClear: (){
+                                    provider.setMedicalFitnessDocumentType('');
+                                  },
+                                  hint: "Select Document Type",
+                                  autovalidateMode: provider.autovalidateMode,
+                                  validator: (value) {
+                                    if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
+                                      return '      Please select Document Type';
+                                    }
+                                    return null;
+                                  },
+                                  searchHint: "Search for a document type",
+                                  onChanged: (value) {
+                                    provider.setMedicalFitnessDocumentType(value as String);
+                                  },
+                                  isExpanded: true,
+                                  underline: SizedBox(),
+                                  displayItem: (item, selected) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                        borderRadius: BorderRadius.circular(2.h),
+                                        border: Border.all(
+                                          color: AppColors.transparent,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    child: ListTile(
-                                      title: Text(item.child.data),
-                                    ),
-                                  );
-                                },
+                                      child: ListTile(
+                                        title: Text(item.child.data),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               SizedBox(height: 1.h),
                               Padding(
@@ -339,46 +345,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   ),
                                 ),
                               ),
-                              SearchChoices.single(
-                                items: provider.countries.map((country) {
-                                  return DropdownMenuItem(
-                                    child: Text(country),
-                                    value: country,
-                                  );
-                                }).toList(),
-                                value: provider.medicalFitnessIssuingCountry,
-                                onClear: (){
-                                  provider.setMedicalFitnessIssuingCountry('');
-                                },
-                                hint: "Select Country",
-                                autovalidateMode: provider.autovalidateMode,
-                                validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                    return '      Please select Country';
-                                  }
-                                  return null;
-                                },
-                                searchHint: "Search for a country",
-                                onChanged: (value) {
-                                  provider.setMedicalFitnessIssuingCountry(value as String);
-                                },
-                                isExpanded: true,
-                                underline: SizedBox(),
-                                displayItem: (item, selected) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                      borderRadius: BorderRadius.circular(2.h),
-                                      border: Border.all(
-                                        color: AppColors.transparent,
-                                        width: 1,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.Color_FAFAFA,
+                                  borderRadius: BorderRadius.circular(2.h),
+                                ),
+                                child: SearchChoices.single(
+                                  items: provider.countries.map((country) {
+                                    return DropdownMenuItem(
+                                      child: Text(country),
+                                      value: country,
+                                    );
+                                  }).toList(),
+                                  value: provider.medicalFitnessIssuingCountry,
+                                  onClear: (){
+                                    provider.setMedicalFitnessIssuingCountry('');
+                                  },
+                                  hint: "Select Country",
+                                  autovalidateMode: provider.autovalidateMode,
+                                  validator: (value) {
+                                    if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
+                                      return '      Please select Country';
+                                    }
+                                    return null;
+                                  },
+                                  searchHint: "Search for a country",
+                                  onChanged: (value) {
+                                    provider.setMedicalFitnessIssuingCountry(value as String);
+                                  },
+                                  isExpanded: true,
+                                  underline: SizedBox(),
+                                  displayItem: (item, selected) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                        borderRadius: BorderRadius.circular(2.h),
+                                        border: Border.all(
+                                          color: AppColors.transparent,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    child: ListTile(
-                                      title: Text(item.child.data),
-                                    ),
-                                  );
-                                },
+                                      child: ListTile(
+                                        title: Text(item.child.data),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               SizedBox(height: 1.h),
                               Padding(
@@ -728,46 +740,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.drugAndAlcoholTestDocumentTypes.map((type) {
-                          return DropdownMenuItem(
-                            child: Text(type),
-                            value: type,
-                          );
-                        }).toList(),
-                        value: provider.drugAndAlcoholTestDocumentType,
-                        hint: "Select Document Type",
-                        onClear: (){
-                          provider.setDrugAndAlcoholTestDocumentType('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Document Type';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a document type",
-                        onChanged: (value) {
-                          provider.setDrugAndAlcoholTestDocumentType(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.drugAndAlcoholTestDocumentTypes.map((type) {
+                            return DropdownMenuItem(
+                              child: Text(type),
+                              value: type,
+                            );
+                          }).toList(),
+                          value: provider.drugAndAlcoholTestDocumentType,
+                          hint: "Select Document Type",
+                          onClear: (){
+                            provider.setDrugAndAlcoholTestDocumentType('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Document Type';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a document type",
+                          onChanged: (value) {
+                            provider.setDrugAndAlcoholTestDocumentType(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -819,46 +837,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.drugAndAlcoholTestIssuingCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setDrugAndAlcoholTestIssuingCountry('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setDrugAndAlcoholTestIssuingCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.drugAndAlcoholTestIssuingCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setDrugAndAlcoholTestIssuingCountry('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setDrugAndAlcoholTestIssuingCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1147,46 +1171,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.vaccinationCertificateDocumentTypes.map((type) {
-                          return DropdownMenuItem(
-                            child: Text(type),
-                            value: type,
-                          );
-                        }).toList(),
-                        value: provider.vaccinationCertificateDocumentType,
-                        hint: "Select Document Type",
-                        onClear: (){
-                          provider.setVaccinationCertificateDocumentType('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Document Type';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a document type",
-                        onChanged: (value) {
-                          provider.setVaccinationCertificateDocumentType(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.vaccinationCertificateDocumentTypes.map((type) {
+                            return DropdownMenuItem(
+                              child: Text(type),
+                              value: type,
+                            );
+                          }).toList(),
+                          value: provider.vaccinationCertificateDocumentType,
+                          hint: "Select Document Type",
+                          onClear: (){
+                            provider.setVaccinationCertificateDocumentType('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Document Type';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a document type",
+                          onChanged: (value) {
+                            provider.setVaccinationCertificateDocumentType(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1201,46 +1231,52 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      SearchChoices.single(
-                        items: provider.countries.map((country) {
-                          return DropdownMenuItem(
-                            child: Text(country),
-                            value: country,
-                          );
-                        }).toList(),
-                        value: provider.vaccinationCertificateIssuingCountry,
-                        hint: "Select Country",
-                        onClear: (){
-                          provider.setVaccinationCertificateIssuingCountry('');
-                        },
-                        autovalidateMode: provider.autovalidateMode,
-                        validator: (value){
-                          if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                            return '      Please select Country';
-                          }
-                          return null;
-                        },
-                        searchHint: "Search for a country",
-                        onChanged: (value) {
-                          provider.setVaccinationCertificateIssuingCountry(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        displayItem: (item, selected) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                              borderRadius: BorderRadius.circular(2.h),
-                              border: Border.all(
-                                color: AppColors.transparent,
-                                width: 1,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.countries.map((country) {
+                            return DropdownMenuItem(
+                              child: Text(country),
+                              value: country,
+                            );
+                          }).toList(),
+                          value: provider.vaccinationCertificateIssuingCountry,
+                          hint: "Select Country",
+                          onClear: (){
+                            provider.setVaccinationCertificateIssuingCountry('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
+                          validator: (value){
+                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                              return '      Please select Country';
+                            }
+                            return null;
+                          },
+                          searchHint: "Search for a country",
+                          onChanged: (value) {
+                            provider.setVaccinationCertificateIssuingCountry(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          displayItem: (item, selected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(item.child.data),
-                            ),
-                          );
-                        },
+                              child: ListTile(
+                                title: Text(item.child.data),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
                       Padding(
