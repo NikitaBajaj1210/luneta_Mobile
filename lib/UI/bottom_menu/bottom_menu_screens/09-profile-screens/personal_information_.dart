@@ -252,40 +252,46 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    SearchChoices.single(
-                      items: provider.countries.map((String country) {
-                        return DropdownMenuItem<String>(
-                          value: country,
-                          child: Text(country),
-                        );
-                      }).toList(),
-                      value: provider.countryOfBirthController.text.isEmpty
-                          ? null
-                          : provider.countryOfBirthController.text,
-                      hint: "Select Country of Birth",
-                      searchHint: "Search for a country",
-                      onChanged: (value) {
-                        setState(() {
-                          provider.countryOfBirthController.text = value as String;
-                        });
-                      },
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      displayItem: (item, selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.transparent,
-                              width: 1,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.countries.map((String country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
+                        value: provider.countryOfBirthController.text.isEmpty
+                            ? null
+                            : provider.countryOfBirthController.text,
+                        hint: "Select Country of Birth",
+                        searchHint: "Search for a country",
+                        onChanged: (value) {
+                          setState(() {
+                            provider.countryOfBirthController.text = value as String;
+                          });
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        displayItem: (item, selected) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                              borderRadius: BorderRadius.circular(2.h),
+                              border: Border.all(
+                                color: AppColors.transparent,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: ListTile(
-                            title: Text(item.child.data),
-                          ),
-                        );
-                      },
+                            child: ListTile(
+                              title: Text(item.child.data),
+                            ),
+                          );
+                        },
+                      ),
                     ),
 
                     Padding(
@@ -301,36 +307,42 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
 
-                    SearchChoices.single(
-                      items: provider.religions.map((religion) {
-                        return DropdownMenuItem(
-                          child: Text(religion),
-                          value: religion,
-                        );
-                      }).toList(),
-                      value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
-                      hint: "Select Religion",
-                      searchHint: "Search for a religion",
-                      onChanged: (value) {
-                        provider.religionController.text = value as String;
-                      },
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      displayItem: (item, selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.transparent,
-                              width: 1,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.religions.map((religion) {
+                          return DropdownMenuItem(
+                            child: Text(religion),
+                            value: religion,
+                          );
+                        }).toList(),
+                        value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
+                        hint: "Select Religion",
+                        searchHint: "Search for a religion",
+                        onChanged: (value) {
+                          provider.religionController.text = value as String;
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        displayItem: (item, selected) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                              borderRadius: BorderRadius.circular(2.h),
+                              border: Border.all(
+                                color: AppColors.transparent,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: ListTile(
-                            title: Text(item.child.data),
-                          ),
-                        );
-                      },
+                            child: ListTile(
+                              title: Text(item.child.data),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -401,46 +413,52 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    SearchChoices.single(
-                      items: provider.countries.map((String country) {
-                        return DropdownMenuItem<String>(
-                          value: country,
-                          child: Text(country),
-                        );
-                      }).toList(),
-                      value: provider.nationalityController.text.isEmpty
-                          ? null
-                          : provider.nationalityController.text,
-                      hint: "Select Nationality",
-                      searchHint: "Search for a nationality",
-                      validator: (value) {
-                        if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
-                          return '      Please select Nationality';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          provider.nationalityController.text = value as String;
-                        });
-                      },
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      displayItem: (item, selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.transparent,
-                              width: 1,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.countries.map((String country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
+                        value: provider.nationalityController.text.isEmpty
+                            ? null
+                            : provider.nationalityController.text,
+                        hint: "Select Nationality",
+                        searchHint: "Search for a nationality",
+                        validator: (value) {
+                          if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                            return '      Please select Nationality';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            provider.nationalityController.text = value as String;
+                          });
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        displayItem: (item, selected) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                              borderRadius: BorderRadius.circular(2.h),
+                              border: Border.all(
+                                color: AppColors.transparent,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: ListTile(
-                            title: Text(item.child.data),
-                          ),
-                        );
-                      },
+                            child: ListTile(
+                              title: Text(item.child.data),
+                            ),
+                          );
+                        },
+                      ),
                     ),
 
                     // Contact Information
@@ -611,38 +629,44 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     // Marital Status and Children Number (Dropdown)
-                    SearchChoices.single(
-                      items: provider.nearestAirportList.map((airport) {
-                        return DropdownMenuItem(
-                          child: Text(airport),
-                          value: airport,
-                        );
-                      }).toList(),
-                      value: provider.nearestAirport,
-                      hint: "Select Nearest Airport",
-                      searchHint: "Search for an airport",
-                      onChanged: (value) {
-                        setState(() {
-                          provider.nearestAirport = value as String;
-                        });
-                      },
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      displayItem: (item, selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.transparent,
-                              width: 1,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.nearestAirportList.map((airport) {
+                          return DropdownMenuItem(
+                            child: Text(airport),
+                            value: airport,
+                          );
+                        }).toList(),
+                        value: provider.nearestAirport,
+                        hint: "Select Nearest Airport",
+                        searchHint: "Search for an airport",
+                        onChanged: (value) {
+                          setState(() {
+                            provider.nearestAirport = value as String;
+                          });
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        displayItem: (item, selected) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                              borderRadius: BorderRadius.circular(2.h),
+                              border: Border.all(
+                                color: AppColors.transparent,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: ListTile(
-                            title: Text(item.child.data),
-                          ),
-                        );
-                      },
+                            child: ListTile(
+                              title: Text(item.child.data),
+                            ),
+                          );
+                        },
+                      ),
                     ),
 
                     Padding(
