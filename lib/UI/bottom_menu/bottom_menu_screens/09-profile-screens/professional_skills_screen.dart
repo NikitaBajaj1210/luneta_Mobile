@@ -182,41 +182,66 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Software"),
-              DropdownButton<String>(
-                value: provider.software,
-                hint: Text("Select Software"),
-                items: provider.softwareList.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  provider.setSoftware(newValue!);
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: SearchChoices.single(
+                  items: provider.softwareList.map((item) {
+                    return DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    );
+                  }).toList(),
+                  value: provider.software,
+                  hint: "Select Software",
+                  searchHint: "Search for a software",
+                  onChanged: (value) {
+                    provider.setSoftware(value as String);
+                  },
+                  isExpanded: true,
+                  underline: SizedBox(),
+                ),
               ),
               SizedBox(height: 1.h),
               Text("Level"),
-              DropdownButton<String>(
-                value: provider.level,
-                hint: Text("Select Level"),
-                items: provider.levelList.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  provider.setLevel(newValue!);
-                },
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.Color_FAFAFA,
+                  borderRadius: BorderRadius.circular(2.h),
+                ),
+                child: SearchChoices.single(
+                  items: provider.levelList.map((item) {
+                    return DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    );
+                  }).toList(),
+                  value: provider.level,
+                  hint: "Select Level",
+                  searchHint: "Search for a level",
+                  onChanged: (value) {
+                    provider.setLevel(value as String);
+                  },
+                  isExpanded: true,
+                  underline: SizedBox(),
+                ),
               ),
               SizedBox(height: 1.h),
-              ElevatedButton(
-                onPressed: () {
+              customButton(
+                voidCallback: () {
                   provider.addComputerAndSoftware();
                 },
-                child: Text(
-                    provider.computerAndSoftware_IsEdit ? "Update" : "Add"),
+                buttonText:
+                    provider.computerAndSoftware_IsEdit ? "Update" : "Add",
+                width: 30.w,
+                height: 10.w,
+                color: AppColors.buttonColor,
+                buttonTextColor: AppColors.buttonTextWhiteColor,
+                shadowColor: AppColors.buttonBorderColor,
+                fontSize: AppFontSize.fontSize18,
+                showShadow: true,
               ),
             ],
           ),
@@ -231,12 +256,22 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Row(
           children: [
             Text("Cargo Experience"),
-            Switch(
-              value: provider.cargoExperience,
+            Radio(
+              value: true,
+              groupValue: provider.cargoExperience,
               onChanged: (value) {
-                provider.setCargoExperience(value);
+                provider.setCargoExperience(value as bool);
               },
             ),
+            Text("Yes"),
+            Radio(
+              value: false,
+              groupValue: provider.cargoExperience,
+              onChanged: (value) {
+                provider.setCargoExperience(value as bool);
+              },
+            ),
+            Text("No"),
           ],
         ),
         if (provider.cargoExperience)
@@ -302,12 +337,22 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Row(
           children: [
             Text("Cargo Gear Experience"),
-            Switch(
-              value: provider.cargoGearExperience,
+            Radio(
+              value: true,
+              groupValue: provider.cargoGearExperience,
               onChanged: (value) {
-                provider.setCargoGearExperience(value);
+                provider.setCargoGearExperience(value as bool);
               },
             ),
+            Text("Yes"),
+            Radio(
+              value: false,
+              groupValue: provider.cargoGearExperience,
+              onChanged: (value) {
+                provider.setCargoGearExperience(value as bool);
+              },
+            ),
+            Text("No"),
           ],
         ),
         if (provider.cargoGearExperience)
@@ -362,18 +407,27 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Type"),
-                    DropdownButton<String>(
-                      value: provider.cargoGearType,
-                      hint: Text("Select Type"),
-                      items: provider.cargoGearTypes.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setCargoGearType(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.cargoGearTypes.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.cargoGearType,
+                        hint: "Select Type",
+                        searchHint: "Search for a type",
+                        onChanged: (value) {
+                          provider.setCargoGearType(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Maker"),
@@ -414,13 +468,20 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       onFieldSubmitted: (String) {},
                     ),
                     SizedBox(height: 1.h),
-                    ElevatedButton(
-                      onPressed: () {
+                    customButton(
+                      voidCallback: () {
                         provider.addCargoGearExperience();
                       },
-                      child: Text(provider.cargoGearExperience_IsEdit
+                      buttonText: provider.cargoGearExperience_IsEdit
                           ? "Update"
-                          : "Add"),
+                          : "Add",
+                      width: 30.w,
+                      height: 10.w,
+                      color: AppColors.buttonColor,
+                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                      shadowColor: AppColors.buttonBorderColor,
+                      fontSize: AppFontSize.fontSize18,
+                      showShadow: true,
                     ),
                   ],
                 ),
@@ -438,12 +499,22 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Row(
           children: [
             Text("Metal Working Skills"),
-            Switch(
-              value: provider.metalWorkingSkills,
+            Radio(
+              value: true,
+              groupValue: provider.metalWorkingSkills,
               onChanged: (value) {
-                provider.setMetalWorkingSkills(value);
+                provider.setMetalWorkingSkills(value as bool);
               },
             ),
+            Text("Yes"),
+            Radio(
+              value: false,
+              groupValue: provider.metalWorkingSkills,
+              onChanged: (value) {
+                provider.setMetalWorkingSkills(value as bool);
+              },
+            ),
+            Text("No"),
           ],
         ),
         if (provider.metalWorkingSkills)
@@ -498,63 +569,106 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Skill Selection"),
-                    DropdownButton<String>(
-                      value: provider.metalWorkingSkill,
-                      hint: Text("Select Skill"),
-                      items:
-                          provider.metalWorkingSkillsTypes.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setMetalWorkingSkill(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.metalWorkingSkillsTypes.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.metalWorkingSkill,
+                        hint: Text("Select Skill"),
+                        searchHint: "Search for a skill",
+                        onChanged: (value) {
+                          provider.setMetalWorkingSkill(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Level"),
-                    DropdownButton<String>(
-                      value: provider.metalWorkingSkillLevel,
-                      hint: Text("Select Level"),
-                      items: provider.metalWorkingSkillLevelList
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setMetalWorkingSkillLevel(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items:
+                            provider.metalWorkingSkillLevelList.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.metalWorkingSkillLevel,
+                        hint: Text("Select Level"),
+                        searchHint: "Search for a level",
+                        onChanged: (value) {
+                          provider.setMetalWorkingSkillLevel(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Row(
                       children: [
                         Text("Certificate"),
-                        Switch(
-                          value: provider.metalWorkingSkillCertificate,
+                        Radio(
+                          value: true,
+                          groupValue: provider.metalWorkingSkillCertificate,
                           onChanged: (value) {
-                            provider.setMetalWorkingSkillCertificate(value);
+                            provider
+                                .setMetalWorkingSkillCertificate(value as bool);
                           },
                         ),
+                        Text("Yes"),
+                        Radio(
+                          value: false,
+                          groupValue: provider.metalWorkingSkillCertificate,
+                          onChanged: (value) {
+                            provider
+                                .setMetalWorkingSkillCertificate(value as bool);
+                          },
+                        ),
+                        Text("No"),
                       ],
                     ),
                     if (provider.metalWorkingSkillCertificate)
-                      ElevatedButton(
-                        onPressed: () {
+                      customButton(
+                        voidCallback: () {
                           provider.showAttachmentOptions(
                               context, 'metalWorkingSkill');
                         },
-                        child: Text("Attach Document"),
+                        buttonText: "Attach Document",
+                        width: 40.w,
+                        height: 10.w,
+                        color: AppColors.buttonColor,
+                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                        shadowColor: AppColors.buttonBorderColor,
+                        fontSize: AppFontSize.fontSize18,
+                        showShadow: true,
                       ),
-                    ElevatedButton(
-                      onPressed: () {
+                    customButton(
+                      voidCallback: () {
                         provider.addMetalWorkingSkill();
                       },
-                      child: Text(provider.metalWorkingSkills_IsEdit
+                      buttonText: provider.metalWorkingSkills_IsEdit
                           ? "Update"
-                          : "Add"),
+                          : "Add",
+                      width: 30.w,
+                      height: 10.w,
+                      color: AppColors.buttonColor,
+                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                      shadowColor: AppColors.buttonBorderColor,
+                      fontSize: AppFontSize.fontSize18,
+                      showShadow: true,
                     ),
                   ],
                 ),
@@ -572,12 +686,22 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Row(
           children: [
             Text("Tank Coating Experience"),
-            Switch(
-              value: provider.tankCoatingExperience,
+            Radio(
+              value: true,
+              groupValue: provider.tankCoatingExperience,
               onChanged: (value) {
-                provider.setTankCoatingExperience(value);
+                provider.setTankCoatingExperience(value as bool);
               },
             ),
+            Text("Yes"),
+            Radio(
+              value: false,
+              groupValue: provider.tankCoatingExperience,
+              onChanged: (value) {
+                provider.setTankCoatingExperience(value as bool);
+              },
+            ),
+            Text("No"),
           ],
         ),
         if (provider.tankCoatingExperience)
@@ -631,27 +755,43 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Type"),
-                    DropdownButton<String>(
-                      value: provider.tankCoatingType,
-                      hint: Text("Select Type"),
-                      items: provider.tankCoatingTypes.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setTankCoatingType(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.tankCoatingTypes.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.tankCoatingType,
+                        hint: Text("Select Type"),
+                        searchHint: "Search for a type",
+                        onChanged: (value) {
+                          provider.setTankCoatingType(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
-                    ElevatedButton(
-                      onPressed: () {
+                    customButton(
+                      voidCallback: () {
                         provider.addTankCoatingExperience();
                       },
-                      child: Text(provider.tankCoatingExperience_IsEdit
+                      buttonText: provider.tankCoatingExperience_IsEdit
                           ? "Update"
-                          : "Add"),
+                          : "Add",
+                      width: 30.w,
+                      height: 10.w,
+                      color: AppColors.buttonColor,
+                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                      shadowColor: AppColors.buttonBorderColor,
+                      fontSize: AppFontSize.fontSize18,
+                      showShadow: true,
                     ),
                   ],
                 ),
@@ -669,12 +809,22 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Row(
           children: [
             Text("Port State Control Experience"),
-            Switch(
-              value: provider.portStateControlExperience,
+            Radio(
+              value: true,
+              groupValue: provider.portStateControlExperience,
               onChanged: (value) {
-                provider.setPortStateControlExperience(value);
+                provider.setPortStateControlExperience(value as bool);
               },
             ),
+            Text("Yes"),
+            Radio(
+              value: false,
+              groupValue: provider.portStateControlExperience,
+              onChanged: (value) {
+                provider.setPortStateControlExperience(value as bool);
+              },
+            ),
+            Text("No"),
           ],
         ),
         if (provider.portStateControlExperience)
@@ -729,34 +879,51 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Regional Agreement"),
-                    DropdownButton<String>(
-                      value: provider.regionalAgreement,
-                      hint: Text("Select Regional Agreement"),
-                      items:
-                          provider.regionalAgreements.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setRegionalAgreement(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.regionalAgreements.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.regionalAgreement,
+                        hint: Text("Select Regional Agreement"),
+                        searchHint: "Search for a regional agreement",
+                        onChanged: (value) {
+                          provider.setRegionalAgreement(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Port"),
-                    DropdownButton<String>(
-                      value: provider.port,
-                      hint: Text("Select Port"),
-                      items: provider.ports.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        provider.setPort(newValue!);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      child: SearchChoices.single(
+                        items: provider.ports.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item),
+                            value: item,
+                          );
+                        }).toList(),
+                        value: provider.port,
+                        hint: Text("Select Port"),
+                        searchHint: "Search for a port",
+                        onChanged: (value) {
+                          provider.setPort(value as String);
+                        },
+                        isExpanded: true,
+                        underline: SizedBox(),
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Date"),
@@ -812,13 +979,20 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       onFieldSubmitted: (String) {},
                     ),
                     SizedBox(height: 1.h),
-                    ElevatedButton(
-                      onPressed: () {
+                    customButton(
+                      voidCallback: () {
                         provider.addPortStateControlExperience();
                       },
-                      child: Text(provider.portStateControlExperience_IsEdit
+                      buttonText: provider.portStateControlExperience_IsEdit
                           ? "Update"
-                          : "Add"),
+                          : "Add",
+                      width: 30.w,
+                      height: 10.w,
+                      color: AppColors.buttonColor,
+                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                      shadowColor: AppColors.buttonBorderColor,
+                      fontSize: AppFontSize.fontSize18,
+                      showShadow: true,
                     ),
                   ],
                 ),
@@ -855,18 +1029,27 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         ),
         SizedBox(height: 1.h),
         Text("Port"),
-        DropdownButton<String>(
-          value: provider.vettingPort,
-          hint: Text("Select Port"),
-          items: provider.vettingPorts.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (newValue) {
-            provider.setVettingPort(newValue!);
-          },
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.Color_FAFAFA,
+            borderRadius: BorderRadius.circular(2.h),
+          ),
+          child: SearchChoices.single(
+            items: provider.vettingPorts.map((item) {
+              return DropdownMenuItem(
+                child: Text(item),
+                value: item,
+              );
+            }).toList(),
+            value: provider.vettingPort,
+            hint: Text("Select Port"),
+            searchHint: "Search for a port",
+            onChanged: (value) {
+              provider.setVettingPort(value as String);
+            },
+            isExpanded: true,
+            underline: SizedBox(),
+          ),
         ),
         SizedBox(height: 1.h),
         Text("Date"),
