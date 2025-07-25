@@ -57,7 +57,7 @@ import '../UI/welcomeScreen/WelcomeScreen.dart';
 import 'package:provider/provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/certification_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/personal_information_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_screen_provider.dart';
+import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/projects_screen_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
@@ -223,11 +223,8 @@ class NavRouter {
         );
         case educationScreen:
         return MaterialPageRoute(
-          builder: (context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: Provider.of<EducationScreenProvider>(context, listen: false)),
-              ChangeNotifierProvider.value(value: Provider.of<ProfileBottommenuProvider>(context, listen: false)),
-            ],
+          builder: (context) => ChangeNotifierProvider(
+            create: (context) => EducationProvider(),
             child: const EducationScreen(),
           ),
         );
