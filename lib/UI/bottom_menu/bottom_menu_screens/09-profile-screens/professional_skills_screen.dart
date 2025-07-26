@@ -662,23 +662,54 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 itemBuilder: (context, index) {
                   CargoGearExperience item =
                       provider.cargoGearExperienceList[index];
-                  return ListTile(
-                    title: Text(item.type),
-                    subtitle: Text("${item.maker} - ${item.swl}"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  return Container(
+                    margin: EdgeInsets.only(top: 1.h, bottom: 1.h),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            provider.editCargoGearExperience(index);
-                          },
+                        Container(
+                          width: 15.w,
+                          height: 15.w,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 0.1.h, color: AppColors.Color_EEEEEE),
+                            borderRadius: BorderRadius.circular(2.h),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/images/TicketStar.png",
+                              // Replace with appropriate icon
+                              width: 8.w,
+                              height: 8.w,
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            provider.removeCargoGearExperience(index);
-                          },
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.type,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyBold,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                item.maker,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -847,23 +878,54 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 itemBuilder: (context, index) {
                   MetalWorkingSkill item =
                       provider.metalWorkingSkillsList[index];
-                  return ListTile(
-                    title: Text(item.skillSelection),
-                    subtitle: Text(item.level),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  return Container(
+                    margin: EdgeInsets.only(top: 1.h, bottom: 1.h),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            provider.editMetalWorkingSkill(index);
-                          },
+                        Container(
+                          width: 15.w,
+                          height: 15.w,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 0.1.h, color: AppColors.Color_EEEEEE),
+                            borderRadius: BorderRadius.circular(2.h),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/images/TicketStar.png",
+                              // Replace with appropriate icon
+                              width: 8.w,
+                              height: 8.w,
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            provider.removeMetalWorkingSkill(index);
-                          },
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.skillSelection,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyBold,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                item.level,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -1205,23 +1267,64 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 itemBuilder: (context, index) {
                   PortStateControlExperience item =
                       provider.portStateControlExperienceList[index];
-                  return ListTile(
-                    title: Text(item.regionalAgreement),
-                    subtitle: Text("${item.port} - ${item.date}"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  return Container(
+                    margin: EdgeInsets.only(top: 1.h, bottom: 1.h),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            provider.editPortStateControlExperience(index);
-                          },
+                        Container(
+                          width: 15.w,
+                          height: 15.w,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 0.1.h, color: AppColors.Color_EEEEEE),
+                            borderRadius: BorderRadius.circular(2.h),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/images/TicketStar.png",
+                              // Replace with appropriate icon
+                              width: 8.w,
+                              height: 8.w,
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            provider.removePortStateControlExperience(index);
-                          },
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.regionalAgreement,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyBold,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                item.port,
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                item.date.toString(),
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.Color_212121,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
