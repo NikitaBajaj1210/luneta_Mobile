@@ -203,17 +203,24 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       provider.editComputerAndSoftware(index);
                     },
+                    child: Image.asset(
+                      "assets/images/Edit.png",
+                      height: 2.h,
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
+                  SizedBox(width: 2.w),
+                  GestureDetector(
+                    onTap: () {
                       provider.removeComputerAndSoftware(index);
                     },
+                    child: Image.asset(
+                      "assets/images/Delete.png",
+                      height: 2.h,
+                    ),
                   ),
                 ],
               ),
@@ -240,7 +247,6 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
                   borderRadius: BorderRadius.circular(2.h),
-                  border: Border.all(color: AppColors.buttonColor)
                 ),
                 child: SearchChoices.single(
                   items: provider.softwareList.map((item) {
@@ -293,7 +299,6 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
                   borderRadius: BorderRadius.circular(2.h),
-                   border: Border.all(color: AppColors.buttonColor)
                 ),
                 child: SearchChoices.single(
                   items: provider.levelList.map((item) {
