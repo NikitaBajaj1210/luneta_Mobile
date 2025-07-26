@@ -519,3 +519,16 @@ class PortStateControlExperience {
       required this.date,
       required this.observations});
 }
+
+class VettingInspectionExperience {
+  final String inspectionBy;
+  final String port;
+  final String date;
+  final String observations;
+
+  VettingInspectionExperience(
+      {required this.inspectionBy,
+      required this.port,
+      required this.date,
+      required this.observations});
+}
