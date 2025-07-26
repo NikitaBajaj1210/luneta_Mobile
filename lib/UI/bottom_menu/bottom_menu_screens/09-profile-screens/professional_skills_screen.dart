@@ -569,7 +569,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   items: provider.stowageAndLashingExperienceList
                       .map((e) => MultiSelectItem(e, e))
                       .toList(),
-                  title: Text("Stowage and Lashing Experience"),
+                  title: Expanded(child: Text("Stowage and Lashing Experience",overflow: TextOverflow.ellipsis,)),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
                   decoration: BoxDecoration(
