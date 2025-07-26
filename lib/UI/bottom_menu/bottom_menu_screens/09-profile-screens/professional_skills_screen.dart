@@ -181,7 +181,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Software"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Software',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -202,10 +213,38 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                   isExpanded: true,
                   underline: SizedBox(),
+                  displayItem: (item, selected) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                        border: Border.all(
+                          color: AppColors.transparent,
+                          width: 1,
+                        ),
+                      ),
+                      child: ListTile(
+                        title: Text(item.child.data),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 1.h),
-              Text("Level"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Level',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -226,22 +265,42 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                   isExpanded: true,
                   underline: SizedBox(),
+                  displayItem: (item, selected) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        borderRadius: BorderRadius.circular(2.h),
+                        border: Border.all(
+                          color: AppColors.transparent,
+                          width: 1,
+                        ),
+                      ),
+                      child: ListTile(
+                        title: Text(item.child.data),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 1.h),
-              customButton(
-                voidCallback: () {
-                  provider.addComputerAndSoftware();
-                },
-                buttonText:
-                    provider.computerAndSoftware_IsEdit ? "Update" : "Add",
-                width: 30.w,
-                height: 10.w,
-                color: AppColors.buttonColor,
-                buttonTextColor: AppColors.buttonTextWhiteColor,
-                shadowColor: AppColors.buttonBorderColor,
-                fontSize: AppFontSize.fontSize18,
-                showShadow: true,
+              Align(
+                alignment: Alignment.centerRight,
+                child: customButton(
+                  voidCallback: () {
+                    provider.addComputerAndSoftware();
+                  },
+                  buttonText:
+                      provider.computerAndSoftware_IsEdit ? "Update" : "Add",
+                  width: 30.w,
+                  height: 10.w,
+                  color: AppColors.buttonColor,
+                  buttonTextColor: AppColors.buttonTextWhiteColor,
+                  shadowColor: AppColors.buttonBorderColor,
+                  fontSize: AppFontSize.fontSize18,
+                  showShadow: true,
+                ),
               ),
             ],
           ),
@@ -253,15 +312,27 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: Text(
+            'Cargo Experience',
+            style: TextStyle(
+              fontSize: AppFontSize.fontSize16,
+              fontWeight: FontWeight.bold,
+              fontFamily: AppColors.fontFamilyMedium,
+              color: AppColors.Color_424242,
+            ),
+          ),
+        ),
         Row(
           children: [
-            Text("Cargo Experience"),
             Radio(
               value: true,
               groupValue: provider.cargoExperience,
               onChanged: (value) {
                 provider.setCargoExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("Yes"),
             Radio(
@@ -270,6 +341,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setCargoExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("No"),
           ],
@@ -278,7 +350,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Bulk Cargo"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Bulk Cargo',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -304,7 +387,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Text("Tanker Cargo"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Tanker Cargo',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -330,7 +424,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Text("General Cargo"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'General Cargo',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -356,7 +461,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Text("Wood Products"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Wood Products',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -382,7 +498,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Text("Stowage and Lashing Experience"),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Text(
+                  'Stowage and Lashing Experience',
+                  style: TextStyle(
+                    fontSize: AppFontSize.fontSize16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.Color_424242,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
@@ -429,6 +556,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setCargoGearExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("Yes"),
             Radio(
@@ -437,6 +565,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setCargoGearExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("No"),
           ],
@@ -554,20 +683,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       onFieldSubmitted: (String) {},
                     ),
                     SizedBox(height: 1.h),
-                    customButton(
-                      voidCallback: () {
-                        provider.addCargoGearExperience();
-                      },
-                      buttonText: provider.cargoGearExperience_IsEdit
-                          ? "Update"
-                          : "Add",
-                      width: 30.w,
-                      height: 10.w,
-                      color: AppColors.buttonColor,
-                      buttonTextColor: AppColors.buttonTextWhiteColor,
-                      shadowColor: AppColors.buttonBorderColor,
-                      fontSize: AppFontSize.fontSize18,
-                      showShadow: true,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: customButton(
+                        voidCallback: () {
+                          provider.addCargoGearExperience();
+                        },
+                        buttonText: provider.cargoGearExperience_IsEdit
+                            ? "Update"
+                            : "Add",
+                        width: 30.w,
+                        height: 10.w,
+                        color: AppColors.buttonColor,
+                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                        shadowColor: AppColors.buttonBorderColor,
+                        fontSize: AppFontSize.fontSize18,
+                        showShadow: true,
+                      ),
                     ),
                   ],
                 ),
@@ -591,6 +723,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setMetalWorkingSkills(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("Yes"),
             Radio(
@@ -599,6 +732,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setMetalWorkingSkills(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("No"),
           ],
@@ -713,6 +847,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                             provider
                                 .setMetalWorkingSkillCertificate(value as bool);
                           },
+                          activeColor: AppColors.buttonColor,
                         ),
                         Text("Yes"),
                         Radio(
@@ -722,6 +857,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                             provider
                                 .setMetalWorkingSkillCertificate(value as bool);
                           },
+                          activeColor: AppColors.buttonColor,
                         ),
                         Text("No"),
                       ],
@@ -741,20 +877,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         fontSize: AppFontSize.fontSize18,
                         showShadow: true,
                       ),
-                    customButton(
-                      voidCallback: () {
-                        provider.addMetalWorkingSkill();
-                      },
-                      buttonText: provider.metalWorkingSkills_IsEdit
-                          ? "Update"
-                          : "Add",
-                      width: 30.w,
-                      height: 10.w,
-                      color: AppColors.buttonColor,
-                      buttonTextColor: AppColors.buttonTextWhiteColor,
-                      shadowColor: AppColors.buttonBorderColor,
-                      fontSize: AppFontSize.fontSize18,
-                      showShadow: true,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: customButton(
+                        voidCallback: () {
+                          provider.addMetalWorkingSkill();
+                        },
+                        buttonText: provider.metalWorkingSkills_IsEdit
+                            ? "Update"
+                            : "Add",
+                        width: 30.w,
+                        height: 10.w,
+                        color: AppColors.buttonColor,
+                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                        shadowColor: AppColors.buttonBorderColor,
+                        fontSize: AppFontSize.fontSize18,
+                        showShadow: true,
+                      ),
                     ),
                   ],
                 ),
@@ -778,6 +917,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setTankCoatingExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("Yes"),
             Radio(
@@ -786,6 +926,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setTankCoatingExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("No"),
           ],
@@ -864,20 +1005,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       ),
                     ),
                     SizedBox(height: 1.h),
-                    customButton(
-                      voidCallback: () {
-                        provider.addTankCoatingExperience();
-                      },
-                      buttonText: provider.tankCoatingExperience_IsEdit
-                          ? "Update"
-                          : "Add",
-                      width: 30.w,
-                      height: 10.w,
-                      color: AppColors.buttonColor,
-                      buttonTextColor: AppColors.buttonTextWhiteColor,
-                      shadowColor: AppColors.buttonBorderColor,
-                      fontSize: AppFontSize.fontSize18,
-                      showShadow: true,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: customButton(
+                        voidCallback: () {
+                          provider.addTankCoatingExperience();
+                        },
+                        buttonText: provider.tankCoatingExperience_IsEdit
+                            ? "Update"
+                            : "Add",
+                        width: 30.w,
+                        height: 10.w,
+                        color: AppColors.buttonColor,
+                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                        shadowColor: AppColors.buttonBorderColor,
+                        fontSize: AppFontSize.fontSize18,
+                        showShadow: true,
+                      ),
                     ),
                   ],
                 ),
@@ -901,6 +1045,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setPortStateControlExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("Yes"),
             Radio(
@@ -909,6 +1054,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               onChanged: (value) {
                 provider.setPortStateControlExperience(value as bool);
               },
+              activeColor: AppColors.buttonColor,
             ),
             Text("No"),
           ],
@@ -1065,20 +1211,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       onFieldSubmitted: (String) {},
                     ),
                     SizedBox(height: 1.h),
-                    customButton(
-                      voidCallback: () {
-                        provider.addPortStateControlExperience();
-                      },
-                      buttonText: provider.portStateControlExperience_IsEdit
-                          ? "Update"
-                          : "Add",
-                      width: 30.w,
-                      height: 10.w,
-                      color: AppColors.buttonColor,
-                      buttonTextColor: AppColors.buttonTextWhiteColor,
-                      shadowColor: AppColors.buttonBorderColor,
-                      fontSize: AppFontSize.fontSize18,
-                      showShadow: true,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: customButton(
+                        voidCallback: () {
+                          provider.addPortStateControlExperience();
+                        },
+                        buttonText: provider.portStateControlExperience_IsEdit
+                            ? "Update"
+                            : "Add",
+                        width: 30.w,
+                        height: 10.w,
+                        color: AppColors.buttonColor,
+                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                        shadowColor: AppColors.buttonBorderColor,
+                        fontSize: AppFontSize.fontSize18,
+                        showShadow: true,
+                      ),
                     ),
                   ],
                 ),
