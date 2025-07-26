@@ -1145,17 +1145,24 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
                             provider.editTankCoatingExperience(index);
                           },
+                          child: Image.asset(
+                            "assets/images/Edit.png",
+                            height: 2.h,
+                          ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
+                        SizedBox(width: 2.w),
+                        GestureDetector(
+                          onTap: () {
                             provider.removeTankCoatingExperience(index);
                           },
+                          child: Image.asset(
+                            "assets/images/Delete.png",
+                            height: 2.h,
+                          ),
                         ),
                       ],
                     ),
