@@ -154,12 +154,55 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           itemCount: provider.computerAndSoftwareList.length,
           itemBuilder: (context, index) {
             ComputerAndSoftware item = provider.computerAndSoftwareList[index];
-            return ListTile(
-              title: Text(item.software),
-              subtitle: Text(item.level),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+            return Container(
+              margin: EdgeInsets.only(top: 1.h, bottom: 1.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Container(
+                    width: 15.w,
+                    height: 15.w,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 0.1.h, color: AppColors.Color_EEEEEE),
+                      borderRadius: BorderRadius.circular(2.h),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        "assets/images/TicketStar.png",
+                        // Replace with appropriate icon
+                        width: 8.w,
+                        height: 8.w,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 3.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.software,
+                          style: TextStyle(
+                            fontSize: AppFontSize.fontSize16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.Color_212121,
+                            fontFamily: AppColors.fontFamilyBold,
+                          ),
+                        ),
+                        SizedBox(height: 0.5.h),
+                        Text(
+                          item.level,
+                          style: TextStyle(
+                            fontSize: AppFontSize.fontSize14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.Color_212121,
+                            fontFamily: AppColors.fontFamilyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -197,6 +240,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
                   borderRadius: BorderRadius.circular(2.h),
+                  border: Border.all(color: AppColors.buttonColor)
                 ),
                 child: SearchChoices.single(
                   items: provider.softwareList.map((item) {
@@ -249,6 +293,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
                   borderRadius: BorderRadius.circular(2.h),
+                   border: Border.all(color: AppColors.buttonColor)
                 ),
                 child: SearchChoices.single(
                   items: provider.levelList.map((item) {
