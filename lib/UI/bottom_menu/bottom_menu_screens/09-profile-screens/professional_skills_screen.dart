@@ -628,12 +628,30 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Cargo Gear Experience Details"),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      provider.setCargoGearExperienceVisibility(true);
-                    },
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        provider.setCargoGearExperienceVisibility(true);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(2.5.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               ListView.builder(
@@ -795,12 +813,30 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Metal Working Skills Details"),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      provider.setMetalWorkingSkillsVisibility(true);
-                    },
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        provider.setMetalWorkingSkillsVisibility(true);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(2.5.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               ListView.builder(
@@ -989,12 +1025,30 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Tank Coating Experience Details"),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      provider.setTankCoatingExperienceVisibility(true);
-                    },
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        provider.setTankCoatingExperienceVisibility(true);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(2.5.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               ListView.builder(
@@ -1117,12 +1171,30 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Port State Control Experience Details"),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      provider.setPortStateControlExperienceVisibility(true);
-                    },
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        provider.setPortStateControlExperienceVisibility(true);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(2.5.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               ListView.builder(
