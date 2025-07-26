@@ -711,6 +711,25 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                             ],
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            provider.editCargoGearExperience(index);
+                          },
+                          child: Image.asset(
+                            "assets/images/Edit.png",
+                            height: 2.h,
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+                        GestureDetector(
+                          onTap: () {
+                            provider.removeCargoGearExperience(index);
+                          },
+                          child: Image.asset(
+                            "assets/images/Delete.png",
+                            height: 2.h,
+                          ),
+                        ),
                       ],
                     ),
                   );
