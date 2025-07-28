@@ -740,65 +740,74 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Type"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items: provider.cargoGearTypes.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.cargoGearType,
-                        hint: Text("Select Type"),
-                        searchHint: "Search for a type",
-                        onChanged: (value) {
-                          provider.setCargoGearType(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.cargoGearTypes.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.cargoGearType,
+                          hint: Text("Select Type"),
+                          searchHint: "Search for a type",
+                          onChanged: (value) {
+                            provider.setCargoGearType(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Maker"),
-                    customTextField(
-                      context: context,
-                      controller: provider.cargoGearMakerController,
-                      hintText: 'Enter Maker',
-                      textInputType: TextInputType.text,
-                      obscureText: false,
-                      voidCallback: (value) {},
-                      fontSize: AppFontSize.fontSize16,
-                      inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: AppColors.Color_FAFAFA,
-                      borderColor: AppColors.buttonColor,
-                      textColor: Colors.black,
-                      labelColor: AppColors.Color_9E9E9E,
-                      cursorColor: AppColors.Color_212121,
-                      fillColor: AppColors.Color_FAFAFA,
-                      onFieldSubmitted: (String) {},
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: customTextField(
+                        context: context,
+                        controller: provider.cargoGearMakerController,
+                        hintText: 'Enter Maker',
+                        textInputType: TextInputType.text,
+                        obscureText: false,
+                        voidCallback: (value) {},
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize16,
+                        backgroundColor: AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.Color_212121,
+                        fillColor: AppColors.Color_FAFAFA,
+                        onFieldSubmitted: (String) {},
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Text("SWL"),
-                    customTextField(
-                      context: context,
-                      controller: provider.cargoGearSWLController,
-                      hintText: 'Enter SWL',
-                      textInputType: TextInputType.text,
-                      obscureText: false,
-                      voidCallback: (value) {},
-                      fontSize: AppFontSize.fontSize16,
-                      inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: AppColors.Color_FAFAFA,
-                      borderColor: AppColors.buttonColor,
-                      textColor: Colors.black,
-                      labelColor: AppColors.Color_9E9E9E,
-                      cursorColor: AppColors.Color_212121,
-                      fillColor: AppColors.Color_FAFAFA,
-                      onFieldSubmitted: (String) {},
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: customTextField(
+                        context: context,
+                        controller: provider.cargoGearSWLController,
+                        hintText: 'Enter SWL',
+                        textInputType: TextInputType.text,
+                        obscureText: false,
+                        voidCallback: (value) {},
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize16,
+                        backgroundColor: AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.Color_212121,
+                        fillColor: AppColors.Color_FAFAFA,
+                        onFieldSubmitted: (String) {},
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Align(
@@ -956,51 +965,57 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Skill Selection"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items: provider.metalWorkingSkillsTypes.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.metalWorkingSkill,
-                        hint: Text("Select Skill"),
-                        searchHint: "Search for a skill",
-                        onChanged: (value) {
-                          provider.setMetalWorkingSkill(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.metalWorkingSkillsTypes.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.metalWorkingSkill,
+                          hint: Text("Select Skill"),
+                          searchHint: "Search for a skill",
+                          onChanged: (value) {
+                            provider.setMetalWorkingSkill(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Level"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items:
-                            provider.metalWorkingSkillLevelList.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.metalWorkingSkillLevel,
-                        hint: Text("Select Level"),
-                        searchHint: "Search for a level",
-                        onChanged: (value) {
-                          provider.setMetalWorkingSkillLevel(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items:
+                              provider.metalWorkingSkillLevelList.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.metalWorkingSkillLevel,
+                          hint: Text("Select Level"),
+                          searchHint: "Search for a level",
+                          onChanged: (value) {
+                            provider.setMetalWorkingSkillLevel(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
@@ -1174,26 +1189,29 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Type"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items: provider.tankCoatingTypes.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.tankCoatingType,
-                        hint: Text("Select Type"),
-                        searchHint: "Search for a type",
-                        onChanged: (value) {
-                          provider.setTankCoatingType(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.tankCoatingTypes.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.tankCoatingType,
+                          hint: Text("Select Type"),
+                          searchHint: "Search for a type",
+                          onChanged: (value) {
+                            provider.setTankCoatingType(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
@@ -1362,104 +1380,116 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Regional Agreement"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items: provider.regionalAgreements.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.regionalAgreement,
-                        hint: Text("Select Regional Agreement"),
-                        searchHint: "Search for a regional agreement",
-                        onChanged: (value) {
-                          provider.setRegionalAgreement(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.regionalAgreements.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.regionalAgreement,
+                          hint: Text("Select Regional Agreement"),
+                          searchHint: "Search for a regional agreement",
+                          onChanged: (value) {
+                            provider.setRegionalAgreement(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Port"),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.Color_FAFAFA,
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      child: SearchChoices.single(
-                        items: provider.ports.map((item) {
-                          return DropdownMenuItem(
-                            child: Text(item),
-                            value: item,
-                          );
-                        }).toList(),
-                        value: provider.port,
-                        hint: Text("Select Port"),
-                        searchHint: "Search for a port",
-                        onChanged: (value) {
-                          provider.setPort(value as String);
-                        },
-                        isExpanded: true,
-                        underline: SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.ports.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item),
+                              value: item,
+                            );
+                          }).toList(),
+                          value: provider.port,
+                          hint: Text("Select Port"),
+                          searchHint: "Search for a port",
+                          onChanged: (value) {
+                            provider.setPort(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Date"),
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                        );
-                        if (picked != null) {
-                          provider.setDate(picked);
-                        }
-                      },
-                      child: AbsorbPointer(
-                        child: customTextField(
-                          context: context,
-                          controller: provider.dateController,
-                          hintText: 'Select Date',
-                          textInputType: TextInputType.datetime,
-                          obscureText: false,
-                          voidCallback: (value) {},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: AppColors.Color_FAFAFA,
-                          onFieldSubmitted: (String) {},
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          );
+                          if (picked != null) {
+                            provider.setDate(picked);
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: customTextField(
+                            context: context,
+                            controller: provider.dateController,
+                            hintText: 'Select Date',
+                            textInputType: TextInputType.datetime,
+                            obscureText: false,
+                            voidCallback: (value) {},
+                            fontSize: AppFontSize.fontSize16,
+                            inputFontSize: AppFontSize.fontSize16,
+                            backgroundColor: AppColors.Color_FAFAFA,
+                            borderColor: AppColors.buttonColor,
+                            textColor: Colors.black,
+                            labelColor: AppColors.Color_9E9E9E,
+                            cursorColor: AppColors.Color_212121,
+                            fillColor: AppColors.Color_FAFAFA,
+                            onFieldSubmitted: (String) {},
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 1.h),
                     Text("Observations"),
-                    customTextField(
-                      context: context,
-                      controller: provider.observationsController,
-                      hintText: 'Enter Observations',
-                      textInputType: TextInputType.text,
-                      obscureText: false,
-                      voidCallback: (value) {},
-                      fontSize: AppFontSize.fontSize16,
-                      inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: AppColors.Color_FAFAFA,
-                      borderColor: AppColors.buttonColor,
-                      textColor: Colors.black,
-                      labelColor: AppColors.Color_9E9E9E,
-                      cursorColor: AppColors.Color_212121,
-                      fillColor: AppColors.Color_FAFAFA,
-                      onFieldSubmitted: (String) {},
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: customTextField(
+                        context: context,
+                        controller: provider.observationsController,
+                        hintText: 'Enter Observations',
+                        textInputType: TextInputType.text,
+                        obscureText: false,
+                        voidCallback: (value) {},
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize16,
+                        backgroundColor: AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.Color_212121,
+                        fillColor: AppColors.Color_FAFAFA,
+                        onFieldSubmitted: (String) {},
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Align(
@@ -1496,99 +1526,111 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         Text("Vetting Inspection Experience"),
         SizedBox(height: 1.h),
         Text("Inspection By"),
-        customTextField(
-          context: context,
-          controller: provider.inspectionByController,
-          hintText: 'Enter Inspection By',
-          textInputType: TextInputType.text,
-          obscureText: false,
-          voidCallback: (value) {},
-          fontSize: AppFontSize.fontSize16,
-          inputFontSize: AppFontSize.fontSize16,
-          backgroundColor: AppColors.Color_FAFAFA,
-          borderColor: AppColors.buttonColor,
-          textColor: Colors.black,
-          labelColor: AppColors.Color_9E9E9E,
-          cursorColor: AppColors.Color_212121,
-          fillColor: AppColors.Color_FAFAFA,
-          onFieldSubmitted: (String) {},
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: customTextField(
+            context: context,
+            controller: provider.inspectionByController,
+            hintText: 'Enter Inspection By',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
+          ),
         ),
         SizedBox(height: 1.h),
         Text("Port"),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.Color_FAFAFA,
-            borderRadius: BorderRadius.circular(2.h),
-          ),
-          child: SearchChoices.single(
-            items: provider.vettingPorts.map((item) {
-              return DropdownMenuItem(
-                child: Text(item),
-                value: item,
-              );
-            }).toList(),
-            value: provider.vettingPort,
-            hint: Text("Select Port"),
-            searchHint: "Search for a port",
-            onChanged: (value) {
-              provider.setVettingPort(value as String);
-            },
-            isExpanded: true,
-            underline: SizedBox(),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.Color_FAFAFA,
+              borderRadius: BorderRadius.circular(2.h),
+            ),
+            child: SearchChoices.single(
+              items: provider.vettingPorts.map((item) {
+                return DropdownMenuItem(
+                  child: Text(item),
+                  value: item,
+                );
+              }).toList(),
+              value: provider.vettingPort,
+              hint: Text("Select Port"),
+              searchHint: "Search for a port",
+              onChanged: (value) {
+                provider.setVettingPort(value as String);
+              },
+              isExpanded: true,
+              underline: SizedBox(),
+            ),
           ),
         ),
         SizedBox(height: 1.h),
         Text("Date"),
-        GestureDetector(
-          onTap: () async {
-            final DateTime? picked = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime.now(),
-            );
-            if (picked != null) {
-              provider.setVettingDate(picked);
-            }
-          },
-          child: AbsorbPointer(
-            child: customTextField(
-              context: context,
-              controller: provider.vettingDateController,
-              hintText: 'Select Date',
-              textInputType: TextInputType.datetime,
-              obscureText: false,
-              voidCallback: (value) {},
-              fontSize: AppFontSize.fontSize16,
-              inputFontSize: AppFontSize.fontSize16,
-              backgroundColor: AppColors.Color_FAFAFA,
-              borderColor: AppColors.buttonColor,
-              textColor: Colors.black,
-              labelColor: AppColors.Color_9E9E9E,
-              cursorColor: AppColors.Color_212121,
-              fillColor: AppColors.Color_FAFAFA,
-              onFieldSubmitted: (String) {},
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: GestureDetector(
+            onTap: () async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+              );
+              if (picked != null) {
+                provider.setVettingDate(picked);
+              }
+            },
+            child: AbsorbPointer(
+              child: customTextField(
+                context: context,
+                controller: provider.vettingDateController,
+                hintText: 'Select Date',
+                textInputType: TextInputType.datetime,
+                obscureText: false,
+                voidCallback: (value) {},
+                fontSize: AppFontSize.fontSize16,
+                inputFontSize: AppFontSize.fontSize16,
+                backgroundColor: AppColors.Color_FAFAFA,
+                borderColor: AppColors.buttonColor,
+                textColor: Colors.black,
+                labelColor: AppColors.Color_9E9E9E,
+                cursorColor: AppColors.Color_212121,
+                fillColor: AppColors.Color_FAFAFA,
+                onFieldSubmitted: (String) {},
+              ),
             ),
           ),
         ),
         SizedBox(height: 1.h),
         Text("Observations"),
-        customTextField(
-          context: context,
-          controller: provider.vettingObservationsController,
-          hintText: 'Enter Observations',
-          textInputType: TextInputType.text,
-          obscureText: false,
-          voidCallback: (value) {},
-          fontSize: AppFontSize.fontSize16,
-          inputFontSize: AppFontSize.fontSize16,
-          backgroundColor: AppColors.Color_FAFAFA,
-          borderColor: AppColors.buttonColor,
-          textColor: Colors.black,
-          labelColor: AppColors.Color_9E9E9E,
-          cursorColor: AppColors.Color_212121,
-          fillColor: AppColors.Color_FAFAFA,
-          onFieldSubmitted: (String) {},
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: customTextField(
+            context: context,
+            controller: provider.vettingObservationsController,
+            hintText: 'Enter Observations',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
+          ),
         ),
       ],
     );
@@ -1600,29 +1642,32 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Trading Area Experience"),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.Color_FAFAFA,
-            borderRadius: BorderRadius.circular(2.h),
-          ),
-          child: MultiSelectDialogField(
-            items: provider.tradingAreaList
-                .map((e) => MultiSelectItem(e, e))
-                .toList(),
-            title: Text("Trading Area"),
-            selectedColor: AppColors.buttonColor,
-            searchable: true,
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: Container(
             decoration: BoxDecoration(
               color: AppColors.Color_FAFAFA,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.buttonColor, width: 1),
+              borderRadius: BorderRadius.circular(2.h),
             ),
-            buttonIcon:
-                Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-            buttonText: Text("Select Trading Area"),
-            onConfirm: (values) {
-              provider.tradingAreaExperience = values.cast<String>();
-            },
+            child: MultiSelectDialogField(
+              items: provider.tradingAreaList
+                  .map((e) => MultiSelectItem(e, e))
+                  .toList(),
+              title: Text("Trading Area"),
+              selectedColor: AppColors.buttonColor,
+              searchable: true,
+              decoration: BoxDecoration(
+                color: AppColors.Color_FAFAFA,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.buttonColor, width: 1),
+              ),
+              buttonIcon:
+                  Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+              buttonText: Text("Select Trading Area"),
+              onConfirm: (values) {
+                provider.tradingAreaExperience = values.cast<String>();
+              },
+            ),
           ),
         ),
       ],
