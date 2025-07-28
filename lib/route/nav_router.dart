@@ -41,6 +41,7 @@ import 'package:luneta/UI/landing-screen/LandingScreen.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_exam_provider.dart';
 import 'package:luneta/route/route_constants.dart';
 
+import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/job_conditions_and_preferences_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_experience.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_document.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/medical_document.dart';
@@ -341,6 +342,10 @@ class NavRouter {
           return MaterialPageRoute(
             builder: (context) => const DeactivateAccountScreen(),
           );
+      case jobConditionsAndPreferences:
+        return MaterialPageRoute(
+          builder: (context) => const JobConditionsAndPreferencesScreen(),
+        );
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(
