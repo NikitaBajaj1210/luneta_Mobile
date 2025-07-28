@@ -1196,22 +1196,11 @@ class ProfileBottommenuProvider with ChangeNotifier {
     {"title": "Travel Documents & Credentials", "icon": "assets/images/SalaryChart.png"},
     {"title": "Medical Documents", "icon": "assets/images/WorkActive.png"},
     {"title": "Education", "icon": "assets/images/Paper.png"},
-    {"title": "Professional Skills", "icon": "assets/images/TicketStar.png"},
-    {"title": "Projects", "icon": "assets/images/Work.png"},
-    {"title": "Certification and Licenses", "icon": "assets/images/Document.png"},
-    {"title": "Volunteering Experience", "icon": "assets/images/Heart.png"},
-    {"title": "Professional Exams", "icon": "assets/images/Document.png"},
-    {"title": "Awards & Achievements", "icon": "assets/images/award.png"},
-    {"title": "Seminars & Trainings", "icon": "assets/images/3User.png"},
-    {"title": "Affiliations", "icon": "assets/images/profile.png"},
-    {"title": "Organization Activities", "icon": "assets/images/Graph.png"},
-    {"title": "Skills", "icon": "assets/images/ticket.png"},
-    {"title": "Languages", "icon": "assets/images/MoreCircle.png"},
-    {"title": "References", "icon": "assets/images/people.png"},
-    {"title": "Expected Salary", "icon": "assets/images/Wallet.png"},
-    {"title": "CV/Resume", "icon": "assets/images/Folder.png"},
-    {"title": "Summary", "icon": "assets/images/documentText.png"},
+    {"title": "Professional Skills", "icon": "assets/images/Chart.png"},
+    {"title": "Job Conditions & Preferences", "icon": "assets/images/TicketStar.png"},
+    {"title": "Security and Compliance", "icon": "assets/images/2User.png"},
   ];
+
 
   // **Getter for Profile Sections**
   List<Map<String, dynamic>> get profileSections => List.unmodifiable(_profileSections);
