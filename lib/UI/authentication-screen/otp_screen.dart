@@ -151,7 +151,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             animationType: AnimationType.fade,
                             pinTheme: PinTheme(
                               shape: PinCodeFieldShape.box,
-                              // borderRadius: BorderRadius.circular(1.h), // Smooth curve
+                              borderRadius: BorderRadius.circular(1.h), // Smooth curve
                               fieldHeight: widget.isFromLogin ? 6.h :  6.h,
                               fieldWidth: widget.isFromLogin ? 6.h :  6.h, // Smaller width for 6 digits
                               activeFillColor: AppColors.activeFieldBgColor,

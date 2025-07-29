@@ -5,7 +5,7 @@ import 'package:luneta/provider/account-provider/choose_country_provider.dart';
 import 'package:luneta/provider/account-provider/create_pin_provider.dart';
 import 'package:luneta/provider/account-provider/profile_provider.dart';
 import 'package:luneta/provider/authentication-provider/create_password_provider.dart';
-import 'package:luneta/provider/authentication-provider/forgot_password_password.dart';
+import 'package:luneta/provider/authentication-provider/forgot_password_provider.dart';
 import 'package:luneta/provider/authentication-provider/login_provider.dart';
 import 'package:luneta/provider/authentication-provider/otp_screen_provider.dart';
 import 'package:luneta/provider/authentication-provider/signup_provider.dart';

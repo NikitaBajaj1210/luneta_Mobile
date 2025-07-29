@@ -7,7 +7,7 @@ const mapKey = 'AIzaSyCuacSCdbor7YMMMO2lR4x3otzJkRcW2rE'; // Base URL
 
 
 const loginUrl = '${baseUrl}user/login';
-const signupUrl = '${baseUrl}Login/signup';
+const signupUrl = '${baseUrl}user/register';
 const forgotUrl = '${baseUrl}Login/forget-password';
 const otpVerifyUrl = '${baseUrl}Login/verify-code';
 const resetUrl = '${baseUrl}Login/reset-password';

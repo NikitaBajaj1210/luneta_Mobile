@@ -1,24 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../models/country_model.dart';
 
 class ChooseCountryProvider with ChangeNotifier {
   FocusNode searchFocusNode = FocusNode();
   TextEditingController searchController = TextEditingController();
-  int? _selectedCountryIndex = -1;
+  String? _selectedCountryCode;
   int? _selectedRoleIndex = -1;
+  
+  List<CountryModel> _countries = [];
+  bool _isLoading = true;
 
-  final List<String> countries = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua & Deps',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-  ];
+  List<CountryModel> get countries => _countries;
+  bool get isLoading => _isLoading;
 
   final List<Map<String, String>> roles = [
     {
@@ -37,18 +32,39 @@ class ChooseCountryProvider with ChangeNotifier {
     searchFocusNode.addListener(() {
       notifyListeners();
     });
+    loadCountries();
   }
 
-  // Getter and Setter for selectedCountryIndex
-  int? get selectedCountryIndex => _selectedCountryIndex;
-  set selectedCountryIndex(int? index) {
-    _selectedCountryIndex = index;
+  Future<void> loadCountries() async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      
+      final String response = await rootBundle.loadString('assets/data/countries.json');
+      final List<dynamic> jsonData = json.decode(response);
+      
+      _countries = jsonData.map((json) => CountryModel.fromJson(json)).toList();
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      print('Error loading countries: $e');
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Getter and Setter for selectedCountryCode
+  String? get selectedCountryCode => _selectedCountryCode;
+  set selectedCountryCode(String? code) {
+    _selectedCountryCode = code;
     notifyListeners();
   }
 
   void updateSelectedCountry(int? index) {
-    selectedCountryIndex = index;
-    notifyListeners();
+    if (index != null && index >= 0 && index < filteredCountries.length) {
+      _selectedCountryCode = filteredCountries[index].code;
+      notifyListeners();
+    }
   }
 
   // Getter and Setter for selectedRoleIndex
@@ -60,19 +76,42 @@ class ChooseCountryProvider with ChangeNotifier {
 
   // Update search query
   void updateSearchQuery(String query) {
-    searchController.text = query;
-    notifyListeners();
+    if (searchController.text != query) {
+      searchController.text = query;
+      notifyListeners();
+    }
   }
 
   // Filtered list based on search query
-  List<String> get filteredCountries {
-    return countries
-        .where((country) => country.toLowerCase().contains(searchController.text.toLowerCase()))
+  List<CountryModel> get filteredCountries {
+    if (searchController.text.isEmpty) {
+      return _countries;
+    }
+    return _countries
+        .where((country) => country.name!.toLowerCase().contains(searchController.text.toLowerCase()))
         .toList();
   }
 
   bool get isContinueEnabled {
-    return selectedCountryIndex != -1;
+    return _selectedCountryCode != null;
+  }
+
+  CountryModel? get selectedCountry {
+    if (_selectedCountryCode != null) {
+      return _countries.firstWhere(
+        (country) => country.code == _selectedCountryCode,
+        orElse: () => CountryModel(),
+      );
+    }
+    return null;
+  }
+
+  int? get selectedCountryIndex {
+    if (_selectedCountryCode != null) {
+      final index = filteredCountries.indexWhere((country) => country.code == _selectedCountryCode);
+      return index >= 0 ? index : null;
+    }
+    return null;
   }
 
   bool get isRoleSelected {

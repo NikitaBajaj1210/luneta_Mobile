@@ -108,39 +108,68 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                         }
                       },
                       onFieldSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
                         // Handle country field submitted if needed
                       },
                     ),
                   SizedBox(height: 1.h,),
             
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: countryProvider.filteredCountries.length,
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            height: 6.3.h,
-                            child: Row(
-                              children: [
-                            Radio<int>(
-                            fillColor: MaterialStateProperty.all(AppColors.buttonColor),
-                            value: index,
-                            groupValue: countryProvider.selectedCountryIndex,
-                            onChanged: (value) {
-                              countryProvider.updateSelectedCountry(value);
-                            },
-                          ),
-                                Text(countryProvider.filteredCountries[index],style: TextStyle(
-                                  fontWeight:FontWeight.w600,
-                                  fontFamily: AppColors.fontFamilySemiBold,
-                                  color: AppColors.Color_212121,
-                                  fontSize: AppFontSize.fontSize18
-                                ),),
-                              ],
+                      child: countryProvider.isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.buttonColor,
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: countryProvider.filteredCountries.length,
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (context, index) {
+                                final country = countryProvider.filteredCountries[index];
+                                return Material(
+                                  color: Colors.transparent,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      countryProvider.updateSelectedCountry(index);
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                                                                                            child: Container(
+                                      height: 6.3.h,
+                                      // padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),
+                                      margin: EdgeInsets.symmetric(vertical: 0.2.h),
+                                      // decoration: BoxDecoration(
+                                      //   color: countryProvider.selectedCountryIndex == index
+                                      //       ? AppColors.buttonColor.withOpacity(0.1)
+                                      //       : Colors.transparent,
+                                      //   borderRadius: BorderRadius.circular(8),
+                                      // ),
+                                      child: Row(
+                                      children: [
+                                        Radio<int>(
+                                          fillColor: MaterialStateProperty.all(AppColors.buttonColor),
+                                          value: index,
+                                          groupValue: countryProvider.selectedCountryIndex,
+                                          onChanged: (value) {
+                                            countryProvider.updateSelectedCountry(value);
+                                          },
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            country.name!,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: AppColors.fontFamilySemiBold,
+                                              color: AppColors.Color_212121,
+                                              fontSize: AppFontSize.fontSize16,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                              },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),

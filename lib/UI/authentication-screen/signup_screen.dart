@@ -18,6 +18,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SignUpProvider>(
@@ -31,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h).copyWith(top: 0),
               child: SingleChildScrollView(
                 child: Form(
-                  key: signUpProvider.formKey,
+                  key: formKey,
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,9 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         obscureText: false,
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize14,
-                        voidCallback: (value) {
-                          // Add validation if needed
-                        },
+                        voidCallback: validateFirstName,
                         backgroundColor: signUpProvider.firstNameFocusNode.hasFocus
                             ? AppColors.activeFieldBgColor
                             : AppColors.Color_FAFAFA,
@@ -101,9 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         obscureText: false,
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize14,
-                        voidCallback: (value) {
-                          // Add validation if needed
-                        },
+                        voidCallback: validateLastName,
                         backgroundColor: signUpProvider.lastNameFocusNode.hasFocus
                             ? AppColors.activeFieldBgColor
                             : AppColors.Color_FAFAFA,
@@ -404,10 +402,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         voidCallback: signUpProvider.isFormValid
                             ? () {
                           signUpProvider.hasValidated = true;
-                          if (signUpProvider.formKey.currentState!.validate()) {
-                            // Navigator.of(context).pushNamed(chooseCountry);
-                            Navigator.of(context).pushNamed(profile);
-                            signUpProvider.resetForm();
+                          if (formKey.currentState!.validate()) {
+                            // Call the registration API
+                            signUpProvider.registerApi(context, true);
                           }
                         }
                             : null,
