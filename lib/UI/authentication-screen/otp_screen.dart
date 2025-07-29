@@ -13,7 +13,16 @@ import '../../custom-component/custom-button.dart';
 import '../../provider/authentication-provider/otp_screen_provider.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String? mobileNumber;
+  final String? email;
+  final bool isFromLogin;
+  
+  const OtpScreen({
+    super.key, 
+    this.mobileNumber,
+    this.email,
+    this.isFromLogin = false,
+  });
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -21,19 +30,24 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   int _remainingSeconds = 60; // Timer duration
-  late Timer _timer;
+  Timer? _timer;
 
   String _enteredPin = ""; // To track entered OTP
 
   @override
   void initState() {
     super.initState();
-    _startCountdown();
+    // Only start countdown if not coming from login screen
+    if (!widget.isFromLogin) {
+      _startCountdown();
+    }
   }
 
   @override
   void dispose() {
-    _timer.cancel(); // Cancel the timer when the widget is disposed
+    if (!widget.isFromLogin && _timer != null) {
+      _timer!.cancel(); // Cancel the timer when the widget is disposed
+    }
     super.dispose();
   }
 
@@ -49,7 +63,7 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-  bool get _isButtonEnabled => _enteredPin.length == 4;
+  bool get _isButtonEnabled => _enteredPin.length == 6;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +123,9 @@ class _OtpScreenState extends State<OtpScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Code has been sent to +63 11 ******99",
+                                widget.isFromLogin 
+                                    ? "Code has been sent to your email ${widget.email}"
+                                    : "Code has been sent to ${widget.mobileNumber}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: AppFontSize.fontSize18,
@@ -120,6 +136,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               ),
                               SizedBox(height: 5.h),
                             PinCodeTextField(
+                            key: ValueKey( 'otp_6'), // Force rebuild when length changes
                             textStyle: TextStyle(
                               fontSize: AppFontSize.fontSize20,
                               color: AppColors.Color_212121,
@@ -128,15 +145,15 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                             appContext: context,
                             keyboardType: TextInputType.number,
-                            length: 4,
+                            length: widget.isFromLogin ? 6 : 6,
                             obscureText: true,
-                            cursorColor: Colors.transparent,
+                            cursorColor: AppColors.Color_607D8B,
                             animationType: AnimationType.fade,
                             pinTheme: PinTheme(
                               shape: PinCodeFieldShape.box,
-                              borderRadius: BorderRadius.circular(2.5.h), // Smooth curve
-                              fieldHeight: 8.h,
-                              fieldWidth: 9.h,
+                              // borderRadius: BorderRadius.circular(1.h), // Smooth curve
+                              fieldHeight: widget.isFromLogin ? 6.h :  6.h,
+                              fieldWidth: widget.isFromLogin ? 6.h :  6.h, // Smaller width for 6 digits
                               activeFillColor: AppColors.activeFieldBgColor,
                               inactiveFillColor: AppColors.Color_FAFAFA,
                               selectedFillColor: AppColors.activeFieldBgColor,
@@ -165,29 +182,46 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
 
                               SizedBox(height: 2.h),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  text: 'Resend code in ',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.Color_212121, // Replace with your desired color
-                                    fontFamily: AppColors.fontFamily,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: '$_remainingSeconds s',
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize16,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.buttonColor, // Timer color
-                                        fontFamily: AppColors.fontFamily,
-                                      ),
+                              if (!widget.isFromLogin && _timer != null) // Only show timer if not coming from login
+                                RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    text: 'Resend code in ',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.Color_212121, // Replace with your desired color
+                                      fontFamily: AppColors.fontFamily,
                                     ),
-                                  ],
+                                    children: [
+                                      TextSpan(
+                                        text: '$_remainingSeconds s',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.buttonColor, // Timer color
+                                          fontFamily: AppColors.fontFamily,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              // if (!widget.isFromLogin) // Show resend button when coming from login
+                              //   GestureDetector(
+                              //     onTap: () {
+                              //       // TODO: Implement resend OTP functionality
+                              //       debugPrint("Resend OTP tapped");
+                              //     },
+                              //     child: Text(
+                              //       "Resend Code",
+                              //       style: TextStyle(
+                              //         fontSize: AppFontSize.fontSize16,
+                              //         fontWeight: FontWeight.w600,
+                              //         color: AppColors.buttonColor,
+                              //         fontFamily: AppColors.fontFamilySemiBold,
+                              //       ),
+                              //     ),
+                              //   ),
 
                             ],
                           ),

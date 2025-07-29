@@ -118,9 +118,21 @@ class NavRouter {
 
       case otpScreen:
         return MaterialPageRoute(
-          builder: (context) => const OtpScreen(),
+          builder: (context) {
+            final args = settings.arguments as Map<dynamic, dynamic>;
+            final mobileNumber = args['mobileNumber'];
+            final email = args['email'];
+            final isFromLogin = args['isFromLogin'] ?? false;
+
+            return OtpScreen(
+              mobileNumber: mobileNumber,
+              email: email,
+              isFromLogin: isFromLogin,
+            );
+          },
         );
-        case travelDocument:
+
+      case travelDocument:
         return MaterialPageRoute(
           builder: (context) => const TravelDocumentScreen(),
         );

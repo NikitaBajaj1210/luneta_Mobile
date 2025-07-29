@@ -20,16 +20,16 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => SignUpProvider(),
-      child: Consumer<SignUpProvider>(
-        builder: (context, signUpProvider, child) {
-          return Scaffold(
+    return Consumer<SignUpProvider>(
+      builder: (context, signUpProvider, child) {
+        return SafeArea(
+          child: Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
             resizeToAvoidBottomInset: false,
-            body: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h).copyWith(top: 0),
+            body: Container(
+              width: 100.w,
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h).copyWith(top: 0),
+              child: SingleChildScrollView(
                 child: Form(
                   key: signUpProvider.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
@@ -45,10 +45,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       // Logo
-                      SizedBox(height: 5.h),
+                      SizedBox(height: 3.h),
                       Image.asset("assets/images/LunetaLogo.png", height: 2.h),
                       // Title
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 3.h),
                       Text(
                         "Create New Account",
                         style: TextStyle(
@@ -58,13 +58,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: AppColors.Color_212121,
                         ),
                       ),
+                      // First Name Field
+                      SizedBox(height: 2.h),
+                      customTextField(
+                        context: context,
+                        focusNode: signUpProvider.firstNameFocusNode,
+                        controller: signUpProvider.firstNameController,
+                        hintText: 'First Name*',
+                        textInputType: TextInputType.name,
+                        obscureText: false,
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize14,
+                        voidCallback: (value) {
+                          // Add validation if needed
+                        },
+                        backgroundColor: signUpProvider.firstNameFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.buttonColor,
+                        fillColor: signUpProvider.firstNameFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context)
+                              .requestFocus(signUpProvider.lastNameFocusNode);
+                        },
+                        autovalidateMode: signUpProvider.hasValidated
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
+                      ),
+                      // Last Name Field
+                      SizedBox(height: 2.h),
+                      customTextField(
+                        context: context,
+                        focusNode: signUpProvider.lastNameFocusNode,
+                        controller: signUpProvider.lastNameController,
+                        hintText: 'Last Name*',
+                        textInputType: TextInputType.name,
+                        obscureText: false,
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize14,
+                        voidCallback: (value) {
+                          // Add validation if needed
+                        },
+                        backgroundColor: signUpProvider.lastNameFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.buttonColor,
+                        fillColor: signUpProvider.lastNameFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context)
+                              .requestFocus(signUpProvider.emailFocusNode);
+                        },
+                        autovalidateMode: signUpProvider.hasValidated
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
+                      ),
                       // Email Field
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 2.h),
                       customTextField(
                         context: context,
                         focusNode: signUpProvider.emailFocusNode,
                         controller: signUpProvider.emailController,
-                        hintText: 'Email',
+                        hintText: 'Email*',
                         textInputType: TextInputType.emailAddress,
                         obscureText: false,
                         fontSize: AppFontSize.fontSize16,
@@ -102,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         context: context,
                         focusNode: signUpProvider.passwordFocusNode,
                         controller: signUpProvider.passwordController,
-                        hintText: 'Password',
+                        hintText: 'Password*',
                         textInputType: TextInputType.visiblePassword,
                         obscureText: signUpProvider.obscurePassword,
                         fontSize: AppFontSize.fontSize16,
@@ -142,6 +206,198 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ? AutovalidateMode.onUserInteraction
                             : AutovalidateMode.disabled,
                       ),
+                      // Career Type Dropdown
+                      SizedBox(height: 2.h),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 4.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                          border: Border.all(
+                            color: AppColors.buttonColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: signUpProvider.selectedCareerType,
+                            hint: Text(
+                              'Career Type*',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize14,
+                                color: AppColors.Color_9E9E9E,
+                                fontFamily: AppColors.fontFamily,
+                              ),
+                            ),
+                            isExpanded: true,
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: AppColors.buttonColor,
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                value: 'Office',
+                                child: Text(
+                                  'Office',
+                                  style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    color: AppColors.Color_212121,
+                                    fontFamily: AppColors.fontFamily,
+                                  ),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: 'At sea',
+                                child: Text(
+                                  'At sea',
+                                  style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    color: AppColors.Color_212121,
+                                    fontFamily: AppColors.fontFamily,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              signUpProvider.setCareerType(value);
+                            },
+                          ),
+                        ),
+                      ),
+                      // Checkboxes
+                      SizedBox(height: 3.h),
+                      // Job Alerts Checkbox
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              signUpProvider.acceptJobAlerts = !signUpProvider.acceptJobAlerts;
+                            },
+                            child: Container(
+                              height: 2.6.h,
+                              width: 2.6.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: signUpProvider.acceptJobAlerts
+                                    ? AppColors.buttonColor
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(0.8.h),
+                                border: Border.all(
+                                  color: AppColors.buttonColor,
+                                  width: 2,
+                                ),
+                              ),
+                              child: signUpProvider.acceptJobAlerts
+                                  ? Image.asset(
+                                "assets/images/tickIcon.png",
+                                scale: 0.5.h,
+                              )
+                                  : Container(),
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Expanded(
+                            child: Text(
+                              "I want to receive job alerts.",
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize14,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.Color_212121,
+                                fontFamily: AppColors.fontFamily,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 2.h),
+                      // Newsletters Checkbox
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              signUpProvider.acceptNewsletters = !signUpProvider.acceptNewsletters;
+                            },
+                            child: Container(
+                              height: 2.6.h,
+                              width: 2.6.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: signUpProvider.acceptNewsletters
+                                    ? AppColors.buttonColor
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(0.8.h),
+                                border: Border.all(
+                                  color: AppColors.buttonColor,
+                                  width: 2,
+                                ),
+                              ),
+                              child: signUpProvider.acceptNewsletters
+                                  ? Image.asset(
+                                "assets/images/tickIcon.png",
+                                scale: 0.5.h,
+                              )
+                                  : Container(),
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Expanded(
+                            child: Text(
+                              "I want to receive newsletters.",
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize14,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.Color_212121,
+                                fontFamily: AppColors.fontFamily,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 2.h),
+                      // Privacy Policy Checkbox
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              signUpProvider.acceptPrivacyPolicy = !signUpProvider.acceptPrivacyPolicy;
+                            },
+                            child: Container(
+                              height: 2.6.h,
+                              width: 2.6.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: signUpProvider.acceptPrivacyPolicy
+                                    ? AppColors.buttonColor
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(0.8.h),
+                                border: Border.all(
+                                  color: AppColors.buttonColor,
+                                  width: 2,
+                                ),
+                              ),
+                              child: signUpProvider.acceptPrivacyPolicy
+                                  ? Image.asset(
+                                "assets/images/tickIcon.png",
+                                scale: 0.5.h,
+                              )
+                                  : Container(),
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Expanded(
+                            child: Text(
+                              "I accept the terms of Privacy Policy.",
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize14,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.Color_212121,
+                                fontFamily: AppColors.fontFamily,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       // Sign up button
                       SizedBox(height: 3.h),
                       customButton(
@@ -155,7 +411,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                         }
                             : null,
-                        buttonText: "Sign up",
+                        buttonText: "Sign Up",
                         width: 90.w,
                         height: 6.h,
                         color: signUpProvider.isFormValid
@@ -217,11 +473,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       // Already have an account
-                      const Spacer(),
+                      SizedBox(height: 2.h,),
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          text: 'Already have an account? ',
+                          text: 'Already have an Account? ',
                           style: TextStyle(
                             fontFamily: AppColors.fontFamilyRegular,
                             fontWeight: FontWeight.w400,
@@ -230,7 +486,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           children: [
                             TextSpan(
-                              text: 'Sign in',
+                              text: 'Sign In',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   Navigator.of(context).pushNamed(login);
@@ -251,9 +507,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

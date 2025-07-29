@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     .copyWith(top: 0),
                 child: Form(
                   key: loginProvider.formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
+                  autovalidateMode: loginProvider.autovalidateMode,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -211,8 +211,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           loginProvider.hasValidated = true; // Set validation attempt
                           if (loginProvider.formKey.currentState!
                               .validate()) {
-                            Navigator.of(context).pushNamed(bottomMenu);
+                            // Navigator.of(context).pushNamed(bottomMenu);
+                            loginProvider.loginApi(context, true);
                             // Handle successful login
+                          }else{
+                            loginProvider.autovalidateMode = AutovalidateMode.onUserInteraction;
                           }
                         }
                             : null,
