@@ -844,7 +844,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       ),
                       GestureDetector(
                         onTap: () async {
-                          // await provider.showAttachmentOptions(context);
+                          await provider.showAttachmentOptions(context);
                         },
                         child: DottedBorder(
                           borderType: BorderType.RRect,
