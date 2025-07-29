@@ -899,6 +899,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           ),
                         ),
                       ),
+                      SizedBox(height: 10,),
                       if (provider.justificationDocument != null)
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
