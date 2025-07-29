@@ -52,3 +52,4 @@ const String languageSettingsScreen = '/languageSettingsScreen';
 const String helpCenterScreen = '/helpCenterScreen';
 const String deactivateAccountScreen = '/deactivateAccountScreen';
 const String logout = '/logout';
+const String jobConditionsAndPreferences = '/jobConditionsAndPreferences';
