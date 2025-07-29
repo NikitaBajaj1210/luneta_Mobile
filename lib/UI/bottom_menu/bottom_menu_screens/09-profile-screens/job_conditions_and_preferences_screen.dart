@@ -34,13 +34,14 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
               ),
               child: customButton(
                 voidCallback: () {
-                  if (provider.formKey.currentState!.validate()) {
-                    // Save the data in provider or update the profile here
-                    Navigator.pop(context);
-                  } else {
+                  if (provider.autovalidateMode == AutovalidateMode.disabled) {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
                     });
+                  }
+                  if (provider.formKey.currentState!.validate()) {
+                    // Save the data in provider or update the profile here
+                    Navigator.pop(context);
                   }
                 },
                 buttonText: "Save",
