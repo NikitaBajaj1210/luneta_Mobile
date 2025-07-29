@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import '../../Utils/validation.dart';
 import '../../const/color.dart';
+import '../../network/network_services.dart';
+import '../../network/app_url.dart';
+import '../../models/auth_model/send_otp_model.dart';
+import '../../Utils/helper.dart';
+import '../../route/route_constants.dart';
+import '../../network/network_helper.dart';
 
 class ForgotPasswordProvider with ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
@@ -22,6 +29,40 @@ class ForgotPasswordProvider with ChangeNotifier {
     } else {
       return AppColors.Color_9E9E9E;
     }
+  }
+
+  Future<void> sendOtpApi(BuildContext context, bool showLoading) async {
+      // Create request body
+      Map<String, dynamic> requestBody = {
+        "email": emailController.text.trim(),
+      };
+
+      String body = jsonEncode(requestBody);
+
+      Map<String, dynamic> response = await NetworkService().postResponse(
+        sendOtpUrl,
+        body,
+        showLoading,
+        context,
+        () => notifyListeners(),
+      );
+
+      print("Send OTP Response: $response");
+
+      if (response['statusCode'] == 200) {
+        SendOtpResponse otpResponse = SendOtpResponse.fromJson(response);
+        
+        if (otpResponse.data == true) {
+          ShowToast("Success", otpResponse.message ?? "OTP sent successfully!");
+          
+          // Navigate to OTP screen with email
+          Navigator.of(context).pushNamed(otpScreen, arguments: {
+            'email': emailController.text.trim(),
+            'isFromLogin': true,
+          });
+        }
+      }
+
   }
 
   void dispose() {

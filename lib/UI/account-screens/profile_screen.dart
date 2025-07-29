@@ -28,6 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
       _setupFocusListeners(provider);
+      // Fetch existing profile data
+      // provider.fetchSeafarerProfile(context, false);
     });
   }
 
@@ -59,13 +61,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
-    var provider = Provider.of<ProfileProvider>(context, listen: false);
-    provider.nameFocusNode.dispose();
-    provider.nickNameFocusNode.dispose();
-    provider.emailFocusNode.dispose();
-    provider.phoneFocusNode.dispose();
-    provider.dateFocusNode.dispose();
-    provider.genderFocusNode.dispose();
+    if(context.mounted){
+      var provider = Provider.of<ProfileProvider>(context, listen: false);
+      provider.nameFocusNode.dispose();
+      provider.nickNameFocusNode.dispose();
+      provider.emailFocusNode.dispose();
+      provider.phoneFocusNode.dispose();
+      provider.dateFocusNode.dispose();
+      provider.genderFocusNode.dispose();
+    }
+
     super.dispose();
   }
 
@@ -101,9 +106,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     bool isValid = profileProvider.validateFields();
                     if (isValid) {
-                      profileProvider.phoneController.clear();
-                      Navigator.of(context).pushNamed(createPin);
-                      profileProvider.resetForm();
+                      // Call the seafarer profile API
+                      profileProvider.updateSeafarerProfile(context, true);
                     }
                     setState(() {
 

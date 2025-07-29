@@ -12,7 +12,16 @@ import '../../custom-component/back_button_with_title.dart';
 import '../../custom-component/custom-button.dart';
 import '../../custom-component/customTextField.dart';
 class CreatePasswordScreen extends StatefulWidget {
-  const CreatePasswordScreen({super.key});
+  final String? token;
+  final String? email;
+  final String? userId;
+  
+  const CreatePasswordScreen({
+    super.key,
+    this.token,
+    this.email,
+    this.userId,
+  });
 
   @override
   State<CreatePasswordScreen> createState() => _CreatePasswordScreenState();
@@ -102,6 +111,11 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<CreatePasswordProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
+      
+      // Print the received parameters for debugging
+      print("CreatePasswordScreen - Token: ${widget.token}");
+      print("CreatePasswordScreen - Email: ${widget.email}");
+      print("CreatePasswordScreen - UserId: ${widget.userId}");
     });
   }
 

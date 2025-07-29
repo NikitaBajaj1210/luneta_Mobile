@@ -37,12 +37,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ? () {
                           forgotPasswordProvider.hasValidated = true;
                           if (forgotPasswordProvider.formKey.currentState!.validate()) {
-                            // Navigator.of(context).pushNamed(otpScreen);
-                            // Navigator.of(context).pushNamed(otpScreen, arguments: {
-                            //   'email': responseModel.data!.user!.email.toString(),
-                            //   'isFromLogin': true,
-                            // });
-                            Navigator.of(context).pushNamed(chooseCountry);
+                            forgotPasswordProvider.sendOtpApi(context, true);
                           } else {
                             forgotPasswordProvider.autovalidateMode = AutovalidateMode.onUserInteraction;
                           }

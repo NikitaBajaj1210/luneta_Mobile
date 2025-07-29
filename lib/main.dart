@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:luneta/provider/Intro_screen_provider.dart';
 import 'package:luneta/provider/account-provider/choose_country_provider.dart';
+import 'package:luneta/provider/account-provider/choose_rank_provider.dart';
 import 'package:luneta/provider/account-provider/create_pin_provider.dart';
 import 'package:luneta/provider/account-provider/profile_provider.dart';
 import 'package:luneta/provider/authentication-provider/create_password_provider.dart';
@@ -75,6 +76,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CreatePasswordProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
         ChangeNotifierProvider(create: (_) => ChooseCountryProvider()),
+        ChangeNotifierProvider(create: (_)=>ChooseRankProvider()),
         ChangeNotifierProvider(create: (_) => CreatePinProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => BottomMenuProvider()),

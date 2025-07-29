@@ -80,8 +80,13 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: customButton(
                   voidCallback: _isButtonEnabled
                       ? () {
-                    Navigator.of(context).pushNamed(createPassword);
-                    // Add logic for "Verify" button here
+                    // Call verify OTP API
+                    countryProvider.verifyOtpApi(
+                      context, 
+                      widget.email ?? '', 
+                      _enteredPin, 
+                      true
+                    );
                     debugPrint("OTP Verified: $_enteredPin");
                   }
                       : () {

@@ -313,21 +313,21 @@ class NetworkService {
         return res;
       } else if (response.statusCode == 401) {
         bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed == true) {
-          // if(res['status']==200||res['statusCode']==200){
-          // if(res['detail']=='Given token not valid for any token type'){
-
-          // Retry the original request with the new token
-          return await getList(urlPath, showLoading, context, notify);
-          // }
-        } else {
+        // if (tokenRefreshed == true) {
+        //   // if(res['status']==200||res['statusCode']==200){
+        //   // if(res['detail']=='Given token not valid for any token type'){
+        //
+        //   // Retry the original request with the new token
+        //   return await getList(urlPath, showLoading, context, notify);
+        //   // }
+        // } else {
           // ShowSnackBar("Error", 'Session_expired'.tr);
           NetworkHelper().removeToken(context);
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             // Provider.of<LoginProvider>(context, listen: false).getEmail();
           });
           Navigator.of(context).pushReplacementNamed(login);
-        }
+        // }
       } else if (response.statusCode == 409) {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
@@ -395,17 +395,12 @@ class NetworkService {
         ShowToast("Error", resJson['message'] ?? 'Error');
         return resJson;
       } else if (response.statusCode == 401) {
-        bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed) {
-          return await putResponse(urlPath, data, showLoading, context, notify);
-        } else {
-          // ShowSnackBar("Error", 'Session_expired'.tr);
-          NetworkHelper().removeToken(context);
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            // Provider.of<LoginProvider>(context, listen: false).getEmail();
-          });
-          Navigator.of(context).pushReplacementNamed(login);
-        }
+        NetworkHelper().removeToken(context);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          // Provider.of<LoginProvider>(context, listen: false).getEmail();
+        });
+        Navigator.of(context).pushReplacementNamed(login);
+
       }else if(response.statusCode == 500){
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
@@ -465,22 +460,12 @@ class NetworkService {
         }
         return res;
       } else if (response.statusCode == 401) {
-        bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed == true) {
-          // if(res['status']==200||res['statusCode']==200){
-          // if(res['detail']=='Given token not valid for any token type'){
+        NetworkHelper().removeToken(context);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          // Provider.of<LoginProvider>(context, listen: false).getEmail();
+        });
+        Navigator.of(context).pushReplacementNamed(login);
 
-          // Retry the original request with the new token
-          return await getList(urlPath, showLoading, context, notify);
-          // }
-        } else {
-          // ShowSnackBar("Error", 'Session_expired'.tr);
-          NetworkHelper().removeToken(context);
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            // Provider.of<LoginProvider>(context, listen: false).getEmail();
-          });
-          Navigator.of(context).pushReplacementNamed(login);
-        }
       }else if(response.statusCode == 500){
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
@@ -540,13 +525,24 @@ class NetworkService {
 
         return res;
       } else if (response.statusCode == 401) {
+        if (showLoading && context.mounted) stopLoading(context);
+
+
         bool tokenRefreshed = await refreshToken(context);
+
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          // Provider.of<LoginProvider>(context, listen: false).getEmail();
+        });
+        ShowToast("Error",res['message']);
+        NetworkHelper().removeToken(context);
+        Navigator.of(context).pushReplacementNamed(login);
         if (tokenRefreshed == true) {
           // if(res['status']==200||res['statusCode']==200){
           // if(res['detail']=='Given token not valid for any token type'){
 
+          notify();
           // Retry the original request with the new token
-          return await getList(urlPath, showLoading, context, notify);
+          return {};
           // }
         }else if(response.statusCode == 500){
           loading = 1;
@@ -612,17 +608,10 @@ class NetworkService {
         ShowToast("Error", res['message']);
         return [];
       } else if (response.statusCode == 401) {
-        bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed == true) {
-          return await getList(urlPath, showLoading, context, notify);
-        } else {
-          // ShowSnackBar("Error", 'Session_expired'.tr);
-          NetworkHelper().removeToken(context);
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            // Provider.of<LoginProvider>(context, listen: false).getEmail();
-          });
-          Navigator.of(context).pushReplacementNamed(login);
-        }
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error",res['message']);
+        NetworkHelper().removeToken(context);
+        Navigator.of(context).pushReplacementNamed(login);
       }else if(response.statusCode == 500){
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
@@ -684,17 +673,11 @@ class NetworkService {
         ShowToast("Error",res['message']);
         notify();
       }else if(response.statusCode == 401) {
-        bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed == true) {
-          return await getAuctionList(urlPath, showLoading, context, notify);
-        } else {
-          // ShowSnackBar("Error", 'Session_expired'.tr);
-          NetworkHelper().removeToken(context);
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            // Provider.of<LoginProvider>(context, listen: false).getEmail();
-          });
-          Navigator.of(context).pushReplacementNamed(login);
-        }
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error",res['message']);
+        NetworkHelper().removeToken(context);
+        Navigator.of(context).pushReplacementNamed(login);
+
       }else {
         var res = jsonDecode(response.body);
         loading = 1;
@@ -753,13 +736,9 @@ class NetworkService {
         ShowToast("Error",res['message']);
         return res;
       } else if (response.statusCode == 401) {
-        // ShowSnackBar("Error",'Session expired');
         if (showLoading && context.mounted) stopLoading(context);
-        // ShowSnackBar("Error", 'Session_expired'.tr);
+        ShowToast("Error",res['message']);
         NetworkHelper().removeToken(context);
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          // Provider.of<LoginProvider>(context, listen: false).getEmail();
-        });
         Navigator.of(context).pushReplacementNamed(login);
       }else if (response.statusCode == 500) {
         loading = 1;
@@ -825,17 +804,10 @@ class NetworkService {
         ShowToast("Error", resJson['message'] ?? 'Error');
         return resJson;
       } else if (response.statusCode == 401) {
-        bool tokenRefreshed = await refreshToken(context);
-        if (tokenRefreshed) {
-          return await patchResponse(urlPath, data, showLoading, context, notify);
-        } else {
-          // ShowSnackBar("Error", 'Session_expired'.tr);
-          NetworkHelper().removeToken(context);
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            // Provider.of<LoginProvider>(context, listen: false).getEmail();
-          });
-          Navigator.of(context).pushReplacementNamed(login);
-        }
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", resJson['message'] ?? 'Error');
+        NetworkHelper().removeToken(context);
+        Navigator.of(context).pushReplacementNamed(login);
       } else if (response.statusCode == 409) {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);

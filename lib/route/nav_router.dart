@@ -142,7 +142,18 @@ class NavRouter {
         );
         case createPassword:
         return MaterialPageRoute(
-          builder: (context) => const CreatePasswordScreen(),
+          builder: (context) {
+            final args = settings.arguments as Map<dynamic, dynamic>?;
+            final token = args?['token'] as String?;
+            final email = args?['email'] as String?;
+            final userId = args?['userId'] as String?;
+
+            return CreatePasswordScreen(
+              token: token,
+              email: email,
+              userId: userId,
+            );
+          },
         );
       case bottomMenu:
         return MaterialPageRoute(

@@ -5,6 +5,7 @@ import '../../const/color.dart';
 import '../../const/font_size.dart';
 import '../../custom-component/back_button_with_title.dart';
 import '../../custom-component/custom-button.dart';
+import '../../network/network_services.dart';
 import '../../provider/account-provider/choose_rank_provider.dart';
 import '../../route/route_constants.dart';
 
@@ -16,13 +17,67 @@ class ChooseRankScreen extends StatefulWidget {
 }
 
 class _ChooseRankScreenState extends State<ChooseRankScreen> {
+
+  @override
+  void initState() {
+    NetworkService.loading =0;
+WidgetsBinding.instance.addPostFrameCallback((timeStamp){
+  var provider = Provider.of<ChooseRankProvider>(context,listen: false);
+  provider.GetAllRank(context);
+});
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ChooseRankProvider(),
+    return Container(
+      height: 100.h,
+      width: 100.w,
+      color: AppColors.Color_FFFFFF,
+      alignment: Alignment.center,
+
       child: Consumer<ChooseRankProvider>(
         builder: (context, provider, child) {
-          return SafeArea(
+          return NetworkService.loading == 0 ? Center(
+            child: CircularProgressIndicator(color: AppColors.Color_607D8B),
+          ) :
+          NetworkService.loading == 1 ? Padding(
+            padding: EdgeInsets.only(top: 2.h),
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  NetworkService.loading = 0;
+                  setState(() {});
+                  provider.GetAllRank(context);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                        'assets/images/refresh.png',
+                        width: 4.5.h,
+                        height: 4.5.h,
+                        color: AppColors.Color_607D8B
+                    ),
+                    SizedBox(
+                      height:1.h,
+                    ),
+                    Text(
+                      "Tab to Try Again",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFamily: AppColors.fontFamilyBold,
+                        fontSize: AppFontSize.fontSize15,
+                          color: AppColors.Color_607D8B,
+                        decoration: TextDecoration.none
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ):
+          SafeArea(
+
             child: Scaffold(
               backgroundColor: AppColors.Color_FFFFFF,
               bottomNavigationBar: Container(
@@ -139,7 +194,7 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
                                   ),
                                   SizedBox(width: 3.w),
                                   Text(
-                                    provider.ranks[index],
+                                    provider.ranks[index].rankName??'',
                                     style: TextStyle(
                                       fontSize: AppFontSize.fontSize16,
                                       fontWeight: FontWeight.w600,

@@ -7,7 +7,7 @@ class ChooseCountryProvider with ChangeNotifier {
   FocusNode searchFocusNode = FocusNode();
   TextEditingController searchController = TextEditingController();
   String? _selectedCountryCode;
-  int? _selectedRoleIndex = -1;
+  int? _selectedRoleIndex = 1;
   
   List<CountryModel> _countries = [];
   bool _isLoading = true;

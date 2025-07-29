@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luneta/network/network_helper.dart';
 import 'package:luneta/route/route_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -35,12 +36,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                     if (countryProvider.selectedRoleIndex != -1) {
                       Navigator.of(context).pushNamed(chooseRank);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Please Select One Job Role.'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      ShowToast("Error", 'Please Select One Job Role.');
                     }
                   },
                   buttonText: "Continue",
@@ -52,7 +48,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                   buttonTextColor: AppColors.buttonTextWhiteColor,
                   shadowColor: AppColors.buttonBorderColor,
                   fontSize: AppFontSize.fontSize18,
-                  showShadow:  countryProvider.selectedCountryIndex==-1 ? false:true,
+                  showShadow: countryProvider.selectedRoleIndex == -1 ? false:true,
                 ),
               ),
               body: Container(
@@ -111,7 +107,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            countryProvider.selectedRoleIndex = index; // Set selected card
+                            // countryProvider.selectedRoleIndex = index; // Set selected card
                           });
                         },
                         child: Container(
