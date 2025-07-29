@@ -281,26 +281,33 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           ),
                         ),
                       ),
-                      customTextField(
-                        context: context,
-                        hintText: 'Enter Manning Agency',
-                        textInputType: TextInputType.text,
-                        obscureText: false,
-                        voidCallback: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Manning Agency';
-                          }
-                          return null;
-                        },
-                        fontSize: AppFontSize.fontSize16,
-                        inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: AppColors.Color_FAFAFA,
-                        borderColor: AppColors.buttonColor,
-                        textColor: Colors.black,
-                        labelColor: AppColors.Color_9E9E9E,
-                        cursorColor: AppColors.Color_212121,
-                        fillColor: AppColors.Color_FAFAFA,
-                        onFieldSubmitted: (String) {},
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.Color_FAFAFA,
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        child: SearchChoices.single(
+                          items: provider.manningAgencies.map((agency) {
+                            return DropdownMenuItem(
+                              child: Text(agency),
+                              value: agency,
+                            );
+                          }).toList(),
+                          value: provider.manningAgency,
+                          hint: "Select Manning Agency",
+                          searchHint: "Search for an agency",
+                          onChanged: (value) {
+                            provider.setManningAgency(value as String);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select a manning agency';
+                            }
+                            return null;
+                          },
+                        ),
                       ),
                       SizedBox(height: 1.h),
 

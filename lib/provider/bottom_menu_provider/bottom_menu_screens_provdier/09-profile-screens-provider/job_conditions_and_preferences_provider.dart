@@ -27,6 +27,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
 
   List<String> ranks = ["Captain", "Chief Officer", "Second Officer", "Third Officer", "Deck Cadet"];
   List<String> vesselTypes = ["Tanker", "Bulker", "Container", "Gas Carrier", "Offshore"];
+  List<String> manningAgencies = ["Maersk", "MSC", "CMA CGM", "Cosco", "Hapag-Lloyd"];
   List<String> contractTypes = ["Voyage", "Permanent"];
   List<String> availabilityStatuses = ["Available", "Onboard", "On Leave"];
   List<String> rotationPatterns = ["3/3", "4/2", "6/6"];
