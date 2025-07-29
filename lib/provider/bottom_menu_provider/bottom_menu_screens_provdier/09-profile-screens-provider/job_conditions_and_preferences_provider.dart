@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class JobConditionsAndPreferencesProvider with ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -99,7 +101,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setJustificationDocument(File file) {
+  void setJustificationDocument(File? file) {
     justificationDocument = file;
     notifyListeners();
   }
@@ -107,5 +109,65 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   void removeJustificationDocument() {
     justificationDocument = null;
     notifyListeners();
+  }
+
+  // File Picker
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> showAttachmentOptions(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from gallery'),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a picture'),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text('Choose a document'),
+                onTap: () {
+                  _pickDocument();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickDocument() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      setJustificationDocument(file);
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      setJustificationDocument(file);
+    }
   }
 }
