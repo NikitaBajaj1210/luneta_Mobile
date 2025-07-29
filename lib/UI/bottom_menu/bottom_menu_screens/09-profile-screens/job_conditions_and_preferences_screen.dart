@@ -105,8 +105,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           isExpanded: true,
                           underline: SizedBox(),
+                          onClear: (){
+                            provider.setCurrentRank('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
                               return 'Please select a rank';
                             }
                             return null;
@@ -302,8 +306,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           isExpanded: true,
                           underline: SizedBox(),
+                          onClear: (){
+                            provider.setManningAgency('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
                               return 'Please select a manning agency';
                             }
                             return null;
@@ -359,8 +367,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           isExpanded: true,
                           underline: SizedBox(),
+                          onClear: (){
+                            provider.setCurrentAvailabilityStatus('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
                               return 'Please select a status';
                             }
                             return null;
@@ -721,13 +733,18 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           value: provider.lastRankJoined,
                           hint: "Select Rank",
                           searchHint: "Search for a rank",
+                          onClear: (){
+                            provider.setLastRankJoined('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
                           onChanged: (value) {
                             provider.setLastRankJoined(value as String);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
+
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
                               return 'Please select a rank';
                             }
                             return null;
@@ -819,8 +836,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           isExpanded: true,
                           underline: SizedBox(),
+                          onClear: (){
+                            provider.setCurrency('');
+                          },
+                          autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
                               return 'Please select a currency';
                             }
                             return null;
@@ -936,6 +957,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             ],
                           ),
                         ),
+                      SizedBox(height: 10,)
                     ],
                   ),
                 ),
