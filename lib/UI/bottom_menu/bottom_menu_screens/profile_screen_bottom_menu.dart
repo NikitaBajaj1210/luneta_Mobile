@@ -161,9 +161,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                           .pushNamed(professionalSkillsScreen);
                                       break;
                                     case 6:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context)
-                                          .pushNamed(projectScreen);
+                                          .pushNamed(jobConditionsAndPreferences);
                                       break;
                                     case 7:
                                       profileProvider.setSectionStatus(section["title"],!curentFlag);
@@ -314,7 +313,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     width: 5.h,
                                                   ),
                                                 ),
-                                                SizedBox(width: 3.w),
+                                                Spacer(),
+                                                // SizedBox(width: 3.w),
                                                 Container(
                                                   // color:Colors.red,
                                                   width: 64.w,
@@ -729,7 +729,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 width: 5.h,
                                               ),
                                             ),
-                                            SizedBox(width: 3.w),
+                                            Spacer(),
+                                            // SizedBox(width: 3.w),
                                             Container(
                                               // color:Colors.red,
                                               width: 64.w,
@@ -941,7 +942,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 width: 5.h,
                                               ),
                                             ),
-                                            SizedBox(width: 3.w),
+                                            Spacer(),
+                                            // SizedBox(width: 3.w),
                                             Container(
                                               // color:Colors.red,
                                               width: 64.w,
@@ -1177,7 +1179,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 width: 5.h,
                                               ),
                                             ),
-                                            SizedBox(width: 3.w),
+                                            Spacer(),
+                                            // SizedBox(width: 3.w),
                                             Container(
                                               // color:Colors.red,
                                               width: 64.w,
@@ -1389,7 +1392,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 width: 5.h,
                                               ),
                                             ),
-                                            SizedBox(width: 3.w),
+                                            Spacer(),
+                                            // SizedBox(width: 3.w),
                                             Container(
                                               // color:Colors.red,
                                               width: 64.w,
@@ -1601,7 +1605,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                 width: 5.h,
                                               ),
                                             ),
-                                            SizedBox(width: 3.w),
+                                            Spacer(),
+                                            // SizedBox(width: 3.w),
                                             Container(
                                               // color:Colors.red,
                                               width: 64.w,
@@ -1830,7 +1835,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                         width: 5.h,
                                                       ),
                                                     ),
-                                                    SizedBox(width: 3.w),
+                                                    Spacer(),
+                                                    // SizedBox(width: 3.w),
                                                     Container(
                                                       // color:Colors.red,
                                                       width: 64.w,
@@ -1943,7 +1949,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     width: 5.h,
                                                   ),
                                                 ),
-                                                SizedBox(width: 3.w),
+                                                Spacer(),
+                                                // SizedBox(width: 3.w),
                                                 Container(
                                                   // color:Colors.red,
                                                   width: 64.w,
@@ -2056,7 +2063,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     width: 5.h,
                                                   ),
                                                 ),
-                                                SizedBox(width: 3.w),
+                                                Spacer(),
+                                                // SizedBox(width: 3.w),
                                                 Container(
                                                   // color:Colors.red,
                                                   width: 64.w,
@@ -2179,7 +2187,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                         width: 5.h,
                                                       ),
                                                     ),
-                                                    SizedBox(width: 3.w),
+                                                    Spacer(),
+                                                    // SizedBox(width: 3.w),
                                                     Container(
                                                       // color:Colors.red,
                                                       width: 64.w,
@@ -2295,7 +2304,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     width: 5.h,
                                                   ),
                                                 ),
-                                                SizedBox(width: 3.w),
+                                                Spacer(),
+                                                // SizedBox(width: 3.w),
                                                 Container(
                                                   // color:Colors.red,
                                                   width: 64.w,

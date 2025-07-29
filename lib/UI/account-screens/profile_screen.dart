@@ -162,20 +162,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                         SizedBox(height: 2.h),
-                        customButton(
-                          voidCallback: () {
-                            Navigator.of(context).pushNamed(jobConditionsAndPreferences);
-                          },
-                          buttonText: "Job Conditions and Preferences",
-                          width: 90.w,
-                          height: 4.h,
-                          color: AppColors.buttonColor,
-                          buttonTextColor: AppColors.buttonTextWhiteColor,
-                          shadowColor: AppColors.buttonBorderColor,
-                          fontSize: AppFontSize.fontSize18,
-                          showShadow: true,
-                        ),
-                        SizedBox(height: 2.h),
                         customTextField(
                           context: context,
                           focusNode: profileProvider.nameFocusNode,
