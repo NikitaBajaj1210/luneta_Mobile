@@ -23,6 +23,14 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var provider = Provider.of<PersonalInformationProvider>(context, listen: false);
+      provider.getPersonalInfo(context, "45f35971-94b5-4c21-be2f-1d7e0dbf157d");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

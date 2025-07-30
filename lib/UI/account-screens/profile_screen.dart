@@ -26,7 +26,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
-      provider.getPersonalInfo(context, "45f35971-94b5-4c21-be2f-1d7e0dbf157d");
       provider.autoValidateMode = AutovalidateMode.disabled;
       // Remove focus listeners to prevent keyboard conflicts
       // _setupFocusListeners(provider);

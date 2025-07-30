@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:luneta_app/custom-component/globalComponent.dart';
+import 'package:luneta_app/network/app_url.dart';
+import 'package:luneta_app/network/network_services.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -173,6 +176,75 @@ class PersonalInformationProvider extends ChangeNotifier {
   void setDOB(DateTime date) {
     dobController.text = "${date.toLocal()}".split(' ')[0];
     notifyListeners();
+  }
+
+  void resetForm() {
+    firstNameController.clear();
+    lastNameController.clear();
+    dobController.clear();
+    countryOfBirthController.clear();
+    religionController.clear();
+    nationalityController.clear();
+    emailController.clear();
+    addressController.clear();
+    NumberOrIDController.clear();
+    phoneController.clear();
+    directPhoneController.clear();
+    _profileImage = null;
+    _communicationList.clear();
+    notifyListeners();
+  }
+
+  Future<void> getPersonalInfo(BuildContext context, String userId) async {
+    resetForm(); // Reset form before fetching new data
+    try {
+      var response = await NetworkService().getResponse(
+        '$getPersonalInfoProfile$userId',
+        true,
+        context,
+        notifyListeners,
+      );
+
+      if (response != null && response['statusCode'] == 200) {
+        final profileData = response['data'];
+        if (profileData != null) {
+          firstNameController.text = profileData['firstName'] ?? '';
+          lastNameController.text = profileData['lastName'] ?? '';
+          emailController.text = profileData['email'] ?? '';
+          phoneController.text = profileData['mobilePhone'] ?? '';
+          directPhoneController.text = profileData['directLinePhone'] ?? '';
+          sex = profileData['sex'] ?? 'Male';
+          nationalityController.text = profileData['nationality'] ?? '';
+          religionController.text = profileData['religion'] ?? '';
+          countryOfBirthController.text = profileData['countryOfBirth'] ?? '';
+          maritalStatus = profileData['maritalStatus'] ?? 'Single';
+          numberOfChildren = profileData['numberOfChildren'] ?? 0;
+          addressController.text = profileData['homeAddress']['street'] ?? '';
+          nearestAirport = profileData['nearestAirport'] ?? '';
+
+          if (profileData['dateOfBirth'] != null) {
+            final dob = DateTime.parse(profileData['dateOfBirth']);
+            setDOB(dob);
+          }
+
+          if (profileData['onlineCommunication'] != null) {
+            for (var item in profileData['onlineCommunication']) {
+              _communicationList.add(PlatformEntry(
+                  platform: item['platform'], numberOrId: item['id']));
+            }
+          }
+        }
+      } else {
+        // Handle error
+        ShowToast(
+            "Error", response['message'] ?? "Failed to fetch profile data");
+      }
+    } catch (e) {
+      print("Error in getPersonalInfo: $e");
+      ShowToast("Error", "An error occurred while fetching profile data.");
+    } finally {
+      notifyListeners();
+    }
   }
 }
 

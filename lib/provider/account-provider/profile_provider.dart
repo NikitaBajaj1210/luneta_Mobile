@@ -927,49 +927,6 @@ class ProfileProvider with ChangeNotifier {
         '${now.day.toString().padLeft(2, '0')}';
   }
 
-  Future<void> getPersonalInfo(BuildContext context, String userId) async {
-    resetForm(); // Reset form before fetching new data
-    try {
-      var response = await NetworkService().getResponse(
-        '$getPersonalInfoProfile$userId',
-        true,
-        context,
-        notifyListeners,
-      );
-
-      if (response != null && response['statusCode'] == 200) {
-        final profileData = response['data'];
-        if (profileData != null) {
-          nameController.text = profileData['firstName'] ?? '';
-          nickNameController.text = profileData['lastName'] ?? '';
-          emailController.text = profileData['email'] ?? '';
-          phoneController.text = profileData['mobilePhone'] ?? '';
-          selectedGender = profileData['sex'] ?? 'Gender';
-
-          if (profileData['dateOfBirth'] != null) {
-            final dob = DateTime.parse(profileData['dateOfBirth']);
-            addDate = '${dob.day}/${dob.month}/${dob.year}';
-            addDateApi = '${dob.year}-${dob.month}-${dob.day}';
-          }
-
-          if (profileData['profilePhoto'] != null) {
-            // Assuming profilePhoto is a URL, you might need to handle image loading from URL
-            // For now, we'll just store the URL.
-            // profileImage = File(profileData['profilePhoto']); // This is incorrect for a URL
-          }
-        }
-      } else {
-        // Handle error
-        ShowToast("Error", response['message'] ?? "Failed to fetch profile data");
-      }
-    } catch (e) {
-      print("Error in getPersonalInfo: $e");
-      ShowToast("Error", "An error occurred while fetching profile data.");
-    } finally {
-      notifyListeners();
-    }
-  }
-
   Future<void> updateSeafarerProfile(BuildContext context, bool showLoading) async {
     try {
       Map<String, String> fieldData = {
