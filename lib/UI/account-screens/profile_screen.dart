@@ -27,41 +27,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
-      _setupFocusListeners(provider);
-      // Fetch existing profile data
-      // provider.fetchSeafarerProfile(context, false);
+      // Remove focus listeners to prevent keyboard conflicts
+      // _setupFocusListeners(provider);
     });
   }
 
-  void _setupFocusListeners(ProfileProvider provider) {
-    provider.nameFocusNode.addListener(() {
-      if (!provider.nameFocusNode.hasFocus && provider.nameController.text.isNotEmpty) {
-        provider.validateFieldIfFocused('name', provider.nameController.text);
-      }
-    });
-
-    provider.nickNameFocusNode.addListener(() {
-      if (!provider.nickNameFocusNode.hasFocus && provider.nickNameController.text.isNotEmpty) {
-        provider.validateFieldIfFocused('nickname', provider.nickNameController.text);
-      }
-    });
-
-    provider.emailFocusNode.addListener(() {
-      if (!provider.emailFocusNode.hasFocus && provider.emailController.text.isNotEmpty) {
-        provider.validateFieldIfFocused('email', provider.emailController.text);
-      }
-    });
-
-    provider.phoneFocusNode.addListener(() {
-      if (!provider.phoneFocusNode.hasFocus && provider.phoneController.text.isNotEmpty) {
-        provider.validateFieldIfFocused('phone', provider.phoneController.text);
-      }
-    });
-  }
+  // Remove the focus listeners setup to prevent keyboard conflicts
+  // void _setupFocusListeners(ProfileProvider provider) {
+  //   // This method is removed to prevent keyboard conflicts
+  // }
 
   @override
   void dispose() {
-    if(context.mounted){
+    if (context.mounted) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.nameFocusNode.dispose();
       provider.nickNameFocusNode.dispose();
@@ -69,8 +47,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       provider.phoneFocusNode.dispose();
       provider.dateFocusNode.dispose();
       provider.genderFocusNode.dispose();
+      provider.rankFocusNode.dispose();
     }
-
     super.dispose();
   }
 
@@ -101,16 +79,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: customButton(
                   voidCallback: isFormValid
                       ? () {
-                    profileProvider.validateAllFields(context);
-                    profileProvider.validatePhone(notify: false);
-
-                    bool isValid = profileProvider.validateFields();
-                    if (isValid) {
-                      // Call the seafarer profile API
-                      profileProvider.updateSeafarerProfile(context, true);
-                    }
-                    setState(() {
-
+                    // Unfocus all fields before validation to prevent keyboard conflicts
+                    profileProvider.unfocusAllFields();
+                    
+                    // Add a small delay to ensure keyboard is fully dismissed
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      profileProvider.safeValidateAllFields(context);
+                      profileProvider.safeValidatePhone(notify: false);
+                      bool isValid = profileProvider.validateFields();
+                      if (isValid) {
+                        profileProvider.updateSeafarerProfile(context, true);
+                      }
+                      setState(() {});
                     });
                   }
                       : null,
@@ -173,7 +153,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           hintText: 'Full Name',
                           textInputType: TextInputType.name,
                           obscureText: false,
-                          voidCallback: (value) => profileProvider.validateFieldIfFocused('name', value!),
+                          voidCallback: (value) {
+                            // Only validate if form has been submitted
+                            if (profileProvider.hasSubmitted) {
+                              profileProvider.validateFieldIfFocused('name', value!);
+                            }
+                          },
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize16,
                           backgroundColor: AppColors.Color_FAFAFA,
@@ -183,11 +168,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           cursorColor: AppColors.Color_212121,
                           fillColor: AppColors.Color_FAFAFA,
                           onFieldSubmitted: (value) {
-                            if (value.isNotEmpty) {
-                              profileProvider.validateFieldIfFocused('name', value);
-                              profileProvider.markFieldAsSubmitted('name');
-                            }
-                            FocusScope.of(context).requestFocus(profileProvider.nickNameFocusNode);
+                            profileProvider.handleFieldSubmission('name', value);
+                            // Use a more stable approach to focus next field
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              FocusScope.of(context).requestFocus(profileProvider.nickNameFocusNode);
+                            });
+                          },
+                          onChange: (value) {
+                            // Remove the problematic validation on change
+                            // Only update UI state without validation
+                            profileProvider.handleTextChange('name', value);
                           },
                           autovalidateMode: profileProvider.autoValidateMode,
                         ),
@@ -214,7 +204,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           hintText: 'Nickname',
                           textInputType: TextInputType.name,
                           obscureText: false,
-                          voidCallback: (value) => profileProvider.validateFieldIfFocused('nickname', value!),
+                          voidCallback: (value) {
+                            if (profileProvider.hasSubmitted) {
+                              profileProvider.validateFieldIfFocused('nickname', value!);
+                            }
+                          },
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize16,
                           backgroundColor: AppColors.Color_FAFAFA,
@@ -224,11 +218,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           cursorColor: AppColors.Color_212121,
                           fillColor: AppColors.Color_FAFAFA,
                           onFieldSubmitted: (value) {
-                            if (value.isNotEmpty) {
-                              profileProvider.validateFieldIfFocused('nickname', value);
-                              profileProvider.markFieldAsSubmitted('nickname');
-                            }
-                            FocusScope.of(context).requestFocus(profileProvider.emailFocusNode);
+                            profileProvider.handleFieldSubmission('nickname', value);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              FocusScope.of(context).requestFocus(profileProvider.emailFocusNode);
+                            });
+                          },
+                          onChange: (value) {
+                            profileProvider.handleTextChange('nickname', value);
                           },
                           autovalidateMode: profileProvider.autoValidateMode,
                         ),
@@ -258,7 +254,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           textColor: profileProvider.getFieldTextColor('date', hasValue: profileProvider.addDate != 'Date of Birth'),
                           iconColor: profileProvider.getFieldIconColor(profileProvider.dateFocusNode, 'date', hasValue: profileProvider.addDate != 'Date of Birth'),
                           onTap: () async {
-                            profileProvider.dateFocusNode.requestFocus();
+                            // Unfocus current field before showing date picker
+                            profileProvider.unfocusAllFields();
+                            
                             DateTime? selectedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
@@ -270,11 +268,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               profileProvider.addDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                               profileProvider.addDateApi = '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
                               profileProvider.markFieldAsSubmitted('date');
-                            }
-
-                            profileProvider.dateFocusNode.unfocus();
-                            if (profileProvider.hasSubmitted) {
-                              profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
+                              
+                              if (profileProvider.hasSubmitted) {
+                                profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
+                              }
                             }
                           },
                           onDateSelected: (selectedDate) {
@@ -313,7 +310,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           hintText: 'Email',
                           textInputType: TextInputType.emailAddress,
                           obscureText: false,
-                          voidCallback: (value) => profileProvider.validateFieldIfFocused('email', value!),
+                          voidCallback: (value) {
+                            if (profileProvider.hasSubmitted) {
+                              profileProvider.validateFieldIfFocused('email', value!);
+                            }
+                          },
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize16,
                           backgroundColor: AppColors.Color_FAFAFA,
@@ -333,11 +334,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           fillColor: AppColors.Color_FAFAFA,
                           onFieldSubmitted: (value) {
-                            if (value.isNotEmpty) {
-                              profileProvider.validateFieldIfFocused('email', value);
-                              profileProvider.markFieldAsSubmitted('email');
-                            }
-                            FocusScope.of(context).requestFocus(profileProvider.phoneFocusNode);
+                            profileProvider.handleFieldSubmission('email', value);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              FocusScope.of(context).requestFocus(profileProvider.phoneFocusNode);
+                            });
+                          },
+                          onChange: (value) {
+                            profileProvider.handleTextChange('email', value);
                           },
                           autovalidateMode: profileProvider.autoValidateMode,
                         ),
@@ -362,8 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           phoneNumber: profileProvider.phoneNumber,
                           controller: profileProvider.phoneController,
                           onPhoneChanged: (PhoneNumber newNumber) {
-                            profileProvider.phoneNumber = newNumber;
-                            profileProvider.validateFieldIfFocused('phone', profileProvider.phoneController.text);
+                            profileProvider.handlePhoneChange(newNumber, profileProvider.phoneController.text);
                           },
                           maxLength: 10,
                           backgroundColor: AppColors.Color_FAFAFA,
@@ -373,9 +375,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           isEditable: true,
                           focusNode: profileProvider.phoneFocusNode,
                           onFieldSubmitted: (value) {
-                            profileProvider.phoneFocusNode.unfocus();
-                            profileProvider.markFieldAsSubmitted('phone');
-                            profileProvider.validatePhone();
+                            profileProvider.handleFieldSubmission('phone', value);
+                            profileProvider.safeValidatePhone();
                           },
                           validator: (value) => profileProvider.validateFieldIfFocused('phone', value ?? '', notify: false),
                           autovalidateMode: profileProvider.autoValidateMode,
@@ -398,6 +399,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 2.h),
                         GestureDetector(
                           onTap: () {
+                            // Unfocus current field before opening dropdown
+                            profileProvider.unfocusAllFields();
                             profileProvider.genderFocusNode.requestFocus();
                           },
                           child: Container(
@@ -430,7 +433,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 profileProvider.selectedGender = newValue!;
                                 profileProvider.validateGender(newValue);
                                 profileProvider.markFieldAsSubmitted('gender');
-                                profileProvider.genderFocusNode.unfocus();
+                                // Unfocus after selection to prevent keyboard conflicts
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  profileProvider.genderFocusNode.unfocus();
+                                });
                               },
                               items: <String>['Gender', 'Male', 'Female', 'Other']
                                   .map<DropdownMenuItem<String>>((String value) {

@@ -211,8 +211,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           loginProvider.hasValidated = true; // Set validation attempt
                           if (loginProvider.formKey.currentState!
                               .validate()) {
-                            // Navigator.of(context).pushNamed(bottomMenu);
-                            loginProvider.loginApi(context, true);
+                            Navigator.of(context).pushNamed(chooseCountry);
+                            // loginProvider.loginApi(context, true);
                             // Handle successful login
                           }else{
                             loginProvider.autovalidateMode = AutovalidateMode.onUserInteraction;
