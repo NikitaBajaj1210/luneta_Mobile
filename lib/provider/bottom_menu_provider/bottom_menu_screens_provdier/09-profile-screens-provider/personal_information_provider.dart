@@ -196,11 +196,11 @@ class PersonalInformationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getPersonalInfo(BuildContext context, String userId) async {
+  Future<void> getPersonalInfo(BuildContext context) async {
     resetForm(); // Reset form before fetching new data
     try {
       var response = await NetworkService().getResponse(
-        '$getPersonalInfoProfile$userId',
+        '$getPersonalInfoProfile${NetworkHelper.loggedInUserId}',
         true,
         context,
         notifyListeners,

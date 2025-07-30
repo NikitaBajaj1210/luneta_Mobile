@@ -160,7 +160,6 @@ class SeafarerProfile {
   String? directLinePhone;
   String? homeAddress;
   String? nearestAirport;
-  String? onlineCommunication;
   String? maritalStatus;
   int? numberOfChildren;
   String? profilePhoto;
@@ -192,7 +191,6 @@ class SeafarerProfile {
     this.directLinePhone,
     this.homeAddress,
     this.nearestAirport,
-    this.onlineCommunication,
     this.maritalStatus,
     this.numberOfChildren,
     this.profilePhoto,
@@ -223,9 +221,8 @@ class SeafarerProfile {
     email = json['email'];
     mobilePhone = json['mobilePhone'];
     directLinePhone = json['directLinePhone'];
-    homeAddress = json['homeAddress'];
+    homeAddress = json['homeAddress']==null?'':json['homeAddress']['street']??'';
     nearestAirport = json['nearestAirport'];
-    onlineCommunication = json['onlineCommunication'];
     maritalStatus = json['maritalStatus'];
     numberOfChildren = json['numberOfChildren'];
     profilePhoto = json['profilePhoto'];
@@ -259,7 +256,6 @@ class SeafarerProfile {
     data['directLinePhone'] = directLinePhone;
     data['homeAddress'] = homeAddress;
     data['nearestAirport'] = nearestAirport;
-    data['onlineCommunication'] = onlineCommunication;
     data['maritalStatus'] = maritalStatus;
     data['numberOfChildren'] = numberOfChildren;
     data['profilePhoto'] = profilePhoto;
