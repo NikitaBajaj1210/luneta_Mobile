@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
-import 'package:luneta_app/custom-component/globalComponent.dart';
-import 'package:luneta_app/network/app_url.dart';
-import 'package:luneta_app/network/network_services.dart';
+
+import '../../../../network/app_url.dart';
+import '../../../../network/network_helper.dart';
+import '../../../../network/network_services.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -219,7 +220,7 @@ class PersonalInformationProvider extends ChangeNotifier {
           countryOfBirthController.text = profileData['countryOfBirth'] ?? '';
           maritalStatus = profileData['maritalStatus'] ?? 'Single';
           numberOfChildren = profileData['numberOfChildren'] ?? 0;
-          addressController.text = profileData['homeAddress']['street'] ?? '';
+          addressController.text = profileData['homeAddress']==null?'':profileData['homeAddress']['street'] ?? '';
           nearestAirport = profileData['nearestAirport'] ?? '';
 
           if (profileData['dateOfBirth'] != null) {

@@ -5,7 +5,7 @@ final List<Map<String, String>> maritalStatusList = [
   {'key': 'Married', 'value': 'Married'},
   {'key': 'Divorced', 'value': 'Divorced'},
   {'key': 'Widowed', 'value': 'Widowed'},
-  {'key': 'PreferNotToSay', 'value': 'Prefer Not to Say'},
+  {'key': 'Prefer Not to Say', 'value': 'Prefer Not to Say'},
 ];
 
 final List<Map<String, String>> religionList = [
