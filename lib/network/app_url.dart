@@ -14,5 +14,4 @@ const verifyOtpUrl = '${baseUrl}user/verify-otp';
 const verifyOtpForgotUrl = '${baseUrl}user/verify-otp-mobile';
 
 
-
 const getSeafarerCompleteProfile = '${baseUrl}seafarer-profile/getCompleteProfileDataMobile/';
