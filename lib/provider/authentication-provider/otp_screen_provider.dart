@@ -28,18 +28,36 @@ class OtpScreenProvider with ChangeNotifier {
   // Method to store user data in SharedPreferences
   Future<void> _storeUserData(String userId, String email, String token) async {
     try {
+      print("OTP Provider - _storeUserData called with:");
+      print("OTP Provider - userId: $userId");
+      print("OTP Provider - email: $email");
+      print("OTP Provider - token: ${token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
+      
+      // Store in NetworkHelper for direct access
+      await NetworkHelper.storeUserData(
+        userId: userId,
+        email: email,
+        token: token,
+        profilePicURL: null, // Will be updated when profile is loaded
+        fullName: null, // Will be updated when profile is loaded
+        refreshToken: null, // Will be updated when available
+      );
+      
+      // Also store in SharedPreferences for persistence
       var prefs = await SharedPreferences.getInstance();
       await prefs.setString('userid', userId);
       await prefs.setString('email', email);
       await prefs.setString('token', token);
-      // Password is already stored during login process
       await prefs.setBool('isLoggedIn', true);
-      await prefs.setBool('rememberMe', true);
       
-      print("User data stored in SharedPreferences");
+      print("OTP Provider - User data stored in both NetworkHelper and SharedPreferences");
+      print("OTP Provider - NetworkHelper.loggedInUserId: ${NetworkHelper.loggedInUserId}");
+      print("OTP Provider - NetworkHelper.token: ${NetworkHelper.token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
+      print("OTP Provider - NetworkHelper.isLoggedIn: ${NetworkHelper.isLoggedIn}");
     } catch (e) {
       print("Error storing user data: $e");
     }
+    notifyListeners();
   }
 
   Future<void> verifyOtpApi(BuildContext context, String email, String otp, bool showLoading, {bool isFromLogin = false, bool rememberMe = false}) async {
@@ -85,18 +103,27 @@ class OtpScreenProvider with ChangeNotifier {
             
             print("OTP Provider - Coming from login, rememberMe: $rememberMe");
             // Coming from login - always go to home screen
+            
+            // Always store user data in NetworkHelper for session management
+            print("OTP Provider - Storing user data in NetworkHelper");
+            NetworkHelper.loggedInUserId = otpResponse.user!.id??'';
+            NetworkHelper.loggedInUserEmail = email;
+            NetworkHelper.token = userToken??'';
+            await _storeUserData(
+              otpResponse.user!.id ?? '',
+              otpResponse.user!.email ?? '',
+              userToken ?? '',
+            );
+            
+            // If Remember Me is checked, also store in SharedPreferences for persistence
             if (rememberMe) {
-              print("OTP Provider - Storing user data for Remember Me");
-              // Store user data in SharedPreferences for Remember Me
-              await _storeUserData(
-                otpResponse.user!.id ?? '',
-                otpResponse.user!.email ?? '',
-                userToken ?? '',
-              );
+              print("OTP Provider - Remember Me checked, storing in SharedPreferences");
+              var prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('rememberMe', true);
+              await prefs.setString('password', ''); // Password should be stored during login
             }
             
             print("OTP Provider - Navigating to home screen");
-            // Navigate to home screen (bottom menu)
             if(otpResponse.user!.seafarerProfile!.isCompletedMobile==false){
               Navigator.of(context).pushNamedAndRemoveUntil(
                 chooseCountry,
@@ -147,5 +174,6 @@ class OtpScreenProvider with ChangeNotifier {
       print("Verify OTP Error: $e");
       ShowToast("Error", "Something went wrong. Please try again.");
     }
+    notifyListeners();
   }
 }

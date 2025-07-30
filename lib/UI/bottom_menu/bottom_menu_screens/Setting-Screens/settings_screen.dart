@@ -12,6 +12,7 @@ import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../const/color.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../provider/authentication-provider/login_provider.dart';
+import '../../../../network/network_helper.dart';
 
 // Custom Divider Widget
 class CustomDivider extends StatelessWidget {
@@ -480,8 +481,7 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                     Navigator.of(context).pop();
                     
                     // Clear stored login data
-                    var loginProvider = Provider.of<LoginProvider>(context, listen: false);
-                    await loginProvider.clearStoredLoginData();
+                    await NetworkHelper.clearUserData();
                     
                     print("Logout - Cleared stored login data");
                     

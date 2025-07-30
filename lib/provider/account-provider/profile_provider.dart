@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:luneta/provider/account-provider/choose_rank_provider.dart';
 import 'package:mime/mime.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,7 @@ import '../../Utils/helper.dart';
 import '../../route/route_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import '../authentication-provider/login_provider.dart';
 import 'choose_country_provider.dart';
 
 
@@ -487,56 +489,83 @@ class ProfileProvider with ChangeNotifier {
     if (context.mounted) startLoading(context);
     
     try {
-      var prefs = await SharedPreferences.getInstance();
-      String? userId = prefs.getString('userid');
-      print("UserID: $userId");
+      // Debug token status
+      NetworkHelper.debugTokenStatus();
+      
+      // Force sync data from SharedPreferences first
+      await NetworkHelper.forceSyncUserData();
+      
+      // Validate session before making API call
+      bool isSessionValid = await NetworkHelper.validateSession();
+      if (!isSessionValid) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            login,
+            (route) => false, // Remove all previous routes
+          );
+        }
+        return;
+      }
 
-      // Validate token
+      // Get user data from NetworkHelper
+      String? userId = NetworkHelper.loggedInUserId;
       String? token = NetworkHelper.token;
-      // if (token == null || token.isEmpty) {
-      //   if (context.mounted) stopLoading(context);
-      //   if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
-      //   if (context.mounted) NetworkHelper().removeToken(context);
-      //   return;
-      // }
+      
+      print("ProfileProvider - UserID from NetworkHelper: $userId");
+      print("ProfileProvider - Token from NetworkHelper: $token");
+
+      // Validate token and user ID
+      if (token == null || token.isEmpty) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
+        if (context.mounted) NetworkHelper().removeToken(context);
+        return;
+      }
+
+      if (userId == null || userId.isEmpty) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "User ID not found. Please log in again.");
+        return;
+      }
 
       // Create Dio instance
       var dio = Dio();
       
       // Set headers
       var headers = {
-        // 'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token',
         'Accept': 'application/json',
         'Language': 'en'
       };
 
       // Prepare form data
       var formData = FormData.fromMap({
-        "userId": "1313bb60-0cd4-4586-bae8-773ca4e17cbc", // Using the provided user ID
+        "userId": userId, // Use actual user ID from NetworkHelper
         "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India", // Use global country data directly
         "firstName": nameController.text.trim(),
         "lastName": nickNameController.text.trim(),
         "dateOfBirth": _formatDateForAPI(),
         "contactEmail": emailController.text.trim(),
-        "rankId":ChooseRankProvider.globalSelectedRankId??'',
+        "rankId": ChooseRankProvider.globalSelectedRankId ?? '',
         "mobilePhone": _formatPhoneNumber(),
         "sex": selectedGender == 'Gender' ? '' : selectedGender,
       });
 
-
-      // Determine MIME type
-      String? mimeType = lookupMimeType(profileImage!.path);
-      if (mimeType == null || !mimeType.startsWith('image/')) {
-        if (context.mounted) {
-          stopLoading(context);
-          ShowToast("Error", "Invalid file type. Please select an image file.");
-        }
-        print("Invalid MIME type: $mimeType for path: ${profileImage!.path}");
-        return;
-      }
-
       // Add profile image if selected
       if (profileImage != null) {
+        // Determine MIME type
+        String? mimeType = lookupMimeType(profileImage!.path);
+        if (mimeType == null || !mimeType.startsWith('image/')) {
+          if (context.mounted) {
+            stopLoading(context);
+            ShowToast("Error", "Invalid file type. Please select an image file.");
+          }
+          print("Invalid MIME type: $mimeType for path: ${profileImage!.path}");
+          return;
+        }
+
         String fileName = profileImage!.path.split('/').last;
         formData.files.add(
           MapEntry(
@@ -551,6 +580,7 @@ class ProfileProvider with ChangeNotifier {
       }
 
       print("Seafarer Profile Dio Request URL: $seafarerProfileBasicInfo");
+      print("Seafarer Profile Dio Request Headers: $headers");
       print("Seafarer Profile Dio Request Fields: ${formData.fields}");
       print("Seafarer Profile Dio Request Files: ${formData.files.map((file) => file.value.filename).toList()}");
 
@@ -578,7 +608,7 @@ class ProfileProvider with ChangeNotifier {
           ChooseCountryProvider.clearGlobalSelectedCountry();
           
           // Navigate to next screen
-          Navigator.of(context).pushNamed(createPin);
+          Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
         }
       } else {
@@ -597,8 +627,11 @@ class ProfileProvider with ChangeNotifier {
         
         if (e.response?.statusCode == 401) {
           ShowToast("Error", "Session expired. Please log in again.");
+          var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+          await loginProvider.clearStoredLoginData();
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
+
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
           ShowToast("Error", e.response?.data['message'] ?? "Bad request");
         } else {
