@@ -46,8 +46,8 @@ WidgetsBinding.instance.addPostFrameCallback((timeStamp){
               child: GestureDetector(
                 onTap: () {
                   NetworkService.loading = 0;
-                  setState(() {});
                   provider.GetAllRank(context);
+                  setState(() {});
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
