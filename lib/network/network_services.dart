@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Utils/helper.dart';
+import '../provider/authentication-provider/login_provider.dart';
 import '../route/route_constants.dart';
 import 'app_url.dart';
 import 'network_helper.dart';
@@ -218,6 +219,16 @@ class NetworkService {
           if (context.mounted) {
             ShowToast("Error", errorMessage);
           }
+          var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+          await loginProvider.clearStoredLoginData();
+
+          print("Logout - Cleared stored login data");
+
+          // Navigate to login screen
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            login,
+                (route) => false, // Remove all previous routes
+          );
           return res;
         }
         // Success case
@@ -225,6 +236,8 @@ class NetworkService {
         if (showLoading && context.mounted) stopLoading(context);
         return res;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         bool tokenRefreshed = await refreshToken(context);
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
@@ -311,6 +324,8 @@ class NetworkService {
         ShowToast("Error", res['message']);
         return res;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         bool tokenRefreshed = await refreshToken(context);
         // if (tokenRefreshed == true) {
         //   // if(res['status']==200||res['statusCode']==200){
@@ -394,6 +409,8 @@ class NetworkService {
         ShowToast("Error", resJson['message'] ?? 'Error');
         return resJson;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         NetworkHelper().removeToken(context);
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           // Provider.of<LoginProvider>(context, listen: false).getEmail();
@@ -459,6 +476,8 @@ class NetworkService {
         }
         return res;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         NetworkHelper().removeToken(context);
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           // Provider.of<LoginProvider>(context, listen: false).getEmail();
@@ -521,6 +540,8 @@ class NetworkService {
 
         return res;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
 
 
@@ -604,6 +625,8 @@ class NetworkService {
         ShowToast("Error", res['message']);
         return [];
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
         ShowToast("Error",res['message']);
         NetworkHelper().removeToken(context);
@@ -669,6 +692,8 @@ class NetworkService {
         ShowToast("Error",res['message']);
         notify();
       }else if(response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
         ShowToast("Error",res['message']);
         NetworkHelper().removeToken(context);
@@ -732,6 +757,8 @@ class NetworkService {
         ShowToast("Error",res['message']);
         return res;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
         ShowToast("Error",res['message']);
         NetworkHelper().removeToken(context);
@@ -800,6 +827,8 @@ class NetworkService {
         ShowToast("Error", resJson['message'] ?? 'Error');
         return resJson;
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
         ShowToast("Error", resJson['message'] ?? 'Error');
         NetworkHelper().removeToken(context);
@@ -943,6 +972,8 @@ class NetworkService {
       } else if (response.statusCode == 204) {
         return {'statusCode': 204};
       } else if (response.statusCode == 401) {
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         ShowToast("Error",res['message']);
         NetworkHelper().removeToken(context);
         Navigator.of(context).pushReplacementNamed(login);
@@ -962,7 +993,8 @@ class NetworkService {
       var headers = {
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
-        'Language': 'en'
+        'Language': 'en',
+        'Authorization': 'Bearer ${NetworkHelper.token}'
       };
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -1000,6 +1032,8 @@ class NetworkService {
         return res;
       } else if (response.statusCode == 401) {
         loading = 2;
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
         ShowToast("Error", res['message'] ?? "Session expired");
         NetworkHelper().removeToken(context);

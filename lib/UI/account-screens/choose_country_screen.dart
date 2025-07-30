@@ -38,9 +38,23 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                 ),
                 child: customButton(
                   voidCallback: () {
-                    countryProvider.selectedCountryIndex!=-1?
-                    Navigator.of(context).pushNamed(chooseRole):print("please select");
-                    // Handle button click action
+                    if (countryProvider.selectedCountryIndex != -1) {
+                      // Get the selected country
+                      final selectedCountry = countryProvider.selectedCountry;
+                      if (selectedCountry != null) {
+                        // Set global country data
+                        ChooseCountryProvider.setGlobalSelectedCountry(
+                          selectedCountry.name,
+                          selectedCountry.code,
+                        );
+                        print("Global country set: ${selectedCountry.name}, ${selectedCountry.code}");
+                        
+                        // Navigate to next screen (no need to pass arguments)
+                        Navigator.of(context).pushNamed(chooseRole);
+                      }
+                    } else {
+                      print("please select");
+                    }
                   },
                   buttonText: "Continue",
                   width: 90.w,
@@ -63,7 +77,7 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                     backButtonWithTitle(
                       title: "Your Country",
                       onBackPressed: () {
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
                       },
                     ),
                     SizedBox(height: 2.h),

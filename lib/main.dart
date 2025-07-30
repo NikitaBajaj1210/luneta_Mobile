@@ -53,6 +53,7 @@ import 'package:luneta/provider/job-details-application-provider/job_details_pro
 import 'package:luneta/provider/job-details-application-provider/projects_screen_provider.dart';
 import 'package:luneta/route/nav_router.dart';
 import 'package:luneta/route/route_constants.dart';
+import 'package:luneta/network/network_helper.dart';
 
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -62,6 +63,18 @@ import 'Utils/helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load and sync user data from SharedPreferences
+  await NetworkHelper.syncUserData();
+  
+  // Debug: Check if user data was loaded correctly
+  print("=== App Startup Debug ===");
+  print("NetworkHelper.isLoggedIn: ${NetworkHelper.isLoggedIn}");
+  print("NetworkHelper.loggedInUserId: ${NetworkHelper.loggedInUserId}");
+  print("NetworkHelper.loggedInUserEmail: ${NetworkHelper.loggedInUserEmail}");
+  print("NetworkHelper.token: ${NetworkHelper.token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
+  print("=== End App Startup Debug ===");
+  
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // Change status bar color

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../network/network_services.dart';
 import '../../network/app_url.dart';
 import '../../models/auth_model/verify_otp_model.dart';
@@ -9,16 +10,60 @@ import '../../network/network_helper.dart';
 
 class OtpScreenProvider with ChangeNotifier {
   String _pin = '';
+  bool _rememberMe = false;
 
   String get pin => _pin;
+  bool get rememberMe => _rememberMe;
 
   set pin(String value) {
     _pin = value;
     notifyListeners();
   }
 
-  Future<void> verifyOtpApi(BuildContext context, String email, String otp, bool showLoading) async {
+  set rememberMe(bool value) {
+    _rememberMe = value;
+    notifyListeners();
+  }
+
+  // Method to store user data in SharedPreferences
+  Future<void> _storeUserData(String userId, String email, String token) async {
     try {
+      print("OTP Provider - _storeUserData called with:");
+      print("OTP Provider - userId: $userId");
+      print("OTP Provider - email: $email");
+      print("OTP Provider - token: ${token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
+      
+      // Store in NetworkHelper for direct access
+      await NetworkHelper.storeUserData(
+        userId: userId,
+        email: email,
+        token: token,
+        profilePicURL: null, // Will be updated when profile is loaded
+        fullName: null, // Will be updated when profile is loaded
+        refreshToken: null, // Will be updated when available
+      );
+      
+      // Also store in SharedPreferences for persistence
+      var prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userid', userId);
+      await prefs.setString('email', email);
+      await prefs.setString('token', token);
+      await prefs.setBool('isLoggedIn', true);
+      
+      print("OTP Provider - User data stored in both NetworkHelper and SharedPreferences");
+      print("OTP Provider - NetworkHelper.loggedInUserId: ${NetworkHelper.loggedInUserId}");
+      print("OTP Provider - NetworkHelper.token: ${NetworkHelper.token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
+      print("OTP Provider - NetworkHelper.isLoggedIn: ${NetworkHelper.isLoggedIn}");
+    } catch (e) {
+      print("Error storing user data: $e");
+    }
+    notifyListeners();
+  }
+
+  Future<void> verifyOtpApi(BuildContext context, String email, String otp, bool showLoading, {bool isFromLogin = false, bool rememberMe = false}) async {
+    try {
+      print("OTP Provider - isFromLogin: $isFromLogin, rememberMe: $rememberMe");
+      
       // Create request body
       Map<String, dynamic> requestBody = {
         "email": email,
@@ -27,8 +72,12 @@ class OtpScreenProvider with ChangeNotifier {
 
       String body = jsonEncode(requestBody);
 
+      // Use different API endpoints based on flow
+      String apiUrl = isFromLogin ? verifyOtpUrl : verifyOtpForgotUrl;
+      print("OTP Provider - Using API URL: $apiUrl");
+
       Map<String, dynamic> response = await NetworkService().postResponse(
-        verifyOtpUrl,
+        apiUrl,
         body,
         showLoading,
         context,
@@ -37,27 +86,84 @@ class OtpScreenProvider with ChangeNotifier {
 
       print("Verify OTP Response: $response");
 
-      if (response['statusCode'] == 200) {
-        VerifyOtpResponse otpResponse = VerifyOtpResponse.fromJson(response);
-        
-        if (otpResponse.user != null) {
-          ShowToast("Success", otpResponse.message ?? "OTP verified successfully!");
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        if (isFromLogin) {
+          // Handle login flow response
+          VerifyOtpResponse otpResponse = VerifyOtpResponse.fromJson(response);
           
-          // Store user token if available
-          String? userToken;
-          if (otpResponse.user!.token != null) {
-            userToken = otpResponse.user!.token;
-            print("User Token: $userToken");
+          if (otpResponse.user != null) {
+            ShowToast("Success", otpResponse.message ?? "OTP verified successfully!");
+            
+            // Store user token if available (now from user object)
+            String? userToken;
+            if (otpResponse.user!.token != null) {
+              userToken = otpResponse.user!.token;
+              print("User Token: $userToken");
+            }
+            
+            print("OTP Provider - Coming from login, rememberMe: $rememberMe");
+            // Coming from login - always go to home screen
+            
+            // Always store user data in NetworkHelper for session management
+            print("OTP Provider - Storing user data in NetworkHelper");
+            NetworkHelper.loggedInUserId = otpResponse.user!.id??'';
+            NetworkHelper.loggedInUserEmail = email;
+            NetworkHelper.token = userToken??'';
+            await _storeUserData(
+              otpResponse.user!.id ?? '',
+              otpResponse.user!.email ?? '',
+              userToken ?? '',
+            );
+            
+            // If Remember Me is checked, also store in SharedPreferences for persistence
+            if (rememberMe) {
+              print("OTP Provider - Remember Me checked, storing in SharedPreferences");
+              var prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('rememberMe', true);
+              await prefs.setString('password', ''); // Password should be stored during login
+            }
+            
+            print("OTP Provider - Navigating to home screen");
+            if(otpResponse.user!.seafarerProfile!.isCompletedMobile==false){
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                chooseCountry,
+                    (route) => false, // Remove all previous routes
+              );
+            }else{
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                bottomMenu,
+                    (route) => false, // Remove all previous routes
+              );
+            }
+
           }
-          
-          // Navigate to create password screen with token
-          Navigator.of(context).pushNamed(createPassword, arguments: {
-            'token': userToken,
-            'email': email,
-            'userId': otpResponse.user!.id,
-          });
         } else {
-          ShowToast("Error", "Failed to verify OTP");
+          // Handle forgot password flow response
+          print("OTP Provider - Processing forgot password response");
+          
+          // Use the new model for forgot password response
+          VerifyOtpForgotResponse forgotResponse = VerifyOtpForgotResponse.fromJson(response);
+          
+          if (forgotResponse.data != null) {
+            String? resetToken = forgotResponse.data!.resetToken;
+            String? userId = forgotResponse.data!.id;
+            
+            print("OTP Provider - Reset Token: $resetToken");
+            print("OTP Provider - User ID: $userId");
+            
+            ShowToast("Success", forgotResponse.message ?? "OTP verified successfully. You may now reset your password.");
+            
+            print("OTP Provider - Coming from forgot password, navigating to create password");
+            // Coming from forgot password - go to create password screen
+            Navigator.of(context).pushNamed(createPassword, arguments: {
+              'token': resetToken, // Use resetToken for forgot password
+              'email': email,
+              'userId': userId,
+              'isFromForgotPassword': true, // Pass forgot password flag
+            });
+          } else {
+            ShowToast("Error", "Invalid response format");
+          }
         }
       } else {
         // Handle error response
@@ -68,5 +174,6 @@ class OtpScreenProvider with ChangeNotifier {
       print("Verify OTP Error: $e");
       ShowToast("Error", "Something went wrong. Please try again.");
     }
+    notifyListeners();
   }
 }

@@ -124,11 +124,19 @@ class NavRouter {
             final mobileNumber = args['mobileNumber'];
             final email = args['email'];
             final isFromLogin = args['isFromLogin'] ?? false;
+            final rememberMe = args['rememberMe'] ?? false;
+            final isFromForgotPassword = args['isFromForgotPassword'] ?? false;
+
+            print("Nav Router - OTP Screen arguments: $args");
+            print("Nav Router - rememberMe: $rememberMe");
+            print("Nav Router - isFromForgotPassword: $isFromForgotPassword");
 
             return OtpScreen(
               mobileNumber: mobileNumber,
               email: email,
               isFromLogin: isFromLogin,
+              rememberMe: rememberMe,
+              isFromForgotPassword: isFromForgotPassword,
             );
           },
         );
@@ -148,11 +156,13 @@ class NavRouter {
             final token = args?['token'] as String?;
             final email = args?['email'] as String?;
             final userId = args?['userId'] as String?;
+            final isFromForgotPassword = args?['isFromForgotPassword'] as bool? ?? false;
 
             return CreatePasswordScreen(
               token: token,
               email: email,
               userId: userId,
+              isFromForgotPassword: isFromForgotPassword,
             );
           },
         );

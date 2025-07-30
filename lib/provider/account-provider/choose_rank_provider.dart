@@ -6,6 +6,23 @@ import '../../network/app_url.dart';
 import '../../network/network_services.dart';
 
 class ChooseRankProvider with ChangeNotifier {
+
+  // Static variables for global access
+  static String? _globalSelectedRankId;
+
+  // Static getters for global access
+  static String? get globalSelectedRankId => _globalSelectedRankId;
+
+  // Static setters for global access
+  static void setGlobalSelectedCountry(String? rankId, ) {
+    _globalSelectedRankId = rankId;
+  }
+
+  // Static method to clear global country data
+  static void clearGlobalSelectedCountry() {
+    _globalSelectedRankId = null;
+  }
+
   int? _selectedRankIndex;
   List<RankData> _ranks = [];
 
@@ -25,8 +42,10 @@ class ChooseRankProvider with ChangeNotifier {
   void setSelectedRankIndex({required int index}) {
     if (_selectedRankIndex == index) {
       _selectedRankIndex = null; // Unselect if the same item is tapped
+      setGlobalSelectedCountry(null); // Clear global rank ID
     } else {
       _selectedRankIndex = index; // Select the new item
+      setGlobalSelectedCountry(_ranks[index].id); // Set global rank ID
     }
     notifyListeners();
   }

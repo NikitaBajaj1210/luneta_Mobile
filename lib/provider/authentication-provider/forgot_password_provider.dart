@@ -58,7 +58,8 @@ class ForgotPasswordProvider with ChangeNotifier {
           // Navigate to OTP screen with email
           Navigator.of(context).pushNamed(otpScreen, arguments: {
             'email': emailController.text.trim(),
-            'isFromLogin': true,
+            'isFromLogin': false, // Indicate it's from forgot password
+            'isFromForgotPassword': true, // Specific flag for forgot password
           });
         }
       }
