@@ -174,7 +174,6 @@ class NetworkService {
       var header = {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "Language": "en"
       };
 
       print("Request URL: $urlPath");
@@ -280,7 +279,7 @@ class NetworkService {
     }
   }
 
-  Future postCreateShopResponse(String urlPath, Object? data, bool showLoading,
+  Future postCreateResponse(String urlPath, Object? data, bool showLoading,
       BuildContext context, VoidCallback notify) async {
     loading = 0;
     notify();
@@ -517,10 +516,7 @@ class NetworkService {
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
         if(response.statusCode == 404 ){
-          if(res['message']!='Auctions not found in bookmarks'&&res['data']!=null){
             ShowToast("Error", res['message']);
-          }
-
         }
 
         return res;
