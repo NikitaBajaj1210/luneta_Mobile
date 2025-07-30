@@ -115,9 +115,12 @@ class ProfileProvider with ChangeNotifier {
         error = validateMobile(value.trim());
         break;
       case 'date':
-        error = (value.isEmpty || value == 'Date of Birth')
-            ? 'Date of birth is required'
-            : null;
+        if (value.isEmpty || value == 'Date of Birth') {
+          error = 'Date of birth is required';
+        } else {
+          // Check if user is at least 18 years old
+          error = validateAgeRequirement(value);
+        }
         break;
       case 'rank':
         error =
@@ -127,6 +130,61 @@ class ProfileProvider with ChangeNotifier {
         error = null;
     }
     return error;
+  }
+
+  // Method to validate age requirement (must be 18 or older)
+  String? validateAgeRequirement(String dateString) {
+    try {
+      // Parse the date string (format: DD/MM/YYYY)
+      List<String> dateParts = dateString.split('/');
+      if (dateParts.length != 3) {
+        return 'Invalid date format';
+      }
+      
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      DateTime birthDate = DateTime(year, month, day);
+      DateTime today = DateTime.now();
+      
+      // Calculate age
+      int age = today.year - birthDate.year;
+      if (today.month < birthDate.month || 
+          (today.month == birthDate.month && today.day < birthDate.day)) {
+        age--;
+      }
+      
+      if (age < 18) {
+        return 'You must be at least 18 years old to register';
+      }
+      
+      return null; // Valid age
+    } catch (e) {
+      return 'Invalid date format';
+    }
+  }
+
+  // Helper method to get the maximum allowed date (18 years ago)
+  DateTime getMaxAllowedDate() {
+    DateTime now = DateTime.now();
+    // Calculate 18 years ago more accurately
+    return DateTime(now.year - 18, now.month, now.day);
+  }
+
+  // Method to get default date for date picker (18 years ago)
+  DateTime getDefaultDateForPicker() {
+    return getMaxAllowedDate();
+  }
+
+  // Method to set default date if no date is selected
+  void setDefaultDateIfNeeded() {
+    if (addDate == 'Date of Birth' || addDate.isEmpty) {
+      DateTime defaultDate = getMaxAllowedDate();
+      addDate = '${defaultDate.day}/${defaultDate.month}/${defaultDate.year}';
+      addDateApi = '${defaultDate.year}-${defaultDate.month.toString().padLeft(2, '0')}-${defaultDate.day.toString().padLeft(2, '0')}';
+      notifyListeners();
+    }
   }
 
   String? validateFieldIfFocused(String fieldName, String value,
@@ -152,9 +210,12 @@ class ProfileProvider with ChangeNotifier {
         phoneError = error;
         break;
       case 'date':
-        error = (value.isEmpty || value == 'Date of Birth')
-            ? 'Date of birth is required'
-            : null;
+        if (value.isEmpty || value == 'Date of Birth') {
+          error = 'Date of birth is required';
+        } else {
+          // Check if user is at least 18 years old
+          error = validateAgeRequirement(value);
+        }
         dateError = error;
         break;
       case 'rank':

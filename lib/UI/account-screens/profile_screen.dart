@@ -30,6 +30,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
       
+      // Debug: Check initial date values
+      print("=== Profile Screen Init Debug ===");
+      print("Initial addDate: ${provider.addDate}");
+      print("Initial addDateApi: ${provider.addDateApi}");
+      print("Max allowed date: ${provider.getMaxAllowedDate()}");
+      print("=== End Profile Screen Init Debug ===");
+      
       // Set the country in the provider if global data exists
       if (ChooseCountryProvider.globalSelectedCountry != null && 
           ChooseCountryProvider.globalSelectedCountryCode != null) {
@@ -256,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         SizedBox(height: 2.h),
                         CustomDatePicker(
-                          initialDate: DateTime.now(),
+                          initialDate: DateTime.now(), // This is just for the date picker, not the display
                           addDate: profileProvider.addDate,
                           hintText: 'Date of Birth',
                           addDateApi: profileProvider.addDateApi,
@@ -268,35 +275,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // Unfocus current field before showing date picker
                             profileProvider.unfocusAllFields();
                             
+                            // Set default date if no date is selected
+                            profileProvider.setDefaultDateIfNeeded();
+                            
+                            // Calculate the maximum date (18 years ago from today)
+                            DateTime maxDate = profileProvider.getMaxAllowedDate();
+                            DateTime defaultDate = profileProvider.getDefaultDateForPicker();
+                            
+                            print("=== Date Picker Debug ===");
+                            print("Current date: ${DateTime.now()}");
+                            print("Max allowed date (18 years ago): $maxDate");
+                            print("Default date for picker: $defaultDate");
+                            print("Current addDate: ${profileProvider.addDate}");
+                            print("User will be 18+ if born on or before: $maxDate");
+                            print("=== End Date Picker Debug ===");
+                            
                             DateTime? selectedDate = await showDatePicker(
                               context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(DateTime.now().year - 100),
-                              lastDate: DateTime.now(),
+                              initialDate: defaultDate, // Use default date (18 years ago)
+                              firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                              lastDate: maxDate, // Maximum date is 18 years ago
                             );
 
                             if (selectedDate != null) {
-                              profileProvider.addDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
-                              profileProvider.addDateApi = '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
+                              print("Selected date: $selectedDate");
+                              print("Age validation: ${profileProvider.validateAgeRequirement('${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')}");
+                              
+                              String formattedDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+                              String formattedDateApi = '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
+                              
+                              print("Formatted date for UI: $formattedDate");
+                              print("Formatted date for API: $formattedDateApi");
+                              
+                              profileProvider.addDate = formattedDate;
+                              profileProvider.addDateApi = formattedDateApi;
                               profileProvider.markFieldAsSubmitted('date');
                               
                               if (profileProvider.hasSubmitted) {
                                 profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
                               }
                             }
+                            setState(() {
+
+                            });
                           },
                           onDateSelected: (selectedDate) {
                             if (selectedDate != null) {
+                              // Calculate the maximum allowed date (18 years ago from today)
+                              DateTime maxDate = profileProvider.getMaxAllowedDate();
+                              
+                              // Check if selected date is valid (18 years or older)
+                              if (selectedDate.isAfter(maxDate)) {
+                                // Show error message for invalid date
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('You must be at least 18 years old to register.'),
+                                    backgroundColor: AppColors.errorRedColor,
+                                  ),
+                                );
+                                return; // Don't update the date
+                              }
+                              
                               profileProvider.addDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
-                              profileProvider.addDateApi = '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
+                              profileProvider.addDateApi = '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
                               profileProvider.markFieldAsSubmitted('date');
+                              setState(() {
+
+                              });
                             }
                             if (profileProvider.hasSubmitted) {
                               profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
                             }
+                            setState(() {
+
+                            });
                           },
                           validator: (value) => profileProvider.validateFieldIfFocused('date', value ?? '', notify: false),
                           autovalidateMode: profileProvider.autoValidateMode,
+
                         ),
                         if (profileProvider.dateError != null)
                           Padding(
@@ -313,6 +369,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
+                        // Add hint about age requirement
+                        // Padding(
+                        //   padding: EdgeInsets.only(left: 4.w, top: 0.5.h),
+                        //   child: SizedBox(
+                        //     width: 100.w,
+                        //     child: Text(
+                        //       "You must be at least 18 years old to register",
+                        //       textAlign: TextAlign.start,
+                        //       style: TextStyle(
+                        //         color: AppColors.Color_9E9E9E,
+                        //         fontSize: AppFontSize.fontSize12,
+                        //         fontStyle: FontStyle.italic,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: 2.h),
                         customTextField(
                           context: context,

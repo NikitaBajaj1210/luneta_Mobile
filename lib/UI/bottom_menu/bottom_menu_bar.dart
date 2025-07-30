@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../const/color.dart';
+import '../../custom-component/custom-button.dart';
 import '../../provider/bottom_menu_provider/bottom_menu_provider.dart';
 class BottomMenuBar extends StatefulWidget {
   const BottomMenuBar({super.key});
@@ -28,12 +29,116 @@ class _BottomMenuBarState extends State<BottomMenuBar> with TickerProviderStateM
     return Consumer<BottomMenuProvider>(
       builder: (context, provider, child) {
         return SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            resizeToAvoidBottomInset: false,
-            extendBody: true,
-            bottomNavigationBar: _buildBottomNavigationBar(provider),
-            body: SingleChildScrollView(child: provider.getSelectedScreen(provider)), // Render the selected screen
+          child: PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) async {
+          if (didPop) return;
+          bool? exitConfirmed =
+              await
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (context, StateSetter setState) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.Color_212121),
+                              borderRadius: BorderRadius.circular(10)),
+                          padding: EdgeInsets.only(
+                              top: 1.h, left: 3.w, right: 3.w, bottom: 3.h),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 2.h),
+                              Text(
+                                'Are you sure, you want to close the app ?',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: AppColors.Color_212121,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.px,
+                                ),
+                              ),
+                              SizedBox(height: 3.5.h),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 3.5.h),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          width: 25.w,
+                                          child: customButton(
+                                            fontSize: 15.sp,
+                                            voidCallback: () async {
+                                              Navigator.of(context).pop();
+                                            },
+                                            buttonText: 'No',
+                                            width: 45.w,
+                                            height: 5.h,
+                                            color: AppColors.Color_607D8B,
+                                            shadowColor: AppColors.Color_607D8B,
+                                            buttonTextColor: AppColors.Color_FFFFFF,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 3.w,
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          width: 25.w,
+                                          child: customButton(
+                                            fontSize: 15.sp,
+                                            voidCallback: () async {
+                                              Navigator.pop(context);
+                                              exit(0);
+                                            },
+                                            buttonText: 'Yes',
+                                            width: 45.w,
+                                            height: 5.h,
+                                            color: AppColors.Color_607D8B,
+                                            shadowColor: AppColors.Color_607D8B,
+                                            buttonTextColor: AppColors.Color_FFFFFF,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+            },
+          );
+          if (exitConfirmed == true && context.mounted) {
+            Navigator.pop(context);
+            exit(0);
+          }},
+
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              resizeToAvoidBottomInset: false,
+              extendBody: true,
+              bottomNavigationBar: _buildBottomNavigationBar(provider),
+              body: SingleChildScrollView(child: provider.getSelectedScreen(provider)), // Render the selected screen
+            ),
           ),
         );
       },

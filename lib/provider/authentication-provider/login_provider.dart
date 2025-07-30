@@ -23,7 +23,6 @@ class LoginProvider with ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool obscurePassword = true;
   bool _isChecked = false;

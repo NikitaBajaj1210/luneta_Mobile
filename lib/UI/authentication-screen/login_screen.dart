@@ -18,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h)
                     .copyWith(top: 0),
                 child: Form(
-                  key: loginProvider.formKey,
+                  key: formKey,
                   autovalidateMode: loginProvider.autovalidateMode,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           print("Login Screen - Remember Me checked: ${loginProvider.isChecked}");
                           print("Login Screen - Email: ${loginProvider.emailController.text}");
                           print("Login Screen - Password: ${loginProvider.passwordController.text}");
-                          if (loginProvider.formKey.currentState!
+                          if (formKey.currentState!
                               .validate()) {
                             // Navigator.of(context).pushNamed(chooseCountry);
                             loginProvider.loginApi(context, true);
