@@ -93,7 +93,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             radius: 8.h,
                             backgroundColor: AppColors.introBackgroundColor,
                             backgroundImage: provider.profileImage == null
-                                ? AssetImage("assets/images/dummyProfileImg.png")
+                                ? provider.profileImage_network==null? AssetImage("assets/images/dummyProfileImg.png"):NetworkImage(provider.profileImage_network!)
                                 : FileImage(provider.profileImage!),
                             child: Align(
                               alignment: Alignment.bottomRight,
@@ -427,11 +427,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         borderRadius: BorderRadius.circular(2.h),
                       ),
                       child: SearchChoices.single(
-                        items: provider.countries.map((String country) {
-                          return DropdownMenuItem<String>(
-                            value: country,
-                            child: Text(country),
-                          );
+                        items: nationalityList.map((value) {
+                          return DropdownMenuItem<dynamic>(
+                              value: value["value"],
+                              child: Text(
+                                value["value"].toString(),
+                                overflow: TextOverflow.ellipsis,
+                              ));
                         }).toList(),
                         value: provider.nationalityController.text.isEmpty
                             ? null
