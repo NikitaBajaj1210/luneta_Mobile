@@ -12,3 +12,4 @@ const seafarerProfileBasicInfo = '${baseUrl}seafarer-profile/basic-info';
 const sendOtpUrl = '${baseUrl}user/send-otp';
 const verifyOtpUrl = '${baseUrl}user/verify-otp';
 const getSeafarerCompleteProfile = '${baseUrl}seafarer-profile/getCompleteProfileDataMobile/';
+const getPersonalInfoProfile = '${baseUrl}seafarer-profile/get-seafarer-profile-by-id/';
