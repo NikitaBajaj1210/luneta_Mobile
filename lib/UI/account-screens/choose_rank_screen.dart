@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luneta/provider/account-provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../const/color.dart';
@@ -6,6 +7,7 @@ import '../../const/font_size.dart';
 import '../../custom-component/back_button_with_title.dart';
 import '../../custom-component/custom-button.dart';
 import '../../network/network_services.dart';
+import '../../provider/account-provider/choose_country_provider.dart';
 import '../../provider/account-provider/choose_rank_provider.dart';
 import '../../route/route_constants.dart';
 
@@ -20,11 +22,11 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
 
   @override
   void initState() {
-    NetworkService.loading =0;
-WidgetsBinding.instance.addPostFrameCallback((timeStamp){
-  var provider = Provider.of<ChooseRankProvider>(context,listen: false);
-  provider.GetAllRank(context);
-});
+    NetworkService.loading = 0;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var provider = Provider.of<ChooseRankProvider>(context, listen: false);
+      provider.GetAllRank(context);
+    });
     super.initState();
   }
   @override
@@ -91,8 +93,9 @@ WidgetsBinding.instance.addPostFrameCallback((timeStamp){
                   voidCallback: provider.selectedIndex == null
                       ? null
                       : () {
+
+                    // Navigate to Profile Screen (country data is already in global provider)
                     Navigator.of(context).pushNamed(profile);
-                    // Handle button click action
                   },
                   buttonText: "Continue",
                   width: 90.w,

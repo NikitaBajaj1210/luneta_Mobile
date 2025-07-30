@@ -15,12 +15,14 @@ class CreatePasswordScreen extends StatefulWidget {
   final String? token;
   final String? email;
   final String? userId;
+  final bool? isFromForgotPassword;
   
   const CreatePasswordScreen({
     super.key,
     this.token,
     this.email,
     this.userId,
+    this.isFromForgotPassword,
   });
 
   @override
@@ -28,86 +30,17 @@ class CreatePasswordScreen extends StatefulWidget {
 }
 
 class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
-
-  void showCustomDialogWithLoader(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.h),
-          ),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-
-              Container(
-                width: 100.w,
-                height: 55.h,
-                decoration: BoxDecoration(
-                  color: AppColors.introBackgroundColor,
-                  borderRadius: BorderRadius.circular(8.h),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/verifyPopBg.png",
-                      height: 20.h,
-                      width: 80.w,
-                    ),
-                    SizedBox(height: 3.h),
-                    Text(
-                      "Congratulations!",
-                      style: TextStyle(
-                        fontSize: AppFontSize.fontSize20,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: AppColors.fontFamilyBold,
-                        color: AppColors.buttonColor,
-                      ),
-                    ),
-                    SizedBox(height: 2.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      child: Text(
-                        "Your account is ready to use. You will be redirected to Home in a few seconds",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: AppFontSize.fontSize16,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: AppColors.fontFamilyRegular,
-                          color: AppColors.Color_212121,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 3.h),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 3.h,
-                child: LoadingAnimationWidget.hexagonDots(
-                  color: AppColors.buttonColor,
-                  size: 4.h,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.of(context).pop(); // Close the dialog
-      Navigator.of(context).pushNamed(bottomMenu); // Redirect to the Home page
-    });
-  }
+  bool _isFromForgotPassword = false;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 
   @override
   void initState() {
     super.initState();
+    // Use constructor parameters instead of navigation arguments
+    _isFromForgotPassword = widget.isFromForgotPassword ?? false;
+    print("CreatePasswordScreen - From Forgot Password: $_isFromForgotPassword");
+    
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<CreatePasswordProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
@@ -139,30 +72,37 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                   ),
                 ),
                 child: customButton(
-                  voidCallback:(){
+                  voidCallback: () async {
                     model.autoValidateMode = AutovalidateMode.always;
-                    if (model.formKey.currentState!.validate()) {
-                      showCustomDialogWithLoader(context);
+                    if (formKey.currentState!.validate()) {
+                      // Call the password reset API
+                      await model.resetPasswordApi(
+                        context,
+                        widget.token ?? '',
+                        widget.email ?? '',
+                        widget.userId ?? '',
+                        isFromForgotPassword: _isFromForgotPassword,
+                      );
                       model.autoValidateMode = AutovalidateMode.disabled;
                     }
                   },
                   buttonText: "Continue",
                   width: 90.w,
                   height: 4.h,
-                  color: model.formKey.currentState?.validate() ?? false
+                  color: formKey.currentState?.validate() ?? false
                       ? AppColors.buttonColor
                       : AppColors.Color_BDBDBD,
                   buttonTextColor: AppColors.buttonTextWhiteColor,
                   shadowColor: AppColors.buttonBorderColor,
                   fontSize: AppFontSize.fontSize18,
-                  showShadow: model.formKey.currentState?.validate() ?? false
+                  showShadow: formKey.currentState?.validate() ?? false
                 ),
               ),
               body: SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4.w,),
                   child: Form(
-                    key: model.formKey,
+                    key: formKey,
                     autovalidateMode: model.autoValidateMode,
                     child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

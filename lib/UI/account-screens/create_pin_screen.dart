@@ -20,6 +20,23 @@ class CreatePinScreen extends StatefulWidget {
 }
 
 class _CreatePinScreenState extends State<CreatePinScreen> {
+  bool _isFromForgotPassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check if coming from forgot password flow
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (args != null) {
+        setState(() {
+          _isFromForgotPassword = args['isFromForgotPassword'] as bool? ?? false;
+        });
+        print("Create Pin - From Forgot Password: $_isFromForgotPassword");
+      }
+    });
+  }
+
   void showCustomDialogWithLoader(BuildContext context) {
     showDialog(
       context: context,
@@ -50,7 +67,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                     ),
                     SizedBox(height: 3.h),
                     Text(
-                      "Congratulations!",
+                      _isFromForgotPassword ? "Password Reset Successful!" : "Congratulations!",
                       style: TextStyle(
                         fontSize: AppFontSize.fontSize20,
                         fontWeight: FontWeight.w700,
@@ -62,7 +79,9 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5.w),
                       child: Text(
-                        "Your account is ready to use. You will be redirected to the Home page in a few seconds.",
+                        _isFromForgotPassword 
+                            ? "Your password has been reset successfully. You will be redirected to the Login page in a few seconds."
+                            : "Your account is ready to use. You will be redirected to the Home page in a few seconds.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: AppFontSize.fontSize16,
@@ -91,8 +110,17 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
     Future.delayed(Duration(seconds: 3), () {
       Navigator.of(context).pop(); // Close the dialog
-      // Navigator.of(context).pushNamed(forgotPassword); // Redirect to the Home page
-      Navigator.of(context).pushNamed(bottomMenu); // Redirect to the Home page
+      
+      if (_isFromForgotPassword) {
+        // Navigate back to login screen for forgot password flow
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          login,
+          (route) => false, // Remove all previous routes
+        );
+      } else {
+        // Navigate to home screen for normal flow
+        Navigator.of(context).pushNamed(bottomMenu);
+      }
     });
   }
 

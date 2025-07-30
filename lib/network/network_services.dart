@@ -962,7 +962,8 @@ class NetworkService {
       var headers = {
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
-        'Language': 'en'
+        'Language': 'en',
+        'Authorization': 'Bearer ${NetworkHelper.token}'
       };
 
       var request = http.MultipartRequest('POST', Uri.parse(url));

@@ -11,6 +11,7 @@ import '../../../../../provider/bottom_menu_provider/bottom_menu_screens_provdie
 import '../../../../custom-component/back_button_with_title.dart';
 import '../../../../const/color.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../provider/authentication-provider/login_provider.dart';
 
 // Custom Divider Widget
 class CustomDivider extends StatelessWidget {
@@ -333,8 +334,7 @@ class SettingsScreen extends StatelessWidget {
                         trailing:null,
                         prefixIcon: Image.asset("assets/images/Logout.png",height: 2.5.h,),
                         onTap: () {
-                          _showApplyJobBottomSheet(context,settingsProvider);
-                          // Add functionality here
+                          _showApplyJobBottomSheet(context, settingsProvider);
                         },
                         titleStyle: TextStyle( fontSize: AppFontSize.fontSize18,
                           fontWeight: FontWeight.w600,
@@ -462,7 +462,7 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                 customButton(
                   voidCallback: () async {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(applyJobCv);
+                    // Navigator.of(context).pushNamed(applyJobCv);
 
                   },
                   buttonText: "Cancel",
@@ -478,7 +478,18 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                 customButton(
                   voidCallback: () async {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(applyJobProfile);
+                    
+                    // Clear stored login data
+                    var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+                    await loginProvider.clearStoredLoginData();
+                    
+                    print("Logout - Cleared stored login data");
+                    
+                    // Navigate to login screen
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      login,
+                      (route) => false, // Remove all previous routes
+                    );
                   },
                   buttonText: "Yes, Logout",
                   width: 48.w,

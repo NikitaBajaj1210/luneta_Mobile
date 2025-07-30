@@ -12,6 +12,26 @@ class ChooseCountryProvider with ChangeNotifier {
   List<CountryModel> _countries = [];
   bool _isLoading = true;
 
+  // Static variables for global access
+  static String? _globalSelectedCountry;
+  static String? _globalSelectedCountryCode;
+
+  // Static getters for global access
+  static String? get globalSelectedCountry => _globalSelectedCountry;
+  static String? get globalSelectedCountryCode => _globalSelectedCountryCode;
+
+  // Static setters for global access
+  static void setGlobalSelectedCountry(String? country, String? countryCode) {
+    _globalSelectedCountry = country;
+    _globalSelectedCountryCode = countryCode;
+  }
+
+  // Static method to clear global country data
+  static void clearGlobalSelectedCountry() {
+    _globalSelectedCountry = null;
+    _globalSelectedCountryCode = null;
+  }
+
   List<CountryModel> get countries => _countries;
   bool get isLoading => _isLoading;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../route/route_constants.dart';
 
@@ -14,6 +15,37 @@ class Splashscreen extends StatefulWidget {
 class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _animation;
+
+  // Method to check if user is already logged in
+  Future<void> _checkAutoLogin() async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      bool rememberMe = prefs.getBool('rememberMe') ?? false;
+      
+      print("SplashScreen - Auto Login Check - isLoggedIn: $isLoggedIn, rememberMe: $rememberMe");
+      
+      if (isLoggedIn && rememberMe) {
+        print("SplashScreen - User is already logged in, navigating to home");
+        // Navigate to home screen
+        if (context.mounted) {
+          Navigator.of(context).pushReplacementNamed(bottomMenu);
+        }
+      } else {
+        print("SplashScreen - No auto login, navigating to welcome");
+        // Navigate to welcome screen
+        if (context.mounted) {
+          Navigator.of(context).pushReplacementNamed(welcome);
+        }
+      }
+    } catch (e) {
+      print("SplashScreen - Auto Login Error: $e");
+      // Navigate to welcome screen on error
+      if (context.mounted) {
+        Navigator.of(context).pushReplacementNamed(welcome);
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -30,7 +62,7 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
 
       _controller!.forward();
       Future.delayed(const Duration(seconds: 3), () {
-        Navigator.of(context).pushReplacementNamed(welcome);
+        _checkAutoLogin(); // Check for auto-login instead of directly navigating
       });
     });
     // Start the animation

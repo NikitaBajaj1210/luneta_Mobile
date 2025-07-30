@@ -16,12 +16,16 @@ class OtpScreen extends StatefulWidget {
   final String? mobileNumber;
   final String? email;
   final bool isFromLogin;
+  final bool? rememberMe;
+  final bool? isFromForgotPassword;
   
   const OtpScreen({
     super.key, 
     this.mobileNumber,
     this.email,
     this.isFromLogin = false,
+    this.rememberMe = false, 
+    this.isFromForgotPassword = false,
   });
 
   @override
@@ -31,16 +35,26 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   int _remainingSeconds = 60; // Timer duration
   Timer? _timer;
-
   String _enteredPin = ""; // To track entered OTP
+  bool _rememberMe = false; // Remember me state
+  bool _isFromForgotPassword = false; // Forgot password flag
 
   @override
   void initState() {
     super.initState();
+    // Use constructor parameters instead of trying to get from arguments
+    _rememberMe = widget.rememberMe ?? false;
+    _isFromForgotPassword = widget.isFromForgotPassword ?? false;
+    
+    print("OTP Screen - Constructor rememberMe: ${widget.rememberMe}");
+    print("OTP Screen - Constructor isFromForgotPassword: ${widget.isFromForgotPassword}");
+    print("OTP Screen - State rememberMe: $_rememberMe");
+    print("OTP Screen - State isFromForgotPassword: $_isFromForgotPassword");
+    
     // Only start countdown if not coming from login screen
-    if (!widget.isFromLogin) {
-      _startCountdown();
-    }
+    // if (!widget.isFromLogin) {
+    //   _startCountdown();
+    // }
   }
 
   @override
@@ -51,17 +65,17 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
-  void _startCountdown() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
-        setState(() {
-          _remainingSeconds--;
-        });
-      } else {
-        timer.cancel(); // Stop the timer when it reaches 0
-      }
-    });
-  }
+  // void _startCountdown() {
+  //   _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
+  //     if (_remainingSeconds > 0) {
+  //       setState(() {
+  //         _remainingSeconds--;
+  //       });
+  //     } else {
+  //       timer.cancel(); // Stop the timer when it reaches 0
+  //     }
+  //   });
+  // }
 
   bool get _isButtonEnabled => _enteredPin.length == 6;
 
@@ -80,14 +94,20 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: customButton(
                   voidCallback: _isButtonEnabled
                       ? () {
-                    // Call verify OTP API
+                    // Call verify OTP API with appropriate parameters
+                    print("OTP Screen - widget.isFromLogin: ${widget.isFromLogin}");
+                    print("OTP Screen - _rememberMe: $_rememberMe");
+                    print("OTP Screen - _isFromForgotPassword: $_isFromForgotPassword");
+                    
                     countryProvider.verifyOtpApi(
                       context, 
                       widget.email ?? '', 
                       _enteredPin, 
-                      true
+                      true,
+                      isFromLogin: widget.isFromLogin, // Use the actual isFromLogin value
+                      rememberMe: _rememberMe,
                     );
-                    debugPrint("OTP Verified: $_enteredPin");
+                    debugPrint("OTP Verified: $_enteredPin, Remember Me: $_rememberMe, From Forgot Password: $_isFromForgotPassword");
                   }
                       : () {
                     debugPrint("Button is disabled");
@@ -128,9 +148,8 @@ class _OtpScreenState extends State<OtpScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                widget.isFromLogin 
-                                    ? "Code has been sent to your email ${widget.email}"
-                                    : "Code has been sent to ${widget.mobileNumber}",
+                                "Code has been sent to your email ${widget.email}",
+
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: AppFontSize.fontSize18,
@@ -187,30 +206,30 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
 
                               SizedBox(height: 2.h),
-                              if (!widget.isFromLogin && _timer != null) // Only show timer if not coming from login
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    text: 'Resend code in ',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.Color_212121, // Replace with your desired color
-                                      fontFamily: AppColors.fontFamily,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: '$_remainingSeconds s',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize16,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.buttonColor, // Timer color
-                                          fontFamily: AppColors.fontFamily,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              // if (!widget.isFromLogin && _timer != null) // Only show timer if not coming from login
+                              //   RichText(
+                              //     textAlign: TextAlign.center,
+                              //     text: TextSpan(
+                              //       text: 'Resend code in ',
+                              //       style: TextStyle(
+                              //         fontSize: AppFontSize.fontSize16,
+                              //         fontWeight: FontWeight.w500,
+                              //         color: AppColors.Color_212121, // Replace with your desired color
+                              //         fontFamily: AppColors.fontFamily,
+                              //       ),
+                              //       children: [
+                              //         TextSpan(
+                              //           text: '$_remainingSeconds s',
+                              //           style: TextStyle(
+                              //             fontSize: AppFontSize.fontSize16,
+                              //             fontWeight: FontWeight.w500,
+                              //             color: AppColors.buttonColor, // Timer color
+                              //             fontFamily: AppColors.fontFamily,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
                               // if (!widget.isFromLogin) // Show resend button when coming from login
                               //   GestureDetector(
                               //     onTap: () {

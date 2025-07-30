@@ -19,12 +19,54 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Check for auto-login when screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAutoLogin();
+    });
+  }
+
+  Future<void> _checkAutoLogin() async {
+    // Use the global LoginProvider
+    var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    print("LoginScreen - Using LoginProvider instance: ${loginProvider.hashCode}");
+    
+    bool isAutoLoggedIn = await loginProvider.checkAutoLogin(context);
+    
+    if (isAutoLoggedIn) {
+      print("Auto login successful - user redirected to home");
+    } else {
+      print("No auto login - user needs to login manually");
+      
+      // Use post-frame callback to ensure UI is ready
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        print("LoginScreen - Post-frame callback executing auto-fill");
+        // Auto-fill the form with stored data if Remember Me was checked
+        await loginProvider.autoFillLoginForm();
+        
+        // Force UI rebuild after auto-fill
+        if (mounted) {
+          setState(() {
+            print("LoginScreen - setState called to rebuild UI");
+          });
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => LoginProvider(),
-      child: Consumer<LoginProvider>(
-        builder: (context, loginProvider, child) {
-          return Scaffold(
+    return Consumer<LoginProvider>(
+      key: ValueKey('login_screen_consumer'), // Add key to force rebuild
+      builder: (context, loginProvider, child) {
+        // Add debug print to track Remember Me state
+        print("LoginScreen - Consumer using LoginProvider instance: ${loginProvider.hashCode}");
+        print("Login Screen - Current Remember Me state: ${loginProvider.isChecked}");
+        print("Login Screen - Email field value: ${loginProvider.emailController.text}");
+        print("Login Screen - Password field value: ${loginProvider.passwordController.text.isNotEmpty ? '[FILLED]' : '[EMPTY]'}");
+        
+        return Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
             resizeToAvoidBottomInset: false,
             body: SafeArea(
@@ -165,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             loginProvider.isChecked = !loginProvider.isChecked;
+                            print("Login Screen - Remember Me checkbox tapped, new value: ${loginProvider.isChecked}");
                           },
                           child: Row(
                             children: [
@@ -209,10 +252,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         voidCallback: loginProvider.isFormValid
                             ? () {
                           loginProvider.hasValidated = true; // Set validation attempt
+                          print("Login Screen - Login button pressed");
+                          print("Login Screen - Remember Me checked: ${loginProvider.isChecked}");
+                          print("Login Screen - Email: ${loginProvider.emailController.text}");
+                          print("Login Screen - Password: ${loginProvider.passwordController.text}");
                           if (loginProvider.formKey.currentState!
                               .validate()) {
-                            Navigator.of(context).pushNamed(chooseCountry);
-                            // loginProvider.loginApi(context, true);
+                            // Navigator.of(context).pushNamed(chooseCountry);
+                            loginProvider.loginApi(context, true);
                             // Handle successful login
                           }else{
                             loginProvider.autovalidateMode = AutovalidateMode.onUserInteraction;
@@ -333,8 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         },
-      ),
-    );
+      );
   }
 
   Widget _buildSocialButton({

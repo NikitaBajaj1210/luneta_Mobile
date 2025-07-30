@@ -14,7 +14,14 @@ class ChooseRoleScreen extends StatefulWidget {
   @override
   State<ChooseRoleScreen> createState() => _ChooseRoleScreenState();
 }
+
 class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -34,6 +41,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                 child: customButton(
                   voidCallback: (){
                     if (countryProvider.selectedRoleIndex != -1) {
+                      // Navigate to next screen (country data is already in global provider)
                       Navigator.of(context).pushNamed(chooseRank);
                     } else {
                       ShowToast("Error", 'Please Select One Job Role.');

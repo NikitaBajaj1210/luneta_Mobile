@@ -11,6 +11,7 @@ import '../../custom-component/custom-button.dart';
 import '../../custom-component/customTextField.dart';
 import '../../custom-component/custom_datePicker.dart';
 import '../../provider/account-provider/profile_provider.dart';
+import '../../provider/account-provider/choose_country_provider.dart';
 import '../../route/route_constants.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,14 +22,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
-      // Remove focus listeners to prevent keyboard conflicts
-      // _setupFocusListeners(provider);
+      
+      // Set the country in the provider if global data exists
+      if (ChooseCountryProvider.globalSelectedCountry != null && 
+          ChooseCountryProvider.globalSelectedCountryCode != null) {
+        provider.setSelectedCountry(
+          ChooseCountryProvider.globalSelectedCountry!,
+          ChooseCountryProvider.globalSelectedCountryCode!
+        );
+      }
     });
   }
 
@@ -88,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       profileProvider.safeValidatePhone(notify: false);
                       bool isValid = profileProvider.validateFields();
                       if (isValid) {
-                        profileProvider.updateSeafarerProfile(context, true);
+                        profileProvider.updateSeafarerProfile(context);
                       }
                       setState(() {});
                     });
@@ -145,6 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
+
+
                         SizedBox(height: 2.h),
                         customTextField(
                           context: context,
