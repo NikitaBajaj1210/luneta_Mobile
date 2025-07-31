@@ -526,47 +526,14 @@ class ProfileProvider with ChangeNotifier {
       NetworkHelper.debugTokenStatus();
       await NetworkHelper.forceSyncUserData();
 
-      bool isSessionValid = await NetworkHelper.validateSession();
-      if (!isSessionValid) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
-        if (context.mounted) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            login,
-                (route) => false,
-          );
-        }
-        return;
-      }
-
-      String? userId = NetworkHelper.loggedInUserId;
-      String? token = NetworkHelper.token;
-
-      print("ProfileProvider - UserID from NetworkHelper: $userId");
-      print("ProfileProvider - Token from NetworkHelper: $token");
-
-      if (token == null || token.isEmpty) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
-        if (context.mounted) NetworkHelper().removeToken(context);
-        return;
-      }
-
-      if (userId == null || userId.isEmpty) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "User ID not found. Please log in again.");
-        return;
-      }
-
       var dio = Dio();
       var headers = {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer ${NetworkHelper.token}',
         'Accept': 'application/json',
-        'Language': 'en'
       };
 
       var formData = FormData.fromMap({
-        "userId": userId,
+        "userId": NetworkHelper.loggedInUserId,
         "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
         "firstName": _nameController.text.trim(),
         "lastName": _nickNameController.text.trim(),
@@ -582,13 +549,11 @@ class ProfileProvider with ChangeNotifier {
         if (mimeType == null || !mimeType.startsWith('image/')) {
           if (context.mounted) {
             stopLoading(context);
-            ShowToast("Error", "Invalid file type. Please select an image file.");
+            ShowToast("Error", "Invalid file type. Please select a valid image file.");
           }
-          print("Invalid MIME type: $mimeType for path: ${profileImage!.path}");
           return;
         }
 
-        String fileName = profileImage!.path.split('/').last;
         formData.files.add(
           MapEntry(
             'profilePhoto',
@@ -600,12 +565,6 @@ class ProfileProvider with ChangeNotifier {
           ),
         );
       }
-
-      print("Seafarer Profile Dio Request URL: $seafarerProfileBasicInfo");
-      print("Seafarer Profile Dio Request Headers: $headers");
-      print("Seafarer Profile Dio Request Fields: ${formData.fields}");
-      print("Seafarer Profile Dio Request Files: ${formData.files.map((file) => file.value.filename).toList()}");
-
       var response = await dio.post(
         seafarerProfileBasicInfo,
         data: formData,
@@ -615,13 +574,9 @@ class ProfileProvider with ChangeNotifier {
         ),
       );
       if (context.mounted) stopLoading(context);
-
-      print("Seafarer Profile Dio Response Status: ${response.statusCode}");
-      print("Seafarer Profile Dio Response: ${response.data}");
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
-          ShowToast("Success", response.data['message'] ?? "Profile updated successfully");
+          ShowToast("Success", response.data['message'] ?? "Saved successfully");
           if (context.mounted) stopLoading(context);
           ChooseCountryProvider.clearGlobalSelectedCountry();
           Navigator.of(context).pushNamed(bottomMenu);
@@ -630,14 +585,10 @@ class ProfileProvider with ChangeNotifier {
       } else {
         if (context.mounted) {
           if (context.mounted) stopLoading(context);
-          ShowToast("Error", response.data['message'] ?? "Failed to update profile");
+          ShowToast("Error", response.data['message'] ?? "Something went wrong");
         }
       }
     } on DioException catch (e) {
-      print("Seafarer Profile Dio Error: ${e.message}");
-      print("Seafarer Profile Dio Error Type: ${e.type}");
-      print("Seafarer Profile Dio Error Response: ${e.response?.data}");
-
       if (context.mounted) {
         if (context.mounted) stopLoading(context);
 
@@ -648,16 +599,16 @@ class ProfileProvider with ChangeNotifier {
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
-          ShowToast("Error", e.response?.data['message'] ?? "Bad request");
+          ShowToast("Error", e.response?.data['message'] ?? "Something went wrong");
         } else {
-          ShowToast("Error", "Something went wrong during profile update");
+          ShowToast("Error", "Something went wrong");
         }
       }
     } catch (e) {
       print("Seafarer Profile Update Error: $e");
       if (context.mounted) {
         if (context.mounted) stopLoading(context);
-        ShowToast("Error", "Something went wrong during profile update");
+        ShowToast("Error", "Something went wrong");
       }
     }
     notifyListeners();

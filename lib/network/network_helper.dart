@@ -372,19 +372,8 @@ class NetworkHelper{
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
         };
-        
-        print("NetworkHelper - Force sync successful");
-        print("NetworkHelper - User ID: $userId");
-        print("NetworkHelper - Email: $email");
-        print("NetworkHelper - Token: ${token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
       } else {
-        print("NetworkHelper - No valid user data found for force sync");
-        print("NetworkHelper - userId: $userId");
-        print("NetworkHelper - email: $email");
-        print("NetworkHelper - token: ${token?.isNotEmpty == true ? '[EXISTS]' : '[EMPTY]'}");
-        print("NetworkHelper - isLoggedIn: $isLoggedIn");
       }
-      print("=== End Force Sync Debug ===");
     } catch (e) {
       print("NetworkHelper - Error force syncing user data: $e");
     }

@@ -260,39 +260,10 @@ class PersonalInformationProvider extends ChangeNotifier {
       NetworkHelper.debugTokenStatus();
       await NetworkHelper.forceSyncUserData();
 
-      bool isSessionValid = await NetworkHelper.validateSession();
-      if (!isSessionValid) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
-        if (context.mounted) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            login,
-                (route) => false,
-          );
-        }
-        return;
-      }
-
-      String? userId = NetworkHelper.loggedInUserId;
-      String? token = NetworkHelper.token;
-      if (token == null || token.isEmpty) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
-        if (context.mounted) NetworkHelper().removeToken(context);
-        return;
-      }
-
-      if (userId == null || userId.isEmpty) {
-        if (context.mounted) stopLoading(context);
-        if (context.mounted) ShowToast("Error", "User ID not found. Please log in again.");
-        return;
-      }
-
       var dio = Dio();
       var headers = {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer ${NetworkHelper.loggedInUserId}',
         'Accept': 'application/json',
-        'Language': 'en'
       };
 
       var formData = FormData.fromMap({
@@ -345,7 +316,6 @@ class PersonalInformationProvider extends ChangeNotifier {
           contentType: 'multipart/form-data',
         ),
       );
-      if (context.mounted) stopLoading(context);
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
           ShowToast("Success", response.data['message'] ?? "Personal Information updated successfully");
@@ -355,10 +325,11 @@ class PersonalInformationProvider extends ChangeNotifier {
         }
       } else {
         if (context.mounted) {
-          if (context.mounted) stopLoading(context);
           ShowToast("Error", response.data['message'] ?? "Something went wrong");
+          if (context.mounted) stopLoading(context);
         }
       }
+
     } on DioException catch (e) {
       if (context.mounted) {
         if (context.mounted) stopLoading(context);

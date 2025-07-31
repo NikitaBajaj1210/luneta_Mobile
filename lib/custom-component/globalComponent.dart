@@ -485,6 +485,7 @@ showPermissionDialog(
 ///   true,
 /// );
 /// ```
+
 Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String url, Map<String, dynamic> fieldData, List<Map<String, dynamic>> fileList, bool showLoading) async {
   try {
     var dio = Dio();
@@ -526,12 +527,6 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
         );
       }
     }
-
-    print("Travel Documents Dio Request URL: $url");
-    print("Travel Documents Dio Request Headers: $headers");
-    print("Travel Documents Dio Request Fields: ${formData.fields}");
-    print("Travel Documents Dio Request Files: ${formData.files.map((file) => file.value.filename).toList()}");
-
     var response = await dio.post(
       url,
       data: formData,
@@ -540,22 +535,14 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
         contentType: 'multipart/form-data',
       ),
     );
-
-    print("Travel Documents Dio Response Status: ${response.statusCode}");
-    print("Travel Documents Dio Response: ${response.data}");
-
     if (response.statusCode == 200 || response.statusCode == 201) {
-      ShowToast("Success", response.data['message'] ?? "Travel documents saved successfully");
+      ShowToast("Success", response.data['message'] ?? "Saved successfully");
       return response.data;
     } else {
-      ShowToast("Error", response.data['message'] ?? "Failed to save travel documents");
+      ShowToast("Error", response.data['message'] ?? "Something went wrong");
       return response.data;
     }
   } on DioException catch (e) {
-    print("Travel Documents Dio Error: ${e.message}");
-    print("Travel Documents Dio Error Type: ${e.type}");
-    print("Travel Documents Dio Error Response: ${e.response?.data}");
-
     if (e.response?.statusCode == 401) {
       ShowToast("Error", "Session expired. Please log in again.");
       var loginProvider = Provider.of<LoginProvider>(context, listen: false);
@@ -577,7 +564,8 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
       return e.response?.data ?? {};
     }
   } catch (e) {
-    ShowToast("Error", "Something went wrong: $e");
+    print(e);
+    ShowToast("Error", "Something went wrong");
     return {};
   }
 }

@@ -36,19 +36,6 @@ class TravelDocumentProvider extends ChangeNotifier {
 
   // API call to fetch travel document data
   Future<void> fetchTravelDocuments(String userId) async {
-    // If no userId provided, try to get from NetworkHelper
-    if (userId.isEmpty) {
-      userId = NetworkHelper.loggedInUserId;
-      print("LOGIN USER ID ${NetworkHelper}");
-    }
-    
-    if (userId.isEmpty) {
-      hasError = true;
-      errorMessage = 'User ID not found. Please login again.';
-      isLoading = false;
-      notifyListeners();
-      return;
-    }
     isLoading = true;
     hasError = false;
     errorMessage = '';
@@ -59,9 +46,6 @@ class TravelDocumentProvider extends ChangeNotifier {
         Uri.parse('$getTravelDocumentsByUserId$userId'),
         headers: NetworkHelper.header,
       );
-
-      print('Raw Response: $response');
-      print('Response Body: ${response.body}'); // Print the raw JSON string
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
