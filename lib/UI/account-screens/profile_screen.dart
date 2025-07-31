@@ -10,9 +10,11 @@ import '../../custom-component/country_input_field.dart';
 import '../../custom-component/custom-button.dart';
 import '../../custom-component/customTextField.dart';
 import '../../custom-component/custom_datePicker.dart';
+import '../../network/network_helper.dart';
 import '../../provider/account-provider/profile_provider.dart';
 import '../../provider/account-provider/choose_country_provider.dart';
 import '../../route/route_constants.dart';
+import '../../custom-component/globalComponent.dart'; // Import for date formatting
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -29,13 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
       provider.autoValidateMode = AutovalidateMode.disabled;
-      
-      // Debug: Check initial date values
-      print("=== Profile Screen Init Debug ===");
-      print("Initial addDate: ${provider.addDate}");
-      print("Initial addDateApi: ${provider.addDateApi}");
-      print("Max allowed date: ${provider.getMaxAllowedDate()}");
-      print("=== End Profile Screen Init Debug ===");
       
       // Set the country in the provider if global data exists
       if (ChooseCountryProvider.globalSelectedCountry != null && 
@@ -76,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (context, profileProvider, child) {
           bool isFormValid = profileProvider.nameController.text.isNotEmpty &&
               profileProvider.nickNameController.text.isNotEmpty &&
-              profileProvider.emailController.text.isNotEmpty &&
+              // profileProvider.emailController.text.isNotEmpty && // Skip email validation since it's disabled
               profileProvider.phoneController.text.isNotEmpty &&
               profileProvider.addDate != 'Date of Birth' &&
               profileProvider.selectedGender != 'Gender';
@@ -299,12 +294,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                             if (selectedDate != null) {
                               print("Selected date: $selectedDate");
-                              print("Age validation: ${profileProvider.validateAgeRequirement('${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')}");
+                              // Format date for age validation (MM/DD/YYYY)
+                              String dateForValidation = formatToMMDDYYYY(selectedDate);
+                              print("Age validation: ${profileProvider.validateAgeRequirement(dateForValidation)}");
                               
-                              String formattedDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
-                              String formattedDateApi = '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
+                              // Format date in MM/DD/YYYY format
+                              String formattedDate = formatToMMDDYYYY(selectedDate);
+                              String formattedDateApi = formatToApiDate(selectedDate);
                               
-                              print("Formatted date for UI: $formattedDate");
+                              print("Formatted date for UI (MM/DD/YYYY): $formattedDate");
                               print("Formatted date for API: $formattedDateApi");
                               
                               profileProvider.addDate = formattedDate;
@@ -336,8 +334,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 return; // Don't update the date
                               }
                               
-                              profileProvider.addDate = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
-                              profileProvider.addDateApi = '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
+                              profileProvider.addDate = formatToMMDDYYYY(selectedDate);
+                              profileProvider.addDateApi = formatToApiDate(selectedDate);
                               profileProvider.markFieldAsSubmitted('date');
                               setState(() {
 
@@ -387,6 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // ),
                         SizedBox(height: 2.h),
                         customTextField(
+                          isReadOnly:true,
                           context: context,
                           focusNode: profileProvider.emailFocusNode,
                           controller: profileProvider.emailController,
@@ -405,6 +404,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           textColor: profileProvider.getFieldTextColor('email', hasValue: profileProvider.emailController.text.isNotEmpty),
                           labelColor: profileProvider.getFieldTextColor('email', hasValue: profileProvider.emailController.text.isNotEmpty),
                           cursorColor: AppColors.Color_212121,
+                          fillColor: AppColors.Color_FAFAFA,
+                          onFieldSubmitted: null, // Disable submission for read-only field
+                          onChange: null, // Disable change handling for read-only field
+                          autovalidateMode: profileProvider.autoValidateMode,
                           suffixIcon: Image.asset(
                             "assets/images/emailIcon.png",
                             width: 3.h,
@@ -415,17 +418,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               hasValue: profileProvider.emailController.text.isNotEmpty,
                             ),
                           ),
-                          fillColor: AppColors.Color_FAFAFA,
-                          onFieldSubmitted: (value) {
-                            profileProvider.handleFieldSubmission('email', value);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              FocusScope.of(context).requestFocus(profileProvider.phoneFocusNode);
-                            });
-                          },
-                          onChange: (value) {
-                            profileProvider.handleTextChange('email', value);
-                          },
-                          autovalidateMode: profileProvider.autoValidateMode,
                         ),
                         if (profileProvider.emailError != null)
                           Padding(
@@ -442,7 +434,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                        SizedBox(height: 2.h),
+                        SizedBox(height: 2.h,),
+
+
                         countryPhoneInput(
                           width: 100.w,
                           phoneNumber: profileProvider.phoneNumber,

@@ -19,7 +19,7 @@ import '../../network/network_helper.dart';
 import '../../network/network_services.dart';
 import '../../network/app_url.dart';
 import '../../models/seafarer_profile_model.dart';
-import '../../models/rank_model.dart'; // Import for GetAllRankModel and Data
+import '../../models/rank_model.dart';
 import '../../Utils/helper.dart';
 import '../../route/route_constants.dart';
 import 'package:dio/dio.dart';
@@ -27,23 +27,22 @@ import 'package:http_parser/http_parser.dart';
 import '../authentication-provider/login_provider.dart';
 import 'choose_country_provider.dart';
 
-
 class ProfileProvider with ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
   bool hasSubmitted = false;
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController nickNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _nickNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   FocusNode nameFocusNode = FocusNode();
   FocusNode nickNameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode dateFocusNode = FocusNode();
   FocusNode genderFocusNode = FocusNode();
-  FocusNode rankFocusNode = FocusNode(); // Added for rank dropdown
+  FocusNode rankFocusNode = FocusNode();
 
   String? nameError;
   String? nickNameError;
@@ -51,16 +50,41 @@ class ProfileProvider with ChangeNotifier {
   String? phoneError;
   String? dateError;
   String? genderError;
-  String? rankError; // Added for rank validation
+  String? rankError;
   PhoneNumber phoneNumber = PhoneNumber(isoCode: 'US');
   String addDate = 'Date of Birth';
   String addDateApi = '';
   String selectedGender = 'Gender';
-  String selectedCountry = 'India'; // Default country, will be updated from Country Screen
-  String selectedCountryCode = 'IN'; // Default country code
+  String selectedCountry = 'India';
+  String selectedCountryCode = 'IN';
   bool isShowDateError = false;
   File? profileImage;
-  List<Data> _ranks = []; // Added ranks list
+  List<Data> _ranks = [];
+
+  // Getters and Setters for controllers
+  TextEditingController get nameController => _nameController;
+  set nameController(TextEditingController controller) {
+    _nameController = controller;
+    notifyListeners();
+  }
+
+  TextEditingController get nickNameController => _nickNameController;
+  set nickNameController(TextEditingController controller) {
+    _nickNameController = controller;
+    notifyListeners();
+  }
+
+  TextEditingController get emailController => _emailController;
+  set emailController(TextEditingController controller) {
+    _emailController = controller;
+    notifyListeners();
+  }
+
+  TextEditingController get phoneController => _phoneController;
+  set phoneController(TextEditingController controller) {
+    _phoneController = controller;
+    notifyListeners();
+  }
 
   // Getter for ranks list
   List<Data> get ranks => _ranks;
@@ -72,6 +96,9 @@ class ProfileProvider with ChangeNotifier {
   }
 
   ProfileProvider() {
+    // Load email from NetworkHelper when provider is created
+    _loadEmailFromNetworkHelper();
+    
     // Remove controller listeners to prevent keyboard conflicts
     // nameController.addListener(() {
     //   if (hasSubmitted) {
@@ -99,6 +126,16 @@ class ProfileProvider with ChangeNotifier {
     // });
   }
 
+  // Method to load email from NetworkHelper
+  void _loadEmailFromNetworkHelper() {
+    if (NetworkHelper.loggedInUserEmail.isNotEmpty) {
+      emailController.text = NetworkHelper.loggedInUserEmail;
+      print("ProfileProvider - Email loaded from NetworkHelper: ${NetworkHelper.loggedInUserEmail}");
+    } else {
+      print("ProfileProvider - No email found in NetworkHelper");
+    }
+  }
+
   String? validateFieldSilently(String fieldName, String value) {
     String? error;
     switch (fieldName) {
@@ -118,7 +155,6 @@ class ProfileProvider with ChangeNotifier {
         if (value.isEmpty || value == 'Date of Birth') {
           error = 'Date of birth is required';
         } else {
-          // Check if user is at least 18 years old
           error = validateAgeRequirement(value);
         }
         break;
@@ -132,52 +168,44 @@ class ProfileProvider with ChangeNotifier {
     return error;
   }
 
-  // Method to validate age requirement (must be 18 or older)
   String? validateAgeRequirement(String dateString) {
     try {
-      // Parse the date string (format: DD/MM/YYYY)
       List<String> dateParts = dateString.split('/');
-      if (dateParts.length != 3) {
-        return 'Invalid date format';
+      if (dateParts.length == 3) {
+        int month = int.parse(dateParts[0]);
+        int day = int.parse(dateParts[1]);
+        int year = int.parse(dateParts[2]);
+
+        DateTime birthDate = DateTime(year, month, day);
+        DateTime today = DateTime.now();
+
+        int age = today.year - birthDate.year;
+        if (today.month < birthDate.month ||
+            (today.month == birthDate.month && today.day < birthDate.day)) {
+          age--;
+        }
+
+        if (age < 18) {
+          return 'You must be at least 18 years old to register';
+        }
+
+        return null;
       }
-      
-      int day = int.parse(dateParts[0]);
-      int month = int.parse(dateParts[1]);
-      int year = int.parse(dateParts[2]);
-      
-      DateTime birthDate = DateTime(year, month, day);
-      DateTime today = DateTime.now();
-      
-      // Calculate age
-      int age = today.year - birthDate.year;
-      if (today.month < birthDate.month || 
-          (today.month == birthDate.month && today.day < birthDate.day)) {
-        age--;
-      }
-      
-      if (age < 18) {
-        return 'You must be at least 18 years old to register';
-      }
-      
-      return null; // Valid age
     } catch (e) {
       return 'Invalid date format';
     }
+    return 'Invalid date format';
   }
 
-  // Helper method to get the maximum allowed date (18 years ago)
   DateTime getMaxAllowedDate() {
     DateTime now = DateTime.now();
-    // Calculate 18 years ago more accurately
     return DateTime(now.year - 18, now.month, now.day);
   }
 
-  // Method to get default date for date picker (18 years ago)
   DateTime getDefaultDateForPicker() {
     return getMaxAllowedDate();
   }
 
-  // Method to set default date if no date is selected
   void setDefaultDateIfNeeded() {
     if (addDate == 'Date of Birth' || addDate.isEmpty) {
       DateTime defaultDate = getMaxAllowedDate();
@@ -213,7 +241,6 @@ class ProfileProvider with ChangeNotifier {
         if (value.isEmpty || value == 'Date of Birth') {
           error = 'Date of birth is required';
         } else {
-          // Check if user is at least 18 years old
           error = validateAgeRequirement(value);
         }
         dateError = error;
@@ -234,7 +261,7 @@ class ProfileProvider with ChangeNotifier {
 
   void validatePhone({bool notify = true}) {
     if (!hasSubmitted) return;
-    phoneError = validateMobile(phoneController.text.trim());
+    phoneError = validateMobile(_phoneController.text.trim());
     if (notify) {
       notifyListeners();
     }
@@ -249,14 +276,12 @@ class ProfileProvider with ChangeNotifier {
     return genderError;
   }
 
-
   void validateAllFields(BuildContext context) {
     hasSubmitted = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      validateFieldIfFocused('name', nameController.text);
-      validateFieldIfFocused('nickname', nickNameController.text);
-      validateFieldIfFocused('email', emailController.text);
-      validateFieldIfFocused('phone', phoneController.text);
+      validateFieldIfFocused('name', _nameController.text);
+      validateFieldIfFocused('nickname', _nickNameController.text);
+      validateFieldIfFocused('phone', _phoneController.text);
       validateFieldIfFocused('date', addDate);
       validateGender(selectedGender);
       notifyListeners();
@@ -264,10 +289,9 @@ class ProfileProvider with ChangeNotifier {
   }
 
   bool validateFields() {
-    return validateFieldSilently('name', nameController.text) == null &&
-        validateFieldSilently('nickname', nickNameController.text) == null &&
-        validateFieldSilently('email', emailController.text) == null &&
-        validateFieldSilently('phone', phoneController.text) == null &&
+    return validateFieldSilently('name', _nameController.text) == null &&
+        validateFieldSilently('nickname', _nickNameController.text) == null &&
+        validateFieldSilently('phone', _phoneController.text) == null &&
         validateFieldSilently('date', addDate) == null &&
         selectedGender != 'Gender';
   }
@@ -277,17 +301,13 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Add a safe method to handle text changes
   void handleTextChange(String fieldName, String value) {
-    // Only validate if form has been submitted and value is not empty
     if (hasSubmitted && value.isNotEmpty) {
       validateFieldIfFocused(fieldName, value);
     }
-    // Always notify listeners to update UI
     notifyListeners();
   }
 
-  // Add a safe method to handle phone number changes
   void handlePhoneChange(PhoneNumber newNumber, String phoneText) {
     phoneNumber = newNumber;
     if (hasSubmitted && phoneText.isNotEmpty) {
@@ -296,16 +316,13 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Add a safe method to handle focus changes
   void handleFocusChange(String fieldName, bool hasFocus, String value) {
-    // Only validate when losing focus and form has been submitted
     if (!hasFocus && hasSubmitted && value.isNotEmpty) {
       validateFieldIfFocused(fieldName, value);
     }
     notifyListeners();
   }
 
-  // Add a method to safely unfocus all fields
   void unfocusAllFields() {
     nameFocusNode.unfocus();
     nickNameFocusNode.unfocus();
@@ -318,7 +335,6 @@ class ProfileProvider with ChangeNotifier {
     }
   }
 
-  // Add methods to set country from Country Screen
   void setSelectedCountry(String countryName, String countryCode) {
     selectedCountry = countryName;
     selectedCountryCode = countryCode;
@@ -331,7 +347,6 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Add a safe method to handle field submission
   void handleFieldSubmission(String fieldName, String value) {
     if (value.isNotEmpty) {
       validateFieldIfFocused(fieldName, value);
@@ -339,27 +354,23 @@ class ProfileProvider with ChangeNotifier {
     }
   }
 
-  // Add a safe method to handle validation without keyboard conflicts
   void safeValidateAllFields(BuildContext context) {
     hasSubmitted = true;
-    // Use a post-frame callback to ensure UI is stable
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      validateFieldIfFocused('name', nameController.text);
-      validateFieldIfFocused('nickname', nickNameController.text);
-      validateFieldIfFocused('email', emailController.text);
-      validateFieldIfFocused('phone', phoneController.text);
+      validateFieldIfFocused('name', _nameController.text);
+      validateFieldIfFocused('nickname', _nickNameController.text);
+      validateFieldIfFocused('email', _emailController.text);
+      validateFieldIfFocused('phone', _phoneController.text);
       validateFieldIfFocused('date', addDate);
       validateGender(selectedGender);
       notifyListeners();
     });
   }
 
-  // Add a safe method to handle phone validation
   void safeValidatePhone({bool notify = true}) {
     if (!hasSubmitted) return;
-    // Use a post-frame callback to ensure UI is stable
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      phoneError = validateMobile(phoneController.text.trim());
+      phoneError = validateMobile(_phoneController.text.trim());
       if (notify) {
         notifyListeners();
       }
@@ -379,14 +390,14 @@ class ProfileProvider with ChangeNotifier {
   }
 
   void resetForm() {
-    nameController.clear();
-    nickNameController.clear();
-    emailController.clear();
-    phoneController.clear();
+    _nameController.clear();
+    _nickNameController.clear();
+    _emailController.clear();
+    _phoneController.clear();
     addDate = 'Date of Birth';
     addDateApi = '';
     selectedGender = 'Gender';
-    selectedCountry = 'India'; // Reset to default country
+    selectedCountry = 'India';
     nameError = null;
     nickNameError = null;
     emailError = null;
@@ -439,7 +450,7 @@ class ProfileProvider with ChangeNotifier {
                 title: const Text('Gallery'),
                 onTap: () {
                   Navigator.pop(context);
-                  pickProfileImage(ImageSource.gallery, context); // Fixed to use gallery
+                  pickProfileImage(ImageSource.gallery, context);
                 },
               ),
             ],
@@ -457,44 +468,6 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // Future<void> fetchRanks(BuildContext context) async {
-  //   try {
-  //     var response = await NetworkService().getResponse(
-  //       getAllRank,
-  //       true,
-  //       context,
-  //           () => notifyListeners(),
-  //     );
-  //     print("Fetch Ranks Response: $response");
-  //     if (response.isNotEmpty) {
-  //       final rankData = GetAllRankModel.fromJson(response);
-  //       if (rankData.statusCode == 200) {
-  //         ranks = rankData.data; // Use setter to update ranks
-  //       } else {
-  //         ranks = [];
-  //         print("Error: Status code ${rankData.statusCode}, Message: ${rankData.message}");
-  //         if (context.mounted) {
-  //           ShowToast("Error", rankData.message ?? "Failed to load ranks");
-  //         }
-  //       }
-  //     } else {
-  //       ranks = [];
-  //       print("Error: Empty response from server");
-  //       if (context.mounted) {
-  //         ShowToast("Error", "No ranks data received");
-  //       }
-  //     }
-  //     notifyListeners();
-  //   } catch (e) {
-  //     ranks = [];
-  //     print("Fetch Ranks Error: $e");
-  //     if (context.mounted) {
-  //       ShowToast("Error", "Failed to load ranks: $e");
-  //     }
-  //     notifyListeners();
-  //   }
-  // }
 
   String _formatPhoneNumber() {
     if (phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.isNotEmpty) {
@@ -548,15 +521,11 @@ class ProfileProvider with ChangeNotifier {
 
   Future<void> updateSeafarerProfile(BuildContext context) async {
     if (context.mounted) startLoading(context);
-    
+
     try {
-      // Debug token status
       NetworkHelper.debugTokenStatus();
-      
-      // Force sync data from SharedPreferences first
       await NetworkHelper.forceSyncUserData();
-      
-      // Validate session before making API call
+
       bool isSessionValid = await NetworkHelper.validateSession();
       if (!isSessionValid) {
         if (context.mounted) stopLoading(context);
@@ -564,20 +533,18 @@ class ProfileProvider with ChangeNotifier {
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             login,
-            (route) => false, // Remove all previous routes
+                (route) => false,
           );
         }
         return;
       }
 
-      // Get user data from NetworkHelper
       String? userId = NetworkHelper.loggedInUserId;
       String? token = NetworkHelper.token;
-      
+
       print("ProfileProvider - UserID from NetworkHelper: $userId");
       print("ProfileProvider - Token from NetworkHelper: $token");
 
-      // Validate token and user ID
       if (token == null || token.isEmpty) {
         if (context.mounted) stopLoading(context);
         if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
@@ -591,32 +558,26 @@ class ProfileProvider with ChangeNotifier {
         return;
       }
 
-      // Create Dio instance
       var dio = Dio();
-      
-      // Set headers
       var headers = {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
         'Language': 'en'
       };
 
-      // Prepare form data
       var formData = FormData.fromMap({
-        "userId": userId, // Use actual user ID from NetworkHelper
-        "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India", // Use global country data directly
-        "firstName": nameController.text.trim(),
-        "lastName": nickNameController.text.trim(),
+        "userId": userId,
+        "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
+        "firstName": _nameController.text.trim(),
+        "lastName": _nickNameController.text.trim(),
         "dateOfBirth": _formatDateForAPI(),
-        "contactEmail": emailController.text.trim(),
+        "contactEmail": _emailController.text.trim(),
         "rankId": ChooseRankProvider.globalSelectedRankId ?? '',
         "mobilePhone": _formatPhoneNumber(),
         "sex": selectedGender == 'Gender' ? '' : selectedGender,
       });
 
-      // Add profile image if selected
       if (profileImage != null) {
-        // Determine MIME type
         String? mimeType = lookupMimeType(profileImage!.path);
         if (mimeType == null || !mimeType.startsWith('image/')) {
           if (context.mounted) {
@@ -634,7 +595,7 @@ class ProfileProvider with ChangeNotifier {
             await MultipartFile.fromFile(
               profileImage!.path,
               filename: profileImage!.path.split('/').last,
-              contentType: MediaType.parse(mimeType), // Use MediaType from http_parser
+              contentType: MediaType.parse(mimeType),
             ),
           ),
         );
@@ -645,7 +606,6 @@ class ProfileProvider with ChangeNotifier {
       print("Seafarer Profile Dio Request Fields: ${formData.fields}");
       print("Seafarer Profile Dio Request Files: ${formData.files.map((file) => file.value.filename).toList()}");
 
-      // Make the API call using Dio
       var response = await dio.post(
         seafarerProfileBasicInfo,
         data: formData,
@@ -660,15 +620,10 @@ class ProfileProvider with ChangeNotifier {
       print("Seafarer Profile Dio Response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Profile update successful
         if (context.mounted) {
           ShowToast("Success", response.data['message'] ?? "Profile updated successfully");
           if (context.mounted) stopLoading(context);
-          
-          // Clear global country data after successful submission
           ChooseCountryProvider.clearGlobalSelectedCountry();
-          
-          // Navigate to next screen
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
         }
@@ -682,17 +637,16 @@ class ProfileProvider with ChangeNotifier {
       print("Seafarer Profile Dio Error: ${e.message}");
       print("Seafarer Profile Dio Error Type: ${e.type}");
       print("Seafarer Profile Dio Error Response: ${e.response?.data}");
-      
+
       if (context.mounted) {
         if (context.mounted) stopLoading(context);
-        
+
         if (e.response?.statusCode == 401) {
           ShowToast("Error", "Session expired. Please log in again.");
           var loginProvider = Provider.of<LoginProvider>(context, listen: false);
           await loginProvider.clearStoredLoginData();
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
-
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
           ShowToast("Error", e.response?.data['message'] ?? "Bad request");
         } else {
@@ -709,20 +663,19 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   @override
   void dispose() {
-    nameController.dispose();
-    nickNameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
+    _nameController.dispose();
+    _nickNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
     nameFocusNode.dispose();
     nickNameFocusNode.dispose();
     emailFocusNode.dispose();
     phoneFocusNode.dispose();
     dateFocusNode.dispose();
     genderFocusNode.dispose();
-    rankFocusNode.dispose(); // Dispose rank focus node
+    rankFocusNode.dispose();
     super.dispose();
   }
 }

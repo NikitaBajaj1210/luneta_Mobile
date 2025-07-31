@@ -31,6 +31,7 @@ Widget customTextField({
   VoidCallback? onPrefixIconPressed,
   FocusNode? focusNode,
   String? FontFamily,
+  bool isReadOnly = false, // New optional parameter for read-only
   required Color fillColor,
   required Function(String)? onFieldSubmitted,
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled, // New parameter
@@ -45,6 +46,7 @@ Widget customTextField({
     child: TextFormField(
       controller: controller,
       enabled: isEditable ?? true,
+      readOnly: isReadOnly,
       cursorColor: AppColors.Color_212121,
       textInputAction: textInputAction,
       maxLength: maxLength,

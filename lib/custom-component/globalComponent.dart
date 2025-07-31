@@ -10,6 +10,227 @@ import '../const/font_size.dart';
 import '../network/network_helper.dart';
 import 'custom-button.dart';
 
+/// Global Date Formatting Functions
+/// 
+/// Usage Examples:
+/// 
+/// // Format DateTime to "Month Day, Year"
+/// DateTime date = DateTime(2025, 1, 15);
+/// String formatted = formatToMonthDayYear(date);
+/// // Result: "January 15, 2025"
+/// 
+/// // Format date string (DD/MM/YYYY) to "Month Day, Year"
+/// String dateString = "15/01/2025";
+/// String formatted = formatDateStringToMonthDayYear(dateString);
+/// // Result: "January 15, 2025"
+/// 
+/// // Format to MM/DD/YYYY
+/// String mmddyyyy = formatToMMDDYYYY(date);
+/// // Result: "01/15/2025"
+/// 
+/// // Format date string to MM/DD/YYYY
+/// String mmddyyyy = formatDateStringToMMDDYYYY("15/01/2025");
+/// // Result: "01/15/2025"
+
+// List of full month names
+const List<String> fullMonths = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+// List of short month names
+const List<String> shortMonths = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
+
+/// Format DateTime to "Month Day, Year" (e.g., "January 15, 2025")
+String formatToMonthDayYear(DateTime date) {
+  String month = fullMonths[date.month - 1];
+  String day = date.day.toString();
+  String year = date.year.toString();
+  
+  return '$month $day, $year';
+}
+
+/// Format DateTime to "Short Month Day, Year" (e.g., "Jan 15, 2025")
+String formatToShortMonthDayYear(DateTime date) {
+  String month = shortMonths[date.month - 1];
+  String day = date.day.toString();
+  String year = date.year.toString();
+  
+  return '$month $day, $year';
+}
+
+/// Format DateTime to MM/DD/YYYY (e.g., "01/15/2025")
+String formatToMMDDYYYY(DateTime date) {
+  String month = date.month.toString().padLeft(2, '0');
+  String day = date.day.toString().padLeft(2, '0');
+  String year = date.year.toString();
+  
+  return '$month/$day/$year';
+}
+
+/// Format DateTime to DD/MM/YYYY (e.g., "15/01/2025")
+String formatToDDMMYYYY(DateTime date) {
+  String day = date.day.toString().padLeft(2, '0');
+  String month = date.month.toString().padLeft(2, '0');
+  String year = date.year.toString();
+  
+  return '$day/$month/$year';
+}
+
+/// Format date string (DD/MM/YYYY) to "Month Day, Year"
+String formatDateStringToMonthDayYear(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      DateTime date = DateTime(year, month, day);
+      return formatToMonthDayYear(date);
+    }
+  } catch (e) {
+    print('Error formatting date string: $e');
+  }
+  return dateString; // Return original if parsing fails
+}
+
+/// Format date string (DD/MM/YYYY) to "Short Month Day, Year"
+String formatDateStringToShortMonthDayYear(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      DateTime date = DateTime(year, month, day);
+      return formatToShortMonthDayYear(date);
+    }
+  } catch (e) {
+    print('Error formatting date string: $e');
+  }
+  return dateString; // Return original if parsing fails
+}
+
+/// Format date string (DD/MM/YYYY) to MM/DD/YYYY
+String formatDateStringToMMDDYYYY(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      DateTime date = DateTime(year, month, day);
+      return formatToMMDDYYYY(date);
+    }
+  } catch (e) {
+    print('Error formatting date string to MM/DD/YYYY: $e');
+  }
+  return dateString; // Return original if parsing fails
+}
+
+/// Parse date string (DD/MM/YYYY) to DateTime
+DateTime? parseDateString(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      return DateTime(year, month, day);
+    }
+  } catch (e) {
+    print('Error parsing date string: $e');
+  }
+  return null;
+}
+
+/// Format DateTime to API format (YYYY-MM-DD)
+String formatToApiDate(DateTime date) {
+  String year = date.year.toString();
+  String month = date.month.toString().padLeft(2, '0');
+  String day = date.day.toString().padLeft(2, '0');
+  
+  return '$year-$month-$day';
+}
+
+/// Format date string (DD/MM/YYYY) to API format (YYYY-MM-DD)
+String formatDateStringToApiDate(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      return formatToApiDate(DateTime(year, month, day));
+    }
+  } catch (e) {
+    print('Error formatting date string to API format: $e');
+  }
+  return dateString; // Return original if parsing fails
+}
+
+/// Get current date in "Month Day, Year" format
+String getCurrentDateFormatted() {
+  return formatToMonthDayYear(DateTime.now());
+}
+
+/// Get current date in MM/DD/YYYY format
+String getCurrentDateMMDDYYYY() {
+  return formatToMMDDYYYY(DateTime.now());
+}
+
+/// Get current date in short format
+String getCurrentDateShortFormatted() {
+  return formatToShortMonthDayYear(DateTime.now());
+}
+
+/// Check if date string is valid
+bool isValidDateString(String dateString) {
+  try {
+    List<String> dateParts = dateString.split('/');
+    if (dateParts.length == 3) {
+      int day = int.parse(dateParts[0]);
+      int month = int.parse(dateParts[1]);
+      int year = int.parse(dateParts[2]);
+      
+      // Check if date is valid
+      DateTime date = DateTime(year, month, day);
+      return date.year == year && date.month == month && date.day == day;
+    }
+  } catch (e) {
+    return false;
+  }
+  return false;
+}
+
+/// Get age from birth date
+int calculateAge(DateTime birthDate) {
+  DateTime now = DateTime.now();
+  int age = now.year - birthDate.year;
+  if (now.month < birthDate.month || 
+      (now.month == birthDate.month && now.day < birthDate.day)) {
+    age--;
+  }
+  return age;
+}
+
+/// Get age from birth date string (DD/MM/YYYY)
+int? calculateAgeFromString(String birthDateString) {
+  DateTime? birthDate = parseDateString(birthDateString);
+  if (birthDate != null) {
+    return calculateAge(birthDate);
+  }
+  return null;
+}
+
 
 Future<bool> checkPermission(BuildContext context) async {
   print("Inside checkPermission at ${DateTime.now()}");
