@@ -8,7 +8,14 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../const/color.dart';
 import '../const/font_size.dart';
 import '../network/network_helper.dart';
+import '../network/app_url.dart';
+import '../provider/authentication-provider/login_provider.dart';
+import '../route/route_constants.dart';
 import 'custom-button.dart';
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 /// Global Date Formatting Functions
 /// 
@@ -442,5 +449,136 @@ showPermissionDialog(
       );
     },
   );
+}
+
+/// Dio-based multipart function for travel documents
+/// This function handles multipart requests using Dio instead of http
+/// 
+/// Parameters:
+/// - context: BuildContext for UI operations
+/// - url: API endpoint URL
+/// - fieldData: Map containing form fields (JSON data)
+/// - fileList: List of file information maps
+/// - showLoading: Whether to show loading indicator
+/// 
+/// Returns: Map<String, dynamic> containing API response
+/// 
+/// Usage Example:
+/// ```dart
+/// Map<String, dynamic> fieldData = {
+///   'data': jsonEncode([yourDataObject]),
+/// };
+/// 
+/// List<Map<String, dynamic>> fileList = [
+///   {
+///     'fieldName': 'passportDocument',
+///     'filePath': '/path/to/file.pdf',
+///     'fileName': 'document.pdf',
+///   }
+/// ];
+/// 
+/// final response = await multipartTravelDocumentsDio(
+///   context,
+///   createOrUpdateTravelDocuments,
+///   fieldData,
+///   fileList,
+///   true,
+/// );
+/// ```
+Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String url, Map<String, dynamic> fieldData, List<Map<String, dynamic>> fileList, bool showLoading) async {
+  try {
+    var dio = Dio();
+    var headers = {
+      'Authorization': 'Bearer ${NetworkHelper.token}',
+      'Accept': 'application/json',
+      'Language': 'en'
+    };
+
+    var formData = FormData.fromMap(fieldData);
+
+    // Add files to form data
+    for (var fileInfo in fileList) {
+      String fieldName = fileInfo['fieldName'];
+      String filePath = fileInfo['filePath'];
+      String fileName = fileInfo['fileName'];
+      String? mimeType = fileInfo['mimeType'];
+
+      if (mimeType != null) {
+        formData.files.add(
+          MapEntry(
+            fieldName,
+            await MultipartFile.fromFile(
+              filePath,
+              filename: fileName,
+              contentType: MediaType.parse(mimeType),
+            ),
+          ),
+        );
+      } else {
+        formData.files.add(
+          MapEntry(
+            fieldName,
+            await MultipartFile.fromFile(
+              filePath,
+              filename: fileName,
+            ),
+          ),
+        );
+      }
+    }
+
+    print("Travel Documents Dio Request URL: $url");
+    print("Travel Documents Dio Request Headers: $headers");
+    print("Travel Documents Dio Request Fields: ${formData.fields}");
+    print("Travel Documents Dio Request Files: ${formData.files.map((file) => file.value.filename).toList()}");
+
+    var response = await dio.post(
+      url,
+      data: formData,
+      options: Options(
+        headers: headers,
+        contentType: 'multipart/form-data',
+      ),
+    );
+
+    print("Travel Documents Dio Response Status: ${response.statusCode}");
+    print("Travel Documents Dio Response: ${response.data}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ShowToast("Success", response.data['message'] ?? "Travel documents saved successfully");
+      return response.data;
+    } else {
+      ShowToast("Error", response.data['message'] ?? "Failed to save travel documents");
+      return response.data;
+    }
+  } on DioException catch (e) {
+    print("Travel Documents Dio Error: ${e.message}");
+    print("Travel Documents Dio Error Type: ${e.type}");
+    print("Travel Documents Dio Error Response: ${e.response?.data}");
+
+    if (e.response?.statusCode == 401) {
+      ShowToast("Error", "Session expired. Please log in again.");
+      var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+      await loginProvider.clearStoredLoginData();
+      NetworkHelper().removeToken(context);
+      Navigator.of(context).pushReplacementNamed(login);
+      return e.response?.data ?? {};
+    } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
+      ShowToast("Error", e.response?.data['message'] ?? "Bad request");
+      return e.response?.data ?? {};
+    } else if (e.response?.statusCode == 403) {
+      ShowToast("Error", e.response?.data['message'] ?? "Access forbidden");
+      return e.response?.data ?? {};
+    } else if (e.response?.statusCode == 500) {
+      ShowToast("Error", e.response?.data['message'] ?? "Internal server error");
+      return e.response?.data ?? {};
+    } else {
+      ShowToast("Error", e.response?.data['message'] ?? "Something went wrong");
+      return e.response?.data ?? {};
+    }
+  } catch (e) {
+    ShowToast("Error", "Something went wrong: $e");
+    return {};
+  }
 }
 

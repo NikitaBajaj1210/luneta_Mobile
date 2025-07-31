@@ -9,6 +9,7 @@ import 'app_url.dart';
 import 'network_helper.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+
 class NetworkService {
   static int loading = 0;
 
@@ -977,6 +978,90 @@ class NetworkService {
         ShowToast("Error", res['message'] ?? "Session expired");
         NetworkHelper().removeToken(context);
         Navigator.of(context).pushReplacementNamed(login);
+        return res;
+      } else {
+        loading = 1;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", res['message'] ?? "Something went wrong");
+        return res;
+      }
+    } on SocketException {
+      loading = 1;
+      if (showLoading && context.mounted) stopLoading(context);
+      ShowToast("Error", "Check your internet connection");
+      return {};
+    } catch (e) {
+      loading = 1;
+      if (showLoading && context.mounted) stopLoading(context);
+      ShowToast("Error", "Something went wrong: $e");
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> multipartTravelDocuments(BuildContext context, String url, Map<String, String> fieldData, List<http.MultipartFile> fileList, bool showLoading, VoidCallback notify) async {
+    loading = 0;
+    if (showLoading && context.mounted) startLoading(context);
+
+    try {
+      var headers = {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+        'Language': 'en',
+        'Authorization': 'Bearer ${NetworkHelper.token}'
+      };
+
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields.addAll(fieldData);
+      request.files.addAll(fileList);
+      request.headers.addAll(headers);
+
+      print("Multipart Travel Documents Request URL: $url");
+      print("Text Fields: $fieldData");
+      print("Files: ${fileList.map((file) => file.filename).toList()}");
+
+      var response = await request.send();
+      var responseBody = await response.stream.bytesToString();
+
+      print("Response Status: ${response.statusCode}");
+      print("Response Body: $responseBody");
+
+      if (responseBody.isEmpty) {
+        loading = 1;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", "Empty response from server");
+        return {};
+      }
+
+      var res = jsonDecode(responseBody);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        loading = 2;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Success", res['message'] ?? "Travel documents saved successfully");
+        return res;
+      } else if (response.statusCode == 400 || response.statusCode == 404) {
+        loading = 2;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", res['message'] ?? "Bad request");
+        return res;
+      } else if (response.statusCode == 401) {
+        loading = 2;
+        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+        await loginProvider.clearStoredLoginData();
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", res['message'] ?? "Session expired");
+        NetworkHelper().removeToken(context);
+        Navigator.of(context).pushReplacementNamed(login);
+        return res;
+      } else if (response.statusCode == 403) {
+        loading = 2;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", res['message'] ?? "Access forbidden");
+        return res;
+      } else if (response.statusCode == 500) {
+        loading = 2;
+        if (showLoading && context.mounted) stopLoading(context);
+        ShowToast("Error", res['message'] ?? "Internal server error");
         return res;
       } else {
         loading = 1;

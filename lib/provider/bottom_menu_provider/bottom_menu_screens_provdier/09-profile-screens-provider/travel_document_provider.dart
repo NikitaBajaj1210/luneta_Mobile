@@ -4,16 +4,303 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../../../../models/travel_document_model.dart';
+import '../../../../network/app_url.dart';
+import '../../../../network/network_helper.dart';
+import 'package:luneta/custom-component/globalComponent.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   List<String> countries = [];
+  
+  // Loading states
+  bool isLoading = false;
+  bool hasError = false;
+  String errorMessage = '';
+  TravelDocument? travelDocumentData;
+
+  // Track existing documents
+  bool hasExistingPassportDocument = false;
+  bool hasExistingSeamanDocument = false;
+  bool hasExistingSeafarerVisaDocument = false;
+  bool hasExistingVisaDocument = false;
+  bool hasExistingResidencePermitDocument = false;
 
   TravelDocumentProvider() {
     countries = CountryService().getAll().map((country) => country.name).toList();
   }
+
+  // API call to fetch travel document data
+  Future<void> fetchTravelDocuments(String userId) async {
+    // If no userId provided, try to get from NetworkHelper
+    if (userId.isEmpty) {
+      userId = NetworkHelper.loggedInUserId;
+      print("LOGIN USER ID ${NetworkHelper}");
+    }
+    
+    if (userId.isEmpty) {
+      hasError = true;
+      errorMessage = 'User ID not found. Please login again.';
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
+    isLoading = true;
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+
+    try {
+      final response = await http.get(
+        Uri.parse('$getTravelDocumentsByUserId$userId'),
+        headers: NetworkHelper.header,
+      );
+
+      print('Raw Response: $response');
+      print('Response Body: ${response.body}'); // Print the raw JSON string
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final travelDocumentResponse = TravelDocumentResponse.fromJson(responseData);
+        
+        if (travelDocumentResponse.data.isNotEmpty) {
+          travelDocumentData = travelDocumentResponse.data.first;
+          _populateFormData();
+        }
+        ShowToast("Success", travelDocumentResponse.message ?? "Fetch Data successfully");
+
+      } else {
+        hasError = true;
+        // errorMessage = 'Failed to load travel documents';
+        ShowToast("Error",  "Failed to load travel documents");
+      }
+    } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
+      ShowToast("Error", "Network error: ${e.toString()}");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // API call to create or update travel document data
+  Future<bool> createOrUpdateTravelDocumentsAPI(BuildContext context) async {
+    // isLoading = true;
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+
+    try {
+      // Prepare the data object
+      Map<String, dynamic> data = {
+        'seafarerRegNo': seafarerRegistrationNoController.text,
+        'passportNo': passportNoController.text,
+        'passportCountry': passportCountry ?? '',
+        'passportIssueDate': passportIssueDateController.text,
+        'passportExpDate': passportExpiryDateController.text,
+        'passportDocumentOriginalName': passportDocument?.path.split('/').last ?? getDocumentOriginalName('passport'),
+        'seamansBookNo': seamanBookNoController.text,
+        'seamansBookIssuingCountry': seamanIssuingCountry ?? '',
+        'seamansBookIssuingAuthority': seamanIssuingAuthorityController.text,
+        'seamansBookIssueDate': seamanIssueDateController.text,
+        'seamansBookExpDate': seamanExpiryDateController.text,
+        'seamansBookNeverExpire': seamanNeverExpire,
+        'seamansBookNationality': seamanNationality ?? '',
+        'seamansBookDocumentOriginalName': seamanDocument?.path.split('/').last ?? getDocumentOriginalName('seaman'),
+        'validSeafarerVisa': validSeafarerVisa,
+        'seafarerVisaIssuingCountry': seafarerVisaIssuingCountry ?? '',
+        'seafarerVisaNo': seafarerVisaNoController.text,
+        'seafarerVisaIssuingDate': seafarerVisaIssueDateController.text,
+        'seafarerVisaExpDate': seafarerVisaExpiryDateController.text,
+        'seafarerVisaDocumentOriginalName': seafarerVisaDocument?.path.split('/').last ?? getDocumentOriginalName('seafarer_visa'),
+        'visaIssuingCountry': visaIssuingCountry ?? '',
+        'visaNo': visaNoController.text,
+        'visaIssuingDate': visaIssueDateController.text,
+        'visaExpDate': visaExpiryDateController.text,
+        'visaDocumentOriginalName': visaDocument?.path.split('/').last ?? getDocumentOriginalName('visa'),
+        'residencePermitIssuingCountry': residencePermitIssuingCountry ?? '',
+        'residencePermitNo': residencePermitNoController.text,
+        'residencePermitIssuingDate': residencePermitIssueDateController.text,
+        'residencePermitExpDate': residencePermitExpiryDateController.text,
+        'residencePermitDocumentOriginalName': residencePermitDocument?.path.split('/').last ?? getDocumentOriginalName('residence_permit'),
+        'userId': NetworkHelper.loggedInUserId,
+        // 'id': travelDocumentData?.id, // Use existing ID if updating
+      };
+
+      // If no new files are uploaded but we have existing documents, 
+      // we need to include the existing document paths in the data
+      if (passportDocument == null && travelDocumentData?.passportDocumentPath.isNotEmpty == true) {
+        data['passportDocumentPath'] = travelDocumentData!.passportDocumentPath;
+      }
+      if (seamanDocument == null && travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true) {
+        data['seamansBookDocumentPath'] = travelDocumentData!.seamansBookDocumentPath;
+      }
+      if (seafarerVisaDocument == null && travelDocumentData?.seafarerVisaDocumentPath.isNotEmpty == true) {
+        data['seafarerVisaDocumentPath'] = travelDocumentData!.seafarerVisaDocumentPath;
+      }
+      if (visaDocument == null && travelDocumentData?.visaDocumentPath.isNotEmpty == true) {
+        data['visaDocumentPath'] = travelDocumentData!.visaDocumentPath;
+      }
+      if (residencePermitDocument == null && travelDocumentData?.residencePermitDocumentPath.isNotEmpty == true) {
+        data['residencePermitDocumentPath'] = travelDocumentData!.residencePermitDocumentPath;
+      }
+
+
+
+      // Call the Dio-based multipart function from globalComponent
+      
+      // Convert fieldData to the format expected by Dio function
+      Map<String, dynamic> dioFieldData = {
+        'data': jsonEncode([data]), // API expects an array
+      };
+      
+      // Convert fileList to the format expected by Dio function
+      List<Map<String, dynamic>> dioFileList = [];
+      
+      if (passportDocument != null) {
+        dioFileList.add({
+          'fieldName': 'passportDocument',
+          'filePath': passportDocument!.path,
+          'fileName': passportDocument!.path.split('/').last,
+        });
+      }
+      
+      if (seamanDocument != null) {
+        dioFileList.add({
+          'fieldName': 'seamansBookDocument',
+          'filePath': seamanDocument!.path,
+          'fileName': seamanDocument!.path.split('/').last,
+        });
+      }
+      
+      if (seafarerVisaDocument != null) {
+        dioFileList.add({
+          'fieldName': 'seafarerVisaDocument',
+          'filePath': seafarerVisaDocument!.path,
+          'fileName': seafarerVisaDocument!.path.split('/').last,
+        });
+      }
+      
+      if (visaDocument != null) {
+        dioFileList.add({
+          'fieldName': 'visaDocument',
+          'filePath': visaDocument!.path,
+          'fileName': visaDocument!.path.split('/').last,
+        });
+      }
+      
+      if (residencePermitDocument != null) {
+        dioFileList.add({
+          'fieldName': 'residencePermitDocument',
+          'filePath': residencePermitDocument!.path,
+          'fileName': residencePermitDocument!.path.split('/').last,
+        });
+      }
+      
+      final response = await multipartDocumentsDio(
+        context,
+        createOrUpdateTravelDocuments,
+        dioFieldData,
+        dioFileList,
+        true, // showLoading
+      );
+
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        // Success - refresh the data
+        String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+            ? NetworkHelper.loggedInUserId 
+            : '';
+        if (userId.isNotEmpty) {
+          await fetchTravelDocuments(userId);
+        }
+        return true;
+      } else {
+        hasError = true;
+        errorMessage = response['message'] ?? 'Failed to save travel documents';
+        return false;
+      }
+    } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Populate form data from API response
+  void _populateFormData() {
+    if (travelDocumentData == null) return;
+
+    // Seafarer Registration No
+    seafarerRegistrationNoController.text = travelDocumentData!.seafarerRegNo;
+    
+    // Passport data
+    passportNoController.text = travelDocumentData!.passportNo;
+    passportCountry = travelDocumentData!.passportCountry;
+    passportIssueDateController.text = travelDocumentData!.passportIssueDate;
+    passportExpiryDateController.text = travelDocumentData!.passportExpDate;
+    
+    // Seaman's Book data
+    seamanBookNoController.text = travelDocumentData!.seamansBookNo;
+    seamanIssuingCountry = travelDocumentData!.seamansBookIssuingCountry;
+    seamanIssuingAuthorityController.text = travelDocumentData!.seamansBookIssuingAuthority;
+    seamanIssueDateController.text = travelDocumentData!.seamansBookIssueDate;
+    seamanExpiryDateController.text = travelDocumentData!.seamansBookExpDate;
+    seamanNeverExpire = travelDocumentData!.seamansBookNeverExpire;
+    seamanNationality = travelDocumentData!.seamansBookNationality;
+    
+    // Valid Seafarer Visa data
+    validSeafarerVisa = travelDocumentData!.validSeafarerVisa;
+    seafarerVisaIssuingCountry = travelDocumentData!.seafarerVisaIssuingCountry;
+    seafarerVisaNoController.text = travelDocumentData!.seafarerVisaNo;
+    seafarerVisaIssueDateController.text = travelDocumentData!.seafarerVisaIssuingDate;
+    seafarerVisaExpiryDateController.text = travelDocumentData!.seafarerVisaExpDate;
+    
+    // Visa data
+    visaIssuingCountry = travelDocumentData!.visaIssuingCountry;
+    visaNoController.text = travelDocumentData!.visaNo;
+    visaIssueDateController.text = travelDocumentData!.visaIssuingDate;
+    visaExpiryDateController.text = travelDocumentData!.visaExpDate;
+    
+    // Residence Permit data
+    _residencePermitIssuingCountry = travelDocumentData!.residencePermitIssuingCountry;
+    residencePermitNoController.text = travelDocumentData!.residencePermitNo;
+    residencePermitIssueDateController.text = travelDocumentData!.residencePermitIssuingDate;
+    residencePermitExpiryDateController.text = travelDocumentData!.residencePermitExpDate;
+
+    // Set existing document flags
+    hasExistingPassportDocument = travelDocumentData!.passportDocumentPath.isNotEmpty;
+    hasExistingSeamanDocument = travelDocumentData!.seamansBookDocumentPath.isNotEmpty;
+    hasExistingSeafarerVisaDocument = travelDocumentData!.seafarerVisaDocumentPath.isNotEmpty;
+    hasExistingVisaDocument = travelDocumentData!.visaDocumentPath.isNotEmpty;
+    hasExistingResidencePermitDocument = travelDocumentData!.residencePermitDocumentPath.isNotEmpty;
+  }
+
+  // Get document original name for API
+  String getDocumentOriginalName(String documentType) {
+    switch (documentType) {
+      case 'passport':
+        return travelDocumentData?.passportDocumentOriginalName ?? '';
+      case 'seaman':
+        return travelDocumentData?.seamansBookDocumentOriginalName ?? '';
+      case 'seafarer_visa':
+        return travelDocumentData?.seafarerVisaDocumentOriginalName ?? '';
+      case 'visa':
+        return travelDocumentData?.visaDocumentOriginalName ?? '';
+      case 'residence_permit':
+        return travelDocumentData?.residencePermitDocumentOriginalName ?? '';
+      default:
+        return '';
+    }
+  }
+
   // Controllers
   final TextEditingController seafarerRegistrationNoController = TextEditingController();
   final TextEditingController passportNoController = TextEditingController();
@@ -173,7 +460,7 @@ class TravelDocumentProvider extends ChangeNotifier {
 
   String? validateManual() {
     if (seafarerRegistrationNoController.text.isEmpty) {
-      return 'Seafarer’s Registration No. is required';
+      return 'Seafarer\'s Registration No. is required';
     }
     if (passportNoController.text.isEmpty) {
       return 'Passport No. is required';
@@ -184,37 +471,48 @@ class TravelDocumentProvider extends ChangeNotifier {
     if (passportExpiryDateController.text.isEmpty) {
       return 'Passport Expiry Date is required';
     }
-    if (passportDocumentController.text.isEmpty) {
+    // Only validate passport document if no existing document and no new document
+    if (passportDocument == null && !hasExistingPassportDocument) {
       return 'Passport Document is required';
     }
     if (seamanBookNoController.text.isEmpty) {
-      return 'Seaman’s Book No. is required';
+      return 'Seaman\'s Book No. is required';
     }
     if (seamanIssuingAuthorityController.text.isEmpty) {
-      return 'Seaman’s Book Issuing Authority is required';
+      return 'Seaman\'s Book Issuing Authority is required';
     }
     if (seamanIssueDateController.text.isEmpty) {
-      return 'Seaman’s Book Issue Date is required';
+      return 'Seaman\'s Book Issue Date is required';
     }
     if (seamanExpiryDateController.text.isEmpty && !seamanNeverExpire) {
-      return 'Seaman’s Book Expiry Date is required';
+      return 'Seaman\'s Book Expiry Date is required';
     }
-    if (seamanDocumentController.text.isEmpty) {
-      return 'Seaman’s Book Document is required';
+    // Only validate seaman document if no existing document and no new document
+    if (seamanDocument == null && !hasExistingSeamanDocument) {
+      return 'Seaman\'s Book Document is required';
     }
     if (validSeafarerVisa) {
       if (seafarerVisaNoController.text.isEmpty) {
-        return 'Seafarer’s Visa No. is required';
+        return 'Seafarer\'s Visa No. is required';
       }
       if (seafarerVisaIssueDateController.text.isEmpty) {
-        return 'Seafarer’s Visa Issue Date is required';
+        return 'Seafarer\'s Visa Issue Date is required';
       }
       if (seafarerVisaExpiryDateController.text.isEmpty) {
-        return 'Seafarer’s Visa Expiry Date is required';
+        return 'Seafarer\'s Visa Expiry Date is required';
       }
-      if (seafarerVisaDocumentController.text.isEmpty) {
-        return 'Seafarer’s Visa Document is required';
+      // Only validate seafarer visa document if no existing document and no new document
+      if (seafarerVisaDocument == null && !hasExistingSeafarerVisaDocument) {
+        return 'Seafarer\'s Visa Document is required';
       }
+    }
+    // Only validate visa document if no existing document and no new document
+    if (visaDocument == null && !hasExistingVisaDocument) {
+      return 'Visa Document is required';
+    }
+    // Only validate residence permit document if no existing document and no new document
+    if (residencePermitDocument == null && !hasExistingResidencePermitDocument) {
+      return 'Residence Permit Document is required';
     }
     return null;
   }
@@ -269,18 +567,23 @@ class TravelDocumentProvider extends ChangeNotifier {
       switch (type) {
         case 'passport':
           passportDocument = file;
+          hasExistingPassportDocument = true;
           break;
         case 'seaman':
           seamanDocument = file;
+          hasExistingSeamanDocument = true;
           break;
         case 'seafarer_visa':
           seafarerVisaDocument = file;
+          hasExistingSeafarerVisaDocument = true;
           break;
         case 'visa':
           visaDocument = file;
+          hasExistingVisaDocument = true;
           break;
         case 'residence_permit':
           residencePermitDocument = file;
+          hasExistingResidencePermitDocument = true;
           break;
       }
       notifyListeners();
@@ -294,18 +597,23 @@ class TravelDocumentProvider extends ChangeNotifier {
       switch (type) {
         case 'passport':
           passportDocument = file;
+          hasExistingPassportDocument = true;
           break;
         case 'seaman':
           seamanDocument = file;
+          hasExistingSeamanDocument = true;
           break;
         case 'seafarer_visa':
           seafarerVisaDocument = file;
+          hasExistingSeafarerVisaDocument = true;
           break;
         case 'visa':
           visaDocument = file;
+          hasExistingVisaDocument = true;
           break;
         case 'residence_permit':
           residencePermitDocument = file;
+          hasExistingResidencePermitDocument = true;
           break;
       }
       notifyListeners();
@@ -316,21 +624,69 @@ class TravelDocumentProvider extends ChangeNotifier {
     switch (type) {
       case 'passport':
         passportDocument = null;
+        hasExistingPassportDocument = false;
         break;
       case 'seaman':
         seamanDocument = null;
+        hasExistingSeamanDocument = false;
         break;
       case 'seafarer_visa':
         seafarerVisaDocument = null;
+        hasExistingSeafarerVisaDocument = false;
         break;
       case 'visa':
         visaDocument = null;
+        hasExistingVisaDocument = false;
         break;
       case 'residence_permit':
         residencePermitDocument = null;
+        hasExistingResidencePermitDocument = false;
         break;
     }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    // Dispose all controllers
+    seafarerRegistrationNoController.dispose();
+    passportNoController.dispose();
+    passportIssueDateController.dispose();
+    passportExpiryDateController.dispose();
+    seamanBookNoController.dispose();
+    seamanIssuingAuthorityController.dispose();
+    seamanIssueDateController.dispose();
+    seamanExpiryDateController.dispose();
+    seafarerVisaNoController.dispose();
+    seafarerVisaIssueDateController.dispose();
+    seafarerVisaExpiryDateController.dispose();
+    visaNoController.dispose();
+    visaIssueDateController.dispose();
+    visaExpiryDateController.dispose();
+    residencePermitNoController.dispose();
+    residencePermitIssueDateController.dispose();
+    residencePermitExpiryDateController.dispose();
+    
+    // Dispose all focus nodes
+    seafarerRegistrationNoFocusNode.dispose();
+    passportNoFocusNode.dispose();
+    passportIssueDateFocusNode.dispose();
+    passportExpiryDateFocusNode.dispose();
+    seamanBookNoFocusNode.dispose();
+    seamanIssuingAuthorityFocusNode.dispose();
+    seamanIssueDateFocusNode.dispose();
+    seamanExpiryDateFocusNode.dispose();
+    seafarerVisaNoFocusNode.dispose();
+    seafarerVisaIssueDateFocusNode.dispose();
+    seafarerVisaExpiryDateFocusNode.dispose();
+    visaNoFocusNode.dispose();
+    visaIssueDateFocusNode.dispose();
+    visaExpiryDateFocusNode.dispose();
+    residencePermitNoFocusNode.dispose();
+    residencePermitIssueDateFocusNode.dispose();
+    residencePermitExpiryDateFocusNode.dispose();
+    
+    super.dispose();
   }
 }
 
