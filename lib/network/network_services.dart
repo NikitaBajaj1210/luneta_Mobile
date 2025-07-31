@@ -293,7 +293,8 @@ class NetworkService {
   }
 
   Future postCreateResponse(String urlPath, Object? data, bool showLoading,
-      BuildContext context, VoidCallback notify) async {
+      BuildContext context, VoidCallback notify) async
+  {
     loading = 0;
     notify();
     if (showLoading && context.mounted) startLoading(context);
@@ -374,7 +375,8 @@ class NetworkService {
   }
 
   Future<Map<String, dynamic>> putResponse(String urlPath, Object? data,
-      bool showLoading, BuildContext context, VoidCallback notify) async {
+      bool showLoading, BuildContext context, VoidCallback notify) async
+  {
     loading = 0;
     notify();
     if (showLoading && context.mounted) startLoading(context);
@@ -449,7 +451,8 @@ class NetworkService {
   }
 
   Future getResponse(String urlPath, bool showLoading, BuildContext context,
-      VoidCallback notify) async {
+      VoidCallback notify) async
+  {
     loading = 0;
     notify();
 
@@ -513,7 +516,8 @@ class NetworkService {
 
 
   Future getResponsePage(String urlPath, bool showLoading, BuildContext context,
-      VoidCallback notify) async {
+      VoidCallback notify) async
+  {
     loading = 0;
     notify();
 
@@ -601,7 +605,8 @@ class NetworkService {
       bool showLoading,
       BuildContext context,
       VoidCallback notify,
-      ) async {
+      ) async
+  {
     loading = 0;
     notify();
 
@@ -658,72 +663,6 @@ class NetworkService {
 
     return [];
   }
-
-  Future<Map<String, dynamic>> getAuctionList(
-      String urlPath,
-      bool showLoading,
-      BuildContext context,
-      VoidCallback notify,
-      ) async {
-    loading = 0;
-    notify();
-
-    if (showLoading && context.mounted) startLoading(context);
-
-    try {
-      var response = await get(
-        Uri.parse(urlPath),
-        headers: NetworkHelper.header,
-      );
-      var res = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        loading = 2;
-        if (showLoading && context.mounted) stopLoading(context);
-        return res; // Return the entire response
-      } else if (response.statusCode == 400 || response.statusCode == 404) {
-        var res = jsonDecode(response.body);
-        loading = 2;
-        if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message']);
-        return {};
-      }else if(response.statusCode == 500){
-        loading = 1;
-        if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error",res['message']);
-        notify();
-      }else if(response.statusCode == 401) {
-        var loginProvider = Provider.of<LoginProvider>(context, listen: false);
-        await loginProvider.clearStoredLoginData();
-        if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error",res['message']);
-        NetworkHelper().removeToken(context);
-        Navigator.of(context).pushReplacementNamed(login);
-
-      }else {
-        var res = jsonDecode(response.body);
-        loading = 1;
-        if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message']);
-        notify();
-      }
-    } on SocketException {
-      loading = 1;
-      if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error", 'check your internet connection');
-      notify();
-    } catch (e) {
-      loading = 1;
-      if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error", 'something went wrong');
-      print(e.toString());
-      notify();
-    }
-
-    return {};
-  }
-
-
-
 
 //   Delete
 
@@ -952,7 +891,7 @@ class NetworkService {
   //     return false;
   //   }
   // }
-  Future<Map<String, dynamic>> multipartResponseSurvey(BuildContext context, String url, Map<String, String> fieldData, List<MultipartFile> fileList) async {
+  Future<Map<String, dynamic>> multipartResponse(BuildContext context, String url, Map<String, String> fieldData, List<MultipartFile> fileList) async {
     try {
       var headers = {
         'Content-Type': 'multipart/form-data',
