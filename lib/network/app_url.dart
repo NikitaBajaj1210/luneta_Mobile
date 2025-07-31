@@ -17,3 +17,6 @@ const verifyOtpForgotUrl = '${baseUrl}user/verify-otp-mobile';
 
 
 const getSeafarerCompleteProfile = '${baseUrl}seafarer-profile/getCompleteProfileDataMobile/';
+
+//post
+const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
