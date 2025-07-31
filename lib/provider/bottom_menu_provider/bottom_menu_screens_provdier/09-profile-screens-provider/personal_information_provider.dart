@@ -172,8 +172,18 @@ class PersonalInformationProvider extends ChangeNotifier {
   void pickProfileImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
-      _profileImage = File(pickedFile.path);
-      notifyListeners();
+      File imageFile = File(pickedFile.path);
+      int originalLength = await imageFile.length();
+
+      if (originalLength <= 20971520) {
+        XFile? compressedFile = await compressFile(imageFile);
+        if (compressedFile != null) {
+          _profileImage = File(compressedFile.path);
+          notifyListeners();
+        }
+      } else {
+        showToast('File size must be less than 20 MB');
+      }
     }
   }
 
@@ -262,7 +272,7 @@ class PersonalInformationProvider extends ChangeNotifier {
 
       var dio = Dio();
       var headers = {
-        'Authorization': 'Bearer ${NetworkHelper.loggedInUserId}',
+        'Authorization': 'Bearer ${NetworkHelper.token}',
         'Accept': 'application/json',
       };
 
@@ -355,107 +365,6 @@ class PersonalInformationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-
-
-//   Future<bool> updatePersonalInfo(BuildContext context) async {
-//     try {
-//       Map<String, String> fieldData = {
-//         'firstName': firstNameController.text,
-//         'lastName': lastNameController.text,
-//         'dateOfBirth':formatDateForAPI(dobController.text),
-//         'countryOfBirth': countryOfBirthController.text,
-//         'contactEmail':emailController.text,
-//         'religion': religionController.text,
-//         'sex': sex,
-//         'currentCountry':'',
-//         'nationality': nationalityController.text,
-//         'mobilePhone': phoneController.text,
-//         'directLinePhone': directPhoneController.text,
-//         'homeAddress':
-//         jsonEncode({"street":addressController.text,"city":"","state":"","postalCode":"","country":""}),
-//         'nearestAirport': nearestAirport ?? '',
-//         'maritalStatus': maritalStatus,
-//         'numberOfChildren': numberOfChildren.toString(),
-//         'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
-//         'userId': NetworkHelper.loggedInUserId,
-//       };
-//
-//       List<http.MultipartFile> fileList = [];
-//
-//       if (_profileImage != null) {
-//         String? mimeType = lookupMimeType(_profileImage!.path);
-//         fileList.add(
-//           await http.MultipartFile.fromPath(
-//             'profilePhoto',
-//             _profileImage!.path,
-//             contentType: MediaType.parse(mimeType!),
-//           ),
-//         );
-//       }
-//
-// // Convert http.MultipartFile to dio.MultipartFile
-//       List<dio.MultipartFile> dioFileList = await convertHttpToDioFiles(fileList);
-//
-//       var response = await NetworkServiceDio().multipartSeafarerProfile(
-//         context,
-//         postUpdatePersonalInfo,
-//         fieldData,
-//         dioFileList,
-//         true,
-//         notifyListeners,
-//       );
-//
-//       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
-//         ShowToast("Success", response['message'] ?? "Profile updated successfully");
-//         await getPersonalInfo(context);
-//         return true;
-//       } else {
-//         ShowToast("Error", response['message'] ?? "Failed to update profile");
-//         return false;
-//       }
-//     } catch (e) {
-//       print("Error in updatePersonalInfo: $e");
-//       ShowToast("Error", "An error occurred while updating profile.");
-//       return false;
-//     }
-//   }
-//
-//
-//   Future<List<dio.MultipartFile>> convertHttpToDioFiles(List<http.MultipartFile> fileList) async {
-//     List<dio.MultipartFile> dioFiles = [];
-//
-//     for (var file in fileList) {
-//       final bytes = await _readStreamBytes(file.finalize());
-//       final filename = file.filename ?? 'upload.jpg';
-//       dio.MultipartFile dioFile = dio.MultipartFile.fromBytes(
-//         bytes,
-//         filename: filename,
-//         contentType: file.contentType,
-//       );
-//       dioFiles.add(dioFile);
-//     }
-//
-//     return dioFiles;
-//   }
-//
-//   Future<List<int>> _readStreamBytes(Stream<List<int>> stream) async {
-//     final completer = Completer<List<int>>();
-//     final collected = <int>[];
-//
-//     stream.listen(
-//       collected.addAll,
-//       onDone: () => completer.complete(collected),
-//       onError: (e) => completer.completeError(e),
-//       cancelOnError: true,
-//     );
-//
-//     return completer.future;
-//   }
-
-
-
-
 }
 
 class PlatformEntry {

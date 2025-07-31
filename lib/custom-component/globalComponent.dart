@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -570,3 +572,64 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
   }
 }
 
+
+Future<XFile?> compressFile(File file) async {
+  var lengthf = await file.length();
+
+  print('File Size before compress => ${lengthf}');
+
+  final tmpDir = await getTemporaryDirectory();
+  final filePath = file.absolute.path;
+  final fileName = file.uri.pathSegments.last;
+  final imageName = fileName.split('.').first;
+  final outputPath = '${tmpDir.path}/${imageName}_app.jpg';
+
+  final fileLength = await file.length();
+
+  int quality = 25; // Default quality for files <= 1 MB
+
+  // Determine quality based on file size
+  if (fileLength >= 18874368) {
+    // >= 18 MB
+    quality = 7; // Highly compressed
+  } else if (fileLength >= 15728640) {
+    // >= 15 MB
+    quality = 9; // Highly compressed
+  } else if (fileLength >= 12582912) {
+    // >= 12 MB
+    quality = 13; // Highly compressed
+  } else if (fileLength >= 9437184) {
+    // >= 8 MB
+    quality = 16; // Highly compressed
+  } else if (fileLength >= 7340032) {
+    // >= 7 MB
+    quality = 19; // Highly compressed
+  } else if (fileLength >= 5242880) {
+    // >= 5 MB
+    quality = 22; // Highly compressed
+  } else if (fileLength >= 3145728) {
+    // >= 3 MB
+    quality = 28;
+  } else if (fileLength >= 2097152) {
+    // >= 2 MB
+    quality = 34;
+  } else if (fileLength <= 1048576) {
+    // <= 1 MB
+    quality = 30;
+  } else {
+    // Other cases
+    quality = 35;
+  }
+
+  final result = await FlutterImageCompress.compressAndGetFile(
+    filePath,
+    outputPath,
+    quality: quality,
+  );
+
+if(result!=null){
+  var length = await result.length();
+  print('File Size after compress => ${length}');
+}
+  return result;
+}
