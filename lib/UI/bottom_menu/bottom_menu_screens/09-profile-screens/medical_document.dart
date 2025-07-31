@@ -8,6 +8,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../network/network_helper.dart';
 
 class MedicalDocumentScreen extends StatefulWidget {
   const MedicalDocumentScreen({super.key});
@@ -18,9 +19,95 @@ class MedicalDocumentScreen extends StatefulWidget {
 
 class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Fetch medical documents when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<MedicalDocumentProvider>(context, listen: false);
+      String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+          ? NetworkHelper.loggedInUserId 
+          : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6'; // Fallback for testing
+      provider.fetchMedicalDocuments(userId, context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<MedicalDocumentProvider>(
       builder: (context, provider, child) {
+        // Show loading indicator
+        if (provider.isLoading) {
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: AppColors.Color_FFFFFF,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: AppColors.buttonColor,
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      'Loading medical documents...',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Show error state
+        if (provider.hasError) {
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: AppColors.Color_FFFFFF,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 5.h,
+                      color: Colors.red,
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      provider.errorMessage.isNotEmpty 
+                          ? provider.errorMessage 
+                          : 'Failed to load medical documents',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        color: AppColors.Color_424242,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 2.h),
+                                          ElevatedButton(
+                        onPressed: () {
+                          String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+                              ? NetworkHelper.loggedInUserId 
+                              : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
+                          provider.fetchMedicalDocuments(userId, context);
+                        },
+                      child: Text('Retry'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.buttonColor,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
@@ -32,10 +119,45 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                 border: Border.all(width: 1, color: AppColors.bottomNavBorderColor),
               ),
               child: customButton(
-                voidCallback: () {
+                voidCallback: () async {
                   if (provider.formKey.currentState!.validate()) {
-                    // Save the data in provider or update the profile here
-                    Navigator.pop(context);
+                    // Show loading indicator
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.buttonColor,
+                          ),
+                        );
+                      },
+                    );
+
+                    // Call the create/update API
+                    bool success = await provider.createOrUpdateMedicalDocumentsAPI(context);
+                    
+                    // Hide loading indicator
+                    Navigator.of(context).pop();
+
+                    // if (success) {
+                    //   // Show success message
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text('Medical documents saved successfully!'),
+                    //       backgroundColor: Colors.green,
+                    //     ),
+                    //   );
+                    //   Navigator.pop(context);
+                    // } else {
+                    //   // Show error message
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(provider.errorMessage),
+                    //       backgroundColor: Colors.red,
+                    //     ),
+                    //   );
+                    // }
                   } else {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
@@ -114,6 +236,99 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           )
                         ],
                       ),
+                      
+                      // Show existing medical fitness documents from API
+                      // if (provider.medicalDocumentData != null && provider.medicalDocumentData!.medicalFitness!.isNotEmpty)
+                      //   Container(
+                      //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                      //     padding: EdgeInsets.all(2.w),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.green.shade50,
+                      //       borderRadius: BorderRadius.circular(1.h),
+                      //       border: Border.all(color: Colors.green.shade200),
+                      //     ),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Row(
+                      //           children: [
+                      //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                      //             SizedBox(width: 1.w),
+                      //             Text(
+                      //               'Existing Medical Fitness Documents',
+                      //               style: TextStyle(
+                      //                 fontSize: AppFontSize.fontSize14,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.green.shade700,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         SizedBox(height: 1.h),
+                      //         ...provider.medicalDocumentData!.medicalFitness!.map((fitness) =>
+                      //           Container(
+                      //             margin: EdgeInsets.only(bottom: 1.h),
+                      //             padding: EdgeInsets.all(2.w),
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               borderRadius: BorderRadius.circular(0.5.h),
+                      //               border: Border.all(color: Colors.green.shade200),
+                      //             ),
+                      //             child: Column(
+                      //               crossAxisAlignment: CrossAxisAlignment.start,
+                      //               children: [
+                      //                 Text(
+                      //                   fitness.documentType!,
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize16,
+                      //                     fontWeight: FontWeight.bold,
+                      //                     color: AppColors.Color_212121,
+                      //                   ),
+                      //                 ),
+                      //                 SizedBox(height: 0.5.h),
+                      //                 Text(
+                      //                   'Certificate: ${fitness.certificateNo}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Country: ${fitness.issuingCountry}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Authority: ${fitness.issuingAuthority}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Valid: ${fitness.issuingDate} - ${fitness.expDate}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 if (fitness.documentOriginalName != null && fitness.documentOriginalName!.isNotEmpty)
+                      //                   Text(
+                      //                     'Document: ${fitness.documentOriginalName}',
+                      //                     style: TextStyle(
+                      //                       fontSize: AppFontSize.fontSize14,
+                      //                       color: AppColors.Color_616161,
+                      //                     ),
+                      //                   ),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         ).toList(),
+                      //       ],
+                      //     ),
+                      //   ),
                       ListView.builder(
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
@@ -157,7 +372,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                medicalFitness.documentType,
+                                                medicalFitness.documentType ?? '',
                                                 style: TextStyle(
                                                   fontSize: AppFontSize.fontSize20,
                                                   fontWeight: FontWeight.w700,
@@ -169,13 +384,13 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      provider.medicalFitnessDocumentType = medicalFitness.documentType;
-                                                      provider.medicalFitnessCertificateNoController.text = medicalFitness.certificateNo;
-                                                      provider.medicalFitnessIssuingCountry = medicalFitness.issuingCountry;
-                                                      provider.medicalFitnessIssuingAuthorityController.text = medicalFitness.issuingAuthority;
-                                                      provider.medicalFitnessIssueDateController.text = medicalFitness.issueDate;
-                                                      provider.medicalFitnessExpiryDateController.text = medicalFitness.expiryDate;
-                                                      provider.medicalFitnessNeverExpire = medicalFitness.neverExpire;
+                                                      provider.medicalFitnessDocumentType = medicalFitness.documentType ?? '';
+                                                      provider.medicalFitnessCertificateNoController.text = medicalFitness.certificateNo ?? '';
+                                                      provider.medicalFitnessIssuingCountry = medicalFitness.issuingCountry ?? '';
+                                                      provider.medicalFitnessIssuingAuthorityController.text = medicalFitness.issuingAuthority ?? '';
+                                                      provider.medicalFitnessIssueDateController.text = medicalFitness.issueDate ?? '';
+                                                      provider.medicalFitnessExpiryDateController.text = medicalFitness.expiryDate ?? '';
+                                                      provider.medicalFitnessNeverExpire = medicalFitness.neverExpire ?? false;
                                                       provider.medicalFitnessDocument = medicalFitness.document;
                                                       provider.setMedicalFitnessVisibility(true);
                                                       provider.medicalFitness_Edit_Index = index;
@@ -201,25 +416,25 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                             ],
                                           ),
                                           SizedBox(height: 0.5.h),
-                                          Text(
-                                            medicalFitness.certificateNo,
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize14,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.Color_212121,
-                                              fontFamily: AppColors.fontFamilyMedium,
+                                                                                      Text(
+                                              medicalFitness.certificateNo ?? '',
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColors.Color_212121,
+                                                fontFamily: AppColors.fontFamilyMedium,
+                                              ),
                                             ),
-                                          ),
                                           SizedBox(height: 0.5.h),
-                                          Text(
-                                            medicalFitness.issueDate + " - " + medicalFitness.expiryDate,
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize14,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.Color_212121,
-                                              fontFamily: AppColors.fontFamilyMedium,
+                                                                                      Text(
+                                              (medicalFitness.issueDate ?? '') + " - " + (medicalFitness.expiryDate ?? ''),
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColors.Color_212121,
+                                                fontFamily: AppColors.fontFamilyMedium,
+                                              ),
                                             ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -727,6 +942,107 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
+                      
+                      // Show existing drug & alcohol test documents from API
+                      if (provider.medicalDocumentData != null && provider.medicalDocumentData!.drugAlcoholTest!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing Drug & Alcohol Test Documents',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              ...provider.medicalDocumentData!.drugAlcoholTest!.map((test) =>
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 1.h),
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(0.5.h),
+                                    border: Border.all(color: Colors.green.shade200),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        test.documentType ?? '',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        'Certificate: ${test.certificateNo ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Country: ${test.issuingCountry ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Authority: ${test.issuingAuthority ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Issue Date: ${test.issuingDate ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      if (test.expDate != null)
+                                        Text(
+                                          'Expiry Date: ${test.expDate}',
+                                          style: TextStyle(
+                                            fontSize: AppFontSize.fontSize14,
+                                            color: AppColors.Color_616161,
+                                          ),
+                                        ),
+                                      if (test.documentOriginalName != null && test.documentOriginalName!.isNotEmpty)
+                                        Text(
+                                          'Document: ${test.documentOriginalName}',
+                                          style: TextStyle(
+                                            fontSize: AppFontSize.fontSize14,
+                                            color: AppColors.Color_616161,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ).toList(),
+                            ],
+                          ),
+                        ),
                       // Drug & Alcohol Test UI
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1026,6 +1342,18 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         ),
                       ),
                       SizedBox(height: 1.h),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: provider.drugAndAlcoholTestNeverExpire ?? false,
+                            onChanged: (value) {
+                              provider.setDrugAndAlcoholTestNeverExpire(value ?? false);
+                            },
+                          ),
+                          Text('Some never expire'),
+                        ],
+                      ),
+                      SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
@@ -1158,6 +1486,99 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
+                      
+                      // Show existing vaccination certificate documents from API
+                      if (provider.medicalDocumentData != null && provider.medicalDocumentData!.vaccinationCertificates!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing Vaccination Certificate Documents',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              ...provider.medicalDocumentData!.vaccinationCertificates!.map((cert) =>
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 1.h),
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(0.5.h),
+                                    border: Border.all(color: Colors.green.shade200),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        cert.documentType ?? '',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        'Certificate: ${cert.certificateNo ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Country: ${cert.issuingCountry ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Authority: ${cert.issuingAuthority ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Valid: ${cert.issuingDate ?? ''} - ${cert.expDate ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      if (cert.documentOriginalName != null && cert.documentOriginalName!.isNotEmpty)
+                                        Text(
+                                          'Document: ${cert.documentOriginalName}',
+                                          style: TextStyle(
+                                            fontSize: AppFontSize.fontSize14,
+                                            color: AppColors.Color_616161,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ).toList(),
+                            ],
+                          ),
+                        ),
                       // Vaccination Certificates UI
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1217,6 +1638,43 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             );
                           },
                         ),
+                      ),
+                      SizedBox(height: 1.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        child: Text(
+                          'Certificate No.',
+                          style: TextStyle(
+                            fontSize: AppFontSize.fontSize16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: AppColors.fontFamilyMedium,
+                            color: AppColors.Color_424242,
+                          ),
+                        ),
+                      ),
+                      customTextField(
+                        context: context,
+                        controller: provider.vaccinationCertificateCertificateNoController,
+                        hintText: 'Enter Certificate No.',
+                        textInputType: TextInputType.text,
+                        obscureText: false,
+                        autovalidateMode: provider.autovalidateMode,
+                        voidCallback: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Certificate No.';
+                          }
+                          return null;
+                        },
+                        fontSize: AppFontSize.fontSize16,
+                        inputFontSize: AppFontSize.fontSize16,
+                        backgroundColor: AppColors.Color_FAFAFA,
+                        borderColor: AppColors.buttonColor,
+                        textColor: Colors.black,
+                        labelColor: AppColors.Color_9E9E9E,
+                        cursorColor: AppColors.Color_212121,
+                        fillColor: provider.vaccinationCertificateIssuingAuthorityFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1401,7 +1859,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             obscureText: false,
                             autovalidateMode: provider.autovalidateMode,
                             voidCallback: (value) {
-                              if ((value == null || value.isEmpty) && !provider.vaccinationCertificateNeverExpire) {
+                              if ((value == null || value.isEmpty) && provider.vaccinationCertificateNeverExpire == false) {
                                 return 'Please select Expiry Date';
                               }
                               return null;

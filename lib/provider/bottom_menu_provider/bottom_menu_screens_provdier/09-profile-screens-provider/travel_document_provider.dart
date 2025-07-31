@@ -4,13 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../../../Utils/helper.dart';
 import '../../../../models/travel_document_model.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
 import 'package:luneta/custom-component/globalComponent.dart';
+import 'package:luneta/network/network_services.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -36,32 +36,47 @@ class TravelDocumentProvider extends ChangeNotifier {
   }
 
   // API call to fetch travel document data
-  Future<void> fetchTravelDocuments(String userId) async {
+  Future<void> fetchTravelDocuments(String userId, BuildContext context) async {
+    // If no userId provided, try to get from NetworkHelper
+    if (userId.isEmpty) {
+      userId = NetworkHelper.loggedInUserId;
+      print("LOGIN USER ID ${NetworkHelper.loggedInUserId}");
+    }
+
+    if (userId.isEmpty) {
+      hasError = true;
+      errorMessage = 'User ID not found. Please login again.';
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
     hasError = false;
     errorMessage = '';
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('$getTravelDocumentsByUserId$userId'),
-        headers: NetworkHelper.header,
+      final response = await NetworkService().getResponse(
+        '$getTravelDocumentsByUserId$userId',
+        false, // showLoading - let the provider handle loading
+        context,
+        () {}, // notify callback
       );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        final travelDocumentResponse = TravelDocumentResponse.fromJson(responseData);
+      print('Travel Documents Response: $response');
+
+      if (response.isNotEmpty) {
+        final travelDocumentResponse = TravelDocumentResponse.fromJson(response);
         
         if (travelDocumentResponse.data.isNotEmpty) {
           travelDocumentData = travelDocumentResponse.data.first;
           _populateFormData();
         }
         ShowToast("Success", travelDocumentResponse.message ?? "Fetch Data successfully");
-
       } else {
         hasError = true;
-        // errorMessage = 'Failed to load travel documents';
-        ShowToast("Error",  "Failed to load travel documents");
+        ShowToast("Error", "Failed to load travel documents");
       }
     } catch (e) {
       hasError = true;
@@ -201,7 +216,7 @@ class TravelDocumentProvider extends ChangeNotifier {
             ? NetworkHelper.loggedInUserId 
             : '';
         if (userId.isNotEmpty) {
-          await fetchTravelDocuments(userId);
+          await fetchTravelDocuments(userId,context);
         }
         return true;
       } else {
