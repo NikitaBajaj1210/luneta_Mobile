@@ -16,7 +16,6 @@ import '../../../../Utils/helper.dart';
 import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
-import '../../../../network/network_service_dio.dart';
 import '../../../../network/network_services.dart';
 import '../../../../route/route_constants.dart';
 import '../../../authentication-provider/login_provider.dart';
