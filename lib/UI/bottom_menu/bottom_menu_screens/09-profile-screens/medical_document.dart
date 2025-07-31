@@ -212,6 +212,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
+                                provider.medicalFitnessDocumentType =  '';
+                                provider.medicalFitnessCertificateNoController.text =  '';
+                                provider.medicalFitnessIssuingCountry =  '';
+                                provider.medicalFitnessIssuingAuthorityController.text =  '';
+                                provider.medicalFitnessIssueDateController.text = '';
+                                provider.medicalFitnessExpiryDateController.text =  '';
+                                provider.medicalFitnessNeverExpire = false;
+                                provider.medicalFitnessDocument = null;
+
+
+
                                 provider.setMedicalFitnessVisibility(true);
                                 provider.medicalFitness_Edit_Index = null;
                                 provider.medicalFitness_IsEdit = false;
@@ -395,6 +406,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                                       provider.setMedicalFitnessVisibility(true);
                                                       provider.medicalFitness_Edit_Index = index;
                                                       provider.medicalFitness_IsEdit = true;
+                                                      setState(() {
+                                                        
+                                                      });
                                                     },
                                                     child: Image.asset(
                                                       "assets/images/Edit.png",
@@ -481,7 +495,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     provider.setMedicalFitnessDocumentType('');
                                   },
                                   hint: "Select Document Type",
-                                  autovalidateMode: provider.autovalidateMode,
+                                  autovalidateMode: provider.autovalidateModeMedical,
                                   validator: (value) {
                                     if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
                                       return '      Please select Document Type';
@@ -530,7 +544,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 hintText: 'Enter Certificate No.',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
-                                autovalidateMode: provider.autovalidateMode,
+                                autovalidateMode: provider.autovalidateModeMedical,
                                 voidCallback: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter Certificate No.';
@@ -577,7 +591,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     provider.setMedicalFitnessIssuingCountry('');
                                   },
                                   hint: "Select Country",
-                                  autovalidateMode: provider.autovalidateMode,
+                                  autovalidateMode: provider.autovalidateModeMedical,
                                   validator: (value) {
                                     if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
                                       return '      Please select Country';
@@ -626,7 +640,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 hintText: 'Enter Issuing Clinic/Hospital/Authority',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
-                                autovalidateMode: provider.autovalidateMode,
+                                autovalidateMode: provider.autovalidateModeMedical,
                                 voidCallback: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter Issuing Clinic/Hospital/Authority';
@@ -675,7 +689,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     hintText: 'Select Issue Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
-                                    autovalidateMode: provider.autovalidateMode,
+                                    autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please select Issue Date';
@@ -726,7 +740,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     hintText: 'Select Expiry Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
-                                    autovalidateMode: provider.autovalidateMode,
+                                    autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
                                       if ((value == null || value.isEmpty) && !provider.medicalFitnessNeverExpire) {
                                         return 'Please select Expiry Date';
@@ -882,11 +896,11 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                   child: customButton(
                                     voidCallback: () {
-                                      if (provider.medicalFitnessFormKey.currentState!.validate() && provider.medicalFitnessDocument!=null) {
+                                                                              if (provider.medicalFitnessFormKey.currentState!.validate()) {
                                         MedicalFitness medicalFitness = MedicalFitness(
-                                          documentType: provider.medicalFitnessDocumentType!,
+                                          documentType: provider.medicalFitnessDocumentType ?? '',
                                           certificateNo: provider.medicalFitnessCertificateNoController.text,
-                                          issuingCountry: provider.medicalFitnessIssuingCountry!,
+                                          issuingCountry: provider.medicalFitnessIssuingCountry ?? '',
                                           issuingAuthority: provider.medicalFitnessIssuingAuthorityController.text,
                                           issueDate: provider.medicalFitnessIssueDateController.text,
                                           expiryDate: provider.medicalFitnessExpiryDateController.text,
