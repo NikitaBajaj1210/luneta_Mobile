@@ -41,7 +41,7 @@ class TravelDocumentProvider extends ChangeNotifier {
       userId = NetworkHelper.loggedInUserId;
       print("LOGIN USER ID ${NetworkHelper.loggedInUserId}");
     }
-    
+
     if (userId.isEmpty) {
       hasError = true;
       errorMessage = 'User ID not found. Please login again.';
@@ -49,7 +49,7 @@ class TravelDocumentProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    
+
     isLoading = true;
     hasError = false;
     errorMessage = '';
