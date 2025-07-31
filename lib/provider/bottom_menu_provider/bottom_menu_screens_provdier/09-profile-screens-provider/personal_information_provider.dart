@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
 
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
@@ -30,19 +31,6 @@ class PersonalInformationProvider extends ChangeNotifier {
     "Zoroastrianism",
     "Atheist",
     "Other"
-  ];
-
-  List<String> nearestAirportList = [
-    "Hartsfield-Jackson Atlanta International Airport (ATL)",
-    "Beijing Capital International Airport (PEK)",
-    "Dubai International Airport (DXB)",
-    "Los Angeles International Airport (LAX)",
-    "Tokyo Haneda Airport (HND)",
-    "O'Hare International Airport (ORD)",
-    "London Heathrow Airport (LHR)",
-    "Shanghai Pudong International Airport (PVG)",
-    "Charles de Gaulle Airport (CDG)",
-    "Dallas/Fort Worth International Airport (DFW)"
   ];
 
   PersonalInformationProvider() {
@@ -182,7 +170,7 @@ class PersonalInformationProvider extends ChangeNotifier {
   }
 
   void setDOB(DateTime date) {
-    dobController.text = "${date.toLocal()}".split(' ')[0];
+    dobController.text = formatToMMDDYYYYString("${date.toLocal()}".split(' ')[0]);
     notifyListeners();
   }
 
