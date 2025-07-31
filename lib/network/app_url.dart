@@ -21,6 +21,7 @@ const getTravelDocumentsByUserId = '${baseUrl}seafarer-profile/travel-documents/
 const createOrUpdateTravelDocuments = '${baseUrl}seafarer-profile/travel-documents/create-or-update';
 const getMedicalDocumentsByUserId = '${baseUrl}seafarer-profile/medical-documents/getByUserId/';
 const createOrUpdateMedicalDocuments = '${baseUrl}seafarer-profile/medical-documents/create-or-update';
+const getProfessionalExperienceByUserId = '${baseUrl}professional-experience/get-by-user-profile/';
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';

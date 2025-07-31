@@ -3,10 +3,22 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import '../../../../models/professional_experience_model.dart';
+import '../../../../network/app_url.dart';
+import '../../../../network/network_helper.dart';
+import '../../../../network/network_services.dart';
+import '../../../../custom-component/globalComponent.dart';
 
 class ProfessionalExperienceProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  // Loading states
+  bool isLoading = false;
+  bool hasError = false;
+  String errorMessage = '';
+  ProfessionalExperience? professionalExperienceData;
 
   File? referenceDocument;
   // Controllers for text fields
@@ -206,6 +218,105 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   void removeReference(int index) {
     _references.removeAt(index);
     notifyListeners();
+  }
+
+  // API call to fetch professional experience data
+  Future<void> fetchProfessionalExperience(String userId, BuildContext context) async {
+    if (userId.isEmpty) {
+      userId = NetworkHelper.loggedInUserId;
+      print("LOGIN USER ID ${NetworkHelper.loggedInUserId}");
+    }
+
+    if (userId.isEmpty) {
+      hasError = true;
+      errorMessage = 'User ID not found. Please login again.';
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
+
+    isLoading = true;
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+
+    try {
+      final response = await NetworkService().getResponse(
+        '$getProfessionalExperienceByUserId$userId',
+        false, // showLoading - let the provider handle loading
+        context,
+        () {},
+      );
+
+      print('Professional Experience Response: $response');
+
+      if (response.isNotEmpty) {
+        final professionalExperienceResponse = ProfessionalExperienceResponse.fromJson(response);
+
+        if (professionalExperienceResponse.data.isNotEmpty) {
+          professionalExperienceData = professionalExperienceResponse.data.first;
+          _populateFormData();
+        }
+
+        ShowToast("Success", "Professional experience fetched successfully");
+      } else {
+        hasError = true;
+        ShowToast("Error", "Failed to load professional experience");
+      }
+    } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
+      ShowToast("Error", "Network error: ${e.toString()}");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Populate form data from API response
+  void _populateFormData() {
+    if (professionalExperienceData == null) return;
+
+    // Populate Positions Held
+    if (professionalExperienceData!.positionsHeld != null && 
+        professionalExperienceData!.positionsHeld!.isNotEmpty) {
+      setPositionsHeld(professionalExperienceData!.positionsHeld!);
+    }
+
+    // Populate Vessel Type Experience
+    if (professionalExperienceData!.vesselTypeExperience != null && 
+        professionalExperienceData!.vesselTypeExperience!.isNotEmpty) {
+      setVesselTypeExperience(professionalExperienceData!.vesselTypeExperience!);
+    }
+
+    // Populate Employment History
+    if (professionalExperienceData!.employmentHistory != null && 
+        professionalExperienceData!.employmentHistory!.isNotEmpty) {
+      for (var history in professionalExperienceData!.employmentHistory!) {
+        EmploymentHistory localHistory = EmploymentHistory(
+          companyName: history.companyName ?? '',
+          position: [history.position ?? ''],
+          startDate: history.startDate ?? '',
+          endDate: history.endDate ?? '',
+          responsibilities: history.responsibilities ?? '',
+        );
+        _employmentHistory.add(localHistory);
+      }
+    }
+
+    // Populate References
+    if (professionalExperienceData!.references != null && 
+        professionalExperienceData!.references!.isNotEmpty) {
+      for (var reference in professionalExperienceData!.references!) {
+        Reference localReference = Reference(
+          issuedBy: reference.issuedBy ?? '',
+          issuingDate: reference.issuingDate ?? '',
+          vesselOrCompanyName: reference.vesselOrCompanyName ?? '',
+          documentUrl: reference.experienceDocumentOriginalName ?? '',
+        );
+        _references.add(localReference);
+      }
+    }
   }
 
   @override

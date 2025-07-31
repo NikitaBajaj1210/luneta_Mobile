@@ -10,6 +10,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../network/network_helper.dart';
 
 class ProfessionalExperienceScreen extends StatefulWidget {
   const ProfessionalExperienceScreen({super.key});
@@ -19,6 +20,18 @@ class ProfessionalExperienceScreen extends StatefulWidget {
 }
 
 class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var provider = Provider.of<ProfessionalExperienceProvider>(context,listen: false);
+      String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+          ? NetworkHelper.loggedInUserId 
+          : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
+      provider.fetchProfessionalExperience(userId, context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProfessionalExperienceProvider>(
@@ -56,7 +69,39 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
             ),
             body: Container(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-              child: SingleChildScrollView(
+              child: provider.isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.buttonColor,
+                      ),
+                    )
+                  : provider.hasError
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Error: ${provider.errorMessage}',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 2.h),
+                              ElevatedButton(
+                                onPressed: () {
+                                  String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+                                      ? NetworkHelper.loggedInUserId 
+                                      : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
+                                  provider.fetchProfessionalExperience(userId, context);
+                                },
+                                child: Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
                 child: Form(
                   key: provider.formKey,
                   autovalidateMode: provider.autovalidateMode,
@@ -128,6 +173,62 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           ),
                         )
                       ),
+
+                      // Show existing positions held from API
+                      if (provider.professionalExperienceData != null && 
+                          provider.professionalExperienceData!.positionsHeld != null &&
+                          provider.professionalExperienceData!.positionsHeld!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing Positions Held',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              Wrap(
+                                spacing: 2.w,
+                                runSpacing: 1.h,
+                                children: provider.professionalExperienceData!.positionsHeld!.map((position) => 
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.h),
+                                      border: Border.all(color: AppColors.buttonColor, width: 0.15.h),
+                                    ),
+                                    child: Text(
+                                      position,
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.buttonColor,
+                                        fontFamily: AppColors.fontFamilySemiBold,
+                                      ),
+                                    ),
+                                  )
+                                ).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
 
                       // Vessel Type Experience (Multiselect Dropdown)
                       Padding(
@@ -214,7 +315,63 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       //       underline: SizedBox(),
                       //     ),
                       //   ),
-                      // ),
+                      //                       ),
+
+                      // Show existing vessel type experience from API
+                      if (provider.professionalExperienceData != null && 
+                          provider.professionalExperienceData!.vesselTypeExperience != null &&
+                          provider.professionalExperienceData!.vesselTypeExperience!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing Vessel Type Experience',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              Wrap(
+                                spacing: 2.w,
+                                runSpacing: 1.h,
+                                children: provider.professionalExperienceData!.vesselTypeExperience!.map((vessel) => 
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.h),
+                                      border: Border.all(color: AppColors.buttonColor, width: 0.15.h),
+                                    ),
+                                    child: Text(
+                                      vessel,
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.buttonColor,
+                                        fontFamily: AppColors.fontFamilySemiBold,
+                                      ),
+                                    ),
+                                  )
+                                ).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
 
                       // Employment History (Repeater)
                       Row(
@@ -712,7 +869,85 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                         ],
                       ) : Container(),
 
-
+                      // Show existing employment history from API
+                      if (provider.professionalExperienceData != null && 
+                          provider.professionalExperienceData!.employmentHistory != null &&
+                          provider.professionalExperienceData!.employmentHistory!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing Employment History',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              ...provider.professionalExperienceData!.employmentHistory!.map((history) => 
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 1.h),
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(0.5.h),
+                                    border: Border.all(color: Colors.green.shade200),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        history.companyName ?? '',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        'Position: ${history.position ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Period: ${history.startDate ?? ''} - ${history.endDate ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Responsibilities: ${history.responsibilities ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ).toList(),
+                            ],
+                          ),
+                        ),
 
                       // References (Repeater)
                       Row(
@@ -758,6 +993,89 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                           )
                         ],
                       ),
+
+                      // Show existing references from API
+                      if (provider.professionalExperienceData != null && 
+                          provider.professionalExperienceData!.references != null &&
+                          provider.professionalExperienceData!.references!.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 1.h),
+                          padding: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                                  SizedBox(width: 1.w),
+                                  Text(
+                                    'Existing References',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 1.h),
+                              ...provider.professionalExperienceData!.references!.map((reference) => 
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 1.h),
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(0.5.h),
+                                    border: Border.all(color: Colors.green.shade200),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        reference.vesselOrCompanyName ?? '',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        'Issued By: ${reference.issuedBy ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Issued Date: ${reference.issuingDate ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize14,
+                                          color: AppColors.Color_616161,
+                                        ),
+                                      ),
+                                      if (reference.experienceDocumentOriginalName != null && 
+                                          reference.experienceDocumentOriginalName!.isNotEmpty)
+                                        Text(
+                                          'Document: ${reference.experienceDocumentOriginalName}',
+                                          style: TextStyle(
+                                            fontSize: AppFontSize.fontSize14,
+                                            color: AppColors.Color_616161,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              ).toList(),
+                            ],
+                          ),
+                        ),
+
                       ListView.builder(
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
