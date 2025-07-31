@@ -77,6 +77,8 @@ class PersonalInformationProvider extends ChangeNotifier {
   final FocusNode sexFocusNode = FocusNode();
   File? _profileImage;
   File? get profileImage => _profileImage;
+  String? _profileImage_network;
+  String? get profileImage_network => _profileImage_network;
 
   bool _showAddSection_communication=false;
   bool get showAddSection_communication=>_showAddSection_communication;
@@ -112,6 +114,11 @@ class PersonalInformationProvider extends ChangeNotifier {
 
   void removeCommunicationChannel(int index) {
     _communicationList.removeAt(index);
+    notifyListeners();
+  }
+
+  void updateProfileImage(String? url) {
+    _profileImage_network= url;
     notifyListeners();
   }
 
@@ -222,6 +229,8 @@ class PersonalInformationProvider extends ChangeNotifier {
           numberOfChildren = profileData['numberOfChildren'] ?? 0;
           addressController.text = profileData['homeAddress']==null?'':profileData['homeAddress']['street'] ?? '';
           nearestAirport = profileData['nearestAirport'] ?? '';
+
+          updateProfileImage(profileData['profileURl']);
 
           if (profileData['dateOfBirth'] != null) {
             final dob = DateTime.parse(profileData['dateOfBirth']);

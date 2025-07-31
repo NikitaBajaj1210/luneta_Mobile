@@ -25,10 +25,10 @@ final List<Map<String, String>> sexList = [
 ];
 
 final List<Map<String, String>> nationalityList = [
-  {'key': 'INDIA', 'value': 'India'},
-  {'key': 'USA', 'value': 'United States'},
-  {'key': 'UK', 'value': 'United Kingdom'},
-  {'key': 'PHILIPPINES', 'value': 'Philippines'},
+  {'key': 'INDIAN', 'value': 'Indian'},
+  {'key': 'AMERICAN', 'value': 'American'},
+  {'key': 'BRITISH', 'value': 'British'},
+  {'key': 'FILIPINO', 'value': 'Filipino'},
   {'key': 'OTHER', 'value': 'Other'},
 ];
 

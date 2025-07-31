@@ -33,7 +33,6 @@ import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdie
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/skills_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/work_experience_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/deactivate_account_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/help_center_provider.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/Setting-Screen-Provider/job_seeking_status_provider.dart';
@@ -95,7 +94,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => BottomMenuProvider()),
         ChangeNotifierProvider(create: (_) => ProfileBottommenuProvider()),
-        ChangeNotifierProvider(create: (_) => WorkExperienceProvider()),
         ChangeNotifierProvider(create: (_) => SummaryProvider()),
         ChangeNotifierProvider(create: (_) => ExpectedSalaryProvider()),
         ChangeNotifierProvider(create: (_) => HomeScreenProvider()),

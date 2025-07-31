@@ -126,22 +126,11 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                               ),
                               index != 7?GestureDetector(
                                 onTap: () {
-
-                                  bool curentFlag = profileProvider.getSectionStatus(section["title"]);
-
-
                                   switch (index) {
                                     case 0:
                                       Navigator.of(context).pushNamed(personalInfo);
                                       break;
                                     case 1:
-                                      // final contactProvider =
-                                      //     Provider.of<SummaryProvider>(context,
-                                      //         listen: false);
-                                      // // Set the values directly in the provider
-                                      // contactProvider.summaryController.text =
-                                      //     profileProvider.summary ?? '';
-                                      // profileProvider.setSectionStatus(section["title"],!curentFlag);
                                       Navigator.of(context).pushNamed(ProfessionalExperience);
                                       break;
                                     case 2:
@@ -163,21 +152,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                     case 6:
                                       Navigator.of(context)
                                           .pushNamed(jobConditionsAndPreferences);
-                                      break;
-                                    case 7:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
-                                      Navigator.of(context)
-                                          .pushNamed(certificationScreen);
-                                      break;
-                                    case 8:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
-                                      Navigator.of(context)
-                                          .pushNamed(volunteeringScreen);
-                                      break;
-                                    case 9:
-                                      profileProvider.setSectionStatus(section["title"],!curentFlag);
-                                      Navigator.of(context)
-                                          .pushNamed(professionalExamScreen);
                                       break;
                                     default:
                                       print("No action defined for this section");
