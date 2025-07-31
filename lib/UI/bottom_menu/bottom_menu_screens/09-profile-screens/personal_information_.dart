@@ -47,10 +47,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 border: Border.all(width: 1, color: AppColors.bottomNavBorderColor),
               ),
               child: customButton(
-                voidCallback: () {
+                voidCallback: () async {
                   if (provider.formKey.currentState!.validate()) {
-                    // Save the data in provider or update the profile here
-                    Navigator.pop(context);
+                    bool success = await provider.updatePersonalInfo(context);
+                    if(success && context.mounted){
+                      Navigator.pop(context);
+                    }
                   } else {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
