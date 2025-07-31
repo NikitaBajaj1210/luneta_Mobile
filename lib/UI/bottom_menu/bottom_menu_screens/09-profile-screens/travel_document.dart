@@ -30,7 +30,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
           ? NetworkHelper.loggedInUserId 
           :'';
       print("LOGIN USER ID IN THE SCREEN ${NetworkHelper.loggedInUserId}");
-      provider.fetchTravelDocuments(userId);
+      provider.fetchTravelDocuments(userId, context);
     });
   }
 
@@ -149,7 +149,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                         String userId = NetworkHelper.loggedInUserId.isNotEmpty 
                             ? NetworkHelper.loggedInUserId 
                             : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
-                        provider.fetchTravelDocuments(userId);
+                        provider.fetchTravelDocuments(userId,context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.buttonColor,
