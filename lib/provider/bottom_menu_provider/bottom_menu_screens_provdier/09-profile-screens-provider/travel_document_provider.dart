@@ -9,6 +9,7 @@ import 'dart:convert';
 import '../../../../models/travel_document_model.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
+import 'package:luneta/custom-component/globalComponent.dart';
 
 class TravelDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -95,15 +96,6 @@ class TravelDocumentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Create multipart request
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(createOrUpdateTravelDocuments),
-      );
-
-      // Add headers
-      request.headers.addAll(NetworkHelper.header);
-
       // Prepare the data object
       Map<String, dynamic> data = {
         'seafarerRegNo': seafarerRegistrationNoController.text,
@@ -140,45 +132,6 @@ class TravelDocumentProvider extends ChangeNotifier {
         // 'id': travelDocumentData?.id, // Use existing ID if updating
       };
 
-      // Add data as JSON string (API expects an array)
-      request.fields['data'] = jsonEncode([data]);
-
-      // Add files if they exist
-      if (passportDocument != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'passportDocument',
-          passportDocument!.path,
-        ));
-      }
-
-      if (seamanDocument != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'seamansBookDocument',
-          seamanDocument!.path,
-        ));
-      }
-
-      if (seafarerVisaDocument != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'seafarerVisaDocument',
-          seafarerVisaDocument!.path,
-        ));
-      }
-
-      if (visaDocument != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'visaDocument',
-          visaDocument!.path,
-        ));
-      }
-
-      if (residencePermitDocument != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'residencePermitDocument',
-          residencePermitDocument!.path,
-        ));
-      }
-
       // If no new files are uploaded but we have existing documents, 
       // we need to include the existing document paths in the data
       if (passportDocument == null && travelDocumentData?.passportDocumentPath.isNotEmpty == true) {
@@ -197,52 +150,83 @@ class TravelDocumentProvider extends ChangeNotifier {
         data['residencePermitDocumentPath'] = travelDocumentData!.residencePermitDocumentPath;
       }
 
-      // Update the data field with the modified data (API expects an array)
-      request.fields['data'] = jsonEncode([data]);
 
-      print('Request URL: ${request.url}');
-      print('Request Headers: ${request.headers}');
-      print('Request Fields: ${request.fields}');
-      print('Request Files: ${request.files.length}');
 
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
+      // Call the Dio-based multipart function from globalComponent
+      
+      // Convert fieldData to the format expected by Dio function
+      Map<String, dynamic> dioFieldData = {
+        'data': jsonEncode([data]), // API expects an array
+      };
+      
+      // Convert fileList to the format expected by Dio function
+      List<Map<String, dynamic>> dioFileList = [];
+      
+      if (passportDocument != null) {
+        dioFileList.add({
+          'fieldName': 'passportDocument',
+          'filePath': passportDocument!.path,
+          'fileName': passportDocument!.path.split('/').last,
+        });
+      }
+      
+      if (seamanDocument != null) {
+        dioFileList.add({
+          'fieldName': 'seamansBookDocument',
+          'filePath': seamanDocument!.path,
+          'fileName': seamanDocument!.path.split('/').last,
+        });
+      }
+      
+      if (seafarerVisaDocument != null) {
+        dioFileList.add({
+          'fieldName': 'seafarerVisaDocument',
+          'filePath': seafarerVisaDocument!.path,
+          'fileName': seafarerVisaDocument!.path.split('/').last,
+        });
+      }
+      
+      if (visaDocument != null) {
+        dioFileList.add({
+          'fieldName': 'visaDocument',
+          'filePath': visaDocument!.path,
+          'fileName': visaDocument!.path.split('/').last,
+        });
+      }
+      
+      if (residencePermitDocument != null) {
+        dioFileList.add({
+          'fieldName': 'residencePermitDocument',
+          'filePath': residencePermitDocument!.path,
+          'fileName': residencePermitDocument!.path.split('/').last,
+        });
+      }
+      
+      final response = await multipartDocumentsDio(
+        context,
+        createOrUpdateTravelDocuments,
+        dioFieldData,
+        dioFileList,
+        true, // showLoading
+      );
 
-      print('Response Status: ${response.statusCode}');
-      print('Response Body: $responseBody');
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final Map<String, dynamic> responseData = json.decode(responseBody);
-        final createUpdateResponse = CreateUpdateTravelDocumentResponse.fromJson(responseData);
-        
-        if (createUpdateResponse.data) {
-          // Success - refresh the data
-          String userId = NetworkHelper.loggedInUserId.isNotEmpty 
-              ? NetworkHelper.loggedInUserId 
-              : '';
-          if (userId.isNotEmpty) {
-            await fetchTravelDocuments(userId);
-          }
-          ShowToast("Success", createUpdateResponse.message ?? "Updated successfully");
-          Navigator.pop(context);
-          return true;
-        } else {
-          hasError = true;
-          errorMessage = createUpdateResponse.message;
-          ShowToast("Error", "$errorMessage}");
-          return false;
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        // Success - refresh the data
+        String userId = NetworkHelper.loggedInUserId.isNotEmpty 
+            ? NetworkHelper.loggedInUserId 
+            : '';
+        if (userId.isNotEmpty) {
+          await fetchTravelDocuments(userId);
         }
+        return true;
       } else {
-        print(responseBody);
         hasError = true;
-        errorMessage = 'Failed to save travel documents';
-        ShowToast("Error", "$errorMessage}");
+        errorMessage = response['message'] ?? 'Failed to save travel documents';
         return false;
       }
     } catch (e) {
       hasError = true;
       errorMessage = 'Network error: ${e.toString()}';
-      ShowToast("Error", "Network error: ${e.toString()}");
       return false;
     } finally {
       isLoading = false;
