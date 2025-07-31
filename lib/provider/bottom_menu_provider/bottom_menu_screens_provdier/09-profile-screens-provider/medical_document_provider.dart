@@ -521,6 +521,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
 import 'dart:convert';
+import '../../../../Utils/helper.dart';
 import '../../../../models/medical_document_model.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
@@ -862,19 +863,34 @@ class MedicalDocumentProvider extends ChangeNotifier {
   Future<void> _pickImage(ImageSource source, String type) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      switch (type) {
-        case 'medical_fitness':
-          medicalFitnessDocument = file;
-          break;
-        case 'drug_alcohol_test':
-          drugAndAlcoholTestDocument = file;
-          break;
-        case 'vaccination_certificate':
-          vaccinationCertificateDocument = file;
-          break;
+      File? file;
+
+      File imageFile = File(pickedFile.path);
+      int originalLength = await imageFile.length();
+
+      if (originalLength <= 20971520) {
+        XFile? compressedFile = await compressFile(imageFile);
+        if (compressedFile != null) {
+          file = File(compressedFile.path);
+          notifyListeners();
+        }
+      } else {
+        showToast('File size must be less than 20 MB');
       }
-      notifyListeners();
+      if (file != null) {
+        switch (type) {
+          case 'medical_fitness':
+            medicalFitnessDocument = file;
+            break;
+          case 'drug_alcohol_test':
+            drugAndAlcoholTestDocument = file;
+            break;
+          case 'vaccination_certificate':
+            vaccinationCertificateDocument = file;
+            break;
+        }
+        notifyListeners();
+      }
     }
   }
 
