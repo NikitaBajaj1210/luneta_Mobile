@@ -10,24 +10,11 @@ import 'package:luneta/UI/authentication-screen/otp_screen.dart';
 import 'package:luneta/UI/authentication-screen/signup_screen.dart';
 import 'package:luneta/UI/authentication-screen/login_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_bar.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/affiliations_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/certification_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/personal_information_.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/cv_resume_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/edit_profile_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/education_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/expected_salary_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/projects_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/summary_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/volunteering_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/work_experience_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/professionalExam_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/awards_achievements_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/seminars_trainings_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/organization_activities_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/languages_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/skills_screen.dart';
-import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/references_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_skills_screen.dart';
 import 'package:luneta/UI/bottom_menu/bottom_menu_screens/Setting-Screens/deactivate_account_screen.dart';
 import 'package:luneta/UI/bottom_menu/filter_screen.dart';
@@ -38,9 +25,7 @@ import 'package:luneta/UI/job-deatils-application-screens/apply_job_cv_screen.da
 import 'package:luneta/UI/job-deatils-application-screens/apply_job_profile_screen.dart';
 import 'package:luneta/UI/job-deatils-application-screens/job_details_screen.dart';
 import 'package:luneta/UI/landing-screen/LandingScreen.dart';
-import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_exam_provider.dart';
 import 'package:luneta/route/route_constants.dart';
-
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/job_conditions_and_preferences_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/professional_experience.dart';
 import '../UI/bottom_menu/bottom_menu_screens/09-profile-screens/travel_document.dart';
@@ -50,20 +35,15 @@ import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/job_seeking_status
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/linked_accounts_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/notification_settings_screen.dart';
-import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/personal_information_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/security_settings_screen.dart';
 import '../UI/bottom_menu/bottom_menu_screens/Setting-Screens/settings_screen.dart';
 import '../UI/intro/IntroScreen.dart';
 import '../UI/splash/SplashScreen.dart';
 import '../UI/welcomeScreen/WelcomeScreen.dart';
 import 'package:provider/provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/certification_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/personal_information_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/projects_screen_provider.dart';
 import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/volunteering_provider.dart';
-import '../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/work_experience_provider.dart';
 
 class NavRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -116,7 +96,6 @@ class NavRouter {
         return MaterialPageRoute(
           builder: (context) => const ForgotPassword(),
         );
-
       case otpScreen:
         return MaterialPageRoute(
           builder: (context) {
@@ -246,16 +225,6 @@ class NavRouter {
         return MaterialPageRoute(
           builder: (context) => const ExpectedSalaryScreen(),
         );
-        case workExperienceScreen:
-        return MaterialPageRoute(
-          builder: (context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: Provider.of<WorkExperienceProvider>(context, listen: false)),
-              ChangeNotifierProvider.value(value: Provider.of<ProfileBottommenuProvider>(context, listen: false)),
-            ],
-            child: const WorkExperienceScreen(),
-          ),
-        );
         case educationScreen:
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
@@ -273,71 +242,9 @@ class NavRouter {
             child: const ProjectsScreen(),
           ),
         );
-        case certificationScreen:
-        return MaterialPageRoute(
-          builder: (context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: Provider.of<CertificationProvider>(context, listen: false)),
-              ChangeNotifierProvider.value(value: Provider.of<ProfileBottommenuProvider>(context, listen: false)),
-            ],
-            child: const CertificationScreen(),
-          ),
-        );
-        case volunteeringScreen:
-        return MaterialPageRoute(
-          builder: (context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: Provider.of<VolunteeringProvider>(context, listen: false)),
-              ChangeNotifierProvider.value(value: Provider.of<ProfileBottommenuProvider>(context, listen: false)),
-            ],
-            child: const VolunteeringScreen(),
-          ),
-        );
-        case professionalExamScreen:
-        return MaterialPageRoute(
-          builder: (context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: Provider.of<ProfessionalExamProvider>(context, listen: false)),
-              ChangeNotifierProvider.value(value: Provider.of<ProfileBottommenuProvider>(context, listen: false)),
-            ],
-            child: const ProfessionalExamScreen(),
-          ),
-        );
-        case awardsAchievementsScreen:
-        return MaterialPageRoute(
-          builder: (context) => const AwardsAchievementsScreen(),
-        );
-        case seminarsTrainingsScreen:
-        return MaterialPageRoute(
-          builder: (context) => const SeminarsTrainingsScreen(),
-        );
-        case organizationActivitiesScreen:
-        return MaterialPageRoute(
-          builder: (context) => const OrganizationActivitiesScreen(),
-        );
-        case languagesScreen:
-        return MaterialPageRoute(
-          builder: (context) => const LanguagesScreen(),
-        );
-        case skillsScreen:
-        return MaterialPageRoute(
-          builder: (context) => const SkillsScreen(),
-        );
-        case affiliationsScreen:
-        return MaterialPageRoute(
-          builder: (context) => const AffiliationsScreen(),
-        );
-        case referencesScreen:
-        return MaterialPageRoute(
-          builder: (context) => const ReferencesScreen(),
-        );
       case professionalSkillsScreen:
         return MaterialPageRoute(
           builder: (context) => const ProfessionalSkillsScreen(),
-        );
-        case cvResumeScreen:
-        return MaterialPageRoute(
-          builder: (context) => const CVResumeScreen(),
         );
         case settingsScreen:
         return MaterialPageRoute(
