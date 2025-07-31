@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:http/http.dart' as http;
+
 
 import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/app_url.dart';
@@ -253,3 +256,59 @@ class PlatformEntry {
   PlatformEntry({required this.platform, required this.numberOrId});
 }
 
+
+extension PersonalInformationProviderExtension on PersonalInformationProvider {
+  Future<bool> updatePersonalInfo(BuildContext context) async {
+    try {
+      Map<String, String> fieldData = {
+        'firstName': firstNameController.text,
+        'lastName': lastNameController.text,
+        'dateOfBirth': dobController.text,
+        'countryOfBirth': countryOfBirthController.text,
+        'religion': religionController.text,
+        'sex': sex,
+        'nationality': nationalityController.text,
+        'mobilePhone': phoneController.text,
+        'directLinePhone': directPhoneController.text,
+        'homeAddress[street]': addressController.text,
+        'nearestAirport': nearestAirport ?? '',
+        'maritalStatus': maritalStatus,
+        'numberOfChildren': numberOfChildren.toString(),
+        'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
+        'seafarerId': NetworkHelper.loggedInUserId,
+      };
+
+      List<http.MultipartFile> fileList = [];
+      if (_profileImage != null) {
+        fileList.add(
+          await http.MultipartFile.fromPath(
+            'profile',
+            _profileImage!.path,
+          ),
+        );
+      }
+
+      var response = await NetworkService().multipartSeafarerProfile(
+        context,
+        seafarerProfileBasicInfo,
+        fieldData,
+        fileList,
+        true,
+        notifyListeners,
+      );
+
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        ShowToast("Success", response['message'] ?? "Profile updated successfully");
+        await getPersonalInfo(context);
+        return true;
+      } else {
+        ShowToast("Error", response['message'] ?? "Failed to update profile");
+        return false;
+      }
+    } catch (e) {
+      print("Error in updatePersonalInfo: $e");
+      ShowToast("Error", "An error occurred while updating profile.");
+      return false;
+    }
+  }
+}
