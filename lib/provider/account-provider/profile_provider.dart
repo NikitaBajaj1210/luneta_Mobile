@@ -464,8 +464,18 @@ class ProfileProvider with ChangeNotifier {
     await checkPermission(context);
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
-      profileImage = File(pickedFile.path);
-      notifyListeners();
+      File imageFile = File(pickedFile.path);
+      int originalLength = await imageFile.length();
+
+      if (originalLength <= 20971520) {
+        XFile? compressedFile = await compressFile(imageFile);
+        if (compressedFile != null) {
+          profileImage = File(compressedFile.path);
+          notifyListeners();
+        }
+      } else {
+        showToast('File size must be less than 20 MB');
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:country_picker/country_picker.dart';
 import 'dart:convert';
+import '../../../../Utils/helper.dart';
 import '../../../../models/travel_document_model.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
@@ -592,29 +593,44 @@ class TravelDocumentProvider extends ChangeNotifier {
   Future<void> _pickImage(ImageSource source, String type) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      switch (type) {
-        case 'passport':
-          passportDocument = file;
-          hasExistingPassportDocument = true;
-          break;
-        case 'seaman':
-          seamanDocument = file;
-          hasExistingSeamanDocument = true;
-          break;
-        case 'seafarer_visa':
-          seafarerVisaDocument = file;
-          hasExistingSeafarerVisaDocument = true;
-          break;
-        case 'visa':
-          visaDocument = file;
-          hasExistingVisaDocument = true;
-          break;
-        case 'residence_permit':
-          residencePermitDocument = file;
-          hasExistingResidencePermitDocument = true;
-          break;
+      File? file;
+
+      File imageFile = File(pickedFile.path);
+      int originalLength = await imageFile.length();
+
+      if (originalLength <= 20971520) {
+        XFile? compressedFile = await compressFile(imageFile);
+        if (compressedFile != null) {
+          file = File(compressedFile.path);
+          notifyListeners();
+        }
+      } else {
+        showToast('File size must be less than 20 MB');
       }
+if(file!=null) {
+  switch (type) {
+    case 'passport':
+      passportDocument = file;
+      hasExistingPassportDocument = true;
+      break;
+    case 'seaman':
+      seamanDocument = file;
+      hasExistingSeamanDocument = true;
+      break;
+    case 'seafarer_visa':
+      seafarerVisaDocument = file;
+      hasExistingSeafarerVisaDocument = true;
+      break;
+    case 'visa':
+      visaDocument = file;
+      hasExistingVisaDocument = true;
+      break;
+    case 'residence_permit':
+      residencePermitDocument = file;
+      hasExistingResidencePermitDocument = true;
+      break;
+  }
+}
       notifyListeners();
     }
   }
