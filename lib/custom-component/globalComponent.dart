@@ -71,6 +71,19 @@ String formatToMMDDYYYY(DateTime date) {
   return '$month/$day/$year';
 }
 
+String formatToMMDDYYYYString(String dateString) {
+  try {
+    DateTime date = DateTime.parse(dateString);
+    String month = date.month.toString().padLeft(2, '0');
+    String day = date.day.toString().padLeft(2, '0');
+    String year = date.year.toString();
+
+    return '$month/$day/$year';
+  } catch (e) {
+    return 'Invalid date';
+  }
+}
+
 /// Format DateTime to DD/MM/YYYY (e.g., "15/01/2025")
 String formatToDDMMYYYY(DateTime date) {
   String day = date.day.toString().padLeft(2, '0');

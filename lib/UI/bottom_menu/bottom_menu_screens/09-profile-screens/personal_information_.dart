@@ -131,7 +131,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.name,
                       obscureText: false,
                       voidCallback: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.toString().trim().isEmpty) {
                           return 'Please enter First Name';
                         }
                         return null;
@@ -204,11 +204,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     // Date of Birth
                     GestureDetector(
                       onTap: () async {
+                        final DateTime today = DateTime.now();
+                        final DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
+                        final DateTime firstDate = DateTime(today.year - 118, today.month, today.day); // 100 years range
+
                         final DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
+                          initialDate: lastDate, // default to max allowed date
+                          firstDate: firstDate,
+                          lastDate: lastDate,
                         );
                         if (picked != null) {
                           provider.setDOB(picked);
@@ -397,7 +401,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           },
                           items: sexList.map((value) {
                             return DropdownMenuItem<dynamic>(
-                                value: value["key"],
+                                value: value["value"],
                                 child: Text(
                                   // value.Type!,
                                   value["value"].toString(),
@@ -499,13 +503,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     customTextField(
+                      isReadOnly: true,
                       context: context,
                       controller: provider.emailController,
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
                       voidCallback: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.toString().trim().isEmpty) {
                           return 'Please enter Email Address';
                         }
                         if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
@@ -543,22 +548,33 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
 
-                    countryPhoneInput(
-                      phoneNumber: provider.phoneNumber,
+                    customTextField(
+                      context: context,
                       controller: provider.phoneController,
-                      onPhoneChanged: (PhoneNumber newNumber) {
-                        setState(() {
-                          provider.phoneNumber = newNumber; // Update provider with new number
-                        });
-                      },
-                      validator: (value) {
+                      hintText: 'Phone Number',
+                      textInputType: TextInputType.phone,
+                      obscureText: false,
+                      voidCallback: (value) {
                         if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
                           return '      Please enter Phone Number';
                         }
                         return null;
                       },
                       autovalidateMode: provider.autovalidateMode,
-                      onFieldSubmitted: (String ) {  },
+                      fontSize: AppFontSize.fontSize16,
+                      inputFontSize: AppFontSize.fontSize16,
+                      backgroundColor: provider.phoneFocusNode.hasFocus
+                          ? AppColors.activeFieldBgColor
+                          : AppColors.Color_FAFAFA,
+                      borderColor: AppColors.buttonColor,
+                      textColor: Colors.black,
+                      labelColor: AppColors.Color_9E9E9E,
+                      cursorColor: AppColors.Color_212121,
+                      fillColor: provider.phoneFocusNode.hasFocus
+                          ? AppColors.activeFieldBgColor
+                          : AppColors.Color_FAFAFA,
+                      onFieldSubmitted: (value) {
+                      },
                     ),
                    if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty) && provider.autovalidateMode == AutovalidateMode.always)
                       Padding(
@@ -580,14 +596,29 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                     ),
-                    countryPhoneInput(
-                      phoneNumber: provider.directPhoneNumber,
+
+                    customTextField(
+                      context: context,
                       controller: provider.directPhoneController,
-                      onPhoneChanged: (PhoneNumber newNumber) {
-                        setState(() {
-                          provider.directPhoneNumber = newNumber; // Update provider with new number
-                        });
-                      }, onFieldSubmitted: (String ) {  },
+                      hintText: 'Direct LinePhone',
+                      textInputType: TextInputType.phone,
+                      obscureText: false,
+                      voidCallback: (value){return;},
+                      autovalidateMode: provider.autovalidateMode,
+                      fontSize: AppFontSize.fontSize16,
+                      inputFontSize: AppFontSize.fontSize16,
+                      backgroundColor: provider.directPhoneFocusNode.hasFocus
+                          ? AppColors.activeFieldBgColor
+                          : AppColors.Color_FAFAFA,
+                      borderColor: AppColors.buttonColor,
+                      textColor: Colors.black,
+                      labelColor: AppColors.Color_9E9E9E,
+                      cursorColor: AppColors.Color_212121,
+                      fillColor: provider.directPhoneFocusNode.hasFocus
+                          ? AppColors.activeFieldBgColor
+                          : AppColors.Color_FAFAFA,
+                      onFieldSubmitted: (value) {
+                      },
                     ),
 
                     Padding(
@@ -645,10 +676,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         borderRadius: BorderRadius.circular(2.h),
                       ),
                       child: SearchChoices.single(
-                        items: provider.nearestAirportList.map((airport) {
+                        items: nearestAirportList.map((airport) {
                           return DropdownMenuItem(
-                            child: Text(airport),
-                            value: airport,
+                            child: Text(airport['value']!),
+                            value: airport['value'],
                           );
                         }).toList(),
                         value: provider.nearestAirport,
