@@ -1,22 +1,27 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:http/http.dart' as http;
-
-
+import 'package:mime/mime.dart';
+import 'package:provider/provider.dart';
+import '../../../../Utils/helper.dart';
 import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
+import '../../../../route/route_constants.dart';
+import '../../../authentication-provider/login_provider.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
 
   List<String> countries = [];
 
@@ -209,7 +214,7 @@ class PersonalInformationProvider extends ChangeNotifier {
         if (profileData != null) {
           firstNameController.text = profileData['firstName'] ?? '';
           lastNameController.text = profileData['lastName'] ?? '';
-          emailController.text = profileData['email'] ?? '';
+          emailController.text = profileData['contactEmail'] ?? '';
           phoneController.text = profileData['mobilePhone'] ?? '';
           directPhoneController.text = profileData['directLinePhone'] ?? '';
           sex = profileData['sex'] ?? 'Male';
@@ -247,6 +252,239 @@ class PersonalInformationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> updatePersonalInfo(BuildContext context) async {
+    if (context.mounted) startLoading(context);
+
+    try {
+      NetworkHelper.debugTokenStatus();
+      await NetworkHelper.forceSyncUserData();
+
+      bool isSessionValid = await NetworkHelper.validateSession();
+      if (!isSessionValid) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            login,
+                (route) => false,
+          );
+        }
+        return;
+      }
+
+      String? userId = NetworkHelper.loggedInUserId;
+      String? token = NetworkHelper.token;
+      if (token == null || token.isEmpty) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "Session expired. Please log in again.");
+        if (context.mounted) NetworkHelper().removeToken(context);
+        return;
+      }
+
+      if (userId == null || userId.isEmpty) {
+        if (context.mounted) stopLoading(context);
+        if (context.mounted) ShowToast("Error", "User ID not found. Please log in again.");
+        return;
+      }
+
+      var dio = Dio();
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Language': 'en'
+      };
+
+      var formData = FormData.fromMap({
+        'firstName': firstNameController.text,
+        'lastName': lastNameController.text,
+        'dateOfBirth':formatDateForAPI(dobController.text),
+        'countryOfBirth': countryOfBirthController.text,
+        'contactEmail':emailController.text,
+        'religion': religionController.text,
+        'sex': sex,
+        'currentCountry':'',
+        'nationality': nationalityController.text,
+        'mobilePhone': phoneController.text,
+        'directLinePhone': directPhoneController.text,
+        'homeAddress':
+        {"street":addressController.text,"city":"","state":"","postalCode":"","country":""},
+        'nearestAirport': nearestAirport ?? '',
+        'maritalStatus': maritalStatus,
+        'numberOfChildren': numberOfChildren.toString(),
+        'onlineCommunication': _communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList(),
+        'userId': NetworkHelper.loggedInUserId,
+      });
+
+      if (profileImage != null) {
+        String? mimeType = lookupMimeType(profileImage!.path);
+        if (mimeType == null || !mimeType.startsWith('image/')) {
+          if (context.mounted) {
+            stopLoading(context);
+            ShowToast("Error", "Invalid file type. Please select an image file.");
+          }
+          return;
+        }
+
+        formData.files.add(
+          MapEntry(
+            'profilePhoto',
+            await MultipartFile.fromFile(
+              profileImage!.path,
+              filename: profileImage!.path.split('/').last,
+              contentType: MediaType.parse(mimeType),
+            ),
+          ),
+        );
+      }
+      var response = await dio.post(
+        seafarerProfileBasicInfo,
+        data: formData,
+        options: Options(
+          headers: headers,
+          contentType: 'multipart/form-data',
+        ),
+      );
+      if (context.mounted) stopLoading(context);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (context.mounted) {
+          ShowToast("Success", response.data['message'] ?? "Personal Information updated successfully");
+          if (context.mounted) stopLoading(context);
+          Navigator.of(context).pushNamed(bottomMenu);
+          resetForm();
+        }
+      } else {
+        if (context.mounted) {
+          if (context.mounted) stopLoading(context);
+          ShowToast("Error", response.data['message'] ?? "Something went wrong");
+        }
+      }
+    } on DioException catch (e) {
+      if (context.mounted) {
+        if (context.mounted) stopLoading(context);
+
+        if (e.response?.statusCode == 401) {
+          ShowToast("Error", "Session expired. Please log in again.");
+          var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+          await loginProvider.clearStoredLoginData();
+          NetworkHelper().removeToken(context);
+          Navigator.of(context).pushReplacementNamed(login);
+        } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
+          ShowToast("Error", e.response?.data['message'] ?? "Bad request");
+        } else {
+          ShowToast("Error", "Something went wrong");
+        }
+      }
+    } catch (e) {
+      print("Seafarer personal info Update Error: $e");
+      if (context.mounted) {
+        if (context.mounted) stopLoading(context);
+        ShowToast("Error", "Something went wrong");
+      }
+    }
+    notifyListeners();
+  }
+
+
+
+//   Future<bool> updatePersonalInfo(BuildContext context) async {
+//     try {
+//       Map<String, String> fieldData = {
+//         'firstName': firstNameController.text,
+//         'lastName': lastNameController.text,
+//         'dateOfBirth':formatDateForAPI(dobController.text),
+//         'countryOfBirth': countryOfBirthController.text,
+//         'contactEmail':emailController.text,
+//         'religion': religionController.text,
+//         'sex': sex,
+//         'currentCountry':'',
+//         'nationality': nationalityController.text,
+//         'mobilePhone': phoneController.text,
+//         'directLinePhone': directPhoneController.text,
+//         'homeAddress':
+//         jsonEncode({"street":addressController.text,"city":"","state":"","postalCode":"","country":""}),
+//         'nearestAirport': nearestAirport ?? '',
+//         'maritalStatus': maritalStatus,
+//         'numberOfChildren': numberOfChildren.toString(),
+//         'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
+//         'userId': NetworkHelper.loggedInUserId,
+//       };
+//
+//       List<http.MultipartFile> fileList = [];
+//
+//       if (_profileImage != null) {
+//         String? mimeType = lookupMimeType(_profileImage!.path);
+//         fileList.add(
+//           await http.MultipartFile.fromPath(
+//             'profilePhoto',
+//             _profileImage!.path,
+//             contentType: MediaType.parse(mimeType!),
+//           ),
+//         );
+//       }
+//
+// // Convert http.MultipartFile to dio.MultipartFile
+//       List<dio.MultipartFile> dioFileList = await convertHttpToDioFiles(fileList);
+//
+//       var response = await NetworkServiceDio().multipartSeafarerProfile(
+//         context,
+//         postUpdatePersonalInfo,
+//         fieldData,
+//         dioFileList,
+//         true,
+//         notifyListeners,
+//       );
+//
+//       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+//         ShowToast("Success", response['message'] ?? "Profile updated successfully");
+//         await getPersonalInfo(context);
+//         return true;
+//       } else {
+//         ShowToast("Error", response['message'] ?? "Failed to update profile");
+//         return false;
+//       }
+//     } catch (e) {
+//       print("Error in updatePersonalInfo: $e");
+//       ShowToast("Error", "An error occurred while updating profile.");
+//       return false;
+//     }
+//   }
+//
+//
+//   Future<List<dio.MultipartFile>> convertHttpToDioFiles(List<http.MultipartFile> fileList) async {
+//     List<dio.MultipartFile> dioFiles = [];
+//
+//     for (var file in fileList) {
+//       final bytes = await _readStreamBytes(file.finalize());
+//       final filename = file.filename ?? 'upload.jpg';
+//       dio.MultipartFile dioFile = dio.MultipartFile.fromBytes(
+//         bytes,
+//         filename: filename,
+//         contentType: file.contentType,
+//       );
+//       dioFiles.add(dioFile);
+//     }
+//
+//     return dioFiles;
+//   }
+//
+//   Future<List<int>> _readStreamBytes(Stream<List<int>> stream) async {
+//     final completer = Completer<List<int>>();
+//     final collected = <int>[];
+//
+//     stream.listen(
+//       collected.addAll,
+//       onDone: () => completer.complete(collected),
+//       onError: (e) => completer.completeError(e),
+//       cancelOnError: true,
+//     );
+//
+//     return completer.future;
+//   }
+
+
+
+
 }
 
 class PlatformEntry {
@@ -254,61 +492,4 @@ class PlatformEntry {
   final String numberOrId;
 
   PlatformEntry({required this.platform, required this.numberOrId});
-}
-
-
-extension PersonalInformationProviderExtension on PersonalInformationProvider {
-  Future<bool> updatePersonalInfo(BuildContext context) async {
-    try {
-      Map<String, String> fieldData = {
-        'firstName': firstNameController.text,
-        'lastName': lastNameController.text,
-        'dateOfBirth': dobController.text,
-        'countryOfBirth': countryOfBirthController.text,
-        'religion': religionController.text,
-        'sex': sex,
-        'nationality': nationalityController.text,
-        'mobilePhone': phoneController.text,
-        'directLinePhone': directPhoneController.text,
-        'homeAddress[street]': addressController.text,
-        'nearestAirport': nearestAirport ?? '',
-        'maritalStatus': maritalStatus,
-        'numberOfChildren': numberOfChildren.toString(),
-        'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
-        'seafarerId': NetworkHelper.loggedInUserId,
-      };
-
-      List<http.MultipartFile> fileList = [];
-      if (_profileImage != null) {
-        fileList.add(
-          await http.MultipartFile.fromPath(
-            'profile',
-            _profileImage!.path,
-          ),
-        );
-      }
-
-      var response = await NetworkService().multipartSeafarerProfile(
-        context,
-        seafarerProfileBasicInfo,
-        fieldData,
-        fileList,
-        true,
-        notifyListeners,
-      );
-
-      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
-        ShowToast("Success", response['message'] ?? "Profile updated successfully");
-        await getPersonalInfo(context);
-        return true;
-      } else {
-        ShowToast("Error", response['message'] ?? "Failed to update profile");
-        return false;
-      }
-    } catch (e) {
-      print("Error in updatePersonalInfo: $e");
-      ShowToast("Error", "An error occurred while updating profile.");
-      return false;
-    }
-  }
 }

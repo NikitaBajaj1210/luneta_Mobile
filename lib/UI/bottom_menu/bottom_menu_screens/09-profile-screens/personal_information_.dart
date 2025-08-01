@@ -23,6 +23,10 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+
+  late var formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   @override
   void initState() {
     super.initState();
@@ -48,14 +52,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () async {
-                  if (provider.formKey.currentState!.validate()) {
-                    bool success = await provider.updatePersonalInfo(context);
-                    if(success && context.mounted){
-                      Navigator.pop(context);
-                    }
+                  if (formKey.currentState!.validate()) {
+                  provider.updatePersonalInfo(context);
                   } else {
                     setState(() {
-                      provider.autovalidateMode = AutovalidateMode.always;
+                      autovalidateMode = AutovalidateMode.always;
                     });
                   }
                 },
@@ -73,8 +74,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
               child: SingleChildScrollView(
                 child: Form(
-                  key: provider.formKey,
-                  autovalidateMode: provider.autovalidateMode,
+                  key: formKey,
+                  autovalidateMode: autovalidateMode,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -447,7 +448,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         hint: "Select Nationality",
                         searchHint: "Search for a nationality",
                         validator: (value) {
-                          if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                          if ((value == null || value.isEmpty) && autovalidateMode == AutovalidateMode.always) {
                             return '      Please select Nationality';
                           }
                           return null;
@@ -505,7 +506,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                     ),
                     customTextField(
-                      isReadOnly: true,
                       context: context,
                       controller: provider.emailController,
                       hintText: 'Email Address',
@@ -557,12 +557,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.phone,
                       obscureText: false,
                       voidCallback: (value) {
-                        if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                        if ((value == null || value.isEmpty) && autovalidateMode == AutovalidateMode.always) {
                           return '      Please enter Phone Number';
                         }
                         return null;
                       },
-                      autovalidateMode: provider.autovalidateMode,
+                      autovalidateMode: autovalidateMode,
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.phoneFocusNode.hasFocus
@@ -578,7 +578,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       onFieldSubmitted: (value) {
                       },
                     ),
-                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty) && provider.autovalidateMode == AutovalidateMode.always)
+                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty) && autovalidateMode == AutovalidateMode.always)
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, left: 12.0),
                         child: Text('Please enter Phone Number',
@@ -606,7 +606,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.phone,
                       obscureText: false,
                       voidCallback: (value){return;},
-                      autovalidateMode: provider.autovalidateMode,
+                      autovalidateMode: autovalidateMode,
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.directPhoneFocusNode.hasFocus

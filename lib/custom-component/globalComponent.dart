@@ -231,6 +231,29 @@ bool isValidDateString(String dateString) {
   return false;
 }
 
+String formatDateForAPI(addDateApi) {
+  if (addDateApi.isNotEmpty) {
+    try {
+      List<String> dateParts = addDateApi.split('-');
+      if (dateParts.length == 3) {
+        int year = int.parse(dateParts[0]);
+        int month = int.parse(dateParts[1]);
+        int day = int.parse(dateParts[2]);
+        DateTime date = DateTime(year, month, day);
+        return '${date.year.toString().padLeft(4, '0')}-'
+            '${date.month.toString().padLeft(2, '0')}-'
+            '${date.day.toString().padLeft(2, '0')}';
+      }
+    } catch (e) {
+      print('Error formatting date: $e');
+    }
+  }
+  DateTime now = DateTime.now();
+  return '${now.year.toString().padLeft(4, '0')}-'
+      '${now.month.toString().padLeft(2, '0')}-'
+      '${now.day.toString().padLeft(2, '0')}';
+}
+
 /// Get age from birth date
 int calculateAge(DateTime birthDate) {
   DateTime now = DateTime.now();
