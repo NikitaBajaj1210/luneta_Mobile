@@ -3,6 +3,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../network/network_helper.dart';
 import '../../route/route_constants.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       if (isLoggedIn && rememberMe) {
         print("SplashScreen - User is already logged in, navigating to home");
         // Navigate to home screen
+        NetworkHelper.syncUserData();
         if (context.mounted) {
           Navigator.of(context).pushReplacementNamed(bottomMenu);
         }

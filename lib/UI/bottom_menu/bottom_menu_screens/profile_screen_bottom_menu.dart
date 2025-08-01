@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../const/color.dart';
 import '../../../const/font_size.dart';
+import '../../../network/network_helper.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/expected_salary_provider.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/skills_provider.dart';
@@ -106,73 +107,81 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                               color: AppColors.Color_EEEEEE)),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                          GestureDetector(
+                            onTap:(){
+                              profileProvider.setSectionStatus(section["title"],!profileProvider.getSectionStatus(section["title"]));
+                            },
+                            child: Container(
+                              color:Colors.transparent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Image.asset(section["icon"],
-                                      height: 2.5.h, width: 2.5.h),
-                                  SizedBox(
-                                    width: 2.w,
+                                  Row(
+                                    children: [
+                                      Image.asset(section["icon"],
+                                          height: 2.5.h, width: 2.5.h),
+                                      SizedBox(
+                                        width: 2.w,
+                                      ),
+                                      Text(
+                                        section["title"],
+                                        style: TextStyle(
+                                            fontSize: AppFontSize.fontSize20,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.Color_212121,
+                                            fontFamily: AppColors.fontFamilyBold),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    section["title"],
-                                    style: TextStyle(
-                                        fontSize: AppFontSize.fontSize20,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyBold),
-                                  ),
+                                  index != 7?GestureDetector(
+                                    onTap: () {
+                                      switch (index) {
+                                        case 0:
+                                          Navigator.of(context).pushNamed(personalInfo);
+                                          break;
+                                        case 1:
+                                          Navigator.of(context).pushNamed(ProfessionalExperience);
+                                          break;
+                                        case 2:
+                                          Navigator.of(context)
+                                              .pushNamed(travelDocument);
+                                          break;
+                                        case 3:
+                                          Navigator.of(context)
+                                              .pushNamed(medicalDocument);
+                                          break;
+                                        case 4:
+                                          Navigator.of(context)
+                                              .pushNamed(educationScreen);
+                                          break;
+                                        case 5:
+                                          Navigator.of(context)
+                                              .pushNamed(professionalSkillsScreen);
+                                          break;
+                                        case 6:
+                                          Navigator.of(context)
+                                              .pushNamed(jobConditionsAndPreferences);
+                                          break;
+                                        default:
+                                          print("No action defined for this section");
+                                      }
+                                    },
+                                    child: profileProvider
+                                                .getSectionStatus(section["title"])
+                                            ? Image.asset(
+                                                "assets/images/Edit.png",
+                                                // Show image instead of icon
+                                                height: 2.5.h,
+                                              )
+                                            : Icon(
+                                                Icons.add,
+                                                size: 2.5.h,
+                                                color: AppColors.buttonColor,
+                                              )
+                                  ):Container()
                                 ],
                               ),
-                              index != 7?GestureDetector(
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Navigator.of(context).pushNamed(personalInfo);
-                                      break;
-                                    case 1:
-                                      Navigator.of(context).pushNamed(ProfessionalExperience);
-                                      break;
-                                    case 2:
-                                      Navigator.of(context)
-                                          .pushNamed(travelDocument);
-                                      break;
-                                    case 3:
-                                      Navigator.of(context)
-                                          .pushNamed(medicalDocument);
-                                      break;
-                                    case 4:
-                                      Navigator.of(context)
-                                          .pushNamed(educationScreen);
-                                      break;
-                                    case 5:
-                                      Navigator.of(context)
-                                          .pushNamed(professionalSkillsScreen);
-                                      break;
-                                    case 6:
-                                      Navigator.of(context)
-                                          .pushNamed(jobConditionsAndPreferences);
-                                      break;
-                                    default:
-                                      print("No action defined for this section");
-                                  }
-                                },
-                                child: profileProvider
-                                            .getSectionStatus(section["title"])
-                                        ? Image.asset(
-                                            "assets/images/Edit.png",
-                                            // Show image instead of icon
-                                            height: 2.5.h,
-                                          )
-                                        : Icon(
-                                            Icons.add,
-                                            size: 2.5.h,
-                                            color: AppColors.buttonColor,
-                                          )
-                              ):Container()
-                            ],
+                            ),
                           ),
 
                           if (index == 0 && profileProvider.ContactInfo!=null && profileProvider.getSectionStatus(section["title"]))
@@ -194,8 +203,8 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                   ),
                                   LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["email"],label: "  Email: "),
                                   LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["mobilePhone"],label: "  Mobile Phone: "),
-                                  LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["directLinePhone"],label: "  Direct Line Phone: "),
-                                  LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["homeAddress"],label: "  Home Address: "),
+                                  profileProvider.ContactInfo!.contactInfo["directLinePhone"]!=""?LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["directLinePhone"],label: "  Direct Line Phone: "):Container(),
+                                  profileProvider.ContactInfo!.contactInfo["homeAddress"]!=""?LabelView("assets/images/emailIcon.png", profileProvider.ContactInfo!.contactInfo["homeAddress"],label: "  Home Address: "):Container(),
                                   ListView.builder(
                                   padding: EdgeInsets.zero,
                                   physics: NeverScrollableScrollPhysics(),
@@ -231,17 +240,108 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                 children: [
                                   dividerRow(),
                                   // Positions Held
-                                  LabelView(
-                                      "assets/images/WorkActive.png",
-                                      profileProvider.experienceInfo!.positionsHeld.join(', '),
-                                      label: "Positions Held: "
+                                  profileProvider.experienceInfo!.positionsHeld.length>0?Padding(
+                                    padding: EdgeInsets.only(top:2.h),
+                                    child: Text("Positions Held",
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.fontSize18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                          fontFamily:
+                                          AppColors.fontFamilyMedium),
+                                    ),
+                                  ):Container(),
+                                  Padding(
+                                    padding: EdgeInsets.only(top:1.h),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Wrap(
+                                            spacing: 2.w,
+                                            // Space between chips horizontally
+                                            runSpacing: 1.h,
+                                            // Space between chips vertically
+                                            children: profileProvider.experienceInfo!.positionsHeld
+                                                .map((position) => Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 4.w, vertical: 1.h),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(50.h),
+                                                border: Border.all(
+                                                    color: AppColors.buttonColor,
+                                                    width: 0.15.h),
+                                              ),
+                                              child: Text(
+                                                position,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                  AppFontSize.fontSize14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.buttonColor,
+                                                  fontFamily: AppColors
+                                                      .fontFamilySemiBold,
+                                                ),
+                                              ),
+                                            ))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   // Vessel Type Experience
-                                  LabelView(
-                                      "assets/images/DocumentIcon.png",
-                                      profileProvider.experienceInfo!.vesselTypeExperience.join(', '),
-                                      label: "Vessel Type Experience: "
+                                  profileProvider.experienceInfo!.vesselTypeExperience.length>0?Padding(
+                                    padding: EdgeInsets.only(top:2.h),
+                                    child: Text("Vessel Type Experience",
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.fontSize18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.Color_212121,
+                                          fontFamily:
+                                          AppColors.fontFamilyMedium),
+                                    ),
+                                  ):Container(),
+                                  Padding(
+                                    padding: EdgeInsets.only(top:1.h),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Wrap(
+                                            spacing: 2.w,
+                                            // Space between chips horizontally
+                                            runSpacing: 1.h,
+                                            // Space between chips vertically
+                                            children: profileProvider.experienceInfo!.vesselTypeExperience
+                                                .map((type) => Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 4.w, vertical: 1.h),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(50.h),
+                                                border: Border.all(
+                                                    color: AppColors.buttonColor,
+                                                    width: 0.15.h),
+                                              ),
+                                              child: Text(
+                                                type,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                  AppFontSize.fontSize14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.buttonColor,
+                                                  fontFamily: AppColors
+                                                      .fontFamilySemiBold,
+                                                ),
+                                              ),
+                                            ))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+
                                   // Employment History
                                   Padding(
                                     padding: EdgeInsets.only(top: 2.h),
@@ -305,7 +405,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                         children: [
-                                                          Text(employment.position,
+                                                          Text(employment.companyName,
                                                             style: TextStyle(
                                                               fontSize: AppFontSize
                                                                   .fontSize20,
@@ -579,19 +679,19 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                             .fontFamilyMedium,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 0.8.h),
-                                                    Text(
-                                                      reference.documentUrl,
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                        AppFontSize.fontSize14,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: AppColors
-                                                            .Color_424242,
-                                                        fontFamily: AppColors
-                                                            .fontFamilyMedium,
-                                                      ),
-                                                    ),
+                                                    // SizedBox(height: 0.8.h),
+                                                    // Text(
+                                                    //   reference.documentUrl,
+                                                    //   style: TextStyle(
+                                                    //     fontSize:
+                                                    //     AppFontSize.fontSize14,
+                                                    //     fontWeight: FontWeight.w500,
+                                                    //     color: AppColors
+                                                    //         .Color_424242,
+                                                    //     fontFamily: AppColors
+                                                    //         .fontFamilyMedium,
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -733,113 +833,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      // GestureDetector(
-                                                      //   // onTap: () {
-                                                      //   //   final provider = Provider
-                                                      //   //       .of<WorkExperienceProvider>(
-                                                      //   //       context,
-                                                      //   //       listen:
-                                                      //   //       false);
-                                                      //   //
-                                                      //   //   // Parse dates
-                                                      //   //   DateTime? startDate;
-                                                      //   //   DateTime? endDate;
-                                                      //   //
-                                                      //   //   if (experience[
-                                                      //   //   'startDate'] !=
-                                                      //   //       null) {
-                                                      //   //     try {
-                                                      //   //       startDate = DateFormat(
-                                                      //   //           'MM/yyyy')
-                                                      //   //           .parse(experience[
-                                                      //   //       'startDate']);
-                                                      //   //     } catch (e) {
-                                                      //   //       print(
-                                                      //   //           'Error parsing start date: $e');
-                                                      //   //     }
-                                                      //   //   }
-                                                      //   //
-                                                      //   //   if (experience[
-                                                      //   //   'endDate'] !=
-                                                      //   //       null &&
-                                                      //   //       experience[
-                                                      //   //       'endDate'] !=
-                                                      //   //           'Present') {
-                                                      //   //     try {
-                                                      //   //       endDate = DateFormat(
-                                                      //   //           'MM/yyyy')
-                                                      //   //           .parse(experience[
-                                                      //   //       'endDate']);
-                                                      //   //     } catch (e) {
-                                                      //   //       print(
-                                                      //   //           'Error parsing end date: $e');
-                                                      //   //     }
-                                                      //   //   }
-                                                      //   //
-                                                      //   //   // Initialize provider with work experience data
-                                                      //   //   provider
-                                                      //   //       .initializeWithData(
-                                                      //   //     title: experience[
-                                                      //   //     'title'] ??
-                                                      //   //         '',
-                                                      //   //     company: experience[
-                                                      //   //     'company'] ??
-                                                      //   //         '',
-                                                      //   //     location:
-                                                      //   //     experience[
-                                                      //   //     'location'],
-                                                      //   //     description:
-                                                      //   //     experience[
-                                                      //   //     'description'],
-                                                      //   //     employmentType:
-                                                      //   //     experience[
-                                                      //   //     'employmentType'],
-                                                      //   //     jobLevel:
-                                                      //   //     experience[
-                                                      //   //     'jobLevel'],
-                                                      //   //     jobFunction:
-                                                      //   //     experience[
-                                                      //   //     'jobFunction'],
-                                                      //   //     startDate:
-                                                      //   //     startDate,
-                                                      //   //     endDate: endDate,
-                                                      //   //     isCurrentlyWorking:
-                                                      //   //     experience[
-                                                      //   //     'endDate'] ==
-                                                      //   //         'Present',
-                                                      //   //     index:
-                                                      //   //     index, // Pass the index for updating the correct item
-                                                      //   //   );
-                                                      //   //
-                                                      //   //   // Navigate to work experience screen using named route
-                                                      //   //   Navigator.push(
-                                                      //   //     context,
-                                                      //   //     MaterialPageRoute(
-                                                      //   //       builder: (context) =>
-                                                      //   //           MultiProvider(
-                                                      //   //             providers: [
-                                                      //   //               ChangeNotifierProvider
-                                                      //   //                   .value(
-                                                      //   //                   value:
-                                                      //   //                   provider),
-                                                      //   //               ChangeNotifierProvider.value(
-                                                      //   //                   value: Provider.of<
-                                                      //   //                       ProfileBottommenuProvider>(
-                                                      //   //                       context,
-                                                      //   //                       listen:
-                                                      //   //                       false)),
-                                                      //   //             ],
-                                                      //   //             child:
-                                                      //   //             const WorkExperienceScreen(),
-                                                      //   //           ),
-                                                      //   //     ),
-                                                      //   //   );
-                                                      //   // },
-                                                      //   child: Image.asset(
-                                                      //     "assets/images/Edit.png",
-                                                      //     height: 2.h,
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1084,7 +1077,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                     ),
                                                   ),
                                                   SizedBox(height: 0.5.h),
-                                                  Text(profileProvider.travelDocsInfo!.seamanBook.issueDate.toString() +" - "+profileProvider.travelDocsInfo!.seamanBook.expDate.toString(),
+                                                  Text(profileProvider.travelDocsInfo!.seamanBook.neverExpire==true?"Never Expire": profileProvider.travelDocsInfo!.seamanBook.issueDate.toString() +" - "+profileProvider.travelDocsInfo!.seamanBook.expDate.toString(),
                                                     style: TextStyle(
                                                       fontSize: AppFontSize
                                                           .fontSize14,
@@ -1116,23 +1109,23 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                   //     : Container(),
                                   // LabelView("assets/images/LocationBlack.png", profileProvider.travelDocsInfo!.seamanBook.nationality, label: "Nationality: "),
                                   // Seafarer's Visa Details
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 2.h),
-                                    child: Text(
-                                      "Valid Seafarer’s Visa",
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize18,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyMedium,
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
+
+                                  profileProvider.travelDocsInfo!.validSeafarerVisa.valid?Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Text(
+                                          "Valid Seafarer’s Visa",
+                                          style: TextStyle(
+                                            fontSize: AppFontSize.fontSize18,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.Color_212121,
+                                            fontFamily: AppColors.fontFamilyMedium,
+                                          ),
+                                        ),
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.only(top: 10),
                                         child: Row(
@@ -1183,113 +1176,6 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                               .fontFamilyBold,
                                                         ),
                                                       ),
-                                                      // GestureDetector(
-                                                      //   // onTap: () {
-                                                      //   //   final provider = Provider
-                                                      //   //       .of<WorkExperienceProvider>(
-                                                      //   //       context,
-                                                      //   //       listen:
-                                                      //   //       false);
-                                                      //   //
-                                                      //   //   // Parse dates
-                                                      //   //   DateTime? startDate;
-                                                      //   //   DateTime? endDate;
-                                                      //   //
-                                                      //   //   if (experience[
-                                                      //   //   'startDate'] !=
-                                                      //   //       null) {
-                                                      //   //     try {
-                                                      //   //       startDate = DateFormat(
-                                                      //   //           'MM/yyyy')
-                                                      //   //           .parse(experience[
-                                                      //   //       'startDate']);
-                                                      //   //     } catch (e) {
-                                                      //   //       print(
-                                                      //   //           'Error parsing start date: $e');
-                                                      //   //     }
-                                                      //   //   }
-                                                      //   //
-                                                      //   //   if (experience[
-                                                      //   //   'endDate'] !=
-                                                      //   //       null &&
-                                                      //   //       experience[
-                                                      //   //       'endDate'] !=
-                                                      //   //           'Present') {
-                                                      //   //     try {
-                                                      //   //       endDate = DateFormat(
-                                                      //   //           'MM/yyyy')
-                                                      //   //           .parse(experience[
-                                                      //   //       'endDate']);
-                                                      //   //     } catch (e) {
-                                                      //   //       print(
-                                                      //   //           'Error parsing end date: $e');
-                                                      //   //     }
-                                                      //   //   }
-                                                      //   //
-                                                      //   //   // Initialize provider with work experience data
-                                                      //   //   provider
-                                                      //   //       .initializeWithData(
-                                                      //   //     title: experience[
-                                                      //   //     'title'] ??
-                                                      //   //         '',
-                                                      //   //     company: experience[
-                                                      //   //     'company'] ??
-                                                      //   //         '',
-                                                      //   //     location:
-                                                      //   //     experience[
-                                                      //   //     'location'],
-                                                      //   //     description:
-                                                      //   //     experience[
-                                                      //   //     'description'],
-                                                      //   //     employmentType:
-                                                      //   //     experience[
-                                                      //   //     'employmentType'],
-                                                      //   //     jobLevel:
-                                                      //   //     experience[
-                                                      //   //     'jobLevel'],
-                                                      //   //     jobFunction:
-                                                      //   //     experience[
-                                                      //   //     'jobFunction'],
-                                                      //   //     startDate:
-                                                      //   //     startDate,
-                                                      //   //     endDate: endDate,
-                                                      //   //     isCurrentlyWorking:
-                                                      //   //     experience[
-                                                      //   //     'endDate'] ==
-                                                      //   //         'Present',
-                                                      //   //     index:
-                                                      //   //     index, // Pass the index for updating the correct item
-                                                      //   //   );
-                                                      //   //
-                                                      //   //   // Navigate to work experience screen using named route
-                                                      //   //   Navigator.push(
-                                                      //   //     context,
-                                                      //   //     MaterialPageRoute(
-                                                      //   //       builder: (context) =>
-                                                      //   //           MultiProvider(
-                                                      //   //             providers: [
-                                                      //   //               ChangeNotifierProvider
-                                                      //   //                   .value(
-                                                      //   //                   value:
-                                                      //   //                   provider),
-                                                      //   //               ChangeNotifierProvider.value(
-                                                      //   //                   value: Provider.of<
-                                                      //   //                       ProfileBottommenuProvider>(
-                                                      //   //                       context,
-                                                      //   //                       listen:
-                                                      //   //                       false)),
-                                                      //   //             ],
-                                                      //   //             child:
-                                                      //   //             const WorkExperienceScreen(),
-                                                      //   //           ),
-                                                      //   //     ),
-                                                      //   //   );
-                                                      //   // },
-                                                      //   child: Image.asset(
-                                                      //     "assets/images/Edit.png",
-                                                      //     height: 2.h,
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 0.5.h),
@@ -1327,7 +1213,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                       ),
                                       // SizedBox(height: 3.h),
                                     ],
-                                  ),
+                                  ):Container(),
                                 // Visa Details
                                   Padding(
                                     padding: EdgeInsets.only(top: 2.h),
@@ -1856,7 +1742,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                             ),
                                                           ),
                                                           SizedBox(height: 0.5.h),
-                                                          Text(medicalFitness.issuingDate +" - "+medicalFitness.expDate,
+                                                          Text(medicalFitness.neverExpire==true?"Never Expire": medicalFitness.issuingDate +" - "+medicalFitness.expDate,
                                                             style: TextStyle(
                                                               fontSize: AppFontSize
                                                                   .fontSize14,
@@ -2084,7 +1970,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                                         ),
                                                       ),
                                                       SizedBox(height: 0.5.h),
-                                                      Text(vaccinationCertificate.issuingDate +" - "+vaccinationCertificate.expDate,
+                                                      Text(vaccinationCertificate.neverExpire==true?"Never Expire": vaccinationCertificate.issuingDate +" - "+vaccinationCertificate.expDate,
                                                         style: TextStyle(
                                                           fontSize: AppFontSize
                                                               .fontSize14,
@@ -2634,88 +2520,105 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                     },
                                   ),
                                   // Metal Working Skills
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 2.h),
-                                    child: Text(
-                                      "Metal Working Skills",
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize18,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyMedium,
-                                      ),
-                                    ),
-                                  ),
                                   ListView.builder(
                                     padding: EdgeInsets.zero,
                                     physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: profileProvider.professionalSkillsInfo!.metalWorkingSkills.length,
                                     itemBuilder: (context, index) {
-                                      var metalSkill = profileProvider.professionalSkillsInfo!.metalWorkingSkills[index];
-                                      return Container(
-                                        margin: EdgeInsets.only(top: 1.h,bottom: 1.h),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      var metalSkill = profileProvider
+                                          .professionalSkillsInfo!
+                                          .metalWorkingSkills[index];
+                                      return metalSkill
+                                          .skillSelection!=""?Column(
                                           children: [
-                                            Container(
-                                              width: 15.w,
-                                              height: 15.w,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    width: 0.1.h,
-                                                    color: AppColors
-                                                        .Color_EEEEEE),
-                                                borderRadius:
-                                                BorderRadius.circular(2.h),
-                                              ),
-                                              child: Center(
-                                                child: Image.asset(
-                                                  "assets/images/TicketStar.png",
-                                                  // Replace with appropriate icon
-                                                  width: 8.w,
-                                                  height: 8.w,
+                                            index == 0 ? Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 2.h),
+                                              child: Text(
+                                                "Metal Working Skills",
+                                                style: TextStyle(
+                                                  fontSize: AppFontSize
+                                                      .fontSize18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors.Color_212121,
+                                                  fontFamily: AppColors
+                                                      .fontFamilyMedium,
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(width: 3.w),
-                                            Expanded(
-                                              child: Column(
+                                            ) : Container(),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: 1.h, bottom: 1.h),
+                                              child: Row(
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    metalSkill.skillSelection,
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                      AppFontSize.fontSize16,
-                                                      fontWeight: FontWeight.w700,
-                                                      color: AppColors.Color_212121,
-                                                      fontFamily: AppColors
-                                                          .fontFamilyBold,
+                                                  Container(
+                                                    width: 15.w,
+                                                    height: 15.w,
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          width: 0.1.h,
+                                                          color: AppColors
+                                                              .Color_EEEEEE),
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.h),
+                                                    ),
+                                                    child: Center(
+                                                      child: Image.asset(
+                                                        "assets/images/TicketStar.png",
+                                                        // Replace with appropriate icon
+                                                        width: 8.w,
+                                                        height: 8.w,
+                                                      ),
                                                     ),
                                                   ),
-                                                  SizedBox(height: 0.5.h),
-                                                  Text(
-                                                    metalSkill.level,
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                      AppFontSize.fontSize14,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: AppColors.Color_212121,
-                                                      fontFamily: AppColors
-                                                          .fontFamilyMedium,
+                                                  SizedBox(width: 3.w),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          metalSkill
+                                                              .skillSelection,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                            AppFontSize
+                                                                .fontSize16,
+                                                            fontWeight: FontWeight
+                                                                .w700,
+                                                            color: AppColors
+                                                                .Color_212121,
+                                                            fontFamily: AppColors
+                                                                .fontFamilyBold,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 0.5.h),
+                                                        Text(
+                                                          metalSkill.level,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                            AppFontSize
+                                                                .fontSize14,
+                                                            fontWeight: FontWeight
+                                                                .w500,
+                                                            color: AppColors
+                                                                .Color_212121,
+                                                            fontFamily: AppColors
+                                                                .fontFamilyMedium,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                            )
+                                          ]):Container();
+                                    }),
                                   // Tank Coating Experience
                                   Padding(
                                     padding: EdgeInsets.only(top: 2.h),
@@ -3367,23 +3270,17 @@ Widget _buildProfileSection(
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      GestureDetector(
-        onTap: () {
-          provider.pickProfileImage();
-        },
-        child: CircleAvatar(
+      CircleAvatar(
+        foregroundColor: Colors.white,
+          backgroundColor: Colors.white,
           radius: 4.5.h,
-          backgroundImage: provider.profileImage != null
-              ? FileImage(provider
-                  .profileImage!) // Use FileImage if user selected an image
-              : const AssetImage("assets/images/profileImg.png")
-                  as ImageProvider,
-        ),
+        backgroundImage: NetworkHelper.loggedInUserProfilePicURL==''? AssetImage("assets/images/dummyProfileImg.png"):NetworkImage(NetworkHelper.loggedInUserProfilePicURL)
       ),
       SizedBox(width: 4.w),
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(provider.userName,
                 style: TextStyle(
@@ -3401,7 +3298,7 @@ Widget _buildProfileSection(
       ),
       GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(editProfile);
+            // Navigator.of(context).pushNamed(editProfile);
           },
           child: Image.asset("assets/images/Edit.png", height: 2.5.h))
     ],

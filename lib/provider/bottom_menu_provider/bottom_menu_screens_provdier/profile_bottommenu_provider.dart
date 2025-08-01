@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:luneta/network/app_url.dart';
 import 'package:luneta/network/network_helper.dart';
 import 'package:luneta/network/network_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Utils/helper.dart';
 import 'ProfileInfo_Model.dart'; // Import the intl package for DateFormat
@@ -13,12 +14,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
   // **User Information**
   String _userName = "Andrew Ainsley";
   String _userRole = "UI/UX Designer at Paypal Inc.";
-  File? _profileImage;
 
   // **Getters**
   String get userName => _userName;
   String get userRole => _userRole;
-  File? get profileImage => _profileImage;
 
   // **Setters**
   void setUserName(String name) {
@@ -28,11 +27,6 @@ class ProfileBottommenuProvider with ChangeNotifier {
 
   void setUserRole(String role) {
     _userRole = role;
-    notifyListeners();
-  }
-
-  void setProfileImage(File? image) {
-    _profileImage = image;
     notifyListeners();
   }
 
@@ -276,7 +270,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "documentType": e['documentType'].toString(),
                 "certificateNo": e['certificateNo'].toString(),
                 "issuingCountry": e['issuingCountry'].toString(),
-                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingClinic": e['issuingAuthority'].toString(),
                 "issuingDate": e['issuingDate'].toString(),
                 "expDate": e['expDate'].toString(),
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
@@ -290,7 +284,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "documentType": e['documentType'].toString(),
                 "certificateNo": e['certificateNo'].toString(),
                 "issuingCountry": e['issuingCountry'].toString(),
-                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingClinic": e['issuingAuthority'].toString(),
                 "issuingDate": e['issuingDate'].toString(),
                 "expDate": e['expDate'].toString(),
                 "documentUrl": e['documentUrl'].toString(),
@@ -302,7 +296,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
                   .map((e) => {
                 "documentType": e['documentType'].toString(),
                 "vaccinationCountry": e['vaccinationCountry'].toString(),
-                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingClinic": e['issuingAuthority'].toString(),
                 "issuingDate": e['issuingDate'].toString(),
                 "expDate": e['expDate'].toString(),
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
@@ -371,7 +365,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
   // **Professional Experience Setters**
   ProfessionalExperience? experienceInfo;
 
-  void setContactInfo({
+  Future<void> setContactInfo({
     required String name,
     required String dob,
     required String countryOfBirth,
@@ -387,7 +381,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
     required String maritalStatus,
     required String numberOfChildren,
     required String profilePhotoPath,
-  }) {
+  }) async {
     ContactInfo = PersonalInfo(
       name: name,
       dob: dob, // Convert string to DateTime
@@ -407,6 +401,26 @@ class ProfileBottommenuProvider with ChangeNotifier {
       numberOfChildren: int.tryParse(numberOfChildren) ?? 0,
       profilePhotoPath: profilePhotoPath,
     );
+    NetworkHelper.loggedInUserProfilePicURL = profilePhotoPath;
+    NetworkHelper.loggedInUserFullName = name;
+
+
+
+    var prefs = await SharedPreferences.getInstance();
+    if (profilePhotoPath != '') {
+      await prefs.setString('profilePicURL', profilePhotoPath);
+    }
+    if (name != '') {
+      await prefs.setString('fullName', name);
+    }
+
+
+
+
+
+
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });
@@ -512,6 +526,8 @@ class ProfileBottommenuProvider with ChangeNotifier {
   }) {
     medicalDocsInfo = MedicalDocuments(
       medicalFitness: medicalFitness.map((m) {
+        print('medical Fitness ==========> ${m}');
+
         return MedicalFitness(
           documentType: m["documentType"] ?? "",
           certificateNo: m["certificateNo"] ?? "",
@@ -1182,13 +1198,13 @@ class ProfileBottommenuProvider with ChangeNotifier {
   }
 
   // **Function to Pick Profile Image**
-  Future<void> pickProfileImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      _profileImage = File(pickedFile.path);
-      notifyListeners();
-    }
-  }
+  // Future<void> pickProfileImage() async {
+  //   final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     _profileImage = File(pickedFile.path);
+  //     notifyListeners();
+  //   }
+  // }
 
   // **Existing Profile Sections**
   final List<Map<String, dynamic>> _profileSections = [
@@ -1208,14 +1224,14 @@ class ProfileBottommenuProvider with ChangeNotifier {
 
   // **Section Status**
   Map<String, bool> _sectionStatus = {
-    'Personal Information': true,
-    'Professional Experience': true,
-    'Travel Documents & Credentials': true,
-    'Medical Documents': true,
-    'Education': true,
-    'Professional Skills': true,
-    'Job Conditions & Preferences': true,
-    'Security and Compliance': true,
+    'Personal Information': false,
+    'Professional Experience': false,
+    'Travel Documents & Credentials': false,
+    'Medical Documents': false,
+    'Education': false,
+    'Professional Skills': false,
+    'Job Conditions & Preferences': false,
+    'Security and Compliance': false,
   };
 
 
@@ -1223,6 +1239,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
   bool getSectionStatus(String section) => _sectionStatus[section] ?? false;
   
   void setSectionStatus(String section, bool status) {
+    print(status);
     _sectionStatus[section] = status;
     notifyListeners();
   }

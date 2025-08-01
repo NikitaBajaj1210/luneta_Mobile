@@ -6,6 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../const/font_size.dart';
 import '../../../custom-component/customTextField.dart';
+import '../../../network/network_helper.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/home_screen_provider.dart';
 import '../../../route/route_constants.dart';
 
@@ -40,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 3.2.h,
-                            backgroundImage: const AssetImage(
-                                'assets/images/profileImg.png'), // Replace with actual image path
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.white,                            radius: 3.2.h,
+                              backgroundImage: NetworkHelper.loggedInUserProfilePicURL==''? AssetImage("assets/images/dummyProfileImg.png"):NetworkImage(NetworkHelper.loggedInUserProfilePicURL)
                           ),
                           SizedBox(width: 2.w),
                           Column(
@@ -58,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Text(
-                                provider.userName,
+                                NetworkHelper.loggedInUserFullName,
+                                // provider.userName,
                                 style: TextStyle(
                                   fontSize: AppFontSize.fontSize20,
                                   fontWeight: FontWeight.w700,
