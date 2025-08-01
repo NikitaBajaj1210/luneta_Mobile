@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../route/route_constants.dart';
 import '../../network/network_helper.dart';
+import '../../network/network_services.dart';
+import '../../network/app_url.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -29,10 +31,19 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       
       // Check if user is logged in and has valid credentials
       if (isLoggedIn && userId.isNotEmpty && token.isNotEmpty) {
-        print("SplashScreen - User is already logged in, navigating to home");
-        // Navigate to home screen
+        print("SplashScreen - User is already logged in, checking profile completion");
+        
+        // Check user's profile completion status
+        bool isProfileComplete = await _checkProfileCompletion(userId, token, context);
+        
         if (context.mounted) {
-          Navigator.of(context).pushReplacementNamed(bottomMenu);
+          if (isProfileComplete) {
+            print("SplashScreen - Profile is complete, navigating to home");
+            Navigator.of(context).pushReplacementNamed(bottomMenu);
+          } else {
+            print("SplashScreen - Profile is incomplete, navigating to choose country");
+            Navigator.of(context).pushReplacementNamed(chooseCountry);
+          }
         }
       } else {
         print("SplashScreen - No auto login, navigating to welcome");
@@ -47,6 +58,38 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       if (context.mounted) {
         Navigator.of(context).pushReplacementNamed(welcome);
       }
+    }
+  }
+
+  // Method to check if user's profile is complete
+  Future<bool> _checkProfileCompletion(String userId, String token, BuildContext context) async {
+    try {
+      // Make API call to get user's complete profile
+      final response = await NetworkService().getResponse(
+        getSeafarerCompleteProfile + userId,
+        false, // showLoading
+        context, // context
+        () => {}, // callback
+      );
+      
+      print("SplashScreen - Profile completion check response: $response");
+      
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        // Check if the response contains profile data
+        if (response['data'] != null && response['data']['seafarerProfile'] != null) {
+          bool isCompletedMobile = response['data']['seafarerProfile']['isCompletedMobile'] ?? false;
+          print("SplashScreen - Profile completion status: $isCompletedMobile");
+          return isCompletedMobile;
+        }
+      }
+      
+      // Default to false if API call fails or data is missing
+      print("SplashScreen - Could not determine profile completion, defaulting to false");
+      return false;
+    } catch (e) {
+      print("SplashScreen - Profile completion check error: $e");
+      // Default to false on error
+      return false;
     }
   }
 
