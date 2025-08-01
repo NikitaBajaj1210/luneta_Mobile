@@ -102,6 +102,105 @@ class ProfileBottommenuProvider with ChangeNotifier {
             );
           }
 
+          if (data['jobConditions'] != null && data['jobConditions'].isNotEmpty) {
+            final jobConditions = data['jobConditions'][0];
+            setJobConditionsAndPreferences(
+              currentRankPosition: jobConditions['currentRank'] ?? '',
+              alternateRankPosition: jobConditions['alternateRank'] ?? '',
+              preferredVesselType: List<String>.from(jobConditions['preferredVesselType'] ?? []),
+              preferredContractType: jobConditions['preferredContractType'] ?? '',
+              preferredPosition: jobConditions['preferredPosition'] ?? '',
+              manningAgency: jobConditions['manningAgency'] ?? '',
+              availability: Availability(
+                currentAvailabilityStatus: jobConditions['currentAvailabilityStatus'] ?? '',
+                availableFrom: jobConditions['availableFrom'] ?? '',
+                minOnBoardDuration: jobConditions['minOnBoardDuration'] ?? 0,
+                maxOnBoardDuration: jobConditions['maxOnBoardDuration'] ?? 0,
+                minAtHomeDuration: jobConditions['minAtHomeDuration'] ?? 0,
+                maxAtHomeDuration: jobConditions['maxAtHomeDuration'] ?? 0,
+                preferredRotationPattern: jobConditions['preferredRotationPattern'] ?? '',
+                tradingAreaExclusions: [jobConditions['tradingAreaExclusions'] ?? ''],
+              ),
+              salary: Salary(
+                lastJobSalary: (jobConditions['lastJobSalary'] ?? 0).toDouble(),
+                lastRankJoined: jobConditions['lastRankJoined'] ?? '',
+                lastPromotedDate: jobConditions['lastPromotedDate'] ?? '',
+                currency: jobConditions['currency'] ?? '',
+                justificationDocumentUrl: jobConditions['justificationDocumentPath'] ?? '',
+                industryStandardSalaryCalculator: true,
+              ),
+            );
+          }
+
+          if (data['securityCompliance'] != null && data['securityCompliance'].isNotEmpty) {
+            final securityCompliance = data['securityCompliance'][0];
+            setSecurityAndComplianceInfo(
+              contactInfoSharing: securityCompliance['contactInformationSharing'] ?? false,
+              dataSharing: securityCompliance['dataSharing'] ?? false,
+              professionalConductDeclaration: securityCompliance['professionalConductDeclaration'] ?? false,
+            );
+          }
+
+          if (data['professionalSkills'] != null && data['professionalSkills'].isNotEmpty) {
+            final professionalSkills = data['professionalSkills'][0];
+            setProfessionalSkills(
+              computerAndSoftwareSkills: (professionalSkills['computerAndSoftware'] as List)
+                  .map((e) => {
+                "software": e['software'].toString(),
+                "level": e['level'].toString(),
+              })
+                  .toList(),
+              cargoExperience: {
+                "bulkCargo": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
+                "tankerCargo": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
+                "generalCargo": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
+                "woodProducts": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
+                "stowageAndLashingExperience": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
+              },
+              cargoGearExperience: (professionalSkills['cargoGearExperience']['items'] as List)
+                  .map((e) => {
+                "type": e['type'].toString(),
+                "maker": e['maker'].toString(),
+                "swl": e['swl'].toString(),
+              })
+                  .toList(),
+              metalWorkingSkills: (professionalSkills['metalWorkingSkills']['items'] as List)
+                  .map((e) => {
+                "skillSelection": e['skill'].toString(),
+                "level": e['level'].toString(),
+                "certificate": (e['certificate'] ?? false).toString(),
+                "documentUrl": e['documentPath'].toString(),
+              })
+                  .toList(),
+              tankCoatingExperience: (professionalSkills['tankCoatingExperience']['items'] as List)
+                  .map((e) => {
+                "type": e['type'].toString(),
+              })
+                  .toList(),
+              portStateControlExperience: (professionalSkills['portStateControlExperience']['items'] as List)
+                  .map((e) => {
+                "regionalAgreement": e['regionalAgreement'].toString(),
+                "port": e['port'].toString(),
+                "date": e['date'].toString(),
+                "observations": e['observations'].toString(),
+              })
+                  .toList(),
+              vettingInspectionExperience: (professionalSkills['vettingInspectionExperience'] as List)
+                  .map((e) => {
+                "inspectionBy": e['inspectionBy'].toString(),
+                "port": e['port'].toString(),
+                "date": e['date'].toString(),
+                "observations": e['observations'].toString(),
+              })
+                  .toList(),
+              tradingAreaExperience: (professionalSkills['tradingAreaExperience']['tradingAreas'] as List)
+                  .map((e) => {
+                "tradingArea": e.toString(),
+              })
+                  .toList(),
+            );
+          }
+
           if (data['travelDocuments'] != null && data['travelDocuments'].isNotEmpty) {
             final travelDocuments = data['travelDocuments'][0];
             setTravelDocumentsCredentials(
