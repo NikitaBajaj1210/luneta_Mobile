@@ -65,13 +65,15 @@ class ProfileBottommenuProvider with ChangeNotifier {
             directLinePhone: seafarerProfile['directLinePhone'] ?? '',
             homeAddress: seafarerProfile['homeAddress']['street'] ?? '',
             nearestAirport: seafarerProfile['nearestAirport'] ?? '',
-            onlineCommunication: (seafarerProfile['onlineCommunication'] as List)
+            onlineCommunication: seafarerProfile['onlineCommunication'] != null
+                ? (seafarerProfile['onlineCommunication'] as List)
                 .map((e) => {
               "platform": e['platform'].toString(),
               "id": e['id'].toString(),
               "verified": "true",
             })
-                .toList(),
+                .toList()
+                : [],
             maritalStatus: seafarerProfile['maritalStatus'] ?? '',
             numberOfChildren: (seafarerProfile['numberOfChildren'] ?? 0).toString(),
             profilePhotoPath: seafarerProfile['profileURl'] ?? '',
@@ -80,9 +82,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
           if (data['professionalExperience'] != null && data['professionalExperience'].isNotEmpty) {
             final professionalExperience = data['professionalExperience'][0];
             setProfessionalExperience(
-              positionsHeld: List<String>.from(professionalExperience['positionsHeld'] ?? []),
-              vesselTypeExperience: List<String>.from(professionalExperience['vesselTypeExperience'] ?? []),
-              employmentHistory: (professionalExperience['employmentHistory'] as List)
+              positionsHeld: professionalExperience['positionsHeld'] != null ? List<String>.from(professionalExperience['positionsHeld']) : [],
+              vesselTypeExperience: professionalExperience['vesselTypeExperience'] != null ? List<String>.from(professionalExperience['vesselTypeExperience']) : [],
+              employmentHistory: professionalExperience['employmentHistory'] != null
+                  ? (professionalExperience['employmentHistory'] as List)
                   .map((e) => {
                 "companyName": e['companyName'].toString(),
                 "position": e['position'].toString(),
@@ -90,15 +93,18 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "endDate": e['endDate'].toString(),
                 "responsibilities": e['responsibilities'].toString(),
               })
-                  .toList(),
-              references: (professionalExperience['references'] as List)
+                  .toList()
+                  : [],
+              references: professionalExperience['references'] != null
+                  ? (professionalExperience['references'] as List)
                   .map((e) => {
                 "issuedBy": e['issuedBy'].toString(),
                 "issuingDate": e['issuingDate'].toString(),
                 "vesselOrCompanyName": e['vesselOrCompanyName'].toString(),
                 "documentUrl": e['documentPath'].toString(),
               })
-                  .toList(),
+                  .toList()
+                  : [],
             );
           }
 
@@ -144,12 +150,14 @@ class ProfileBottommenuProvider with ChangeNotifier {
           if (data['professionalSkills'] != null && data['professionalSkills'].isNotEmpty) {
             final professionalSkills = data['professionalSkills'][0];
             setProfessionalSkills(
-              computerAndSoftwareSkills: (professionalSkills['computerAndSoftware'] as List)
+              computerAndSoftwareSkills: professionalSkills['computerAndSoftware'] != null
+                  ? (professionalSkills['computerAndSoftware'] as List)
                   .map((e) => {
                 "software": e['software'].toString(),
                 "level": e['level'].toString(),
               })
-                  .toList(),
+                  .toList()
+                  : [],
               cargoExperience: {
                 "bulkCargo": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
                 "tankerCargo": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
@@ -157,47 +165,59 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "woodProducts": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
                 "stowageAndLashingExperience": professionalSkills['cargoExperience']['hasCargoExperience'] ?? false,
               },
-              cargoGearExperience: (professionalSkills['cargoGearExperience']['items'] as List)
+              cargoGearExperience: professionalSkills['cargoGearExperience'] != null && professionalSkills['cargoGearExperience']['items'] != null
+                  ? (professionalSkills['cargoGearExperience']['items'] as List)
                   .map((e) => {
                 "type": e['type'].toString(),
                 "maker": e['maker'].toString(),
                 "swl": e['swl'].toString(),
               })
-                  .toList(),
-              metalWorkingSkills: (professionalSkills['metalWorkingSkills']['items'] as List)
+                  .toList()
+                  : [],
+              metalWorkingSkills: professionalSkills['metalWorkingSkills'] != null && professionalSkills['metalWorkingSkills']['items'] != null
+                  ? (professionalSkills['metalWorkingSkills']['items'] as List)
                   .map((e) => {
                 "skillSelection": e['skill'].toString(),
                 "level": e['level'].toString(),
                 "certificate": (e['certificate'] ?? false).toString(),
                 "documentUrl": e['documentPath'].toString(),
               })
-                  .toList(),
-              tankCoatingExperience: (professionalSkills['tankCoatingExperience']['items'] as List)
+                  .toList()
+                  : [],
+              tankCoatingExperience: professionalSkills['tankCoatingExperience'] != null && professionalSkills['tankCoatingExperience']['items'] != null
+                  ? (professionalSkills['tankCoatingExperience']['items'] as List)
                   .map((e) => {
                 "type": e['type'].toString(),
               })
-                  .toList(),
-              portStateControlExperience: (professionalSkills['portStateControlExperience']['items'] as List)
+                  .toList()
+                  : [],
+              portStateControlExperience: professionalSkills['portStateControlExperience'] != null && professionalSkills['portStateControlExperience']['items'] != null
+                  ? (professionalSkills['portStateControlExperience']['items'] as List)
                   .map((e) => {
                 "regionalAgreement": e['regionalAgreement'].toString(),
                 "port": e['port'].toString(),
                 "date": e['date'].toString(),
                 "observations": e['observations'].toString(),
               })
-                  .toList(),
-              vettingInspectionExperience: (professionalSkills['vettingInspectionExperience'] as List)
+                  .toList()
+                  : [],
+              vettingInspectionExperience: professionalSkills['vettingInspectionExperience'] != null
+                  ? (professionalSkills['vettingInspectionExperience'] as List)
                   .map((e) => {
                 "inspectionBy": e['inspectionBy'].toString(),
                 "port": e['port'].toString(),
                 "date": e['date'].toString(),
                 "observations": e['observations'].toString(),
               })
-                  .toList(),
-              tradingAreaExperience: (professionalSkills['tradingAreaExperience']['tradingAreas'] as List)
+                  .toList()
+                  : [],
+              tradingAreaExperience: professionalSkills['tradingAreaExperience'] != null && professionalSkills['tradingAreaExperience']['tradingAreas'] != null
+                  ? (professionalSkills['tradingAreaExperience']['tradingAreas'] as List)
                   .map((e) => {
                 "tradingArea": e.toString(),
               })
-                  .toList(),
+                  .toList()
+                  : [],
             );
           }
 
@@ -250,7 +270,8 @@ class ProfileBottommenuProvider with ChangeNotifier {
           if (data['medicalDocuments'] != null && data['medicalDocuments'].isNotEmpty) {
             final medicalDocuments = data['medicalDocuments'][0];
             setMedicalDocuments(
-              medicalFitness: (medicalDocuments['medicalFitness'] as List)
+              medicalFitness: medicalDocuments['medicalFitness'] != null
+                  ? (medicalDocuments['medicalFitness'] as List)
                   .map((e) => {
                 "documentType": e['documentType'].toString(),
                 "certificateNo": e['certificateNo'].toString(),
@@ -261,8 +282,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
                 "documentUrl": e['documentUrl'].toString(),
               })
-                  .toList(),
-              drugAlcoholTest: (medicalDocuments['drugAlcoholTest'] as List)
+                  .toList()
+                  : [],
+              drugAlcoholTest: medicalDocuments['drugAlcoholTest'] != null
+                  ? (medicalDocuments['drugAlcoholTest'] as List)
                   .map((e) => {
                 "documentType": e['documentType'].toString(),
                 "certificateNo": e['certificateNo'].toString(),
@@ -272,8 +295,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "expDate": e['expDate'].toString(),
                 "documentUrl": e['documentUrl'].toString(),
               })
-                  .toList(),
-              vaccinationCertificates: (medicalDocuments['vaccinationCertificates'] as List)
+                  .toList()
+                  : [],
+              vaccinationCertificates: medicalDocuments['vaccinationCertificates'] != null
+                  ? (medicalDocuments['vaccinationCertificates'] as List)
                   .map((e) => {
                 "documentType": e['documentType'].toString(),
                 "vaccinationCountry": e['vaccinationCountry'].toString(),
@@ -283,38 +308,45 @@ class ProfileBottommenuProvider with ChangeNotifier {
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
                 "documentUrl": e['documentUrl'].toString(),
               })
-                  .toList(),
+                  .toList()
+                  : [],
             );
           }
 
           if (data['education'] != null && data['education'].isNotEmpty) {
             final education = data['education'][0];
             setEducation(
-              academicQualifications: (education['academicQualifications'] as List)
+              academicQualifications: education['academicQualification'] != null
+                  ? (education['academicQualification'] as List)
                   .map((e) => {
                 "educationalDegree": e['educationalDegree'].toString(),
                 "fieldOfStudy": e['fieldOfStudy'].toString(),
                 "educationalInstitution": e['educationalInstitution'].toString(),
                 "country": e['country'].toString(),
                 "graduationDate": e['graduationDate'].toString(),
-                "documentUrl": e['documentUrl'].toString(),
+                "documentUrl": e['degreeDocumentOriginalName'].toString(),
               })
-                  .toList(),
-              certificationsAndTrainings: (education['certificationsAndTrainings'] as List)
+                  .toList()
+                  : [],
+              certificationsAndTrainings: education['certificationsAndTrainings'] != null
+                  ? (education['certificationsAndTrainings'] as List)
                   .map((e) => {
                 "certificationType": e['certificationType'].toString(),
                 "issuingAuthority": e['issuingAuthority'].toString(),
                 "issueDate": e['issueDate'].toString(),
                 "expiryDate": e['expiryDate'].toString(),
-                "documentUrl": e['documentUrl'].toString(),
+                "documentUrl": e['certificationsAndTrainingsDocumentOriginalName'].toString(),
               })
-                  .toList(),
-              languagesSpoken: (education['languagesSpoken'] as List)
+                  .toList()
+                  : [],
+              languagesSpoken: education['languagesSpoken'] != null
+                  ? (education['languagesSpoken'] as List)
                   .map((e) => {
-                "language": e['language'].toString(),
+                "language": e['native'][0].toString(),
                 "level": e['level'].toString(),
               })
-                  .toList(),
+                  .toList()
+                  : [],
             );
           }
         }
