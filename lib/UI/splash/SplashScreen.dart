@@ -32,8 +32,6 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       
       // Check if user is logged in and has valid credentials
       if (isLoggedIn && userId.isNotEmpty && token.isNotEmpty) {
-        print("SplashScreen - User is already logged in, checking profile completion");
-
         // Check user's profile completion status
         bool isProfileComplete = await _checkProfileCompletion(userId, token, context);
 
@@ -41,15 +39,12 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
         NetworkHelper.syncUserData();
         if (context.mounted) {
           if (isProfileComplete) {
-            print("SplashScreen - Profile is complete, navigating to home");
             Navigator.of(context).pushReplacementNamed(bottomMenu);
           } else {
-            print("SplashScreen - Profile is incomplete, navigating to choose country");
             Navigator.of(context).pushReplacementNamed(chooseCountry);
           }
         }
       } else {
-        print("SplashScreen - No auto login, navigating to welcome");
         // Navigate to welcome screen
         if (context.mounted) {
           Navigator.of(context).pushReplacementNamed(welcome);
