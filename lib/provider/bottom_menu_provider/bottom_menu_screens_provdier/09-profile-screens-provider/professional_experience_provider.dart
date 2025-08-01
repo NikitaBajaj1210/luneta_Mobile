@@ -517,14 +517,14 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       return false;
     }
     
-    // Check if we have at least some data to send
-    if (positionsHeld.isEmpty && vesselTypeExperience.isEmpty && 
-        employmentHistory.isEmpty && references.isEmpty) {
-      hasError = true;
-      errorMessage = 'Please add at least one position, vessel type, employment history, or reference.';
-      ShowToast("Error", "Please add at least one position, vessel type, employment history, or reference.");
-      return false;
-    }
+    // // Check if we have at least some data to send
+    // if (positionsHeld.isEmpty && vesselTypeExperience.isEmpty &&
+    //     employmentHistory.isEmpty && references.isEmpty) {
+    //   hasError = true;
+    //   errorMessage = 'Please add at least one position, vessel type, employment history, or reference.';
+    //   ShowToast("Error", "Please add at least one position, vessel type, employment history, or reference.");
+    //   return false;
+    // }
 
     // Validate date ranges for all employment history entries
     for (int i = 0; i < employmentHistory.length; i++) {
@@ -604,6 +604,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
           'fileName': referenceDocument!.path.split('/').last,
         });
       }
+
 
       // Call the Dio-based multipart function from globalComponent
       final response = await multipartDocumentsDio(
