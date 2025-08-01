@@ -35,6 +35,28 @@ class TravelDocumentProvider extends ChangeNotifier {
     countries = CountryService().getAll().map((country) => country.name).toList();
   }
 
+  // Reset all form data
+  void resetForm() {
+    // Reset error states
+    hasError = false;
+    errorMessage = '';
+    
+    // Reset validation mode
+    autovalidateMode = AutovalidateMode.disabled;
+    
+    // Reset document tracking
+    hasExistingPassportDocument = false;
+    hasExistingSeamanDocument = false;
+    hasExistingSeafarerVisaDocument = false;
+    hasExistingVisaDocument = false;
+    hasExistingResidencePermitDocument = false;
+    
+    // Clear data
+    travelDocumentData = null;
+    
+    notifyListeners();
+  }
+
   // API call to fetch travel document data
   Future<void> fetchTravelDocuments(String userId, BuildContext context) async {
     // If no userId provided, try to get from NetworkHelper

@@ -4,6 +4,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../route/route_constants.dart';
+import '../../network/network_helper.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -19,13 +20,15 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
   // Method to check if user is already logged in
   Future<void> _checkAutoLogin() async {
     try {
-      var prefs = await SharedPreferences.getInstance();
-      bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-      bool rememberMe = prefs.getBool('rememberMe') ?? false;
+      // Use NetworkHelper data which is already synced in main.dart
+      bool isLoggedIn = NetworkHelper.isLoggedIn;
+      String userId = NetworkHelper.loggedInUserId;
+      String token = NetworkHelper.token;
       
-      print("SplashScreen - Auto Login Check - isLoggedIn: $isLoggedIn, rememberMe: $rememberMe");
+      print("SplashScreen - Auto Login Check - isLoggedIn: $isLoggedIn, userId: $userId, token: ${token.isNotEmpty ? '[EXISTS]' : '[EMPTY]'}");
       
-      if (isLoggedIn && rememberMe) {
+      // Check if user is logged in and has valid credentials
+      if (isLoggedIn && userId.isNotEmpty && token.isNotEmpty) {
         print("SplashScreen - User is already logged in, navigating to home");
         // Navigate to home screen
         if (context.mounted) {

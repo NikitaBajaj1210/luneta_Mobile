@@ -35,7 +35,7 @@ class ProfessionalExperience {
   final String? userId;
   final String? experienceDocumentPath;
   final String? experienceDocumentOriginalName;
-  final List<EmploymentHistory>? employmentHistory;
+  final List<ProfessionalEmploymentHistory>? employmentHistory;
   final List<Reference>? references;
   final User? user;
 
@@ -60,7 +60,7 @@ class ProfessionalExperience {
       experienceDocumentPath: json['experienceDocumentPath'],
       experienceDocumentOriginalName: json['experienceDocumentOriginalName'],
       employmentHistory: (json['employmentHistory'] as List?)
-          ?.map((item) => EmploymentHistory.fromJson(item))
+          ?.map((item) => ProfessionalEmploymentHistory.fromJson(item))
           .toList() ?? [],
       references: (json['references'] as List?)
           ?.map((item) => Reference.fromJson(item))
@@ -84,7 +84,7 @@ class ProfessionalExperience {
   }
 }
 
-class EmploymentHistory {
+class ProfessionalEmploymentHistory {
   final String? id;
   final String? companyName;
   final String? position;
@@ -93,7 +93,7 @@ class EmploymentHistory {
   final String? endDate;
   final String? responsibilities;
 
-  EmploymentHistory({
+  ProfessionalEmploymentHistory({
     this.id,
     this.companyName,
     this.position,
@@ -103,8 +103,8 @@ class EmploymentHistory {
     this.responsibilities,
   });
 
-  factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
-    return EmploymentHistory(
+  factory ProfessionalEmploymentHistory.fromJson(Map<String, dynamic> json) {
+    return ProfessionalEmploymentHistory(
       id: json['id'],
       companyName: json['companyName'],
       position: json['position'],

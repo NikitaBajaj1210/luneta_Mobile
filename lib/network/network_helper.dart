@@ -29,6 +29,7 @@ class NetworkHelper{
     String? profilePicURL,
     String? fullName,
     String? refreshToken,
+    bool rememberMe = true, // Default to true for auto-login
   }) async {
     try {
       var prefs = await SharedPreferences.getInstance();
@@ -47,6 +48,7 @@ class NetworkHelper{
         await prefs.setString('refreshToken', refreshToken);
       }
       await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('rememberMe', rememberMe);
       
       // Update static variables
       NetworkHelper.loggedInUserId = userId;
@@ -85,6 +87,7 @@ class NetworkHelper{
       String? fullName = prefs.getString('fullName');
       String? refreshToken = prefs.getString('refreshToken');
       bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      bool rememberMe = prefs.getBool('rememberMe') ?? false;
       
       if (userId != null && email != null && token != null && isLoggedIn) {
         NetworkHelper.loggedInUserId = userId;

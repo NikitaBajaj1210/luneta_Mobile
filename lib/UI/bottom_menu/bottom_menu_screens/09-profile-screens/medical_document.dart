@@ -24,6 +24,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
     // Fetch medical documents when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<MedicalDocumentProvider>(context, listen: false);
+      
+      // Reset form before fetching data
+      provider.resetForm();
+      
       String userId = NetworkHelper.loggedInUserId.isNotEmpty 
           ? NetworkHelper.loggedInUserId 
           : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6'; // Fallback for testing
@@ -134,6 +138,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       },
                     );
 
+                    // Reset form before API call
+                    provider.resetForm();
+                    
                     // Call the create/update API
                     bool success = await provider.createOrUpdateMedicalDocumentsAPI(context);
                     

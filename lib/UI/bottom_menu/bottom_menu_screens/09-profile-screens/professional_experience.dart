@@ -10,6 +10,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../models/professional_experience_model.dart';
 import '../../../../network/network_helper.dart';
 
 class ProfessionalExperienceScreen extends StatefulWidget {
@@ -25,6 +26,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var provider = Provider.of<ProfessionalExperienceProvider>(context,listen: false);
+      
+      // Reset form before fetching data
+      provider.resetForm();
+      
       String userId = NetworkHelper.loggedInUserId.isNotEmpty 
           ? NetworkHelper.loggedInUserId 
           : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
@@ -47,10 +52,47 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                 border: Border.all(width: 1, color: AppColors.bottomNavBorderColor),
               ),
               child: customButton(
-                voidCallback: () {
+                voidCallback: () async {
                   if (provider.formKey.currentState!.validate()) {
-                    // Save the data in provider or update the profile here
-                    // Navigator.pop(context);
+                    // Show loading indicator
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.buttonColor,
+                          ),
+                        );
+                      },
+                    );
+
+                    // Reset form before API call
+                    provider.resetForm();
+                    
+                    // Call the API
+                    bool success = await provider.createOrUpdateProfessionalExperienceAPI(context);
+                    
+                    // Hide loading indicator
+                    Navigator.of(context).pop();
+
+                    // if (success) {
+                    //   // Show success message
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text('Professional experience saved successfully'),
+                    //       backgroundColor: Colors.green,
+                    //     ),
+                    //   );
+                    // } else {
+                    //   // Show error message
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text('Failed to save professional experience'),
+                    //       backgroundColor: Colors.red,
+                    //     ),
+                    //   );
+                    // }
                   } else {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
@@ -155,6 +197,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               }
                               return null;
                             },
+                            initialValue: provider.positionsHeld,
                             items: predefinedPositionList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
                             title: Text("Positions"),
                             selectedColor: AppColors.buttonColor,
@@ -174,63 +217,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                         )
                       ),
 
-                      // Show existing positions held from API
-                      if (provider.professionalExperienceData != null && 
-                          provider.professionalExperienceData!.positionsHeld != null &&
-                          provider.professionalExperienceData!.positionsHeld!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 1.h),
-                          padding: EdgeInsets.all(2.w),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade50,
-                            borderRadius: BorderRadius.circular(1.h),
-                            border: Border.all(color: Colors.green.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                  SizedBox(width: 1.w),
-                                  Text(
-                                    'Existing Positions Held',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 1.h),
-                              Wrap(
-                                spacing: 2.w,
-                                runSpacing: 1.h,
-                                children: provider.professionalExperienceData!.positionsHeld!.map((position) => 
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50.h),
-                                      border: Border.all(color: AppColors.buttonColor, width: 0.15.h),
-                                    ),
-                                    child: Text(
-                                      position,
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.buttonColor,
-                                        fontFamily: AppColors.fontFamilySemiBold,
-                                      ),
-                                    ),
-                                  )
-                                ).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                      // Vessel Type Experience (Multiselect Dropdown)
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
@@ -267,6 +253,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 }
                                 return null;
                               },
+                              initialValue: provider.vesselTypeExperience,
                               items: vesselTypeList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
                               title: Text('Vessel Type'),
                               selectedColor: AppColors.buttonColor,
@@ -318,60 +305,60 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       //                       ),
 
                       // Show existing vessel type experience from API
-                      if (provider.professionalExperienceData != null && 
-                          provider.professionalExperienceData!.vesselTypeExperience != null &&
-                          provider.professionalExperienceData!.vesselTypeExperience!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 1.h),
-                          padding: EdgeInsets.all(2.w),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade50,
-                            borderRadius: BorderRadius.circular(1.h),
-                            border: Border.all(color: Colors.green.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                  SizedBox(width: 1.w),
-                                  Text(
-                                    'Existing Vessel Type Experience',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 1.h),
-                              Wrap(
-                                spacing: 2.w,
-                                runSpacing: 1.h,
-                                children: provider.professionalExperienceData!.vesselTypeExperience!.map((vessel) => 
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50.h),
-                                      border: Border.all(color: AppColors.buttonColor, width: 0.15.h),
-                                    ),
-                                    child: Text(
-                                      vessel,
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.buttonColor,
-                                        fontFamily: AppColors.fontFamilySemiBold,
-                                      ),
-                                    ),
-                                  )
-                                ).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
+                      // if (provider.professionalExperienceData != null &&
+                      //     provider.professionalExperienceData!.vesselTypeExperience != null &&
+                      //     provider.professionalExperienceData!.vesselTypeExperience!.isNotEmpty)
+                      //   Container(
+                      //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                      //     padding: EdgeInsets.all(2.w),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.green.shade50,
+                      //       borderRadius: BorderRadius.circular(1.h),
+                      //       border: Border.all(color: Colors.green.shade200),
+                      //     ),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Row(
+                      //           children: [
+                      //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                      //             SizedBox(width: 1.w),
+                      //             Text(
+                      //               'Existing Vessel Type Experience',
+                      //               style: TextStyle(
+                      //                 fontSize: AppFontSize.fontSize14,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.green.shade700,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         SizedBox(height: 1.h),
+                      //         Wrap(
+                      //           spacing: 2.w,
+                      //           runSpacing: 1.h,
+                      //           children: provider.professionalExperienceData!.vesselTypeExperience!.map((vessel) =>
+                      //             Container(
+                      //               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                      //               decoration: BoxDecoration(
+                      //                 borderRadius: BorderRadius.circular(50.h),
+                      //                 border: Border.all(color: AppColors.buttonColor, width: 0.15.h),
+                      //               ),
+                      //               child: Text(
+                      //                 vessel,
+                      //                 style: TextStyle(
+                      //                   fontSize: AppFontSize.fontSize14,
+                      //                   fontWeight: FontWeight.w600,
+                      //                   color: AppColors.buttonColor,
+                      //                   fontFamily: AppColors.fontFamilySemiBold,
+                      //                 ),
+                      //               ),
+                      //             )
+                      //           ).toList(),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
 
                       // Employment History (Repeater)
                       Row(
@@ -393,6 +380,13 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             padding: EdgeInsets.only(right: 10.0,top:10),
                             child: GestureDetector(
                               onTap: (){
+                                // Clear form data
+                                provider.companyController.clear();
+                                provider.startDate.clear();
+                                provider.endDate.clear();
+                                provider.responsibilitiesController.clear();
+                                provider.empHisPositionsHeld.clear();
+                                
                                 provider.setEmploymentHistoryVisibility(true);
                                 provider.employment_Edit_Index=null;
                                 provider.employment_IsEdit=false;
@@ -423,7 +417,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                         shrinkWrap: true,
                         itemCount: provider.employmentHistory.length,
                         itemBuilder: (context, index) {
-                          EmploymentHistory empDetail = provider.employmentHistory[index];
+                          ProfessionalEmploymentHistory empDetail = provider.employmentHistory[index];
                           print("position at index => ${empDetail.position}");
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -468,7 +462,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                             MainAxisAlignment
                                                 .spaceBetween,
                                             children: [
-                                              Text(empDetail.companyName,
+                                              Text(empDetail.companyName ?? '',
                                                 style: TextStyle(
                                                   fontSize: AppFontSize
                                                       .fontSize20,
@@ -484,11 +478,11 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                 children: [
                                                   GestureDetector(
                                                     onTap:(){
-                                                     provider.companyController.text =empDetail.companyName;
-                                                     provider.setEmpHisPositionsHeld(empDetail.position);
-                                                     provider.startDate.text =empDetail.startDate ;
-                                                     provider.endDate.text =empDetail.endDate;
-                                                     provider.responsibilitiesController.text=empDetail.responsibilities;
+                                                     provider.companyController.text = empDetail.companyName ?? '';
+                                                     provider.setEmpHisPositionsHeld([empDetail.position ?? '']);
+                                                     provider.startDate.text = empDetail.startDate ?? '';
+                                                     provider.endDate.text = empDetail.endDate ?? '';
+                                                     provider.responsibilitiesController.text = empDetail.responsibilities ?? '';
                                                      provider.setEmploymentHistoryVisibility(true);
                                                      provider.employment_Edit_Index=index;
                                                      provider.employment_IsEdit=true;
@@ -518,7 +512,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                             // Space between chips horizontally
                                             runSpacing: 1.h,
                                             // Space between chips vertically
-                                            children: empDetail.position
+                                            children: [empDetail.position ?? '']
                                                 .map((position) => Container(
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 4.w, vertical: 1.h),
@@ -544,7 +538,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                 .toList(),
                                           ),
                                           SizedBox(height: 0.5.h),
-                                          Text(empDetail.startDate +" - "+empDetail.endDate,
+                                          Text((empDetail.startDate ?? '') +" - "+(empDetail.endDate ?? ''),
                                             style: TextStyle(
                                               fontSize: AppFontSize
                                                   .fontSize14,
@@ -581,7 +575,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                         AppColors.fontFamilyMedium),
                                   ),
                                   Expanded(
-                                    child: Text(empDetail.responsibilities,
+                                    child: Text(empDetail.responsibilities ?? '',
                                       maxLines: 2,
                                       style: TextStyle(
                                           fontSize: AppFontSize.fontSize16,
@@ -679,7 +673,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   dialogHeight: 30.h,
                                   searchHint: 'Search Position',
                                   initialValue: provider.empHisPositionsHeld,
-                                  items: vesselTypeList.map((e) => MultiSelectItem(e["value"], e["key"]!)).toList(),
+                                  items: predefinedPositionList.map((e) => MultiSelectItem(e["value"], e["key"]!)).toList(),
                                   title: Text('Position'),
                                   selectedColor: AppColors.buttonColor,
                                   decoration: BoxDecoration(
@@ -718,7 +712,19 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 lastDate: DateTime(2101),
                               );
                               if (picked != null) {
-                                provider.setStartDate(picked);
+                                // Check if this start date would be valid with existing end date
+                                String tempStartDate = "${picked.toLocal()}".split(' ')[0];
+                                String? dateError = provider.validateDateRange(
+                                  tempStartDate, 
+                                  provider.endDate.text
+                                );
+                                
+                                if (dateError != null) {
+                                  ShowToast("Error", dateError);
+                                  // Don't set the invalid date
+                                } else {
+                                  provider.setStartDate(picked);
+                                }
                               }
                             },
                             child: AbsorbPointer(
@@ -732,13 +738,15 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 fontSize: AppFontSize.fontSize16,
                                 inputFontSize: AppFontSize.fontSize16,
                                 backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
+                                // borderColor: AppColors.buttonColor,
                                 textColor: Colors.black,
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: provider.startDateFocusNode.hasFocus
                                     ? AppColors.activeFieldBgColor
-                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                                    : AppColors.Color_FAFAFA, 
+                                borderColor: AppColors.buttonColor,
+                                onFieldSubmitted: (String ) {  },
                               ),
                             ),
                           ),
@@ -764,7 +772,19 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 lastDate: DateTime(2101),
                               );
                               if (picked != null) {
-                                provider.setEndDate(picked);
+                                // Check if this end date would be valid with existing start date
+                                String tempEndDate = "${picked.toLocal()}".split(' ')[0];
+                                String? dateError = provider.validateDateRange(
+                                  provider.startDate.text, 
+                                  tempEndDate
+                                );
+                                
+                                if (dateError != null) {
+                                  ShowToast("Error", dateError);
+                                  // Don't set the invalid date
+                                } else {
+                                  provider.setEndDate(picked);
+                                }
                               }
                             },
                             child: AbsorbPointer(
@@ -778,13 +798,15 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 fontSize: AppFontSize.fontSize16,
                                 inputFontSize: AppFontSize.fontSize16,
                                 backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
+                                // borderColor: AppColors.buttonColor,
                                 textColor: Colors.black,
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: provider.endDateFocusNode.hasFocus
                                     ? AppColors.activeFieldBgColor
-                                    : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                                    : AppColors.Color_FAFAFA, 
+                                borderColor: AppColors.buttonColor,
+                                onFieldSubmitted: (String ) {  },
                               ),
                             ),
                           ),
@@ -833,10 +855,32 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       provider.startDate.text.isNotEmpty &&
                                       provider.endDate.text.isNotEmpty &&
                                       provider.responsibilitiesController.text.isNotEmpty) {
+                                    
+                                    // Validate date range
+                                    String? dateError = provider.validateDateRange(
+                                      provider.startDate.text, 
+                                      provider.endDate.text
+                                    );
+                                    if (dateError != null) {
+                                      ShowToast("Error", dateError);
+                                      return;
+                                    }
                                     if (!provider.employment_IsEdit) {
-                                      await provider.addEmploymentHistory(EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
+                                      await provider.addEmploymentHistory(ProfessionalEmploymentHistory(
+                                        companyName: provider.companyController.text,
+                                        position: provider.empHisPositionsHeld.isNotEmpty ? provider.empHisPositionsHeld.first : '',
+                                        startDate: provider.startDate.text,
+                                        endDate: provider.endDate.text,
+                                        responsibilities: provider.responsibilitiesController.text,
+                                      ));
                                     } else {
-                                      await provider.updateEmploymentHistory(provider.employment_Edit_Index!,EmploymentHistory(companyName: provider.companyController.text, position: provider.empHisPositionsHeld, startDate: provider.startDate.text, endDate: provider.endDate.text, responsibilities: provider.responsibilitiesController.text));
+                                      await provider.updateEmploymentHistory(provider.employment_Edit_Index!, ProfessionalEmploymentHistory(
+                                        companyName: provider.companyController.text,
+                                        position: provider.empHisPositionsHeld.isNotEmpty ? provider.empHisPositionsHeld.first : '',
+                                        startDate: provider.startDate.text,
+                                        endDate: provider.endDate.text,
+                                        responsibilities: provider.responsibilitiesController.text,
+                                      ));
                                     }
                                     provider.companyController.clear();
                                     provider.startDate.clear();
@@ -847,12 +891,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     provider.employment_Edit_Index=null;
                                     provider.setEmploymentHistoryVisibility(false);
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Please fill in all required fields'),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
+                                    ShowToast("Error", "Please fill in all required fields");
                                   }
                                 },
                                 buttonText: provider.employment_IsEdit ? "Update" : "Add",
@@ -870,84 +909,84 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       ) : Container(),
 
                       // Show existing employment history from API
-                      if (provider.professionalExperienceData != null && 
-                          provider.professionalExperienceData!.employmentHistory != null &&
-                          provider.professionalExperienceData!.employmentHistory!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 1.h),
-                          padding: EdgeInsets.all(2.w),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade50,
-                            borderRadius: BorderRadius.circular(1.h),
-                            border: Border.all(color: Colors.green.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                  SizedBox(width: 1.w),
-                                  Text(
-                                    'Existing Employment History',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 1.h),
-                              ...provider.professionalExperienceData!.employmentHistory!.map((history) => 
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 1.h),
-                                  padding: EdgeInsets.all(2.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(0.5.h),
-                                    border: Border.all(color: Colors.green.shade200),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        history.companyName ?? '',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize16,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.Color_212121,
-                                        ),
-                                      ),
-                                      SizedBox(height: 0.5.h),
-                                      Text(
-                                        'Position: ${history.position ?? ''}',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize14,
-                                          color: AppColors.Color_616161,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Period: ${history.startDate ?? ''} - ${history.endDate ?? ''}',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize14,
-                                          color: AppColors.Color_616161,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Responsibilities: ${history.responsibilities ?? ''}',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize14,
-                                          color: AppColors.Color_616161,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ).toList(),
-                            ],
-                          ),
-                        ),
+                      // if (provider.professionalExperienceData != null &&
+                      //     provider.professionalExperienceData!.employmentHistory != null &&
+                      //     provider.professionalExperienceData!.employmentHistory!.isNotEmpty)
+                      //   Container(
+                      //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                      //     padding: EdgeInsets.all(2.w),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.green.shade50,
+                      //       borderRadius: BorderRadius.circular(1.h),
+                      //       border: Border.all(color: Colors.green.shade200),
+                      //     ),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Row(
+                      //           children: [
+                      //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                      //             SizedBox(width: 1.w),
+                      //             Text(
+                      //               'Existing Employment History',
+                      //               style: TextStyle(
+                      //                 fontSize: AppFontSize.fontSize14,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.green.shade700,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         SizedBox(height: 1.h),
+                      //         ...provider.professionalExperienceData!.employmentHistory!.map((history) =>
+                      //           Container(
+                      //             margin: EdgeInsets.only(bottom: 1.h),
+                      //             padding: EdgeInsets.all(2.w),
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               borderRadius: BorderRadius.circular(0.5.h),
+                      //               border: Border.all(color: Colors.green.shade200),
+                      //             ),
+                      //             child: Column(
+                      //               crossAxisAlignment: CrossAxisAlignment.start,
+                      //               children: [
+                      //                 Text(
+                      //                   history.companyName ?? '',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize16,
+                      //                     fontWeight: FontWeight.bold,
+                      //                     color: AppColors.Color_212121,
+                      //                   ),
+                      //                 ),
+                      //                 SizedBox(height: 0.5.h),
+                      //                 Text(
+                      //                   'Position: ${history.position ?? ''}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Period: ${history.startDate ?? ''} - ${history.endDate ?? ''}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Responsibilities: ${history.responsibilities ?? ''}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           )
+                      //         ).toList(),
+                      //       ],
+                      //     ),
+                      //   ),
 
                       // References (Repeater)
                       Row(
@@ -969,6 +1008,13 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             padding: EdgeInsets.only(right: 10.0,top:10),
                             child: GestureDetector(
                               onTap: (){
+                                // Clear form data
+                                provider.referenceVesselController.clear();
+                                provider.referenceIssuedDate.clear();
+                                provider.referenceDocumentController.clear();
+                                provider.referenceIssuedBy = null;
+                                provider.referenceDocument = null;
+                                
                                 provider.setReferenceVisibility(true);
                                 provider.reference_Edit_Index=null;
                                 provider.reference_IsEdit=false;
@@ -995,86 +1041,86 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       ),
 
                       // Show existing references from API
-                      if (provider.professionalExperienceData != null && 
-                          provider.professionalExperienceData!.references != null &&
-                          provider.professionalExperienceData!.references!.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 1.h),
-                          padding: EdgeInsets.all(2.w),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade50,
-                            borderRadius: BorderRadius.circular(1.h),
-                            border: Border.all(color: Colors.green.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                  SizedBox(width: 1.w),
-                                  Text(
-                                    'Existing References',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 1.h),
-                              ...provider.professionalExperienceData!.references!.map((reference) => 
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 1.h),
-                                  padding: EdgeInsets.all(2.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(0.5.h),
-                                    border: Border.all(color: Colors.green.shade200),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        reference.vesselOrCompanyName ?? '',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize16,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.Color_212121,
-                                        ),
-                                      ),
-                                      SizedBox(height: 0.5.h),
-                                      Text(
-                                        'Issued By: ${reference.issuedBy ?? ''}',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize14,
-                                          color: AppColors.Color_616161,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Issued Date: ${reference.issuingDate ?? ''}',
-                                        style: TextStyle(
-                                          fontSize: AppFontSize.fontSize14,
-                                          color: AppColors.Color_616161,
-                                        ),
-                                      ),
-                                      if (reference.experienceDocumentOriginalName != null && 
-                                          reference.experienceDocumentOriginalName!.isNotEmpty)
-                                        Text(
-                                          'Document: ${reference.experienceDocumentOriginalName}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                )
-                              ).toList(),
-                            ],
-                          ),
-                        ),
+                      // if (provider.professionalExperienceData != null &&
+                      //     provider.professionalExperienceData!.references != null &&
+                      //     provider.professionalExperienceData!.references!.isNotEmpty)
+                      //   Container(
+                      //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                      //     padding: EdgeInsets.all(2.w),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.green.shade50,
+                      //       borderRadius: BorderRadius.circular(1.h),
+                      //       border: Border.all(color: Colors.green.shade200),
+                      //     ),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Row(
+                      //           children: [
+                      //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                      //             SizedBox(width: 1.w),
+                      //             Text(
+                      //               'Existing References',
+                      //               style: TextStyle(
+                      //                 fontSize: AppFontSize.fontSize14,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.green.shade700,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         SizedBox(height: 1.h),
+                      //         ...provider.professionalExperienceData!.references!.map((reference) =>
+                      //           Container(
+                      //             margin: EdgeInsets.only(bottom: 1.h),
+                      //             padding: EdgeInsets.all(2.w),
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               borderRadius: BorderRadius.circular(0.5.h),
+                      //               border: Border.all(color: Colors.green.shade200),
+                      //             ),
+                      //             child: Column(
+                      //               crossAxisAlignment: CrossAxisAlignment.start,
+                      //               children: [
+                      //                 Text(
+                      //                   reference.vesselOrCompanyName ?? '',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize16,
+                      //                     fontWeight: FontWeight.bold,
+                      //                     color: AppColors.Color_212121,
+                      //                   ),
+                      //                 ),
+                      //                 SizedBox(height: 0.5.h),
+                      //                 Text(
+                      //                   'Issued By: ${reference.issuedBy ?? ''}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 Text(
+                      //                   'Issued Date: ${reference.issuingDate ?? ''}',
+                      //                   style: TextStyle(
+                      //                     fontSize: AppFontSize.fontSize14,
+                      //                     color: AppColors.Color_616161,
+                      //                   ),
+                      //                 ),
+                      //                 if (reference.experienceDocumentOriginalName != null &&
+                      //                     reference.experienceDocumentOriginalName!.isNotEmpty)
+                      //                   Text(
+                      //                     'Document: ${reference.experienceDocumentOriginalName}',
+                      //                     style: TextStyle(
+                      //                       fontSize: AppFontSize.fontSize14,
+                      //                       color: AppColors.Color_616161,
+                      //                     ),
+                      //                   ),
+                      //               ],
+                      //             ),
+                      //           )
+                      //         ).toList(),
+                      //       ],
+                      //     ),
+                      //   ),
 
                       ListView.builder(
                         padding: EdgeInsets.zero,
@@ -1112,7 +1158,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        referenceDetail.vesselOrCompanyName,
+                                        referenceDetail.vesselOrCompanyName ?? '',
                                         style: TextStyle(
                                           fontSize:
                                           AppFontSize.fontSize20,
@@ -1123,7 +1169,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                         ),
                                       ),
                                       SizedBox(height: 0.8.h),
-                                      Text(referenceDetail.issuedBy,
+                                      Text(referenceDetail.issuedBy ?? '',
                                         style: TextStyle(
                                           fontSize:
                                           AppFontSize.fontSize14,
@@ -1136,7 +1182,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       ),
                                       SizedBox(height: 0.8.h),
                                       Text(
-                                        referenceDetail.issuingDate,
+                                        referenceDetail.issuingDate ?? '',
                                         style: TextStyle(
                                           fontSize:
                                           AppFontSize.fontSize14,
@@ -1149,7 +1195,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       ),
                                       SizedBox(height: 0.8.h),
                                       Text(
-                                        referenceDetail.documentUrl,
+                                        referenceDetail.experienceDocumentOriginalName ?? '',
                                         style: TextStyle(
                                           fontSize:
                                           AppFontSize.fontSize14,
@@ -1165,10 +1211,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    provider.referenceVesselController.text =referenceDetail.vesselOrCompanyName;
-                                    provider.referenceIssuedDate.text =referenceDetail.issuingDate ;
-                                    provider.setReferenceIssuedBy(referenceDetail.issuedBy);
-                                    provider.referenceDocumentController.text=referenceDetail.documentUrl;
+                                    provider.referenceVesselController.text = referenceDetail.vesselOrCompanyName ?? '';
+                                    provider.referenceIssuedDate.text = referenceDetail.issuingDate ?? '';
+                                    provider.setReferenceIssuedBy(referenceDetail.issuedBy ?? '');
+                                    provider.referenceDocumentController.text = referenceDetail.experienceDocumentOriginalName ?? '';
                                     provider.setReferenceVisibility(true);
                                     provider.reference_Edit_Index=index;
                                     provider.reference_IsEdit=true;
@@ -1438,9 +1484,19 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       provider.referenceIssuedDate.text.isNotEmpty &&
                                       provider.referenceDocumentController.text.isNotEmpty) {
                                     if (!provider.reference_IsEdit) {
-                                      await provider.addReference(Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                      await provider.addReference(Reference(
+                                        vesselOrCompanyName: provider.referenceVesselController.text,
+                                        issuedBy: provider.referenceIssuedBy!,
+                                        issuingDate: provider.referenceIssuedDate.text,
+                                        experienceDocumentOriginalName: provider.referenceDocumentController.text,
+                                      ));
                                     } else {
-                                      await provider.updateReference(provider.reference_Edit_Index!,Reference(vesselOrCompanyName: provider.referenceVesselController.text, issuedBy: provider.referenceIssuedBy!, issuingDate: provider.referenceIssuedDate.text, documentUrl: provider.referenceDocumentController.text));
+                                      await provider.updateReference(provider.reference_Edit_Index!, Reference(
+                                        vesselOrCompanyName: provider.referenceVesselController.text,
+                                        issuedBy: provider.referenceIssuedBy!,
+                                        issuingDate: provider.referenceIssuedDate.text,
+                                        experienceDocumentOriginalName: provider.referenceDocumentController.text,
+                                      ));
                                     }
                                     provider.referenceVesselController.clear();
                                     provider.referenceIssuedBy = null;
@@ -1450,12 +1506,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     provider.reference_Edit_Index=null;
                                     provider.setReferenceVisibility(false);
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Please fill in all required fields'),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
+                                    ShowToast("Error", "Please fill in all required fields");
                                   }
                                 },
                                 buttonText: provider.reference_IsEdit ? "Update" : "Add",
@@ -1483,60 +1534,12 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
   }
 }
 
-class ReferenceField extends StatelessWidget {
-  final Reference reference;
-  final Function(Reference) onEdit;
-  final VoidCallback onDelete;
 
-  const ReferenceField({
-    Key? key,
-    required this.reference,
-    required this.onEdit,
-    required this.onDelete,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 1.h),
-      child: Padding(
-        padding: EdgeInsets.all(2.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Issued By: ${reference.issuedBy}"),
-                Text("Vessel/Company: ${reference.vesselOrCompanyName}"),
-                Text("Issued On: ${reference.issuingDate}"),
-                SizedBox(height: 1.h),
-                Text("Document: ${reference.documentUrl}"),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => onEdit(reference),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 
 class EmploymentHistoryField extends StatelessWidget {
-  final EmploymentHistory history;
-  final Function(EmploymentHistory) onEdit;
+  final ProfessionalEmploymentHistory history;
+  final Function(ProfessionalEmploymentHistory) onEdit;
   final VoidCallback onDelete;
 
   const EmploymentHistoryField({

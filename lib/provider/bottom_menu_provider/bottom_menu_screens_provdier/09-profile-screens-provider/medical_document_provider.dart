@@ -557,6 +557,27 @@ class MedicalDocumentProvider extends ChangeNotifier {
     countries = CountryService().getAll().map((country) => country.name).toList();
   }
 
+  // Reset all form data
+  void resetForm() {
+    // Reset error states
+    hasError = false;
+    errorMessage = '';
+    
+    // Reset validation modes
+    autovalidateMode = AutovalidateMode.disabled;
+    autovalidateModeMedical = AutovalidateMode.disabled;
+    
+    // Clear data
+    medicalDocumentData = null;
+    
+    // Clear lists (you may need to add these lists if they don't exist)
+    // medicalFitnessList.clear();
+    // drugAndAlcoholTestList.clear();
+    // vaccinationCertificateList.clear();
+    
+    notifyListeners();
+  }
+
   // API call to fetch medical document data
   Future<void> fetchMedicalDocuments(String userId, BuildContext context) async {
     if (userId.isEmpty) {

@@ -24,6 +24,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
     // Call API to fetch travel document data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<TravelDocumentProvider>(context, listen: false);
+      
+      // Reset form before fetching data
+      provider.resetForm();
+      
       // Get userId from NetworkHelper or use the hardcoded one for testing
       String userId = NetworkHelper.loggedInUserId.isNotEmpty
 
@@ -49,6 +53,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
         },
       );
 
+      // Reset form before API call
+      provider.resetForm();
+      
       // Call the create/update API
       bool success = await provider.createOrUpdateTravelDocumentsAPI(context);
       
