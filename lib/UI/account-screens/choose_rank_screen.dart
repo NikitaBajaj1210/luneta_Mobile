@@ -39,50 +39,13 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
 
       child: Consumer<ChooseRankProvider>(
         builder: (context, provider, child) {
-          return NetworkService.loading == 0 ? Center(
-            child: CircularProgressIndicator(color: AppColors.Color_607D8B),
-          ) :
-          NetworkService.loading == 1 ? Padding(
-            padding: EdgeInsets.only(top: 2.h),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  NetworkService.loading = 0;
-                  provider.GetAllRank(context);
-                  setState(() {});
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                        'assets/images/refresh.png',
-                        width: 4.5.h,
-                        height: 4.5.h,
-                        color: AppColors.Color_607D8B
-                    ),
-                    SizedBox(
-                      height:1.h,
-                    ),
-                    Text(
-                      "Tab to Try Again",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontFamily: AppColors.fontFamilyBold,
-                        fontSize: AppFontSize.fontSize15,
-                          color: AppColors.Color_607D8B,
-                        decoration: TextDecoration.none
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ):
+          return
           SafeArea(
 
             child: Scaffold(
               backgroundColor: AppColors.Color_FFFFFF,
-              bottomNavigationBar: Container(
+              bottomNavigationBar:
+              Container(
                 height: 11.h,
                 width: 100.w,
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
@@ -110,109 +73,152 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
                 ),
               ),
               body: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.w).copyWith(top: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    backButtonWithTitle(
-                      title: "",
-                      onBackPressed: () {
-                        Navigator.pop(context);
+                height: 100.h,
+                width: 100.w,
+                color: AppColors.Color_FFFFFF,
+                child: NetworkService.loading == 0 ? Center(
+                  child: CircularProgressIndicator(color: AppColors.Color_607D8B),
+                ) :
+                NetworkService.loading == 1 ? Padding(
+                  padding: EdgeInsets.only(top: 2.h),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        NetworkService.loading = 0;
+                        provider.GetAllRank(context);
+                        setState(() {});
                       },
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      "What is your Rank",
-                      style: TextStyle(
-                        fontSize: AppFontSize.fontSize32,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: AppColors.fontFamilyBold,
-                        color: AppColors.Color_212121,
-                      ),
-                    ),
-                    SizedBox(height: 1.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 1.w),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "You can change it later from your profile",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: AppFontSize.fontSize18,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.Color_212121,
-                          fontFamily: AppColors.fontFamilyRegular,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 2.h, bottom: 2.5.h),
-                      height: 0.1.h,
-                      color: AppColors.Color_EEEEEE,
-                      width: 100.w,
-                    ),
-                    // List of ranks with checkboxes
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: provider.ranks.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              provider.setSelectedRankIndex(index: index);
-                            },
-                            child: Container(
-                              width: 90.w,
-                              margin: EdgeInsets.only(bottom: 2.h),
-                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.2.h),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2.5.h),
-                                border: Border.all(
-                                  color: provider.selectedIndex == index
-                                      ? AppColors.buttonColor
-                                      : AppColors.Color_EEEEEE, // Replaced borderColor
-                                  width: 0.3.w,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 2.6.h,
-                                    width: 2.6.h,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: provider.selectedIndex == index
-                                          ? AppColors.buttonColor
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(1.h),
-                                      border: Border.all(
-                                        color: provider.selectedIndex == index
-                                            ? AppColors.buttonColor
-                                            : AppColors.buttonColor,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: provider.selectedIndex == index
-                                        ? Image.asset("assets/images/tickIcon.png", scale: 0.5.h)
-                                        : Container(),
-                                  ),
-                                  SizedBox(width: 3.w),
-                                  Text(
-                                    provider.ranks[index].rankName??'',
-                                    style: TextStyle(
-                                      fontSize: AppFontSize.fontSize16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.Color_212121,
-                                      fontFamily: AppColors.fontFamilySemiBold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                              'assets/images/refresh.png',
+                              width: 4.5.h,
+                              height: 4.5.h,
+                              color: AppColors.Color_607D8B
+                          ),
+                          SizedBox(
+                            height:1.h,
+                          ),
+                          Text(
+                            "Tab to Try Again",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontFamily: AppColors.fontFamilyBold,
+                                fontSize: AppFontSize.fontSize15,
+                                color: AppColors.Color_607D8B,
+                                decoration: TextDecoration.none
                             ),
-                          );
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ): Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w).copyWith(top: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      backButtonWithTitle(
+                        title: "",
+                        onBackPressed: () {
+                          Navigator.pop(context);
                         },
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 2.h),
+                      Text(
+                        "What is your Rank",
+                        style: TextStyle(
+                          fontSize: AppFontSize.fontSize32,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: AppColors.fontFamilyBold,
+                          color: AppColors.Color_212121,
+                        ),
+                      ),
+                      SizedBox(height: 1.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 1.w),
+                        alignment: Alignment.center,
+                        child: Text(
+                          "You can change it later from your profile",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: AppFontSize.fontSize18,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.Color_212121,
+                            fontFamily: AppColors.fontFamilyRegular,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 2.h, bottom: 2.5.h),
+                        height: 0.1.h,
+                        color: AppColors.Color_EEEEEE,
+                        width: 100.w,
+                      ),
+                      // List of ranks with checkboxes
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: provider.ranks.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                provider.setSelectedRankIndex(index: index);
+                              },
+                              child: Container(
+                                width: 90.w,
+                                margin: EdgeInsets.only(bottom: 2.h),
+                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.2.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2.5.h),
+                                  border: Border.all(
+                                    color: provider.selectedIndex == index
+                                        ? AppColors.buttonColor
+                                        : AppColors.Color_EEEEEE, // Replaced borderColor
+                                    width: 0.3.w,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 2.6.h,
+                                      width: 2.6.h,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: provider.selectedIndex == index
+                                            ? AppColors.buttonColor
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(1.h),
+                                        border: Border.all(
+                                          color: provider.selectedIndex == index
+                                              ? AppColors.buttonColor
+                                              : AppColors.buttonColor,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: provider.selectedIndex == index
+                                          ? Image.asset("assets/images/tickIcon.png", scale: 0.5.h)
+                                          : Container(),
+                                    ),
+                                    SizedBox(width: 3.w),
+                                    Text(
+                                      provider.ranks[index].rankName??'',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.Color_212121,
+                                        fontFamily: AppColors.fontFamilySemiBold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

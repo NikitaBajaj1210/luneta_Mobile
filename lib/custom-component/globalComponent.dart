@@ -13,6 +13,7 @@ import '../network/network_helper.dart';
 import '../network/app_url.dart';
 import '../provider/authentication-provider/login_provider.dart';
 import '../route/route_constants.dart';
+import '../Utils/helper.dart';
 import 'custom-button.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -489,6 +490,9 @@ showPermissionDialog(
 /// ```
 
 Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String url, Map<String, dynamic> fieldData, List<Map<String, dynamic>> fileList, bool showLoading) async {
+  // Start loading if showLoading is true
+  if (showLoading && context.mounted) startLoading(context);
+  
   try {
     var dio = Dio();
     var headers = {
@@ -538,13 +542,17 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
       ),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
+      if (showLoading && context.mounted) stopLoading(context);
       ShowToast("Success", response.data['message'] ?? "Saved successfully");
       return response.data;
     } else {
+      if (showLoading && context.mounted) stopLoading(context);
       ShowToast("Error", response.data['message'] ?? "Something went wrong");
       return response.data;
     }
   } on DioException catch (e) {
+    if (showLoading && context.mounted) stopLoading(context);
+    
     if (e.response?.statusCode == 401) {
       ShowToast("Error", "Session expired. Please log in again.");
       var loginProvider = Provider.of<LoginProvider>(context, listen: false);
@@ -566,6 +574,7 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
       return e.response?.data ?? {};
     }
   } catch (e) {
+    if (showLoading && context.mounted) stopLoading(context);
     print(e);
     ShowToast("Error", "Something went wrong");
     return {};

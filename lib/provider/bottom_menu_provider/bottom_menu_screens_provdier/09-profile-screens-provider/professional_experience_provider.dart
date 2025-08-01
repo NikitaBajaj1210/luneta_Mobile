@@ -517,7 +517,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       return false;
     }
     
-    // // Check if we have at least some data to send
+    // Check if we have at least some data to send
     // if (positionsHeld.isEmpty && vesselTypeExperience.isEmpty &&
     //     employmentHistory.isEmpty && references.isEmpty) {
     //   hasError = true;
@@ -612,7 +612,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
         createOrUpdateProfessionalExperience,
         dioFieldData,
         dioFileList,
-        true, // showLoading
+        false, // showLoading
       );
 
       print("POST DATA PayLoad ====> ${dioFieldData}");
