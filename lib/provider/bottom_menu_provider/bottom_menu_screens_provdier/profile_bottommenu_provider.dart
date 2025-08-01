@@ -526,8 +526,6 @@ class ProfileBottommenuProvider with ChangeNotifier {
   }) {
     medicalDocsInfo = MedicalDocuments(
       medicalFitness: medicalFitness.map((m) {
-        print('medical Fitness ==========> ${m}');
-
         return MedicalFitness(
           documentType: m["documentType"] ?? "",
           certificateNo: m["certificateNo"] ?? "",
@@ -1239,7 +1237,6 @@ class ProfileBottommenuProvider with ChangeNotifier {
   bool getSectionStatus(String section) => _sectionStatus[section] ?? false;
   
   void setSectionStatus(String section, bool status) {
-    print(status);
     _sectionStatus[section] = status;
     notifyListeners();
   }

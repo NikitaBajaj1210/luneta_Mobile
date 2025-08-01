@@ -557,6 +557,27 @@ class MedicalDocumentProvider extends ChangeNotifier {
     countries = CountryService().getAll().map((country) => country.name).toList();
   }
 
+  // Reset all form data
+  void resetForm() {
+    // Reset error states
+    hasError = false;
+    errorMessage = '';
+    
+    // Reset validation modes
+    autovalidateMode = AutovalidateMode.disabled;
+    autovalidateModeMedical = AutovalidateMode.disabled;
+    
+    // Clear data
+    medicalDocumentData = null;
+    
+    // Clear lists (you may need to add these lists if they don't exist)
+    // medicalFitnessList.clear();
+    // drugAndAlcoholTestList.clear();
+    // vaccinationCertificateList.clear();
+    
+    notifyListeners();
+  }
+
   // API call to fetch medical document data
   Future<void> fetchMedicalDocuments(String userId, BuildContext context) async {
     if (userId.isEmpty) {
@@ -961,6 +982,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
         'data': jsonEncode(medicalDocument), // API expects a single object
       };
 
+
+
       // Convert fileList to the format expected by Dio function
       List<Map<String, dynamic>> dioFileList = [];
 
@@ -999,9 +1022,13 @@ class MedicalDocumentProvider extends ChangeNotifier {
         createOrUpdateMedicalDocuments,
         dioFieldData,
         dioFileList,
-        true, // showLoading
+        false, // showLoading
       );
 
+      print("Medical Document API Response: $response");
+      print("Medical Document Field Data: $dioFieldData");
+      print("Medical Document File List: $dioFileList");
+      
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
         // Success - refresh the data
         String userId =
@@ -1009,11 +1036,11 @@ class MedicalDocumentProvider extends ChangeNotifier {
         if (userId.isNotEmpty) {
           await fetchMedicalDocuments(userId, context);
         }
-        ShowToast("Success", "Medical Document found successfully");
+        ShowToast("Success", "Medical documents saved successfully");
         return true;
       } else {
         hasError = true;
-        ShowToast("Error", 'Failed to save medical documents');
+        ShowToast("Error", response['message'] ?? 'Failed to save medical documents');
         return false;
       }
     } catch (e) {
