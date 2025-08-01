@@ -59,10 +59,12 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_screen.dart';
 import 'Utils/helper.dart';
+import 'custom-component/globalComponent.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  setStatusBarColor(true);
+
   // Load and sync user data from SharedPreferences
   await NetworkHelper.syncUserData();
   
@@ -75,10 +77,10 @@ Future<void> main() async {
   print("=== End App Startup Debug ===");
   
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // Change status bar color
-    statusBarIconBrightness: Brightness.dark, // For light or dark icons
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarColor: Colors.transparent, // Change status bar color
+  //   statusBarIconBrightness: Brightness.dark, // For light or dark icons
+  // ));
   runApp(
     MultiProvider(
       providers: [

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -632,4 +633,11 @@ if(result!=null){
   print('File Size after compress => ${length}');
 }
   return result;
+}
+
+void setStatusBarColor(bool IsIconDark){
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: IsIconDark?Brightness.dark:Brightness.light
+  ));
 }
