@@ -1,8 +1,16 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../../../models/education_model.dart';
+import '../../../../network/app_url.dart';
+import '../../../../network/network_helper.dart';
+import '../../../../network/network_services.dart';
+import '../../../../Utils/helper.dart';
+import '../../../../custom-component/globalComponent.dart';
+
 
 class EducationProvider with ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -225,6 +233,241 @@ class EducationProvider with ChangeNotifier {
     } else if (type == 'certification') {
       setCertificationDocument(null);
     }
+  }
+
+  // API Methods
+  bool isLoading = false;
+  String errorMessage = '';
+  bool hasError = false;
+  EducationData? educationData;
+
+  // Fetch education data from API
+  Future<void> fetchEducationData(BuildContext context) async {
+    isLoading = true;
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+
+    try {
+      String userId = NetworkHelper.loggedInUserId;
+      if (userId.isEmpty) {
+        hasError = true;
+        errorMessage = 'User ID not found';
+        isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      final response = await NetworkService().getResponse(
+        getEducationByUserId + userId,
+        false, // showLoading
+        context,
+        () => notifyListeners(),
+      );
+
+      print("Education API Response: $response");
+
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        EducationResponse educationResponse = EducationResponse.fromJson(response);
+        
+        if (educationResponse.data != null) {
+          educationData = educationResponse.data;
+          _populateFormData(educationResponse.data!);
+          print("Education data loaded successfully");
+        } else {
+          print("No education data found");
+        }
+      } else {
+        hasError = true;
+        errorMessage = response['message'] ?? 'Failed to fetch education data';
+        print("Education API Error: $errorMessage");
+      }
+    } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
+      print("Education API Exception: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Populate form data from API response
+  void _populateFormData(EducationData data) {
+    // Clear existing data
+    academicQualificationList.clear();
+    certificationList.clear();
+    nativeLanguages.clear();
+    additionalLanguage = null;
+    additionalLanguageLevel = null;
+
+    // Populate Academic Qualifications
+    if (data.academicQualification != null) {
+      for (var qualification in data.academicQualification!) {
+        AcademicQualification academicQual = AcademicQualification(
+          educationalDegree: qualification.educationalDegree ?? '',
+          fieldOfStudy: qualification.fieldOfStudy ?? '',
+          educationalInstitution: qualification.educationalInstitution ?? '',
+          country: qualification.country ?? '',
+          graduationDate: qualification.graduationDate ?? '',
+          document: null, // Document path would need to be handled separately
+        );
+        academicQualificationList.add(academicQual);
+      }
+    }
+
+    // Populate Certifications
+    if (data.certificationsAndTrainings != null) {
+      for (var certification in data.certificationsAndTrainings!) {
+        Certification cert = Certification(
+          typeOfCertification: certification.certificationType ?? '',
+          issuingAuthority: certification.issuingAuthority ?? '',
+          issueDate: certification.issueDate ?? '',
+          expiryDate: certification.expiryDate ?? '',
+          document: null, // Document path would need to be handled separately
+        );
+        certificationList.add(cert);
+      }
+    }
+
+    // Populate Languages
+    if (data.languagesSpoken != null && data.languagesSpoken!.isNotEmpty) {
+      var languageData = data.languagesSpoken!.first;
+      if (languageData.native != null) {
+        nativeLanguages = List<String>.from(languageData.native!);
+      }
+      additionalLanguage = languageData.additionalLanguage;
+      additionalLanguageLevel = languageData.level;
+    }
+
+    notifyListeners();
+  }
+
+  // Create or update education data
+  Future<bool> createOrUpdateEducationAPI(BuildContext context) async {
+    isLoading = true;
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+
+    try {
+      String userId = NetworkHelper.loggedInUserId;
+      if (userId.isEmpty) {
+        hasError = true;
+        errorMessage = 'User ID not found';
+        isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      // Prepare the data object
+      Map<String, dynamic> educationPayload = {
+        'userId': userId,
+        'academicQualification': academicQualificationList.map((qual) => {
+          'educationalDegree': qual.educationalDegree,
+          'fieldOfStudy': qual.fieldOfStudy,
+          'educationalInstitution': qual.educationalInstitution,
+          'country': qual.country,
+          'graduationDate': qual.graduationDate,
+          'document': qual.document?.path.split('/').last ?? '',
+        }).toList(),
+        'certificationsAndTrainings': certificationList.map((cert) => {
+          'certificationType': cert.typeOfCertification,
+          'issuingAuthority': cert.issuingAuthority,
+          'issueDate': cert.issueDate,
+          'expiryDate': cert.expiryDate,
+          'neverExpire': false, // Default value
+          'document': cert.document?.path.split('/').last ?? '',
+        }).toList(),
+        'languagesSpoken': [
+          {
+            'native': nativeLanguages,
+            'additionalLanguage': additionalLanguage ?? '',
+            'level': additionalLanguageLevel ?? '',
+          }
+        ],
+      };
+
+      // Convert data to the format expected by Dio function
+      Map<String, dynamic> dioFieldData = {
+        'data': jsonEncode(educationPayload), // API expects a single object
+      };
+
+      // Convert fileList to the format expected by Dio function
+      List<Map<String, dynamic>> dioFileList = [];
+
+      // Add academic qualification files
+      for (int i = 0; i < academicQualificationList.length; i++) {
+        if (academicQualificationList[i].document != null) {
+          dioFileList.add({
+            'fieldName': 'academicQualificationFiles',
+            'filePath': academicQualificationList[i].document!.path,
+            'fileName': academicQualificationList[i].document!.path.split('/').last,
+          });
+        }
+      }
+
+      // Add certification files
+      for (int i = 0; i < certificationList.length; i++) {
+        if (certificationList[i].document != null) {
+          dioFileList.add({
+            'fieldName': 'certificationsAndTrainingsFiles',
+            'filePath': certificationList[i].document!.path,
+            'fileName': certificationList[i].document!.path.split('/').last,
+          });
+        }
+      }
+
+      print("Education API Field Data: $dioFieldData");
+      print("Education API File List: $dioFileList");
+
+      // Call the Dio-based multipart function from globalComponent
+      final response = await multipartDocumentsDio(
+        context,
+        createOrUpdateEducation,
+        dioFieldData,
+        dioFileList,
+        false, // showLoading
+      );
+
+      print("Education Create/Update Response: $response");
+
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        ShowToast("Success", "Education data saved successfully");
+        return true;
+      } else {
+        hasError = true;
+        errorMessage = response['message'] ?? 'Failed to save education data';
+        ShowToast("Error", errorMessage);
+        return false;
+      }
+    } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
+      ShowToast("Error", errorMessage);
+      print("Education Create/Update Exception: $e");
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Reset form data
+  void resetForm() {
+    academicQualificationList.clear();
+    certificationList.clear();
+    nativeLanguages.clear();
+    additionalLanguage = null;
+    additionalLanguageLevel = null;
+    educationData = null;
+    hasError = false;
+    errorMessage = '';
+    autovalidateMode = AutovalidateMode.disabled;
+    autovalidateModeAcademic = AutovalidateMode.disabled;
+    autovalidateModeCertification = AutovalidateMode.disabled;
+    autovalidateModeLanguages = AutovalidateMode.disabled;
+    notifyListeners();
   }
 }
 

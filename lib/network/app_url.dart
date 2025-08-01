@@ -23,6 +23,26 @@ const getMedicalDocumentsByUserId = '${baseUrl}seafarer-profile/medical-document
 const createOrUpdateMedicalDocuments = '${baseUrl}seafarer-profile/medical-documents/create-or-update';
 const getProfessionalExperienceByUserId = '${baseUrl}professional-experience/get-by-user-profile/';
 const createOrUpdateProfessionalExperience = '${baseUrl}professional-experience/create-or-update';
+const getEducationByUserId = '${baseUrl}seafarer-profile/education-getByUserId/';
+const createOrUpdateEducation = '${baseUrl}seafarer-profile/education/create-or-update';
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
+
+
+
+//USED  TO API
+// /api/master-general-cargo/bulk-general-cargo-create-or-update
+// /api/master-general-cargo/get-all
+//
+// /api/master-wood-products/bulk-wood-product-create-or-update
+// /api/master-wood-products/get-all
+//
+// /api/master-tanker-cargo/bulk-tanker-cargo-create-or-update
+// /api/master-tanker-cargo/get-all
+//
+// /api/master-lashing-experience/bulk-lashing-create-or-update
+// /api/master-lashing-experience/get-all
+//
+// /api/master-cargo-experience/bulk-cargo-create-or-update
+// /api/master-cargo-experience

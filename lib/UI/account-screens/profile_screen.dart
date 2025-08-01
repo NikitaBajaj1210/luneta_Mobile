@@ -510,6 +510,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 profileProvider.selectedGender = newValue!;
                                 profileProvider.validateGender(newValue);
                                 profileProvider.markFieldAsSubmitted('gender');
+                                profileProvider.notifyListeners(); // Trigger UI rebuild
                                 // Unfocus after selection to prevent keyboard conflicts
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
                                   profileProvider.genderFocusNode.unfocus();
@@ -519,7 +520,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   .map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
-                                  child: Text(value),
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      color: value == 'Gender' ? AppColors.Color_9E9E9E : AppColors.Color_212121,
+                                      fontFamily: value == 'Gender' ? AppColors.fontFamilyRegular : AppColors.fontFamilySemiBold,
+                                      fontWeight: value == 'Gender' ? FontWeight.w400 : FontWeight.w600,
+                                    ),
+                                  ),
                                 );
                               }).toList(),
                               validator: (value) => profileProvider.validateGender(value ?? 'Gender', notify: false),
