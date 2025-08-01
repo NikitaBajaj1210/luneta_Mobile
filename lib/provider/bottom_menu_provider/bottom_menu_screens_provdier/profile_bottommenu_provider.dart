@@ -67,8 +67,8 @@ class ProfileBottommenuProvider with ChangeNotifier {
             nearestAirport: seafarerProfile['nearestAirport'] ?? '',
             onlineCommunication: (seafarerProfile['onlineCommunication'] as List)
                 .map((e) => {
-              "platform": e['platform'] ?? '',
-              "id": e['id'] ?? '',
+              "platform": e['platform'].toString(),
+              "id": e['id'].toString(),
               "verified": "true",
             })
                 .toList(),
@@ -84,19 +84,19 @@ class ProfileBottommenuProvider with ChangeNotifier {
               vesselTypeExperience: List<String>.from(professionalExperience['vesselTypeExperience'] ?? []),
               employmentHistory: (professionalExperience['employmentHistory'] as List)
                   .map((e) => {
-                "companyName": e['companyName'] ?? '',
-                "position": e['position'] ?? '',
-                "startDate": e['startDate'] ?? '',
-                "endDate": e['endDate'] ?? '',
-                "responsibilities": e['responsibilities'] ?? '',
+                "companyName": e['companyName'].toString(),
+                "position": e['position'].toString(),
+                "startDate": e['startDate'].toString(),
+                "endDate": e['endDate'].toString(),
+                "responsibilities": e['responsibilities'].toString(),
               })
                   .toList(),
               references: (professionalExperience['references'] as List)
                   .map((e) => {
-                "issuedBy": e['issuedBy'] ?? '',
-                "issuingDate": e['issuingDate'] ?? '',
-                "vesselOrCompanyName": e['vesselOrCompanyName'] ?? '',
-                "documentUrl": e['documentPath'] ?? '',
+                "issuedBy": e['issuedBy'].toString(),
+                "issuingDate": e['issuingDate'].toString(),
+                "vesselOrCompanyName": e['vesselOrCompanyName'].toString(),
+                "documentUrl": e['documentPath'].toString(),
               })
                   .toList(),
             );
@@ -153,36 +153,36 @@ class ProfileBottommenuProvider with ChangeNotifier {
             setMedicalDocuments(
               medicalFitness: (medicalDocuments['medicalFitness'] as List)
                   .map((e) => {
-                "documentType": e['documentType'] ?? '',
-                "certificateNo": e['certificateNo'] ?? '',
-                "issuingCountry": e['issuingCountry'] ?? '',
-                "issuingClinic": e['issuingClinic'] ?? '',
-                "issuingDate": e['issuingDate'] ?? '',
-                "expDate": e['expDate'] ?? '',
+                "documentType": e['documentType'].toString(),
+                "certificateNo": e['certificateNo'].toString(),
+                "issuingCountry": e['issuingCountry'].toString(),
+                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingDate": e['issuingDate'].toString(),
+                "expDate": e['expDate'].toString(),
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
-                "documentUrl": e['documentUrl'] ?? '',
+                "documentUrl": e['documentUrl'].toString(),
               })
                   .toList(),
               drugAlcoholTest: (medicalDocuments['drugAlcoholTest'] as List)
                   .map((e) => {
-                "documentType": e['documentType'] ?? '',
-                "certificateNo": e['certificateNo'] ?? '',
-                "issuingCountry": e['issuingCountry'] ?? '',
-                "issuingClinic": e['issuingClinic'] ?? '',
-                "issuingDate": e['issuingDate'] ?? '',
-                "expDate": e['expDate'] ?? '',
-                "documentUrl": e['documentUrl'] ?? '',
+                "documentType": e['documentType'].toString(),
+                "certificateNo": e['certificateNo'].toString(),
+                "issuingCountry": e['issuingCountry'].toString(),
+                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingDate": e['issuingDate'].toString(),
+                "expDate": e['expDate'].toString(),
+                "documentUrl": e['documentUrl'].toString(),
               })
                   .toList(),
               vaccinationCertificates: (medicalDocuments['vaccinationCertificates'] as List)
                   .map((e) => {
-                "documentType": e['documentType'] ?? '',
-                "vaccinationCountry": e['vaccinationCountry'] ?? '',
-                "issuingClinic": e['issuingClinic'] ?? '',
-                "issuingDate": e['issuingDate'] ?? '',
-                "expDate": e['expDate'] ?? '',
+                "documentType": e['documentType'].toString(),
+                "vaccinationCountry": e['vaccinationCountry'].toString(),
+                "issuingClinic": e['issuingClinic'].toString(),
+                "issuingDate": e['issuingDate'].toString(),
+                "expDate": e['expDate'].toString(),
                 "neverExpire": (e['neverExpire'] ?? false).toString(),
-                "documentUrl": e['documentUrl'] ?? '',
+                "documentUrl": e['documentUrl'].toString(),
               })
                   .toList(),
             );
@@ -193,27 +193,27 @@ class ProfileBottommenuProvider with ChangeNotifier {
             setEducation(
               academicQualifications: (education['academicQualifications'] as List)
                   .map((e) => {
-                "educationalDegree": e['educationalDegree'] ?? '',
-                "fieldOfStudy": e['fieldOfStudy'] ?? '',
-                "educationalInstitution": e['educationalInstitution'] ?? '',
-                "country": e['country'] ?? '',
-                "graduationDate": e['graduationDate'] ?? '',
-                "documentUrl": e['documentUrl'] ?? '',
+                "educationalDegree": e['educationalDegree'].toString(),
+                "fieldOfStudy": e['fieldOfStudy'].toString(),
+                "educationalInstitution": e['educationalInstitution'].toString(),
+                "country": e['country'].toString(),
+                "graduationDate": e['graduationDate'].toString(),
+                "documentUrl": e['documentUrl'].toString(),
               })
                   .toList(),
               certificationsAndTrainings: (education['certificationsAndTrainings'] as List)
                   .map((e) => {
-                "certificationType": e['certificationType'] ?? '',
-                "issuingAuthority": e['issuingAuthority'] ?? '',
-                "issueDate": e['issueDate'] ?? '',
-                "expiryDate": e['expiryDate'] ?? '',
-                "documentUrl": e['documentUrl'] ?? '',
+                "certificationType": e['certificationType'].toString(),
+                "issuingAuthority": e['issuingAuthority'].toString(),
+                "issueDate": e['issueDate'].toString(),
+                "expiryDate": e['expiryDate'].toString(),
+                "documentUrl": e['documentUrl'].toString(),
               })
                   .toList(),
               languagesSpoken: (education['languagesSpoken'] as List)
                   .map((e) => {
-                "language": e['language'] ?? '',
-                "level": e['level'] ?? '',
+                "language": e['language'].toString(),
+                "level": e['level'].toString(),
               })
                   .toList(),
             );

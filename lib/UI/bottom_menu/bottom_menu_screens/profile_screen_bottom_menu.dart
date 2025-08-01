@@ -23,9 +23,11 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProfileBottommenuProvider>(
-        context,
-        listen: false).getProfileInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ProfileBottommenuProvider>(
+          context,
+          listen: false).getProfileInfo(context);
+    });
   }
 
   @override
