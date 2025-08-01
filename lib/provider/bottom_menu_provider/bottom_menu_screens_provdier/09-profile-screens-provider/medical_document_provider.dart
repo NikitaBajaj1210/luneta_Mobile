@@ -790,7 +790,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
   }
 
   // Vaccination Certificates
-  bool? vaccinationCertificateNeverExpire; // Made optional
+  bool? vaccinationCertificateNeverExpire=false; // Made optional
   String? vaccinationCertificateDocumentType;
   String? vaccinationCertificateIssuingCountry;
 

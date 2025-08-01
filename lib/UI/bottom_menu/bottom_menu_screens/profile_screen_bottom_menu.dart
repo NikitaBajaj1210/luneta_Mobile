@@ -3274,7 +3274,8 @@ Widget _buildProfileSection(
         foregroundColor: Colors.white,
           backgroundColor: Colors.white,
           radius: 4.5.h,
-        backgroundImage: NetworkHelper.loggedInUserProfilePicURL==''? AssetImage("assets/images/dummyProfileImg.png"):NetworkImage(NetworkHelper.loggedInUserProfilePicURL)
+        backgroundImage: NetworkHelper.loggedInUserProfilePicURL==''?
+        AssetImage("assets/images/dummyProfileImg.png"):NetworkImage(NetworkHelper.loggedInUserProfilePicURL)
       ),
       SizedBox(width: 4.w),
       Expanded(

@@ -118,24 +118,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
 
                       // Hide loading indicator
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
 
-                      // if (success) {
-                      //   // Show success message
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Text('Professional experience saved successfully'),
-                      //       backgroundColor: Colors.green,
-                      //     ),
-                      //   );
-                      // } else {
-                      //   // Show error message
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Text('Failed to save professional experience'),
-                      //       backgroundColor: Colors.red,
-                      //     ),
-                      //   );
-                      // }
                     } else {
                       setState(() {
                         provider.autovalidateMode = AutovalidateMode.always;

@@ -225,7 +225,7 @@ class SeafarerProfile {
     nearestAirport = json['nearestAirport'];
     maritalStatus = json['maritalStatus'];
     numberOfChildren = json['numberOfChildren'];
-    profilePhoto = json['profileURI'];
+    profilePhoto = json['profileURl'];
     profilePhotoOriginalName = json['profilePhotoOriginalName'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];

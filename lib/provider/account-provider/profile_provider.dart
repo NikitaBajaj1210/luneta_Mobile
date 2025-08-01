@@ -412,45 +412,28 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void showImageSourceBottomSheet(BuildContext context) {
+
+  Future<void> showImageSourceBottomSheet(BuildContext context) async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 30.h,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 2.h),
-              Container(
-                width: 10.w,
-                height: 0.5.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              SizedBox(height: 3.h),
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Camera'),
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from gallery'),
                 onTap: () {
-                  Navigator.pop(context);
-                  pickProfileImage(ImageSource.camera, context);
+                  pickProfileImage(ImageSource.gallery, context);
+                  Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a picture'),
                 onTap: () {
-                  Navigator.pop(context);
-                  pickProfileImage(ImageSource.gallery, context);
+                  pickProfileImage(ImageSource.camera, context);
+                  Navigator.of(context).pop();
                 },
               ),
             ],
@@ -459,6 +442,7 @@ class ProfileProvider with ChangeNotifier {
       },
     );
   }
+
 
   Future<void> pickProfileImage(ImageSource source, BuildContext context) async {
     await checkPermission(context);

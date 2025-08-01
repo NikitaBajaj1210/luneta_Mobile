@@ -57,7 +57,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
             email: seafarerProfile['email'] ?? '',
             mobilePhone: seafarerProfile['mobilePhone'] ?? '',
             directLinePhone: seafarerProfile['directLinePhone'] ?? '',
-            homeAddress: seafarerProfile['homeAddress']['street'] ?? '',
+            homeAddress: seafarerProfile['homeAddress']==null?'':seafarerProfile['homeAddress']['street'] ?? '',
             nearestAirport: seafarerProfile['nearestAirport'] ?? '',
             onlineCommunication: seafarerProfile['onlineCommunication'] != null
                 ? (seafarerProfile['onlineCommunication'] as List)
@@ -138,6 +138,12 @@ class ProfileBottommenuProvider with ChangeNotifier {
               contactInfoSharing: securityCompliance['contactInformationSharing'] ?? false,
               dataSharing: securityCompliance['dataSharing'] ?? false,
               professionalConductDeclaration: securityCompliance['professionalConductDeclaration'] ?? false,
+            );
+          }else{
+            setSecurityAndComplianceInfo(
+              contactInfoSharing:  false,
+              dataSharing: false,
+              professionalConductDeclaration:  false,
             );
           }
 
@@ -403,9 +409,6 @@ class ProfileBottommenuProvider with ChangeNotifier {
     );
     NetworkHelper.loggedInUserProfilePicURL = profilePhotoPath;
     NetworkHelper.loggedInUserFullName = name;
-
-
-
     var prefs = await SharedPreferences.getInstance();
     if (profilePhotoPath != '') {
       await prefs.setString('profilePicURL', profilePhotoPath);
@@ -413,14 +416,6 @@ class ProfileBottommenuProvider with ChangeNotifier {
     if (name != '') {
       await prefs.setString('fullName', name);
     }
-
-
-
-
-
-
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });

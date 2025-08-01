@@ -234,12 +234,6 @@ class TravelDocumentProvider extends ChangeNotifier {
 
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
         // Success - refresh the data
-        String userId = NetworkHelper.loggedInUserId.isNotEmpty 
-            ? NetworkHelper.loggedInUserId 
-            : '';
-        if (userId.isNotEmpty) {
-          await fetchTravelDocuments(userId,context);
-        }
         return true;
       } else {
         hasError = true;

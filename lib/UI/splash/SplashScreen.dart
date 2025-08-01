@@ -75,7 +75,18 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
         // Check if the response contains profile data
         if (response['data'] != null && response['data']['seafarerProfile'] != null) {
-          bool isCompletedMobile = response['data']['seafarerProfile']['isCompletedMobile'] ?? false;
+          bool isCompletedMobile = response['data']['seafarerProfile'][0]['is_completed_mobile'] ?? false;
+          NetworkHelper.loggedInUserProfilePicURL = response['data']['seafarerProfile'][0]['profileURl']??'';
+          NetworkHelper.loggedInUserFullName = ((response['data']['seafarerProfile'][0]['firstName'] ?? '')+" "+(response['data']['seafarerProfile'][0]['lastName'] ?? ''));
+          var prefs = await SharedPreferences.getInstance();
+          if (NetworkHelper.loggedInUserProfilePicURL != '') {
+            await prefs.setString('profilePicURL', NetworkHelper.loggedInUserProfilePicURL);
+          }
+          if (NetworkHelper.loggedInUserFullName != '') {
+            await prefs.setString('fullName', NetworkHelper.loggedInUserFullName);
+          }
+
+
           print("SplashScreen - Profile completion status: $isCompletedMobile");
           return isCompletedMobile;
         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:luneta/const/color.dart';
 import 'package:luneta/provider/Intro_screen_provider.dart';
 import 'package:luneta/provider/account-provider/choose_country_provider.dart';
 import 'package:luneta/provider/account-provider/choose_rank_provider.dart';
@@ -77,10 +78,12 @@ Future<void> main() async {
   print("=== End App Startup Debug ===");
   
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   statusBarColor: Colors.transparent, // Change status bar color
-  //   statusBarIconBrightness: Brightness.dark, // For light or dark icons
-  // ));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // Change status bar color
+      systemNavigationBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark, // For light or dark icons
+      systemNavigationBarIconBrightness: Brightness.dark
+  ));
   runApp(
     MultiProvider(
       providers: [
@@ -159,6 +162,22 @@ class InitRoutes extends StatelessWidget {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(.8)),
           child: MaterialApp(
+            theme: ThemeData(
+              colorScheme: ColorScheme(
+                brightness: Brightness.light,
+                primary: AppColors.buttonColor,
+                onPrimary: Colors.white,
+                secondary: AppColors.buttonColor,
+                onSecondary: Colors.white,
+                error: Colors.red,
+                onError: Colors.white,
+                background: Colors.white,
+                onBackground: Colors.black,
+                surface: Colors.white,
+                onSurface: Colors.black,
+              ),
+              useMaterial3: true,
+            ),
             debugShowCheckedModeBanner: false,
             onGenerateRoute: NavRouter.generateRoute,
             initialRoute: splash,

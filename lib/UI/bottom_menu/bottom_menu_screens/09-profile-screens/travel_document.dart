@@ -42,17 +42,17 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
   Future<void> _handleSaveButton(TravelDocumentProvider provider) async {
     if (provider.formKey.currentState!.validate()) {
       // Show loading indicator
-      // showDialog(
-      //   context: context,
-      //   barrierDismissible: false,
-      //   builder: (BuildContext context) {
-      //     return Center(
-      //       child: CircularProgressIndicator(
-      //         color: AppColors.buttonColor,
-      //       ),
-      //     );
-      //   },
-      // );
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: AppColors.buttonColor,
+            ),
+          );
+        },
+      );
 
       // Reset form before API call
       provider.resetForm();
@@ -61,6 +61,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
       bool success = await provider.createOrUpdateTravelDocumentsAPI(context);
       
       // Hide loading indicator
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
 
       // if (success) {
@@ -577,61 +578,61 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         SizedBox(height: 3.h),
                         // Show existing passport document from API
-                        if (provider.travelDocumentData?.passportDocumentPath.isNotEmpty == true)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade100,
-                              borderRadius: BorderRadius.circular(1.h),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                SizedBox(width: 2.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        provider.travelDocumentData!.passportDocumentOriginalName.isNotEmpty
-                                            ? provider.travelDocumentData!.passportDocumentOriginalName
-                                            : "Passport Document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "Existing document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize12,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily:
-                                            AppColors.fontFamilyMedium),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Open document URL
-                                    // You can implement document viewer here
-                                  },
-                                  child: Icon(
-                                    Icons.open_in_new,
-                                    color: Colors.green,
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // if (provider.travelDocumentData?.passportDocumentPath.isNotEmpty == true)
+                        //   Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         horizontal: 4.w, vertical: 2.h),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade100,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                        //         SizedBox(width: 2.w),
+                        //         Expanded(
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //             CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text(
+                        //                 provider.travelDocumentData!.passportDocumentOriginalName.isNotEmpty
+                        //                     ? provider.travelDocumentData!.passportDocumentOriginalName
+                        //                     : "Passport Document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.w700,
+                        //                     color: AppColors.Color_212121,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyBold),
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               ),
+                        //               Text(
+                        //                 "Existing document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize12,
+                        //                     color: Colors.green,
+                        //                     fontWeight: FontWeight.w500,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyMedium),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         GestureDetector(
+                        //           onTap: () {
+                        //             // Open document URL
+                        //             // You can implement document viewer here
+                        //           },
+                        //           child: Icon(
+                        //             Icons.open_in_new,
+                        //             color: Colors.green,
+                        //             size: 24,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                         if (provider.passportDocument != null)
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -1076,61 +1077,61 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         SizedBox(height: 3.h),
                         // Show existing seaman document from API
-                        if (provider.travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade100,
-                              borderRadius: BorderRadius.circular(1.h),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                SizedBox(width: 2.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        provider.travelDocumentData!.seamansBookDocumentOriginalName.isNotEmpty
-                                            ? provider.travelDocumentData!.seamansBookDocumentOriginalName
-                                            : "Seaman's Book Document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "Existing document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize12,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily:
-                                            AppColors.fontFamilyMedium),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Open document URL
-                                    // You can implement document viewer here
-                                  },
-                                  child: Icon(
-                                    Icons.open_in_new,
-                                    color: Colors.green,
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // if (provider.travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true)
+                        //   Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         horizontal: 4.w, vertical: 2.h),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade100,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                        //         SizedBox(width: 2.w),
+                        //         Expanded(
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //             CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text(
+                        //                 provider.travelDocumentData!.seamansBookDocumentOriginalName.isNotEmpty
+                        //                     ? provider.travelDocumentData!.seamansBookDocumentOriginalName
+                        //                     : "Seaman's Book Document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.w700,
+                        //                     color: AppColors.Color_212121,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyBold),
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               ),
+                        //               Text(
+                        //                 "Existing document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize12,
+                        //                     color: Colors.green,
+                        //                     fontWeight: FontWeight.w500,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyMedium),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         GestureDetector(
+                        //           onTap: () {
+                        //             // Open document URL
+                        //             // You can implement document viewer here
+                        //           },
+                        //           child: Icon(
+                        //             Icons.open_in_new,
+                        //             color: Colors.green,
+                        //             size: 24,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                         if (provider.seamanDocument != null)
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -1493,61 +1494,61 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                 ),
                               SizedBox(height: 3.h),
                               // Show existing seafarer visa document from API
-                              if (provider.travelDocumentData?.seafarerVisaDocumentPath.isNotEmpty == true)
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              provider.travelDocumentData!.seafarerVisaDocumentOriginalName.isNotEmpty
-                                                  ? provider.travelDocumentData!.seafarerVisaDocumentOriginalName
-                                                  : "Seafarer Visa Document",
-                                              style: TextStyle(
-                                                  fontSize: AppFontSize.fontSize16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: AppColors.Color_212121,
-                                                  fontFamily:
-                                                  AppColors.fontFamilyBold),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              "Existing document",
-                                              style: TextStyle(
-                                                  fontSize: AppFontSize.fontSize12,
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily:
-                                                  AppColors.fontFamilyMedium),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Open document URL
-                                          // You can implement document viewer here
-                                        },
-                                        child: Icon(
-                                          Icons.open_in_new,
-                                          color: Colors.green,
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              // if (provider.travelDocumentData?.seafarerVisaDocumentPath.isNotEmpty == true)
+                              //   Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 4.w, vertical: 2.h),
+                              //     decoration: BoxDecoration(
+                              //       color: Colors.green.shade100,
+                              //       borderRadius: BorderRadius.circular(1.h),
+                              //     ),
+                              //     child: Row(
+                              //       children: [
+                              //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                              //         SizedBox(width: 2.w),
+                              //         Expanded(
+                              //           child: Column(
+                              //             crossAxisAlignment:
+                              //             CrossAxisAlignment.start,
+                              //             children: [
+                              //               Text(
+                              //                 provider.travelDocumentData!.seafarerVisaDocumentOriginalName.isNotEmpty
+                              //                     ? provider.travelDocumentData!.seafarerVisaDocumentOriginalName
+                              //                     : "Seafarer Visa Document",
+                              //                 style: TextStyle(
+                              //                     fontSize: AppFontSize.fontSize16,
+                              //                     fontWeight: FontWeight.w700,
+                              //                     color: AppColors.Color_212121,
+                              //                     fontFamily:
+                              //                     AppColors.fontFamilyBold),
+                              //                 overflow: TextOverflow.ellipsis,
+                              //               ),
+                              //               Text(
+                              //                 "Existing document",
+                              //                 style: TextStyle(
+                              //                     fontSize: AppFontSize.fontSize12,
+                              //                     color: Colors.green,
+                              //                     fontWeight: FontWeight.w500,
+                              //                     fontFamily:
+                              //                     AppColors.fontFamilyMedium),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         ),
+                              //         GestureDetector(
+                              //           onTap: () {
+                              //             // Open document URL
+                              //             // You can implement document viewer here
+                              //           },
+                              //           child: Icon(
+                              //             Icons.open_in_new,
+                              //             color: Colors.green,
+                              //             size: 24,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
                               if (provider.seafarerVisaDocument != null)
                                 Container(
                                   padding: EdgeInsets.symmetric(
@@ -1885,61 +1886,61 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         SizedBox(height: 3.h),
                         // Show existing visa document from API
-                        if (provider.travelDocumentData?.visaDocumentPath.isNotEmpty == true)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade100,
-                              borderRadius: BorderRadius.circular(1.h),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                SizedBox(width: 2.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        provider.travelDocumentData!.visaDocumentOriginalName.isNotEmpty
-                                            ? provider.travelDocumentData!.visaDocumentOriginalName
-                                            : "Visa Document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "Existing document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize12,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily:
-                                            AppColors.fontFamilyMedium),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Open document URL
-                                    // You can implement document viewer here
-                                  },
-                                  child: Icon(
-                                    Icons.open_in_new,
-                                    color: Colors.green,
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // if (provider.travelDocumentData?.visaDocumentPath.isNotEmpty == true)
+                        //   Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         horizontal: 4.w, vertical: 2.h),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade100,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                        //         SizedBox(width: 2.w),
+                        //         Expanded(
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //             CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text(
+                        //                 provider.travelDocumentData!.visaDocumentOriginalName.isNotEmpty
+                        //                     ? provider.travelDocumentData!.visaDocumentOriginalName
+                        //                     : "Visa Document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.w700,
+                        //                     color: AppColors.Color_212121,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyBold),
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               ),
+                        //               Text(
+                        //                 "Existing document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize12,
+                        //                     color: Colors.green,
+                        //                     fontWeight: FontWeight.w500,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyMedium),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         GestureDetector(
+                        //           onTap: () {
+                        //             // Open document URL
+                        //             // You can implement document viewer here
+                        //           },
+                        //           child: Icon(
+                        //             Icons.open_in_new,
+                        //             color: Colors.green,
+                        //             size: 24,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                         if (provider.visaDocument != null)
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -2276,61 +2277,61 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                           ),
                         SizedBox(height: 3.h),
                         // Show existing residence permit document from API
-                        if (provider.travelDocumentData?.residencePermitDocumentPath.isNotEmpty == true)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade100,
-                              borderRadius: BorderRadius.circular(1.h),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                SizedBox(width: 2.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        provider.travelDocumentData!.residencePermitDocumentOriginalName.isNotEmpty
-                                            ? provider.travelDocumentData!.residencePermitDocumentOriginalName
-                                            : "Residence Permit Document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "Existing document",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize12,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily:
-                                            AppColors.fontFamilyMedium),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Open document URL
-                                    // You can implement document viewer here
-                                  },
-                                  child: Icon(
-                                    Icons.open_in_new,
-                                    color: Colors.green,
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // if (provider.travelDocumentData?.residencePermitDocumentPath.isNotEmpty == true)
+                        //   Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         horizontal: 4.w, vertical: 2.h),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade100,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                        //         SizedBox(width: 2.w),
+                        //         Expanded(
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //             CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text(
+                        //                 provider.travelDocumentData!.residencePermitDocumentOriginalName.isNotEmpty
+                        //                     ? provider.travelDocumentData!.residencePermitDocumentOriginalName
+                        //                     : "Residence Permit Document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.w700,
+                        //                     color: AppColors.Color_212121,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyBold),
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               ),
+                        //               Text(
+                        //                 "Existing document",
+                        //                 style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize12,
+                        //                     color: Colors.green,
+                        //                     fontWeight: FontWeight.w500,
+                        //                     fontFamily:
+                        //                     AppColors.fontFamilyMedium),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         GestureDetector(
+                        //           onTap: () {
+                        //             // Open document URL
+                        //             // You can implement document viewer here
+                        //           },
+                        //           child: Icon(
+                        //             Icons.open_in_new,
+                        //             color: Colors.green,
+                        //             size: 24,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                         if (provider.residencePermitDocument != null)
                           Container(
                             padding: EdgeInsets.symmetric(
