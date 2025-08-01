@@ -58,7 +58,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                       Text(
                         "Profile",
                         style: TextStyle(
-                            fontSize: AppFontSize.fontSize24,
+                            fontSize: AppFontSize.fontSize20,
                             fontWeight: FontWeight.w700,
                             color: AppColors.Color_212121,
                             fontFamily: AppColors.fontFamilyBold),
