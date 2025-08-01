@@ -2,7 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:luneta/network/app_url.dart';
+import 'package:luneta/network/network_helper.dart';
+import 'package:luneta/network/network_services.dart';
 
+import '../../../../Utils/helper.dart';
 import 'ProfileInfo_Model.dart'; // Import the intl package for DateFormat
 
 class ProfileBottommenuProvider with ChangeNotifier {
@@ -32,336 +36,202 @@ class ProfileBottommenuProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  getProfileInfo(){
-
-    setContactInfo(
-      name: "John Doe",
-      dob: "07-Dec-1997",
-      countryOfBirth: "India",
-      religion: "Hindu",
-      sex: "Male",
-      nationality: "Indian",
-      email: "test@test.com",
-      mobilePhone: "+919999999999",
-      directLinePhone: "+911122334455",
-      homeAddress: "123 Main Street, City, Country",
-      nearestAirport: "Indira Gandhi International Airport",
-      onlineCommunication: [
-        {
-          "platform": "WhatsApp",
-          "id": "+919999999999",
-          "verified": "true"
+  Future<void> getProfileData(BuildContext context) async {
+    try {
+      var response = await NetworkService().getResponse(
+        '$getSeafarerCompleteProfile${NetworkHelper.loggedInUserId}',
+        true,
+        context,
+        () {
+          notifyListeners();
         },
-        {
-          "platform": "Skype",
-          "id": "live:john.doe",
-          "verified": "false"
+      );
+
+      if (response != null && response['statusCode'] == 200) {
+        final data = response['data'];
+        if (data != null) {
+          final seafarerProfile = data['seafarerProfile'][0];
+          setUserName(seafarerProfile['firstName'] + " " + seafarerProfile['lastName']);
+
+          setContactInfo(
+            name: (seafarerProfile['firstName'] ?? '') + " " + (seafarerProfile['lastName'] ?? ''),
+            dob: seafarerProfile['dateOfBirth'] ?? '',
+            countryOfBirth: seafarerProfile['countryOfBirth'] ?? '',
+            religion: seafarerProfile['religion'] ?? '',
+            sex: seafarerProfile['sex'] ?? '',
+            nationality: seafarerProfile['nationality'] ?? '',
+            email: seafarerProfile['email'] ?? '',
+            mobilePhone: seafarerProfile['mobilePhone'] ?? '',
+            directLinePhone: seafarerProfile['directLinePhone'] ?? '',
+            homeAddress: seafarerProfile['homeAddress']['street'] ?? '',
+            nearestAirport: seafarerProfile['nearestAirport'] ?? '',
+            onlineCommunication: (seafarerProfile['onlineCommunication'] as List)
+                .map((e) => {
+              "platform": e['platform'] ?? '',
+              "id": e['id'] ?? '',
+              "verified": "true",
+            })
+                .toList(),
+            maritalStatus: seafarerProfile['maritalStatus'] ?? '',
+            numberOfChildren: (seafarerProfile['numberOfChildren'] ?? 0).toString(),
+            profilePhotoPath: seafarerProfile['profileURl'] ?? '',
+          );
+
+          if (data['professionalExperience'] != null && data['professionalExperience'].isNotEmpty) {
+            final professionalExperience = data['professionalExperience'][0];
+            setProfessionalExperience(
+              positionsHeld: List<String>.from(professionalExperience['positionsHeld'] ?? []),
+              vesselTypeExperience: List<String>.from(professionalExperience['vesselTypeExperience'] ?? []),
+              employmentHistory: (professionalExperience['employmentHistory'] as List)
+                  .map((e) => {
+                "companyName": e['companyName'] ?? '',
+                "position": e['position'] ?? '',
+                "startDate": e['startDate'] ?? '',
+                "endDate": e['endDate'] ?? '',
+                "responsibilities": e['responsibilities'] ?? '',
+              })
+                  .toList(),
+              references: (professionalExperience['references'] as List)
+                  .map((e) => {
+                "issuedBy": e['issuedBy'] ?? '',
+                "issuingDate": e['issuingDate'] ?? '',
+                "vesselOrCompanyName": e['vesselOrCompanyName'] ?? '',
+                "documentUrl": e['documentPath'] ?? '',
+              })
+                  .toList(),
+            );
+          }
+
+          if (data['travelDocuments'] != null && data['travelDocuments'].isNotEmpty) {
+            final travelDocuments = data['travelDocuments'][0];
+            setTravelDocumentsCredentials(
+              seafarerRegistrationNo: travelDocuments['seafarerRegistrationNo'] ?? '',
+              passport: {
+                "passportNo": travelDocuments['passport']['passportNo'] ?? '',
+                "country": travelDocuments['passport']['country'] ?? '',
+                "issueDate": travelDocuments['passport']['issueDate'] ?? '',
+                "expDate": travelDocuments['passport']['expDate'] ?? '',
+                "documentUrl": travelDocuments['passport']['documentUrl'] ?? '',
+              },
+              seamanBook: {
+                "seamanBookNo": travelDocuments['seamanBook']['seamanBookNo'] ?? '',
+                "issuingCountry": travelDocuments['seamanBook']['issuingCountry'] ?? '',
+                "issuingAuthority": travelDocuments['seamanBook']['issuingAuthority'] ?? '',
+                "issueDate": travelDocuments['seamanBook']['issueDate'] ?? '',
+                "expDate": travelDocuments['seamanBook']['expDate'] ?? '',
+                "neverExpire": (travelDocuments['seamanBook']['neverExpire'] ?? false).toString(),
+                "nationality": travelDocuments['seamanBook']['nationality'] ?? '',
+                "documentUrl": travelDocuments['seamanBook']['documentUrl'] ?? '',
+              },
+              validSeafarerVisa: {
+                "valid": (travelDocuments['validSeafarerVisa']['valid'] ?? false).toString(),
+                "issuingCountry": travelDocuments['validSeafarerVisa']['issuingCountry'] ?? '',
+                "visaNo": travelDocuments['validSeafarerVisa']['visaNo'] ?? '',
+                "issuingDate": travelDocuments['validSeafarerVisa']['issuingDate'] ?? '',
+                "expDate": travelDocuments['validSeafarerVisa']['expDate'] ?? '',
+                "documentUrl": travelDocuments['validSeafarerVisa']['documentUrl'] ?? '',
+              },
+              visa: {
+                "issuingCountry": travelDocuments['visa']['issuingCountry'] ?? '',
+                "visaNo": travelDocuments['visa']['visaNo'] ?? '',
+                "issuingDate": travelDocuments['visa']['issuingDate'] ?? '',
+                "expDate": travelDocuments['visa']['expDate'] ?? '',
+                "documentUrl": travelDocuments['visa']['documentUrl'] ?? '',
+              },
+              residencePermit: {
+                "issuingCountry": travelDocuments['residencePermit']['issuingCountry'] ?? '',
+                "permitNo": travelDocuments['residencePermit']['permitNo'] ?? '',
+                "issuingDate": travelDocuments['residencePermit']['issuingDate'] ?? '',
+                "expDate": travelDocuments['residencePermit']['expDate'] ?? '',
+                "documentUrl": travelDocuments['residencePermit']['documentUrl'] ?? '',
+              },
+            );
+          }
+
+          if (data['medicalDocuments'] != null && data['medicalDocuments'].isNotEmpty) {
+            final medicalDocuments = data['medicalDocuments'][0];
+            setMedicalDocuments(
+              medicalFitness: (medicalDocuments['medicalFitness'] as List)
+                  .map((e) => {
+                "documentType": e['documentType'] ?? '',
+                "certificateNo": e['certificateNo'] ?? '',
+                "issuingCountry": e['issuingCountry'] ?? '',
+                "issuingClinic": e['issuingClinic'] ?? '',
+                "issuingDate": e['issuingDate'] ?? '',
+                "expDate": e['expDate'] ?? '',
+                "neverExpire": (e['neverExpire'] ?? false).toString(),
+                "documentUrl": e['documentUrl'] ?? '',
+              })
+                  .toList(),
+              drugAlcoholTest: (medicalDocuments['drugAlcoholTest'] as List)
+                  .map((e) => {
+                "documentType": e['documentType'] ?? '',
+                "certificateNo": e['certificateNo'] ?? '',
+                "issuingCountry": e['issuingCountry'] ?? '',
+                "issuingClinic": e['issuingClinic'] ?? '',
+                "issuingDate": e['issuingDate'] ?? '',
+                "expDate": e['expDate'] ?? '',
+                "documentUrl": e['documentUrl'] ?? '',
+              })
+                  .toList(),
+              vaccinationCertificates: (medicalDocuments['vaccinationCertificates'] as List)
+                  .map((e) => {
+                "documentType": e['documentType'] ?? '',
+                "vaccinationCountry": e['vaccinationCountry'] ?? '',
+                "issuingClinic": e['issuingClinic'] ?? '',
+                "issuingDate": e['issuingDate'] ?? '',
+                "expDate": e['expDate'] ?? '',
+                "neverExpire": (e['neverExpire'] ?? false).toString(),
+                "documentUrl": e['documentUrl'] ?? '',
+              })
+                  .toList(),
+            );
+          }
+
+          if (data['education'] != null && data['education'].isNotEmpty) {
+            final education = data['education'][0];
+            setEducation(
+              academicQualifications: (education['academicQualifications'] as List)
+                  .map((e) => {
+                "educationalDegree": e['educationalDegree'] ?? '',
+                "fieldOfStudy": e['fieldOfStudy'] ?? '',
+                "educationalInstitution": e['educationalInstitution'] ?? '',
+                "country": e['country'] ?? '',
+                "graduationDate": e['graduationDate'] ?? '',
+                "documentUrl": e['documentUrl'] ?? '',
+              })
+                  .toList(),
+              certificationsAndTrainings: (education['certificationsAndTrainings'] as List)
+                  .map((e) => {
+                "certificationType": e['certificationType'] ?? '',
+                "issuingAuthority": e['issuingAuthority'] ?? '',
+                "issueDate": e['issueDate'] ?? '',
+                "expiryDate": e['expiryDate'] ?? '',
+                "documentUrl": e['documentUrl'] ?? '',
+              })
+                  .toList(),
+              languagesSpoken: (education['languagesSpoken'] as List)
+                  .map((e) => {
+                "language": e['language'] ?? '',
+                "level": e['level'] ?? '',
+              })
+                  .toList(),
+            );
+          }
         }
-      ],
-      maritalStatus: "Married",
-      numberOfChildren: "2",
-      profilePhotoPath: "assets/images/profileImg.png",
-    );
+      } else {
+        ShowToast("Error", response['message'] ?? "Failed to fetch profile data");
+      }
+    } catch (e) {
+      print("Error in getProfileData: $e");
+      ShowToast("Error", "An error occurred while fetching profile data.");
+    } finally {
+      notifyListeners();
+    }
+  }
 
-    setProfessionalExperience(
-      positionsHeld: ["Captain", "Chief Officer"],
-      vesselTypeExperience: ["Bulk Carrier", "Tanker"],
-      employmentHistory: [
-        {
-          "companyName": "Company A",
-          "position": "Captain",
-          "startDate": "01-Jan-2019",
-          "endDate": "05-Jun-2022",
-          "responsibilities": "Responsible for the ship's operations."
-        },
-        {
-          "companyName": "Company B",
-          "position": "Chief Officer",
-          "startDate": "06-Jun-2022",
-          "endDate": "Present",
-          "responsibilities": "Managed the deck crew and navigational duties."
-        }
-      ],
-      references: [
-        {
-          "issuedBy": "Company A",
-          "issuingDate": "01-Feb-2025",
-          "vesselOrCompanyName": "Vessel A",
-          "documentUrl": "http://example.com/reference1.pdf"
-        },
-        {
-          "issuedBy": "Company B",
-          "issuingDate": "01-Mar-2025",
-          "vesselOrCompanyName": "Vessel B",
-          "documentUrl": "http://example.com/reference2.pdf"
-        }
-      ],
-    );
-
-
-    setTravelDocumentsCredentials(
-      seafarerRegistrationNo: "SRN123456",
-      passport: {
-        "passportNo": "P12345678",
-        "country": "India",
-        "issueDate": "07-Dec-2020",
-        "expDate": "07-Dec-2027",
-        "documentUrl": "http://example.com/passport.pdf",
-      },
-      seamanBook: {
-        "seamanBookNo": "SB123456",
-        "issuingCountry": "India",
-        "issuingAuthority": "Indian Maritime Authority",
-        "issueDate": "07-Dec-2020",
-        "expDate": "07-Dec-2027",
-        "neverExpire": "false", // Use "false" if Seaman's Book has an expiry
-        "nationality": "Indian",
-        "documentUrl": "http://example.com/seaman_book.pdf",
-      },
-      validSeafarerVisa: {
-        "valid": "true", // Use "true" or "false"
-        "issuingCountry": "USA",
-        "visaNo": "VISA1234",
-        "issuingDate": "07-Dec-2023",
-        "expDate": "07-Dec-2027",
-        "documentUrl": "http://example.com/seafarer_visa.pdf",
-      },
-      visa: {
-        "issuingCountry": "USA",
-        "visaNo": "VISA5678",
-        "issuingDate": "07-Dec-2023",
-        "expDate": "07-Dec-2027",
-        "documentUrl": "http://example.com/visa.pdf",
-      },
-      residencePermit: {
-        "issuingCountry": "USA",
-        "permitNo": "RP123456",
-        "issuingDate": "07-Dec-2023",
-        "expDate": "07-Dec-2027",
-        "documentUrl": "http://example.com/residence_permit.pdf",
-      },
-    );
-
-
-    setMedicalDocuments(
-      medicalFitness: [
-        {
-          "documentType": "PEME",
-          "certificateNo": "PEME 123",
-          "issuingCountry": "India",
-          "issuingClinic": "Clinic A",
-          "issuingDate": "07-Dec-2020",
-          "expDate": "07-Dec-2025",
-          "neverExpire": "false", // Use "false" if certificate has an expiry
-          "documentUrl": "http://example.com/medical_fitness.pdf",
-        },
-        {
-          "documentType": "PEME 1",
-          "certificateNo": "PEME 12345",
-          "issuingCountry": "India",
-          "issuingClinic": "Clinic B",
-          "issuingDate": "07-Dec-2022",
-          "expDate": "07-Dec-2027",
-          "neverExpire": "false", // Use "false" if certificate has an expiry
-          "documentUrl": "http://example.com/medical_fitness.pdf",
-        },
-      ],
-      drugAlcoholTest: [
-        {
-          "documentType": "PEME",
-          "certificateNo": "DA12345",
-          "issuingCountry": "India",
-          "issuingClinic": "Clinic B",
-          "issuingDate": "07-Dec-2021",
-          "expDate": "07-Dec-2026",
-          "documentUrl": "http://example.com/drug_alcohol_test.pdf",
-        },
-      ],
-      vaccinationCertificates: [
-        {
-          "documentType": "COVID-19",
-          "vaccinationCountry": "India",
-          "issuingClinic": "Clinic C",
-          "issuingDate": "07-Dec-2021",
-          "expDate": "07-Dec-2026",
-          "neverExpire": "true", // Use "true" if certificate never expires
-          "documentUrl": "http://example.com/vaccination_certificate.pdf",
-        },
-      ],
-    );
-
-    setEducation(
-        academicQualifications: [
-          {
-            "educationalDegree": "Bachelor of Science in Nautical Science",
-            "fieldOfStudy": "Nautical Science",
-            "educationalInstitution": "Marine Academy",
-            "country": "India",
-            "graduationDate": "10-Apr-2020",
-            "documentUrl": "http://example.com/degree_certificate.pdf"
-          },
-          {
-            "educationalDegree": "Master of Science in Marine Engineering",
-            "fieldOfStudy": "Marine Engineering",
-            "educationalInstitution": "National Maritime University",
-            "country": "India",
-            "graduationDate": "15-Jul-2022",
-            "documentUrl": "http://example.com/masters_certificate.pdf"
-          }
-        ],
-        certificationsAndTrainings: [
-          {
-            "certificationType": "Advanced STCW Training",
-            "issuingAuthority": "Maritime Safety Council",
-            "issueDate": "01-Jan-2021",
-            "expiryDate": "01-Jan-2026",
-            "documentUrl": "http://example.com/advanced_stcw.pdf"
-          },
-          {
-            "certificationType": "Oil Spill Response Training",
-            "issuingAuthority": "International Maritime Organization",
-            "issueDate": "10-Feb-2021",
-            "expiryDate": "10-Feb-2026",
-            "documentUrl": "http://example.com/oil_spill_response.pdf"
-          }
-        ],
-        languagesSpoken: [
-          {
-            "language": "English",
-            "level": "Very Good"
-          },
-          {
-            "language": "Hindi",
-            "level": "Good"
-          }
-        ]
-    );
-
-    setProfessionalSkills(
-        computerAndSoftwareSkills: [
-          {
-            "software": "Danaos",
-            "level": "Very Good"
-          },
-          {
-            "software": "Benefit",
-            "level": "Good"
-          }
-        ],
-        cargoExperience: {
-          "bulkCargo": true,
-          "tankerCargo": true,
-          "generalCargo": false,
-          "woodProducts": true,
-          "stowageAndLashingExperience": true
-        },
-        cargoGearExperience: [
-          {
-            "type": "Cranes",
-            "maker": "ABC Cranes",
-            "swl": "50 tons"
-          },
-          {
-            "type": "Grabs",
-            "maker": "XYZ Grabs",
-            "swl": "30 tons"
-          }
-        ],
-        metalWorkingSkills: [
-          {
-            "skillSelection": "Arc welding",
-            "level": "Intermediate",
-            "certificate": "true",
-            "documentUrl": "http://example.com/arc_welding_certificate.pdf"
-          },
-          {
-            "skillSelection": "Gas welding",
-            "level": "Beginner",
-            "certificate": "false",
-            "documentUrl": ""
-          }
-        ],
-        tankCoatingExperience: [
-          {
-            "type": "Epoxy"
-          },
-          {
-            "type": "Steel"
-          }
-        ],
-        portStateControlExperience: [
-          {
-            "regionalAgreement": "USCG",
-            "port": "Los Angeles",
-            "date": "01-Jan-2020",
-            "observations": "Inspection passed"
-          },
-          {
-            "regionalAgreement": "AMSA",
-            "port": "Sydney",
-            "date": "05-Apr-2021",
-            "observations": "Minor defects found"
-          }
-        ],
-        vettingInspectionExperience: [
-          {
-            "inspectionBy": "Inspector A",
-            "port": "Dubai",
-            "date": "10-Oct-2020",
-            "observations": "No issues found"
-          },
-          {
-            "inspectionBy": "Inspector B",
-            "port": "Singapore",
-            "date": "15-Jan-2021",
-            "observations": "Inspection completed with recommendations"
-          }
-        ],
-        tradingAreaExperience: [
-          {
-            "tradingArea": "North America"
-          },
-          {
-            "tradingArea": "South America"
-          }
-        ]
-    );
-
-
-
-    setJobConditionsAndPreferences(
-        currentRankPosition: "Captain",
-        alternateRankPosition: "Chief Officer",
-        preferredVesselType: ["Bulk Carrier", "Tanker"], // Multiselect
-        preferredContractType: "Voyage",
-        preferredPosition: "Captain",
-        manningAgency: "Other", // Option
-        availability: Availability(
-            currentAvailabilityStatus: "Available",
-            availableFrom: "15-Jan-2025",
-            minOnBoardDuration: 6, // 6 months
-            maxOnBoardDuration: 12, // 12 months
-            minAtHomeDuration: 1, // 1 month
-            maxAtHomeDuration: 3, // 3 months
-            preferredRotationPattern: "2:1", // Custom rotation pattern
-            tradingAreaExclusions: ["North America", "Europe"] // Excluded trading areas
-        ),
-        salary: Salary(
-            lastJobSalary: 50000,
-            lastRankJoined: "Chief Officer",
-            lastPromotedDate: "15-Jan-2025",
-            currency: "USD",
-            justificationDocumentUrl: "http://example.com/salary_justification.pdf",
-            industryStandardSalaryCalculator: true
-        )
-    );
-
-    setSecurityAndComplianceInfo(
-      contactInfoSharing: true,
-      dataSharing: false,
-      professionalConductDeclaration: true,
-    );
+  getProfileInfo(BuildContext context) {
+    getProfileData(context);
   }
 
   // **Contact Info Setters**
