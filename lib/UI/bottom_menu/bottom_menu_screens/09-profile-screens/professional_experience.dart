@@ -13,6 +13,7 @@ import '../../../../custom-component/custom-button.dart';
 import '../../../../models/professional_experience_model.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class ProfessionalExperienceScreen extends StatefulWidget {
   const ProfessionalExperienceScreen({super.key});
@@ -115,11 +116,16 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
 
                       // Call the API
                       bool success = await provider.createOrUpdateProfessionalExperienceAPI(context);
-
-                      // Hide loading indicator
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-
+                      if(success) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Provider.of<ProfileBottommenuProvider>(
+                              context,
+                              listen: false).getProfileInfo(context);
+                        });
+                        // Hide loading indicator
+                        Navigator.of(context).pop();
+                      }
                     } else {
                       setState(() {
                         provider.autovalidateMode = AutovalidateMode.always;

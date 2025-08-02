@@ -11,6 +11,7 @@ import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../network/network_helper.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class EducationScreen extends StatefulWidget {
   const EducationScreen({super.key});
@@ -101,9 +102,14 @@ class _EducationScreenState extends State<EducationScreen> {
                       NetworkService.loading = 0;
                       // Call the API to save education data
                       bool success = await provider.createOrUpdateEducationAPI(context);
-                      // if (success) {
-                      //   Navigator.pop(context);
-                      // }
+                      if (success) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Provider.of<ProfileBottommenuProvider>(
+                              context,
+                              listen: false).getProfileInfo(context);
+                        });
+                        Navigator.pop(context);
+                      }
                     } else {
                       setState(() {
                         provider.autovalidateModeLanguages = AutovalidateMode.always;
@@ -1084,6 +1090,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: 3.h),
                                 if (provider.certificationDocument != null)
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),

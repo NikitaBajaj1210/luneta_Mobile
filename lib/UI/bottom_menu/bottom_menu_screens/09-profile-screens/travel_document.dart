@@ -10,6 +10,7 @@ import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class TravelDocumentScreen extends StatefulWidget {
   const TravelDocumentScreen({super.key});
@@ -59,11 +60,17 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
       
       // Call the create/update API
       bool success = await provider.createOrUpdateTravelDocumentsAPI(context);
-      
-      // Hide loading indicator
-      Navigator.of(context).pop();
       Navigator.of(context).pop();
 
+      if (success) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<ProfileBottommenuProvider>(
+              context,
+              listen: false).getProfileInfo(context);
+        });
+        // Hide loading indicator
+        Navigator.of(context).pop();
+      }
       // if (success) {
       //   // Show success message
       //   ScaffoldMessenger.of(context).showSnackBar(

@@ -10,6 +10,7 @@ import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 
 class MedicalDocumentScreen extends StatefulWidget {
   const MedicalDocumentScreen({super.key});
@@ -172,11 +173,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                 child: customButton(
                   voidCallback: () async {
                     if (provider.formKey.currentState!.validate()) {
-                      NetworkService.loading = 0;
+                      // NetworkService.loading = 0;
                       // Call the create/update API
                       bool success = await provider.createOrUpdateMedicalDocumentsAPI(context);
                       
                       if (success) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Provider.of<ProfileBottommenuProvider>(
+                              context,
+                              listen: false).getProfileInfo(context);
+                        });
+                        Navigator.of(context).pop();
                         // Show success message
                         // ShowToast("Success", "Medical documents saved successfully!");
                       } else {
@@ -983,105 +990,105 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         ),
 
                         // Show existing drug & alcohol test documents from API
-                        if (provider.medicalDocumentData != null && provider.medicalDocumentData!.drugAlcoholTest!.isNotEmpty)
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 1.h),
-                            padding: EdgeInsets.all(2.w),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade50,
-                              borderRadius: BorderRadius.circular(1.h),
-                              border: Border.all(color: Colors.green.shade200),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                    SizedBox(width: 1.w),
-                                    Text(
-                                      'Existing Drug & Alcohol Test Documents',
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green.shade700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 1.h),
-                                ...provider.medicalDocumentData!.drugAlcoholTest!.map((test) =>
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 1.h),
-                                    padding: EdgeInsets.all(2.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(0.5.h),
-                                      border: Border.all(color: Colors.green.shade200),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          test.documentType ?? '',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.Color_212121,
-                                          ),
-                                        ),
-                                        SizedBox(height: 0.5.h),
-                                        Text(
-                                          'Certificate: ${test.certificateNo ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Country: ${test.issuingCountry ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Authority: ${test.issuingAuthority ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Issue Date: ${test.issuingDate ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        if (test.expDate != null)
-                                          Text(
-                                            'Expiry Date: ${test.expDate}',
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize14,
-                                              color: AppColors.Color_616161,
-                                            ),
-                                          ),
-                                        if (test.documentOriginalName != null && test.documentOriginalName!.isNotEmpty)
-                                          Text(
-                                            'Document: ${test.documentOriginalName}',
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize14,
-                                              color: AppColors.Color_616161,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ).toList(),
-                              ],
-                            ),
-                          ),
+                        // if (provider.medicalDocumentData != null && provider.medicalDocumentData!.drugAlcoholTest!.isNotEmpty)
+                        //   Container(
+                        //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                        //     padding: EdgeInsets.all(2.w),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade50,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //       border: Border.all(color: Colors.green.shade200),
+                        //     ),
+                        //     child: Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Row(
+                        //           children: [
+                        //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                        //             SizedBox(width: 1.w),
+                        //             Text(
+                        //               'Existing Drug & Alcohol Test Documents',
+                        //               style: TextStyle(
+                        //                 fontSize: AppFontSize.fontSize14,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.green.shade700,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         SizedBox(height: 1.h),
+                        //         ...provider.medicalDocumentData!.drugAlcoholTest!.map((test) =>
+                        //           Container(
+                        //             margin: EdgeInsets.only(bottom: 1.h),
+                        //             padding: EdgeInsets.all(2.w),
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.white,
+                        //               borderRadius: BorderRadius.circular(0.5.h),
+                        //               border: Border.all(color: Colors.green.shade200),
+                        //             ),
+                        //             child: Column(
+                        //               crossAxisAlignment: CrossAxisAlignment.start,
+                        //               children: [
+                        //                 Text(
+                        //                   test.documentType ?? '',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.bold,
+                        //                     color: AppColors.Color_212121,
+                        //                   ),
+                        //                 ),
+                        //                 SizedBox(height: 0.5.h),
+                        //                 Text(
+                        //                   'Certificate: ${test.certificateNo ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Country: ${test.issuingCountry ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Authority: ${test.issuingAuthority ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Issue Date: ${test.issuingDate ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 if (test.expDate != null)
+                        //                   Text(
+                        //                     'Expiry Date: ${test.expDate}',
+                        //                     style: TextStyle(
+                        //                       fontSize: AppFontSize.fontSize14,
+                        //                       color: AppColors.Color_616161,
+                        //                     ),
+                        //                   ),
+                        //                 if (test.documentOriginalName != null && test.documentOriginalName!.isNotEmpty)
+                        //                   Text(
+                        //                     'Document: ${test.documentOriginalName}',
+                        //                     style: TextStyle(
+                        //                       fontSize: AppFontSize.fontSize14,
+                        //                       color: AppColors.Color_616161,
+                        //                     ),
+                        //                   ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ).toList(),
+                        //       ],
+                        //     ),
+                        //   ),
                         // Drug & Alcohol Test UI
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1527,97 +1534,97 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         ),
 
                         // Show existing vaccination certificate documents from API
-                        if (provider.medicalDocumentData != null && provider.medicalDocumentData!.vaccinationCertificates!.isNotEmpty)
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 1.h),
-                            padding: EdgeInsets.all(2.w),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade50,
-                              borderRadius: BorderRadius.circular(1.h),
-                              border: Border.all(color: Colors.green.shade200),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.check_circle, color: Colors.green, size: 2.h),
-                                    SizedBox(width: 1.w),
-                                    Text(
-                                      'Existing Vaccination Certificate Documents',
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green.shade700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 1.h),
-                                ...provider.medicalDocumentData!.vaccinationCertificates!.map((cert) =>
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 1.h),
-                                    padding: EdgeInsets.all(2.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(0.5.h),
-                                      border: Border.all(color: Colors.green.shade200),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          cert.documentType ?? '',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.Color_212121,
-                                          ),
-                                        ),
-                                        SizedBox(height: 0.5.h),
-                                        Text(
-                                          'Certificate: ${cert.certificateNo ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Country: ${cert.issuingCountry ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Authority: ${cert.issuingAuthority ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Valid: ${cert.issuingDate ?? ''} - ${cert.expDate ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            color: AppColors.Color_616161,
-                                          ),
-                                        ),
-                                        if (cert.documentOriginalName != null && cert.documentOriginalName!.isNotEmpty)
-                                          Text(
-                                            'Document: ${cert.documentOriginalName}',
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize14,
-                                              color: AppColors.Color_616161,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ).toList(),
-                              ],
-                            ),
-                          ),
+                        // if (provider.medicalDocumentData != null && provider.medicalDocumentData!.vaccinationCertificates!.isNotEmpty)
+                        //   Container(
+                        //     margin: EdgeInsets.symmetric(vertical: 1.h),
+                        //     padding: EdgeInsets.all(2.w),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.green.shade50,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //       border: Border.all(color: Colors.green.shade200),
+                        //     ),
+                        //     child: Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Row(
+                        //           children: [
+                        //             Icon(Icons.check_circle, color: Colors.green, size: 2.h),
+                        //             SizedBox(width: 1.w),
+                        //             Text(
+                        //               'Existing Vaccination Certificate Documents',
+                        //               style: TextStyle(
+                        //                 fontSize: AppFontSize.fontSize14,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.green.shade700,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         SizedBox(height: 1.h),
+                        //         ...provider.medicalDocumentData!.vaccinationCertificates!.map((cert) =>
+                        //           Container(
+                        //             margin: EdgeInsets.only(bottom: 1.h),
+                        //             padding: EdgeInsets.all(2.w),
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.white,
+                        //               borderRadius: BorderRadius.circular(0.5.h),
+                        //               border: Border.all(color: Colors.green.shade200),
+                        //             ),
+                        //             child: Column(
+                        //               crossAxisAlignment: CrossAxisAlignment.start,
+                        //               children: [
+                        //                 Text(
+                        //                   cert.documentType ?? '',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize16,
+                        //                     fontWeight: FontWeight.bold,
+                        //                     color: AppColors.Color_212121,
+                        //                   ),
+                        //                 ),
+                        //                 SizedBox(height: 0.5.h),
+                        //                 Text(
+                        //                   'Certificate: ${cert.certificateNo ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Country: ${cert.issuingCountry ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Authority: ${cert.issuingAuthority ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 Text(
+                        //                   'Valid: ${cert.issuingDate ?? ''} - ${cert.expDate ?? ''}',
+                        //                   style: TextStyle(
+                        //                     fontSize: AppFontSize.fontSize14,
+                        //                     color: AppColors.Color_616161,
+                        //                   ),
+                        //                 ),
+                        //                 if (cert.documentOriginalName != null && cert.documentOriginalName!.isNotEmpty)
+                        //                   Text(
+                        //                     'Document: ${cert.documentOriginalName}',
+                        //                     style: TextStyle(
+                        //                       fontSize: AppFontSize.fontSize14,
+                        //                       color: AppColors.Color_616161,
+                        //                     ),
+                        //                   ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ).toList(),
+                        //       ],
+                        //     ),
+                        //   ),
                         // Vaccination Certificates UI
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 1.h),

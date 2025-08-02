@@ -1022,7 +1022,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
         createOrUpdateMedicalDocuments,
         dioFieldData,
         dioFileList,
-        false, // showLoading
+        true, // showLoading
       );
 
       print("Medical Document API Response: $response");
@@ -1031,11 +1031,11 @@ class MedicalDocumentProvider extends ChangeNotifier {
       
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
         // Success - refresh the data
-        String userId =
-        NetworkHelper.loggedInUserId.isNotEmpty ? NetworkHelper.loggedInUserId : '';
-        if (userId.isNotEmpty) {
-          await fetchMedicalDocuments(userId, context);
-        }
+        // String userId =
+        // NetworkHelper.loggedInUserId.isNotEmpty ? NetworkHelper.loggedInUserId : '';
+        // if (userId.isNotEmpty) {
+        //   await fetchMedicalDocuments(userId, context);
+        // }
         ShowToast("Success", "Medical documents saved successfully");
         return true;
       } else {

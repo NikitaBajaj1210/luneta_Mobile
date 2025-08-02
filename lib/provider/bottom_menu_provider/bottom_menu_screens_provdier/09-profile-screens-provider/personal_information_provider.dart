@@ -19,6 +19,7 @@ import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
 import '../../../../route/route_constants.dart';
 import '../../../authentication-provider/login_provider.dart';
+import '../profile_bottommenu_provider.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
 
@@ -330,6 +331,11 @@ class PersonalInformationProvider extends ChangeNotifier {
         if (context.mounted) {
           ShowToast("Success", response.data['message'] ?? "Personal Information updated successfully");
           if (context.mounted) stopLoading(context);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<ProfileBottommenuProvider>(
+                context,
+                listen: false).getProfileInfo(context);
+          });
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
         }
