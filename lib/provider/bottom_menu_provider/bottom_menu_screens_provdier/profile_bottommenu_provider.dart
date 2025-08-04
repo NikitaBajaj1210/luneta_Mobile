@@ -359,9 +359,13 @@ class ProfileBottommenuProvider with ChangeNotifier {
     } finally {
       notifyListeners();
     }
+     if(context.mounted)stopLoading(context);
+
+    notifyListeners();
   }
 
   getProfileInfo(BuildContext context) {
+    // NetworkService.loading = 0;
     getProfileData(context);
   }
 

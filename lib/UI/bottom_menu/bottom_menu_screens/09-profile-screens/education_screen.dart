@@ -1237,6 +1237,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   title: Text("Native Languages"),
                                   selectedColor: AppColors.buttonColor,
                                   searchable: true,
+                                  initialValue: provider.nativeLanguages,
                                   decoration: BoxDecoration(
                                     color: AppColors.Color_FAFAFA,
                                     borderRadius: BorderRadius.circular(10),

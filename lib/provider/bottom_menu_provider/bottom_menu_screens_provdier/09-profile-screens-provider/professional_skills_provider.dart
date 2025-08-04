@@ -1,12 +1,21 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import '../../../../network/app_url.dart';
+import '../../../../network/network_helper.dart';
+import '../../../../network/network_services.dart';
+import '../../../../Utils/helper.dart';
+import '../../../../custom-component/globalComponent.dart';
 
 class ProfessionalSkillsProvider with ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  // Data state
+  Map<String, dynamic>? professionalSkillsData;
 
   // Computer and Software
   List<ComputerAndSoftware> computerAndSoftwareList = [];
@@ -468,6 +477,349 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   void removeAttachment(String type) {
     if (type == 'metalWorkingSkill') {
       setMetalWorkingSkillDocument(null);
+    }
+  }
+
+  // Fetch professional skills data from API
+  Future<void> fetchProfessionalSkillsData(BuildContext context) async {
+    try {
+      String userId = NetworkHelper.loggedInUserId;
+      if (userId.isEmpty) {
+        print('User ID not found');
+        return;
+      }
+
+      final response = await NetworkService().getResponse(
+        getProfessionalSkillsByUserId + userId,
+        false, // showLoading
+        context,
+        () => notifyListeners(),
+      );
+
+      print("Professional Skills Fetch Response: $response");
+
+      if (response['statusCode'] == 200) {
+        if (response['data'] != null && response['data'].isNotEmpty) {
+          professionalSkillsData = response['data'][0]; // Get first item
+          _populateFormData(professionalSkillsData!);
+          print("Professional skills data loaded successfully");
+        } else {
+          print("No professional skills data found");
+        }
+      } else {
+        print("Professional Skills API Error: ${response['message'] ?? 'Failed to fetch professional skills data'}");
+      }
+    } catch (e) {
+      print("Professional Skills Fetch Exception: $e");
+    }
+  }
+
+  // Populate form data from API response
+  void _populateFormData(Map<String, dynamic> data) {
+    try {
+      // Clear existing data
+      computerAndSoftwareList.clear();
+      cargoGearExperienceList.clear();
+      metalWorkingSkillsList.clear();
+      tankCoatingExperienceList.clear();
+      portStateControlExperienceList.clear();
+      
+      // Reset boolean values
+      cargoExperience = false;
+      cargoGearExperience = false;
+      metalWorkingSkills = false;
+      tankCoatingExperience = false;
+      portStateControlExperience = false;
+
+      // Populate Computer and Software
+      if (data['computerAndSoftware'] != null) {
+        List<dynamic> computerData = data['computerAndSoftware'];
+        for (var item in computerData) {
+          ComputerAndSoftware computer = ComputerAndSoftware(
+            software: item['software'] ?? '',
+            level: item['level'] ?? '',
+          );
+          computerAndSoftwareList.add(computer);
+        }
+      }
+
+      // Populate Cargo Experience
+      if (data['cargoExperience'] != null) {
+        var cargoData = data['cargoExperience'];
+        cargoExperience = cargoData['hasCargoExperience'] ?? false;
+        
+        if (cargoData['bulkCargo'] != null) {
+          bulkCargo = List<String>.from(cargoData['bulkCargo']);
+        }
+        if (cargoData['tankerCargo'] != null) {
+          tankerCargo = List<String>.from(cargoData['tankerCargo']);
+        }
+        if (cargoData['generalCargo'] != null) {
+          generalCargo = List<String>.from(cargoData['generalCargo']);
+        }
+        if (cargoData['woodProducts'] != null) {
+          woodProducts = List<String>.from(cargoData['woodProducts']);
+        }
+        if (cargoData['stowageAndLashing'] != null) {
+          stowageAndLashingExperience = List<String>.from(cargoData['stowageAndLashing']);
+        }
+      }
+
+      // Populate Cargo Gear Experience
+      if (data['cargoGearExperience'] != null) {
+        var cargoGearData = data['cargoGearExperience'];
+        cargoGearExperience = cargoGearData['hasCargoGearExperience'] ?? false;
+        
+        if (cargoGearData['items'] != null) {
+          List<dynamic> cargoGearItems = cargoGearData['items'];
+          for (var item in cargoGearItems) {
+            CargoGearExperience cargoGear = CargoGearExperience(
+              type: item['type'] ?? '',
+              maker: item['maker'] ?? '',
+              swl: item['swl'] ?? '',
+            );
+            cargoGearExperienceList.add(cargoGear);
+          }
+        }
+      }
+
+      // Populate Metal Working Skills
+      if (data['metalWorkingSkills'] != null) {
+        var metalWorkingData = data['metalWorkingSkills'];
+        metalWorkingSkills = metalWorkingData['hasMetalWorking'] ?? false;
+        
+        if (metalWorkingData['items'] != null) {
+          List<dynamic> metalWorkingItems = metalWorkingData['items'];
+          for (var item in metalWorkingItems) {
+            MetalWorkingSkill metalWorking = MetalWorkingSkill(
+              skillSelection: item['skill'] ?? '',
+              level: item['level'] ?? '',
+              certificate: item['certificate'] ?? false,
+              document: null, // Document path would need to be handled separately
+            );
+            metalWorkingSkillsList.add(metalWorking);
+          }
+        }
+      }
+
+      // Populate Tank Coating Experience
+      if (data['tankCoatingExperience'] != null) {
+        var tankCoatingData = data['tankCoatingExperience'];
+        tankCoatingExperience = tankCoatingData['hasTankCoating'] ?? false;
+        
+        if (tankCoatingData['items'] != null) {
+          List<dynamic> tankCoatingItems = tankCoatingData['items'];
+          for (var item in tankCoatingItems) {
+            TankCoatingExperience tankCoating = TankCoatingExperience(
+              type: item['type'] ?? '',
+            );
+            tankCoatingExperienceList.add(tankCoating);
+          }
+        }
+      }
+
+      // Populate Port State Control Experience
+      if (data['portStateControlExperience'] != null) {
+        var portStateData = data['portStateControlExperience'];
+        portStateControlExperience = portStateData['hasPortStateControl'] ?? false;
+        
+        if (portStateData['items'] != null) {
+          List<dynamic> portStateItems = portStateData['items'];
+          for (var item in portStateItems) {
+            PortStateControlExperience portState = PortStateControlExperience(
+              regionalAgreement: item['regionalAgreement'] ?? '',
+              port: item['port'] ?? '',
+              date: item['date'] ?? '',
+              observations: item['observations'] ?? '',
+            );
+            portStateControlExperienceList.add(portState);
+          }
+        }
+      }
+
+      // Populate Vetting Inspection Experience
+      if (data['vettingInspectionExperience'] != null) {
+        List<dynamic> vettingData = data['vettingInspectionExperience'];
+        if (vettingData.isNotEmpty) {
+          var vettingItem = vettingData[0]; // Get first item
+          inspectionByController.text = vettingItem['inspectionBy'] ?? '';
+          vettingPort = vettingItem['port'];
+          vettingDateController.text = vettingItem['date'] ?? '';
+          vettingObservationsController.text = vettingItem['observations'] ?? '';
+        }
+      }
+
+      // Populate Trading Area Experience
+      if (data['tradingAreaExperience'] != null) {
+        var tradingAreaData = data['tradingAreaExperience'];
+        if (tradingAreaData['tradingAreas'] != null) {
+          tradingAreaExperience = List<String>.from(tradingAreaData['tradingAreas']);
+        }
+      }
+
+      print("Form data populated successfully");
+      print("Computer and Software: ${computerAndSoftwareList.length}");
+      print("Cargo Experience: $cargoExperience");
+      print("Cargo Gear Experience: $cargoGearExperience");
+      print("Metal Working Skills: $metalWorkingSkills");
+      print("Tank Coating Experience: $tankCoatingExperience");
+      print("Port State Control Experience: $portStateControlExperience");
+      print("Trading Area Experience: $tradingAreaExperience");
+      
+      notifyListeners();
+    } catch (e) {
+      print("Error populating form data: $e");
+    }
+  }
+
+  // Reset form data
+  void resetForm() {
+    computerAndSoftwareList.clear();
+    cargoGearExperienceList.clear();
+    metalWorkingSkillsList.clear();
+    tankCoatingExperienceList.clear();
+    portStateControlExperienceList.clear();
+    
+    // Reset boolean values
+    cargoExperience = false;
+    cargoGearExperience = false;
+    metalWorkingSkills = false;
+    tankCoatingExperience = false;
+    portStateControlExperience = false;
+    
+    // Reset lists
+    bulkCargo.clear();
+    tankerCargo.clear();
+    generalCargo.clear();
+    woodProducts.clear();
+    stowageAndLashingExperience.clear();
+    tradingAreaExperience.clear();
+    
+    // Reset controllers
+    inspectionByController.clear();
+    vettingDateController.clear();
+    vettingObservationsController.clear();
+    
+    // Reset other values
+    vettingPort = null;
+    
+    professionalSkillsData = null;
+    autovalidateMode = AutovalidateMode.disabled;
+    notifyListeners();
+  }
+
+  // Create or update professional skills data
+  Future<bool> createOrUpdateProfessionalSkillsAPI(BuildContext context) async {
+    try {
+      String userId = NetworkHelper.loggedInUserId;
+      if (userId.isEmpty) {
+        print('User ID not found');
+        return false;
+      }
+
+      // Prepare the data object
+      Map<String, dynamic> professionalSkillsPayload = {
+        'userId': userId,
+        'computerAndSoftware': computerAndSoftwareList.map((item) => {
+          'software': item.software,
+          'level': item.level,
+        }).toList(),
+        'cargoExperience': {
+          'hasCargoExperience': cargoExperience,
+          'bulkCargo': bulkCargo,
+          'tankerCargo': tankerCargo,
+          'generalCargo': generalCargo,
+          'woodProducts': woodProducts,
+          'stowageAndLashing': stowageAndLashingExperience,
+        },
+        'cargoGearExperience': {
+          'hasCargoGearExperience': cargoGearExperience,
+          'items': cargoGearExperienceList.map((item) => {
+            'type': item.type,
+            'maker': item.maker,
+            'swl': item.swl,
+          }).toList(),
+        },
+        'metalWorkingSkills': {
+          'hasMetalWorking': metalWorkingSkills,
+          'items': metalWorkingSkillsList.map((item) => {
+            'skill': item.skillSelection,
+            'level': item.level,
+            'certificate': item.certificate,
+            'documentPath': item.document?.path ?? '',
+          }).toList(),
+        },
+        'tankCoatingExperience': {
+          'hasTankCoating': tankCoatingExperience,
+          'items': tankCoatingExperienceList.map((item) => {
+            'type': item.type,
+          }).toList(),
+        },
+        'portStateControlExperience': {
+          'hasPortStateControl': portStateControlExperience,
+          'items': portStateControlExperienceList.map((item) => {
+            'regionalAgreement': item.regionalAgreement,
+            'port': item.port,
+            'date': item.date,
+            'observations': item.observations,
+          }).toList(),
+        },
+        'vettingInspectionExperience': [
+          {
+            'inspectionBy': inspectionByController.text,
+            'port': vettingPort ?? '',
+            'date': vettingDateController.text,
+            'observations': vettingObservationsController.text,
+          }
+        ],
+        'tradingAreaExperience': {
+          'tradingAreas': tradingAreaExperience,
+        },
+      };
+
+      print("Professional Skills Payload: $professionalSkillsPayload");
+
+      // Convert data to the format expected by Dio function
+      Map<String, dynamic> dioFieldData = {
+        'data': jsonEncode(professionalSkillsPayload), // API expects a JSON string
+      };
+
+      // Prepare file list for metal working skills documents
+      List<Map<String, dynamic>> dioFileList = [];
+      
+      for (int i = 0; i < metalWorkingSkillsList.length; i++) {
+        var item = metalWorkingSkillsList[i];
+        if (item.document != null) {
+          dioFileList.add({
+            'fieldName': 'msattachDocument[$i]',
+            'file': item.document!,
+          });
+        }
+      }
+
+      print("File List: $dioFileList");
+
+      // Make the API call
+      final response = await multipartDocumentsDio(
+        context,
+        createOrUpdateProfessionalSkills + userId,
+        dioFieldData,
+        dioFileList,
+         false,
+      );
+
+      print("Professional Skills Save Response: $response");
+
+      if (response['statusCode'] == 200) {
+        print("Professional skills saved successfully");
+        return true;
+      } else {
+        print("Professional Skills Save Error: ${response['message'] ?? 'Failed to save professional skills'}");
+        return false;
+      }
+    } catch (e) {
+      print("Professional Skills Save Exception: $e");
+      return false;
     }
   }
 }

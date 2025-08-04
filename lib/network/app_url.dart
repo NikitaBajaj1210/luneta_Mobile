@@ -25,6 +25,8 @@ const getProfessionalExperienceByUserId = '${baseUrl}professional-experience/get
 const createOrUpdateProfessionalExperience = '${baseUrl}professional-experience/create-or-update';
 const getEducationByUserId = '${baseUrl}seafarer-profile/education-getByUserId/';
 const createOrUpdateEducation = '${baseUrl}seafarer-profile/education/create-or-update';
+const getProfessionalSkillsByUserId = '${baseUrl}seafarer-profile/professional-skills/';
+const createOrUpdateProfessionalSkills = '${baseUrl}seafarer-profile/professional-skills/create-or-update/';
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
