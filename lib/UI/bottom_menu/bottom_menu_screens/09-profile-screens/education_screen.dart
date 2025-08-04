@@ -46,18 +46,15 @@ class _EducationScreenState extends State<EducationScreen> {
             height: 100.h,
             width: 100.w,
             color: AppColors.Color_FFFFFF,
-            child: NetworkService.loading == 0 ? Center(
+            child: provider.isLoading ? Center(
               child: CircularProgressIndicator(color: AppColors.Color_607D8B),
             ) :
-            NetworkService.loading == 1 ? Padding(
+            provider.hasError ? Padding(
               padding: EdgeInsets.only(top: 2.h),
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    NetworkService.loading = 0;
-
                     provider.fetchEducationData(context);
-                    setState(() {});
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -95,30 +92,37 @@ class _EducationScreenState extends State<EducationScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: AppColors.bottomNavBorderColor),
                 ),
-                child: customButton(
-                  voidCallback: () async {
-                    if (provider.languagesSpokenFormKey.currentState!.validate()) {
-                      NetworkService.loading = 0;
-                      // Call the API to save education data
-                      bool success = await provider.createOrUpdateEducationAPI(context);
-                      // if (success) {
-                      //   Navigator.pop(context);
-                      // }
-                    } else {
-                      setState(() {
-                        provider.autovalidateModeLanguages = AutovalidateMode.always;
-                      });
-                    }
-                  },
-                  buttonText: "Save",
-                  width: 90.w,
-                  height: 4.h,
-                  color: AppColors.buttonColor,
-                  buttonTextColor: AppColors.buttonTextWhiteColor,
-                  shadowColor: AppColors.buttonBorderColor,
-                  fontSize: AppFontSize.fontSize18,
-                  showShadow: true,
-                ),
+                child: provider.isLoading 
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.buttonTextWhiteColor,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : customButton(
+                      voidCallback: () async {
+                        if (provider.languagesSpokenFormKey.currentState!.validate()) {
+                          // Call the API to save education data
+                          bool success = await provider.createOrUpdateEducationAPI(context);
+                          if (success) {
+                            // Optionally refresh the data after successful save
+                            await provider.fetchEducationData(context);
+                          }
+                        } else {
+                          setState(() {
+                            provider.autovalidateModeLanguages = AutovalidateMode.always;
+                          });
+                        }
+                      },
+                      buttonText: "Save",
+                      width: 90.w,
+                      height: 4.h,
+                      color: AppColors.buttonColor,
+                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                      shadowColor: AppColors.buttonBorderColor,
+                      fontSize: AppFontSize.fontSize18,
+                      showShadow: true,
+                    ),
               ),
               body: Container(
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
@@ -1230,13 +1234,16 @@ class _EducationScreenState extends State<EducationScreen> {
                                   title: Text("Native Languages"),
                                   selectedColor: AppColors.buttonColor,
                                   searchable: true,
+                                  initialValue: provider.nativeLanguages,
                                   decoration: BoxDecoration(
                                     color: AppColors.Color_FAFAFA,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(color: AppColors.buttonColor, width: 1),
                                   ),
                                   buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                                  buttonText: Text("Select Native Languages"),
+                                  buttonText: Text(provider.nativeLanguages.isEmpty 
+                                    ? "Select Native Languages" 
+                                    : "Selected: ${provider.nativeLanguages.join(', ')}"),
                                   onConfirm: (values) {
                                     provider.setNativeLanguages(values.cast<String>());
                                   },

@@ -141,7 +141,15 @@ class EducationProvider with ChangeNotifier {
   String? additionalLanguage;
   String? additionalLanguageLevel;
 
-  List<String> allLanguages = ["English", "Spanish", "French", "German"]; // Example list
+  // Comprehensive list of languages
+  List<String> allLanguages = [
+    "English", "Spanish", "French", "German", "Italian", "Portuguese", 
+    "Russian", "Chinese", "Japanese", "Korean", "Arabic", "Hindi", 
+    "Bengali", "Urdu", "Turkish", "Dutch", "Swedish", "Norwegian", 
+    "Danish", "Finnish", "Polish", "Czech", "Hungarian", "Romanian", 
+    "Bulgarian", "Greek", "Hebrew", "Thai", "Vietnamese", "Indonesian", 
+    "Malay", "Filipino", "Swahili", "Yoruba", "Zulu", "Afrikaans"
+  ];
   List<String> languageLevels = ["Fair", "Good", "Very Good", "Excellent"];
 
   void setNativeLanguages(List<String> languages) {
@@ -157,6 +165,16 @@ class EducationProvider with ChangeNotifier {
   void setAdditionalLanguageLevel(String level) {
     additionalLanguageLevel = level;
     notifyListeners();
+  }
+
+  // Get selected native languages for display
+  List<String> getSelectedNativeLanguages() {
+    return nativeLanguages;
+  }
+
+  // Check if a language is selected as native
+  bool isNativeLanguageSelected(String language) {
+    return nativeLanguages.contains(language);
   }
 
   // File Picker
@@ -248,15 +266,15 @@ class EducationProvider with ChangeNotifier {
     errorMessage = '';
     notifyListeners();
 
-    try {
-      String userId = NetworkHelper.loggedInUserId;
-      if (userId.isEmpty) {
-        hasError = true;
-        errorMessage = 'User ID not found';
-        isLoading = false;
-        notifyListeners();
-        return;
-      }
+          try {
+        String userId = NetworkHelper.loggedInUserId;
+        if (userId.isEmpty) {
+          hasError = true;
+          errorMessage = 'User ID not found';
+          isLoading = false;
+          notifyListeners();
+          return;
+        }
 
       final response = await NetworkService().getResponse(
         getEducationByUserId + userId,
@@ -286,64 +304,118 @@ class EducationProvider with ChangeNotifier {
       hasError = true;
       errorMessage = 'Network error: ${e.toString()}';
       print("Education API Exception: $e");
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+          } finally {
+        isLoading = false;
+        notifyListeners();
+      }
   }
 
   // Populate form data from API response
-  void _populateFormData(EducationData data) {
-    // Clear existing data
-    academicQualificationList.clear();
-    certificationList.clear();
-    nativeLanguages.clear();
-    additionalLanguage = null;
-    additionalLanguageLevel = null;
+  void _populateFormData(dynamic data) {
+    try {
+      // Clear existing data
+      academicQualificationList.clear();
+      certificationList.clear();
+      nativeLanguages.clear();
+      additionalLanguage = null;
+      additionalLanguageLevel = null;
 
-    // Populate Academic Qualifications
-    if (data.academicQualification != null) {
-      for (var qualification in data.academicQualification!) {
-        AcademicQualification academicQual = AcademicQualification(
-          educationalDegree: qualification.educationalDegree ?? '',
-          fieldOfStudy: qualification.fieldOfStudy ?? '',
-          educationalInstitution: qualification.educationalInstitution ?? '',
-          country: qualification.country ?? '',
-          graduationDate: qualification.graduationDate ?? '',
-          document: null, // Document path would need to be handled separately
-        );
-        academicQualificationList.add(academicQual);
+      // Handle both EducationData model and raw Map response
+      Map<String, dynamic> responseData;
+      if (data is EducationData) {
+        // Handle EducationData model
+        responseData = {
+          'academicQualification': data.academicQualification?.map((q) => {
+            'educationalDegree': q.educationalDegree,
+            'fieldOfStudy': q.fieldOfStudy,
+            'educationalInstitution': q.educationalInstitution,
+            'country': q.country,
+            'graduationDate': q.graduationDate,
+          }).toList(),
+          'certificationsAndTrainings': data.certificationsAndTrainings?.map((c) => {
+            'certificationType': c.certificationType,
+            'issuingAuthority': c.issuingAuthority,
+            'issueDate': c.issueDate,
+            'expiryDate': c.expiryDate,
+          }).toList(),
+          'languagesSpoken': data.languagesSpoken?.map((l) => {
+            'native': l.native,
+            'additionalLanguage': l.additionalLanguage,
+            'level': l.level,
+          }).toList(),
+        };
+      } else if (data is Map<String, dynamic>) {
+        // Handle raw Map response
+        responseData = data;
+      } else {
+        print("Unknown data type for _populateFormData: ${data.runtimeType}");
+        return;
       }
-    }
 
-    // Populate Certifications
-    if (data.certificationsAndTrainings != null) {
-      for (var certification in data.certificationsAndTrainings!) {
-        Certification cert = Certification(
-          typeOfCertification: certification.certificationType ?? '',
-          issuingAuthority: certification.issuingAuthority ?? '',
-          issueDate: certification.issueDate ?? '',
-          expiryDate: certification.expiryDate ?? '',
-          document: null, // Document path would need to be handled separately
-        );
-        certificationList.add(cert);
+      // Populate academic qualifications
+      if (responseData['academicQualification'] != null) {
+        List<dynamic> academicData = responseData['academicQualification'];
+        for (var item in academicData) {
+          AcademicQualification qualification = AcademicQualification(
+            educationalDegree: item['educationalDegree'] ?? '',
+            fieldOfStudy: item['fieldOfStudy'] ?? '',
+            educationalInstitution: item['educationalInstitution'] ?? '',
+            country: item['country'] ?? '',
+            graduationDate: item['graduationDate'] ?? '',
+            document: null, // We don't have file object from API response
+          );
+          academicQualificationList.add(qualification);
+        }
       }
-    }
 
-    // Populate Languages
-    if (data.languagesSpoken != null && data.languagesSpoken!.isNotEmpty) {
-      var languageData = data.languagesSpoken!.first;
-      if (languageData.native != null) {
-        nativeLanguages = List<String>.from(languageData.native!);
+      // Populate certifications
+      if (responseData['certificationsAndTrainings'] != null) {
+        List<dynamic> certificationData = responseData['certificationsAndTrainings'];
+        for (var item in certificationData) {
+          Certification certification = Certification(
+            typeOfCertification: item['certificationType'] ?? '',
+            issuingAuthority: item['issuingAuthority'] ?? '',
+            issueDate: item['issueDate'] ?? '',
+            expiryDate: item['expiryDate'] ?? '',
+            document: null, // We don't have file object from API response
+          );
+          certificationList.add(certification);
+        }
       }
-      additionalLanguage = languageData.additionalLanguage;
-      additionalLanguageLevel = languageData.level;
-    }
 
-    notifyListeners();
+      // Populate languages
+      if (responseData['languagesSpoken'] != null && responseData['languagesSpoken'].isNotEmpty) {
+        var languageData = responseData['languagesSpoken'][0];
+        print("Language data from API: $languageData");
+        
+        if (languageData['native'] != null) {
+          nativeLanguages = List<String>.from(languageData['native']);
+          print("Native languages populated: $nativeLanguages");
+        } else {
+          print("No native languages found in API response");
+        }
+        
+        additionalLanguage = languageData['additionalLanguage'];
+        additionalLanguageLevel = languageData['level'];
+        print("Additional language: $additionalLanguage, Level: $additionalLanguageLevel");
+      } else {
+        print("No languages data found in API response");
+      }
+
+      print("Form data populated successfully");
+      print("Academic qualifications: ${academicQualificationList.length}");
+      print("Certifications: ${certificationList.length}");
+      print("Native languages: $nativeLanguages");
+      print("Additional language: $additionalLanguage");
+      print("Language level: $additionalLanguageLevel");
+      
+      notifyListeners();
+    } catch (e) {
+      print("Error populating form data: $e");
+    }
   }
 
-  // Create or update education data
+    // Create or update education data
   Future<bool> createOrUpdateEducationAPI(BuildContext context) async {
     isLoading = true;
     hasError = false;
@@ -352,13 +424,13 @@ class EducationProvider with ChangeNotifier {
 
     try {
       String userId = NetworkHelper.loggedInUserId;
-      if (userId.isEmpty) {
-        hasError = true;
-        errorMessage = 'User ID not found';
-        isLoading = false;
-        notifyListeners();
-        return false;
-      }
+      // if (userId.isEmpty) {
+      //   hasError = true;
+      //   errorMessage = 'User ID not found';
+      //   isLoading = false;
+      //   notifyListeners();
+      //   return false;
+      // }
 
       // Prepare the data object
       Map<String, dynamic> educationPayload = {
@@ -390,7 +462,7 @@ class EducationProvider with ChangeNotifier {
 
       // Convert data to the format expected by Dio function
       Map<String, dynamic> dioFieldData = {
-        'data': jsonEncode(educationPayload), // API expects a single object
+        'data': jsonEncode(educationPayload), // API expects a JSON string
       };
 
       // Convert fileList to the format expected by Dio function
@@ -452,6 +524,8 @@ class EducationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
 
   // Reset form data
   void resetForm() {
