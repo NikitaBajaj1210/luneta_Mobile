@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../const/color.dart';
 import '../../../const/font_size.dart';
+import '../../../custom-component/custom-button.dart';
 import '../../../network/network_helper.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/expected_salary_provider.dart';
 import '../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/references_provider.dart';
@@ -3189,6 +3190,25 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.Color_212121,
                                         fontFamily: AppColors.fontFamilyMedium,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                      child: customButton(
+                                        voidCallback: () async {
+                                          profileProvider.SecurityCompliancePostApi(context);
+                                        },
+                                        buttonText: "Save",
+                                        width: 30.w,
+                                        height: 10.w,
+                                        color: AppColors.buttonColor,
+                                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                                        shadowColor: AppColors.buttonBorderColor,
+                                        fontSize: AppFontSize.fontSize18,
+                                        showShadow: true,
                                       ),
                                     ),
                                   ),

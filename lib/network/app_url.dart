@@ -28,6 +28,7 @@ const createOrUpdateEducation = '${baseUrl}seafarer-profile/education/create-or-
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
+const postUpdateCompliance = '${baseUrl}seafarer-profile/security-compliance/create-or-update';
 
 
 
