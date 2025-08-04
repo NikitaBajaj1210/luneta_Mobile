@@ -190,6 +190,7 @@ class PersonalInformationProvider extends ChangeNotifier {
 
   void setDOB(DateTime date) {
     dobController.text = formatToMMDDYYYYString("${date.toLocal()}".split(' ')[0]);
+    print('dob controller => ${dobController.text}');
     notifyListeners();
   }
 
@@ -297,6 +298,7 @@ class PersonalInformationProvider extends ChangeNotifier {
         'onlineCommunication': _communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList(),
         'userId': NetworkHelper.loggedInUserId,
       });
+      print(formatDateForAPI(dobController.text));
 
       if (profileImage != null) {
         String? mimeType = lookupMimeType(profileImage!.path);

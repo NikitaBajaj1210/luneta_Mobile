@@ -55,7 +55,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
             religion: seafarerProfile['religion'] ?? '',
             sex: seafarerProfile['sex'] ?? '',
             nationality: seafarerProfile['nationality'] ?? '',
-            email: seafarerProfile['email'] ?? '',
+            email: seafarerProfile['contactEmail'] ?? '',
             mobilePhone: seafarerProfile['mobilePhone'] ?? '',
             directLinePhone: seafarerProfile['directLinePhone'] ?? '',
             homeAddress: seafarerProfile['homeAddress']==null?'':seafarerProfile['homeAddress']['street'] ?? '',

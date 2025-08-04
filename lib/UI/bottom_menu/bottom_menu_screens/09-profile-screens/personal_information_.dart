@@ -217,7 +217,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           firstDate: firstDate,
                           lastDate: lastDate,
                         );
-                        if (picked != null) {
+                        if (picked != null && !picked.isAfter(lastDate)) {
+                          print('date ${picked}');
                           provider.setDOB(picked);
                         }
                       },

@@ -11,6 +11,7 @@ import '../../const/font_size.dart';
 import '../../custom-component/back_button_with_title.dart';
 import '../../custom-component/custom-button.dart';
 import '../../provider/account-provider/create_pin_provider.dart';
+import '../../provider/bottom_menu_provider/bottom_menu_provider.dart';
 
 class CreatePinScreen extends StatefulWidget {
   const CreatePinScreen({super.key});
@@ -118,6 +119,11 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
           (route) => false, // Remove all previous routes
         );
       } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<BottomMenuProvider>(
+              context,
+              listen: false).updateSelectedIndex(0);
+        });
         // Navigate to home screen for normal flow
         Navigator.of(context).pushNamed(bottomMenu);
       }
