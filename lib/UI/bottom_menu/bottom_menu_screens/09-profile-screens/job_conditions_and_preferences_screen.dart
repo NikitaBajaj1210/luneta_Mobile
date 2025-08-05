@@ -9,6 +9,8 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../network/network_services.dart';
+import '../../../../Utils/helper.dart';
 
 class JobConditionsAndPreferencesScreen extends StatefulWidget {
   const JobConditionsAndPreferencesScreen({super.key});
@@ -19,11 +21,58 @@ class JobConditionsAndPreferencesScreen extends StatefulWidget {
 
 class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPreferencesScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<JobConditionsAndPreferencesProvider>(context, listen: false).fetchJobConditionsData(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<JobConditionsAndPreferencesProvider>(
       builder: (context, provider, child) {
         return SafeArea(
-          child: Scaffold(
+          child: Container(
+            height: 100.h,
+            width: 100.w,
+            color: AppColors.Color_FFFFFF,
+            child: NetworkService.loading == 0 ? Center(
+              child: CircularProgressIndicator(color: AppColors.Color_607D8B),
+            ) :
+            NetworkService.loading == 1 ? Padding(
+              padding: EdgeInsets.only(top: 2.h),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    provider.fetchJobConditionsData(context);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                          'assets/images/refresh.png',
+                          width: 4.5.h,
+                          height: 4.5.h,
+                          color: AppColors.Color_607D8B
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        "Tap to Try Again",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontFamily: AppColors.fontFamilyBold,
+                            fontSize: AppFontSize.fontSize15,
+                            color: AppColors.Color_607D8B,
+                            decoration: TextDecoration.none
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ) :
+            Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
             bottomNavigationBar: Container(
               height: 11.h,
@@ -33,7 +82,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                 border: Border.all(width: 1, color: AppColors.bottomNavBorderColor),
               ),
               child: customButton(
-                voidCallback: () {
+                voidCallback: () async {
                   if (provider.autovalidateMode == AutovalidateMode.disabled) {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
@@ -41,7 +90,10 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                   }
                   if (provider.formKey.currentState!.validate()) {
                     // Save the data in provider or update the profile here
-                    Navigator.pop(context);
+                    bool success = await provider.createOrUpdateJobConditionsAPI(context);
+                    if (success) {
+                      Navigator.pop(context);
+                    }
                   }
                 },
                 buttonText: "Save",
@@ -73,6 +125,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       SizedBox(height: 2.h),
 
                       // Current Rank / Position
+                      // Current Rank / Position
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
@@ -91,9 +144,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.ranks.map((rank) {
+                          items: RankType.values.map((rank) {
                             return DropdownMenuItem(
-                              child: Text(rank),
+                              child: Text(rank.value),
                               value: rank,
                             );
                           }).toList(),
@@ -101,16 +154,16 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Rank",
                           searchHint: "Search for a rank",
                           onChanged: (value) {
-                            provider.setCurrentRank(value as String);
+                            provider.setCurrentRank(value as RankType?);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
-                          onClear: (){
-                            provider.setCurrentRank('');
+                          onClear: () {
+                            provider.setCurrentRank(null);
                           },
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
-                            if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
+                            if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
                               return 'Please select a rank';
                             }
                             return null;
@@ -138,9 +191,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.ranks.map((rank) {
+                          items: RankType.values.map((rank) {
                             return DropdownMenuItem(
-                              child: Text(rank),
+                              child: Text(rank.value),
                               value: rank,
                             );
                           }).toList(),
@@ -148,7 +201,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Rank",
                           searchHint: "Search for a rank",
                           onChanged: (value) {
-                            provider.setAlternateRank(value as String);
+                            provider.setAlternateRank(value);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -175,19 +228,24 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: MultiSelectDialogField(
-                          items: provider.vesselTypes.map((e) => MultiSelectItem(e, e)).toList(),
+                          items: PreferredVesselType.values.map((vessel) {
+                            return MultiSelectItem(vessel.value, vessel.value); // Use value as both key and display
+                          }).toList(),
                           title: Text("Preferred Vessel Types"),
                           selectedColor: AppColors.buttonColor,
                           searchable: true,
+                          initialValue: provider.preferredVesselTypes, // List<String>
                           decoration: BoxDecoration(
                             color: AppColors.Color_FAFAFA,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: AppColors.buttonColor, width: 1),
                           ),
                           buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                          buttonText: Text("Select Preferred Vessel Types"),
+                          buttonText: Text(provider.preferredVesselTypes.isEmpty
+                              ? "Select Preferred Vessel Types"
+                              : "Selected: ${provider.preferredVesselTypes.join(', ')}"), // Join strings directly
                           onConfirm: (values) {
-                            provider.setPreferredVesselTypes(values.cast<String>());
+                            provider.setPreferredVesselTypes(values.cast<String>()); // Cast to List<String>
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -218,9 +276,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.contractTypes.map((type) {
+                          items: ContractType.values.map((type) {
                             return DropdownMenuItem(
-                              child: Text(type),
+                              child: Text(type.value),
                               value: type,
                             );
                           }).toList(),
@@ -228,7 +286,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Contract Type",
                           searchHint: "Search for a contract type",
                           onChanged: (value) {
-                            provider.setPreferredContractType(value as String);
+                            provider.setPreferredContractType(value);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -255,9 +313,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.ranks.map((rank) {
+                          items: RankType.values.map((rank) {
                             return DropdownMenuItem(
-                              child: Text(rank),
+                              child: Text(rank.value),
                               value: rank,
                             );
                           }).toList(),
@@ -265,7 +323,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Position",
                           searchHint: "Search for a position",
                           onChanged: (value) {
-                            provider.setPreferredPosition(value as String);
+                            provider.setPreferredPosition(value);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -292,17 +350,24 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.manningAgencies.map((agency) {
+                          items: provider.agencyData.map((agency) {
                             return DropdownMenuItem(
-                              child: Text(agency),
+                              child: Text(agency.name!),
                               value: agency,
                             );
                           }).toList(),
-                          value: provider.manningAgency,
+                          value: provider.agencyData.isNotEmpty && provider.manningAgency != null
+                              ? provider.agencyData.firstWhere(
+                                  (agency) => agency.name == provider.manningAgency,
+                                  orElse: () => provider.agencyData.first,
+                                )
+                              : null,
                           hint: "Select Manning Agency",
                           searchHint: "Search for an agency",
                           onChanged: (value) {
-                            provider.setManningAgency(value as String);
+                            if (value != null) {
+                              provider.setManningAgency(value.name ?? '');
+                            }
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -353,9 +418,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.availabilityStatuses.map((status) {
+                          items: AvailabilityStatus.values.map((status) {
                             return DropdownMenuItem(
-                              child: Text(status),
+                              child: Text(status.value),
                               value: status,
                             );
                           }).toList(),
@@ -363,12 +428,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Status",
                           searchHint: "Search for a status",
                           onChanged: (value) {
-                            provider.setCurrentAvailabilityStatus(value as String);
+                            provider.setCurrentAvailabilityStatus(value as AvailabilityStatus?);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
                           onClear: (){
-                            provider.setCurrentAvailabilityStatus('');
+                            provider.setCurrentAvailabilityStatus(null);
                           },
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
@@ -593,9 +658,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.rotationPatterns.map((pattern) {
+                          items:RotationPattern.values.map((pattern) {
                             return DropdownMenuItem(
-                              child: Text(pattern),
+                              child: Text(pattern.value),
                               value: pattern,
                             );
                           }).toList(),
@@ -603,7 +668,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Pattern",
                           searchHint: "Search for a pattern",
                           onChanged: (value) {
-                            provider.setPreferredRotationPattern(value as String);
+                            provider.setPreferredRotationPattern(value);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -630,19 +695,27 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: MultiSelectDialogField(
-                          items: provider.tradingAreas.map((e) => MultiSelectItem(e, e)).toList(),
+                          items: TradingArea.values.map((e) {
+                            return MultiSelectItem(e.value, e.value);
+                          }).toList(),
                           title: Text("Trading Area Exclusions"),
                           selectedColor: AppColors.buttonColor,
                           searchable: true,
+                          initialValue: provider.tradingAreaExclusions,
                           decoration: BoxDecoration(
                             color: AppColors.Color_FAFAFA,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: AppColors.buttonColor, width: 1),
                           ),
                           buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                          buttonText: Text("Select Trading Area Exclusions"),
+                          buttonText: Text(provider.tradingAreaExclusions.isEmpty
+                              ? "Select Trading Area Exclusions"
+                              : "Selected: ${provider.tradingAreaExclusions.join(', ')}"),
                           onConfirm: (values) {
-                            provider.setTradingAreaExclusions(values.cast<String>());
+                            final selectedAreas = values.map((value) {
+                              return TradingArea.values.firstWhere((e) => e.value == value.toString());
+                            }).toList();
+                            provider.setTradingAreaExclusions(selectedAreas);
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -726,7 +799,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         child: SearchChoices.single(
                           items: provider.ranks.map((rank) {
                             return DropdownMenuItem(
-                              child: Text(rank),
+                              child: Text(rank.rankName.toString()),
                               value: rank,
                             );
                           }).toList(),
@@ -734,11 +807,11 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Rank",
                           searchHint: "Search for a rank",
                           onClear: (){
-                            provider.setLastRankJoined('');
+                            provider.setLastRankJoined(null);
                           },
                           autovalidateMode: provider.autovalidateMode,
                           onChanged: (value) {
-                            provider.setLastRankJoined(value as String);
+                            provider.setLastRankJoined(value);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
@@ -822,9 +895,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.currencies.map((currency) {
+                          items: Currency.values.map((currency) {
                             return DropdownMenuItem(
-                              child: Text(currency),
+                              child: Text(currency.value),
                               value: currency,
                             );
                           }).toList(),
@@ -832,12 +905,12 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           hint: "Select Currency",
                           searchHint: "Search for a currency",
                           onChanged: (value) {
-                            provider.setCurrency(value as String);
+                            provider.setCurrency(value as Currency);
                           },
                           isExpanded: true,
                           underline: SizedBox(),
                           onClear: (){
-                            provider.setCurrency('');
+                            provider.setCurrency(null);
                           },
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
@@ -965,7 +1038,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
               ),
             ),
           ),
-        );
+        ));
       },
     );
   }

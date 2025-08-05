@@ -27,10 +27,13 @@ const getEducationByUserId = '${baseUrl}seafarer-profile/education-getByUserId/'
 const createOrUpdateEducation = '${baseUrl}seafarer-profile/education/create-or-update';
 const getProfessionalSkillsByUserId = '${baseUrl}seafarer-profile/professional-skills/';
 const createOrUpdateProfessionalSkills = '${baseUrl}seafarer-profile/professional-skills/create-or-update/';
+const getJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/';
+const postJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/create-or-update';
+
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
-
+const getAllAgency = '${baseUrl}/master-manning-agency/get-all';
 
 
 //USED  TO API
