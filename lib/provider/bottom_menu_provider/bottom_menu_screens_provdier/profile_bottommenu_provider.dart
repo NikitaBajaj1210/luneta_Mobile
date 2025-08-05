@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,7 +55,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
             religion: seafarerProfile['religion'] ?? '',
             sex: seafarerProfile['sex'] ?? '',
             nationality: seafarerProfile['nationality'] ?? '',
-            email: seafarerProfile['email'] ?? '',
+            email: seafarerProfile['contactEmail'] ?? '',
             mobilePhone: seafarerProfile['mobilePhone'] ?? '',
             directLinePhone: seafarerProfile['directLinePhone'] ?? '',
             homeAddress: seafarerProfile['homeAddress']==null?'':seafarerProfile['homeAddress']['street'] ?? '',
@@ -363,6 +364,43 @@ class ProfileBottommenuProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> SecurityCompliancePostApi(BuildContext context) async {
+    try {
+
+      // Create request body
+      Map<String, dynamic> requestBody = {
+        "userId": NetworkHelper.loggedInUserId,
+        "contactInformationSharing": securityAndComplianceInfo!.contactInfoSharing,
+        "dataSharing": securityAndComplianceInfo!.dataSharing,
+        "professionalConductDeclaration": securityAndComplianceInfo!.professionalConductDeclaration,
+      };
+
+      String body = jsonEncode(requestBody);
+
+      Map<String, dynamic> response = await NetworkService().postResponse(
+        postUpdateCompliance,
+        body,
+        true, // showLoading
+        context,
+            () => notifyListeners(),
+      );
+
+
+      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+        ShowToast("Success", response['message'] ?? "Compliance updated.");
+
+      } else {
+        // Handle error response
+        String errorMessage = response['message'] ?? "Something went wrong";
+        ShowToast("Error", errorMessage);
+      }
+    } catch (e) {
+      print("compliance update error: $e");
+      ShowToast("Error", "Something went wrong. Please try again.");
+    }
+  }
+
 
   getProfileInfo(BuildContext context) {
     // NetworkService.loading = 0;

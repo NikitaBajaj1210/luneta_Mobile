@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../network/network_helper.dart';
+import '../../provider/bottom_menu_provider/bottom_menu_provider.dart';
+import '../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 import '../../route/route_constants.dart';
 import '../../network/network_helper.dart';
 import '../../network/network_services.dart';
@@ -39,6 +42,12 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
         NetworkHelper.syncUserData();
         if (context.mounted) {
           if (isProfileComplete) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Provider.of<BottomMenuProvider>(
+                  context,
+                  listen: false).updateSelectedIndex(0);
+            });
+
             Navigator.of(context).pushReplacementNamed(bottomMenu);
           } else {
             Navigator.of(context).pushReplacementNamed(chooseCountry);

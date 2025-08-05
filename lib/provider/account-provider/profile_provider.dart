@@ -25,6 +25,7 @@ import '../../route/route_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import '../authentication-provider/login_provider.dart';
+import '../bottom_menu_provider/bottom_menu_provider.dart';
 import 'choose_country_provider.dart';
 
 class ProfileProvider with ChangeNotifier {
@@ -465,27 +466,27 @@ class ProfileProvider with ChangeNotifier {
 
   String _formatPhoneNumber() {
     if (phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.isNotEmpty) {
-      String countryCode = '';
-      switch (phoneNumber.isoCode) {
-        case 'IN':
-          countryCode = '+91';
-          break;
-        case 'US':
-          countryCode = '+1';
-          break;
-        case 'GB':
-          countryCode = '+44';
-          break;
-        case 'FR':
-          countryCode = '+33';
-          break;
-        case 'DE':
-          countryCode = '+49';
-          break;
-        default:
-          countryCode = '+1';
-      }
-      return '$countryCode ${phoneNumber.phoneNumber}';
+      // String countryCode = '';
+      // switch (phoneNumber.isoCode) {
+      //   case 'IN':
+      //     countryCode = '+91';
+      //     break;
+      //   case 'US':
+      //     countryCode = '+1';
+      //     break;
+      //   case 'GB':
+      //     countryCode = '+44';
+      //     break;
+      //   case 'FR':
+      //     countryCode = '+33';
+      //     break;
+      //   case 'DE':
+      //     countryCode = '+49';
+      //     break;
+      //   default:
+      //     countryCode = '+1';
+      // }
+      return '${phoneNumber.phoneNumber}';
     }
     return '';
   }
@@ -573,6 +574,11 @@ class ProfileProvider with ChangeNotifier {
           ShowToast("Success", response.data['message'] ?? "Saved successfully");
           if (context.mounted) stopLoading(context);
           ChooseCountryProvider.clearGlobalSelectedCountry();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<BottomMenuProvider>(
+                context,
+                listen: false).updateSelectedIndex(0);
+          });
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
         }

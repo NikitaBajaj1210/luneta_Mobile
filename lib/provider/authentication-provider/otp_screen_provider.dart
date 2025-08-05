@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../network/network_services.dart';
@@ -7,6 +8,7 @@ import '../../models/auth_model/verify_otp_model.dart';
 import '../../Utils/helper.dart';
 import '../../route/route_constants.dart';
 import '../../network/network_helper.dart';
+import '../bottom_menu_provider/bottom_menu_provider.dart';
 
 class OtpScreenProvider with ChangeNotifier {
   String _pin = '';
@@ -135,6 +137,11 @@ class OtpScreenProvider with ChangeNotifier {
                     (route) => false, // Remove all previous routes
               );
             }else{
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Provider.of<BottomMenuProvider>(
+                    context,
+                    listen: false).updateSelectedIndex(0);
+              });
               Navigator.of(context).pushNamedAndRemoveUntil(
                 bottomMenu,
                     (route) => false, // Remove all previous routes

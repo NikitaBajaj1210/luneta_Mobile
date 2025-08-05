@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:luneta/route/route_constants.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/helper.dart';
 import '../../const/color.dart';
@@ -9,6 +10,7 @@ import '../../models/auth_model/login_model.dart';
 import '../../network/app_url.dart';
 import '../../network/network_services.dart';
 import '../../network/network_helper.dart';
+import '../bottom_menu_provider/bottom_menu_provider.dart';
 
 class LoginProvider with ChangeNotifier {
 
@@ -169,6 +171,11 @@ class LoginProvider with ChangeNotifier {
         print("Auto Login - User is already logged in, navigating to home");
         
         if (context.mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<BottomMenuProvider>(
+                context,
+                listen: false).updateSelectedIndex(0);
+          });
           Navigator.of(context).pushNamedAndRemoveUntil(
             bottomMenu,
             (route) => false, // Remove all previous routes

@@ -33,6 +33,8 @@ const postJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/cre
 
 //post
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
+const postUpdateCompliance = '${baseUrl}seafarer-profile/security-compliance/create-or-update';
+
 const getAllAgency = '${baseUrl}/master-manning-agency/get-all';
 
 
