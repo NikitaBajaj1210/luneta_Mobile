@@ -70,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Consumer<ProfileProvider>(
         builder: (context, profileProvider, child) {
           bool isFormValid = profileProvider.nameController.text.isNotEmpty &&
-              profileProvider.nickNameController.text.isNotEmpty &&
               // profileProvider.emailController.text.isNotEmpty && // Skip email validation since it's disabled
               profileProvider.phoneController.text.isNotEmpty &&
               profileProvider.addDate != 'Date of Birth' &&
@@ -237,7 +236,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: AppColors.Color_424242,
                                 ),
                               ),
-                            ),                            customTextField(
+                            ),
+                            customTextField(
                               context: context,
                               focusNode: profileProvider.nickNameFocusNode,
                               controller: profileProvider.nickNameController,
@@ -245,9 +245,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               textInputType: TextInputType.name,
                               obscureText: false,
                               voidCallback: (value) {
-                                if (profileProvider.hasSubmitted) {
-                                  profileProvider.validateFieldIfFocused('nickname', value!);
-                                }
+                                return null;
+                                // if (profileProvider.hasSubmitted) {
+                                //   profileProvider.validateFieldIfFocused('nickname', value!);
+                                // }
                               },
                               fontSize: AppFontSize.fontSize16,
                               inputFontSize: AppFontSize.fontSize16,
@@ -262,31 +263,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ? AppColors.activeFieldBgColor
                                   : AppColors.Color_FAFAFA,
                               onFieldSubmitted: (value) {
-                                profileProvider.handleFieldSubmission('nickname', value);
+                                // profileProvider.handleFieldSubmission('nickname', value);
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
                                   FocusScope.of(context).requestFocus(profileProvider.emailFocusNode);
                                 });
                               },
                               onChange: (value) {
-                                profileProvider.handleTextChange('nickname', value);
+                                // profileProvider.handleTextChange('nickname', value);
                               },
-                              autovalidateMode: profileProvider.autoValidateMode,
+                              // autovalidateMode: profileProvider.autoValidateMode,
                             ),
-                            if (profileProvider.nickNameError != null)
-                              Padding(
-                                padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                                child: SizedBox(
-                                  width: 100.w,
-                                  child: Text(
-                                    profileProvider.nickNameError!,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: AppColors.errorRedColor,
-                                      fontSize: AppFontSize.fontSize12,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            // if (profileProvider.nickNameError != null)
+                            //   Padding(
+                            //     padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                            //     child: SizedBox(
+                            //       width: 100.w,
+                            //       child: Text(
+                            //         profileProvider.nickNameError!,
+                            //         textAlign: TextAlign.start,
+                            //         style: TextStyle(
+                            //           color: AppColors.errorRedColor,
+                            //           fontSize: AppFontSize.fontSize12,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
                               child: Text(
@@ -505,28 +506,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
 
-                            countryPhoneInput(
-                              width: 100.w,
-                              phoneNumber: profileProvider.phoneNumber,
+                            // countryPhoneInput(
+                            //   width: 100.w,
+                            //   phoneNumber: profileProvider.phoneNumber,
+                            //   controller: profileProvider.phoneController,
+                            //   onPhoneChanged: (PhoneNumber newNumber) {
+                            //     profileProvider.handlePhoneChange(newNumber, profileProvider.phoneController.text);
+                            //   },
+                            //   maxLength: 10,
+                            //   backgroundColor: profileProvider.phoneFocusNode.hasFocus
+                            //       ? AppColors.activeFieldBgColor
+                            //       : AppColors.Color_FAFAFA,                          borderColor: profileProvider.getFieldBorderColor(profileProvider.phoneFocusNode, 'phone'),
+                            //   labelColor: AppColors.Color_9E9E9E,
+                            //   iconColor: profileProvider.getFieldIconColor(profileProvider.phoneFocusNode, 'phone', hasValue: profileProvider.phoneController.text.isNotEmpty),
+                            //   isEditable: true,
+                            //   focusNode: profileProvider.phoneFocusNode,
+                            //   onFieldSubmitted: (value) {
+                            //     profileProvider.handleFieldSubmission('phone', value);
+                            //     profileProvider.safeValidatePhone();
+                            //   },
+                            //   validator: (value) => profileProvider.validateFieldIfFocused('phone', value ?? '', notify: false),
+                            //   autovalidateMode: profileProvider.autoValidateMode,
+                            // ),
+
+
+
+                            customTextField(
+                              context: context,
                               controller: profileProvider.phoneController,
-                              onPhoneChanged: (PhoneNumber newNumber) {
-                                profileProvider.handlePhoneChange(newNumber, profileProvider.phoneController.text);
+                              hintText: 'Phone Number',
+                              textInputType: TextInputType.phone,
+                              maxLength: 15,
+                              obscureText: false,
+                              voidCallback: (value) {
+                                if ((value == null || value.isEmpty || value.toString().trim().length<10) && profileProvider.autoValidateMode == AutovalidateMode.always) {
+                                  return '      Please enter Phone Number';
+                                }
+                                return null;
                               },
-                              maxLength: 10,
+                              autovalidateMode: profileProvider.autoValidateMode,
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
                               backgroundColor: profileProvider.phoneFocusNode.hasFocus
                                   ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA,                          borderColor: profileProvider.getFieldBorderColor(profileProvider.phoneFocusNode, 'phone'),
+                                  : AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
                               labelColor: AppColors.Color_9E9E9E,
-                              iconColor: profileProvider.getFieldIconColor(profileProvider.phoneFocusNode, 'phone', hasValue: profileProvider.phoneController.text.isNotEmpty),
-                              isEditable: true,
-                              focusNode: profileProvider.phoneFocusNode,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: profileProvider.phoneFocusNode.hasFocus
+                                  ? AppColors.activeFieldBgColor
+                                  : AppColors.Color_FAFAFA,
                               onFieldSubmitted: (value) {
-                                profileProvider.handleFieldSubmission('phone', value);
-                                profileProvider.safeValidatePhone();
                               },
-                              validator: (value) => profileProvider.validateFieldIfFocused('phone', value ?? '', notify: false),
-                              autovalidateMode: profileProvider.autoValidateMode,
                             ),
+
+
+
+
                             if (profileProvider.phoneError != null)
                               Padding(
                                 padding: EdgeInsets.only(top: 1.h, left: 4.w),

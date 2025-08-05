@@ -104,11 +104,11 @@ class ChooseCountryProvider with ChangeNotifier {
 
   // Filtered list based on search query
   List<CountryModel> get filteredCountries {
-    if (searchController.text.isEmpty) {
+    if (searchController.text.toString().trim().isEmpty) {
       return _countries;
     }
     return _countries
-        .where((country) => country.name!.toLowerCase().contains(searchController.text.toLowerCase()))
+        .where((country) => country.name!.toLowerCase().contains(searchController.text.toLowerCase().trim()))
         .toList();
   }
 

@@ -226,10 +226,10 @@ class ProfileProvider with ChangeNotifier {
         error = validateName(value.trim());
         nameError = error;
         break;
-      case 'nickname':
-        error = validateName(value.trim());
-        nickNameError = error;
-        break;
+      // case 'nickname':
+      //   error = validateName(value.trim());
+      //   nickNameError = error;
+      //   break;
       case 'email':
         error = validateEmail(value.trim());
         emailError = error;
@@ -291,7 +291,7 @@ class ProfileProvider with ChangeNotifier {
 
   bool validateFields() {
     return validateFieldSilently('name', _nameController.text) == null &&
-        validateFieldSilently('nickname', _nickNameController.text) == null &&
+        // validateFieldSilently('nickname', _nickNameController.text) == null &&
         validateFieldSilently('phone', _phoneController.text) == null &&
         validateFieldSilently('date', addDate) == null &&
         selectedGender != 'Gender';
@@ -359,7 +359,7 @@ class ProfileProvider with ChangeNotifier {
     hasSubmitted = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       validateFieldIfFocused('name', _nameController.text);
-      validateFieldIfFocused('nickname', _nickNameController.text);
+      // validateFieldIfFocused('nickname', _nickNameController.text);
       validateFieldIfFocused('email', _emailController.text);
       validateFieldIfFocused('phone', _phoneController.text);
       validateFieldIfFocused('date', addDate);
@@ -529,7 +529,7 @@ class ProfileProvider with ChangeNotifier {
 
       var formData = FormData.fromMap({
         "userId": NetworkHelper.loggedInUserId,
-        "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
+        // "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
         "firstName": _nameController.text.trim(),
         "lastName": _nickNameController.text.trim(),
         "dateOfBirth": _formatDateForAPI(),
@@ -579,6 +579,25 @@ class ProfileProvider with ChangeNotifier {
                 context,
                 listen: false).updateSelectedIndex(0);
           });
+
+          String name = [
+            _nameController.text.trim(),
+            _nickNameController.text.trim()
+          ].where((part) => part.isNotEmpty).join(' ');
+          String profilePhotoPath='';
+
+          print('username :${name}:');
+          NetworkHelper.loggedInUserProfilePicURL = profilePhotoPath;
+          NetworkHelper.loggedInUserFullName = name;
+          var prefs = await SharedPreferences.getInstance();
+          if (profilePhotoPath != '') {
+            await prefs.setString('profilePicURL', profilePhotoPath);
+          }
+          if (name != '') {
+            await prefs.setString('fullName', name);
+          }
+
+
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
         }

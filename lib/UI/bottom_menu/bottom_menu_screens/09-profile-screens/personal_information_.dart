@@ -291,7 +291,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           });
                         },
                         isExpanded: true,
-                        underline: SizedBox(),
+                        onClear: () {
+                          provider.countryOfBirthController.clear();
+                        },
+                          underline: SizedBox(),
                         displayItem: (item, selected) {
                           return Container(
                             decoration: BoxDecoration(
@@ -337,6 +340,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }).toList(),
                         value: provider.religionController.text.isEmpty ? null : provider.religionController.text,
                         hint: "Select Religion",
+                        onClear: (){
+                          provider.religionController.clear();
+                        },
                         searchHint: "Search for a religion",
                         onChanged: (value) {
                           provider.religionController.text = value as String;
@@ -447,6 +453,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             ? null
                             : provider.nationalityController.text,
                         hint: "Select Nationality",
+                        onClear: (){
+                          provider.nationalityController.clear();
+
+                        },
                         searchHint: "Search for a nationality",
                         validator: (value) {
                           if ((value == null || value.isEmpty) && autovalidateMode == AutovalidateMode.always) {
@@ -553,12 +563,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
                     customTextField(
                       context: context,
+                      maxLength: 15,
                       controller: provider.phoneController,
                       hintText: 'Phone Number',
                       textInputType: TextInputType.phone,
                       obscureText: false,
                       voidCallback: (value) {
-                        if ((value == null || value.isEmpty) && autovalidateMode == AutovalidateMode.always) {
+                        if ((value == null || value.isEmpty || (value.toString().trim().length<10)) && autovalidateMode == AutovalidateMode.always) {
                           return '      Please enter Phone Number';
                         }
                         return null;
@@ -579,7 +590,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       onFieldSubmitted: (value) {
                       },
                     ),
-                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty) && autovalidateMode == AutovalidateMode.always)
+                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty || (provider.phoneController.text.toString().trim().length<10)) && autovalidateMode == AutovalidateMode.always)
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, left: 12.0),
                         child: Text('Please enter Phone Number',
@@ -606,6 +617,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Direct LinePhone',
                       textInputType: TextInputType.phone,
                       obscureText: false,
+                      maxLength: 15,
                       voidCallback: (value){return;},
                       autovalidateMode: autovalidateMode,
                       fontSize: AppFontSize.fontSize16,
@@ -687,6 +699,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }).toList(),
                         value: provider.nearestAirport,
                         hint: "Select Nearest Airport",
+                        onClear: (){
+                          provider.nearestAirport='';
+                        },
                         searchHint: "Search for an airport",
                         onChanged: (value) {
                           setState(() {

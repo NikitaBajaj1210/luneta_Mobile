@@ -27,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
-            resizeToAvoidBottomInset: false,
+            // resizeToAvoidBottomInset: false,
             body: Container(
               width: 100.w,
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h).copyWith(top: 0),

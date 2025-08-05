@@ -201,7 +201,7 @@ class NetworkService {
           loading = 2;
           if (showLoading && context.mounted) stopLoading(context);
           if (context.mounted) {
-            ShowToast("Error", res['message'] ?? "An error occurred");
+            // ShowToast("Error", res['message'] ?? "An error occurred");
           }
           return res;
         } else if (res['statusCode'] != null && res['statusCode'] == 404) {
@@ -231,6 +231,10 @@ class NetworkService {
                 (route) => false, // Remove all previous routes
           );
           return res;
+        }else{
+          if (context.mounted) {
+            ShowToast("Error", res['message'] ?? "An error occurred");
+          }
         }
         // Success case
         loading = 2;
@@ -268,7 +272,7 @@ class NetworkService {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
         if (context.mounted) {
-          ShowToast("Error", "Something went wrong (Status: ${response.statusCode})");
+          ShowToast("Error", "Something went wrong");
         }
         notify();
         return {};

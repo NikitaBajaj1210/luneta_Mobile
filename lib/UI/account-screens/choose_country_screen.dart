@@ -154,6 +154,7 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                           print("Global country set: ${selectedCountry.name}, ${selectedCountry.code}");
 
                           // Navigate to next screen (no need to pass arguments)
+                          countryProvider.searchController.clear();
                           Navigator.of(context).pushNamed(chooseRole);
                         }
                       } else {
@@ -218,7 +219,7 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                           // Handle prefix icon press if needed
                         },
                         onChange: (value) {
-                          countryProvider.updateSearchQuery(value);
+                          countryProvider.updateSearchQuery(value.toString().trim());
                           setState(() {}); // Update the UI on input change
                           // Remove focus if input exceeds 3 words
                           if (value.split(' ').length > 3) {
