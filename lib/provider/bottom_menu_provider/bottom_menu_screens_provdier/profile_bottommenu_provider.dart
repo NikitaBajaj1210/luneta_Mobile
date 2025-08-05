@@ -37,11 +37,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
         '$getSeafarerCompleteProfile${NetworkHelper.loggedInUserId}',
         true,
         context,
-        () {
-          notifyListeners();
-        },
+        notifyListeners,
       );
 
+      print("PROFILE API URL $getSeafarerCompleteProfile${NetworkHelper.loggedInUserId}");
       if (response != null && response['statusCode'] == 200) {
         final data = response['data'];
         if (data != null) {
@@ -351,15 +350,23 @@ class ProfileBottommenuProvider with ChangeNotifier {
             );
           }
         }
+        // if(context.mounted)stopLoading(context);
       } else {
         ShowToast("Error", response['message'] ?? "Failed to fetch profile data");
+        if(context.mounted)stopLoading(context);
       }
     } catch (e) {
       print("Error in getProfileData: $e");
       ShowToast("Error", "An error occurred while fetching profile data.");
+      if(context.mounted)stopLoading(context);
     } finally {
+      if(context.mounted)stopLoading(context);
       notifyListeners();
+
     }
+     if(context.mounted)stopLoading(context);
+
+    notifyListeners();
   }
 
   Future<void> SecurityCompliancePostApi(BuildContext context) async {

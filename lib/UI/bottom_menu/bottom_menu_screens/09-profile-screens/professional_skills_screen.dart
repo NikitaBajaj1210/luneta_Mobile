@@ -9,6 +9,8 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../network/network_services.dart';
+import '../../../../Utils/helper.dart';
 
 class ProfessionalSkillsScreen extends StatefulWidget {
   const ProfessionalSkillsScreen({super.key});
@@ -20,11 +22,60 @@ class ProfessionalSkillsScreen extends StatefulWidget {
 
 class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var provider = Provider.of<ProfessionalSkillsProvider>(context, listen: false);
+      provider.resetForm();
+      provider.fetchProfessionalSkillsData(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<ProfessionalSkillsProvider>(
       builder: (context, provider, child) {
         return SafeArea(
-          child: Scaffold(
+          child: Container(
+            height: 100.h,
+            width: 100.w,
+            color: AppColors.Color_FFFFFF,
+            child: NetworkService.loading == 0 ? Center(
+              child: CircularProgressIndicator(color: AppColors.Color_607D8B),
+            ) :
+            NetworkService.loading == 1 ? Padding(
+              padding: EdgeInsets.only(top: 2.h),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    provider.fetchProfessionalSkillsData(context);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                          'assets/images/refresh.png',
+                          width: 4.5.h,
+                          height: 4.5.h,
+                          color: AppColors.Color_607D8B
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        "Tap to Try Again",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontFamily: AppColors.fontFamilyBold,
+                            fontSize: AppFontSize.fontSize15,
+                            color: AppColors.Color_607D8B,
+                            decoration: TextDecoration.none
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ) :
+            Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
             bottomNavigationBar: Container(
               height: 11.h,
@@ -35,9 +86,15 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     width: 1, color: AppColors.bottomNavBorderColor),
               ),
               child: customButton(
-                voidCallback: () {
-                  // Save the data in provider or update the profile here
-                  Navigator.pop(context);
+                voidCallback: () async {
+                  NetworkService.loading = 0;
+                  bool success = await provider.createOrUpdateProfessionalSkillsAPI(context);
+                  if (success) {
+                    showToast("Professional skills saved successfully");
+                    Navigator.pop(context);
+                  } else {
+                    showToast( "Failed to save professional skills");
+                  }
                 },
                 buttonText: "Save",
                 width: 90.w,
@@ -96,7 +153,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               ),
             ),
           ),
-        );
+        ));
       },
     );
   }
@@ -424,6 +481,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   title: Text("Bulk Cargo"),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
+                  initialValue: provider.bulkCargo,
                   decoration: BoxDecoration(
                     color: AppColors.Color_FAFAFA,
                     borderRadius: BorderRadius.circular(10),
@@ -431,7 +489,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text("Select Bulk Cargo"),
+                  buttonText: Text(provider.bulkCargo.isEmpty 
+                    ? "Select Bulk Cargo" 
+                    : "Selected: ${provider.bulkCargo.join(', ')}"),
                   onConfirm: (values) {
                     provider.bulkCargo = values.cast<String>();
                   },
@@ -461,6 +521,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   title: Text("Tanker Cargo"),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
+                  initialValue: provider.tankerCargo,
                   decoration: BoxDecoration(
                     color: AppColors.Color_FAFAFA,
                     borderRadius: BorderRadius.circular(10),
@@ -468,7 +529,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text("Select Tanker Cargo"),
+                  buttonText: Text(provider.tankerCargo.isEmpty 
+                    ? "Select Tanker Cargo" 
+                    : "Selected: ${provider.tankerCargo.join(', ')}"),
                   onConfirm: (values) {
                     provider.tankerCargo = values.cast<String>();
                   },
@@ -498,6 +561,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   title: Text("General Cargo"),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
+                  initialValue: provider.generalCargo,
                   decoration: BoxDecoration(
                     color: AppColors.Color_FAFAFA,
                     borderRadius: BorderRadius.circular(10),
@@ -505,7 +569,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text("Select General Cargo"),
+                  buttonText: Text(provider.generalCargo.isEmpty 
+                    ? "Select General Cargo" 
+                    : "Selected: ${provider.generalCargo.join(', ')}"),
                   onConfirm: (values) {
                     provider.generalCargo = values.cast<String>();
                   },
@@ -535,6 +601,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   title: Text("Wood Products"),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
+                  initialValue: provider.woodProducts,
                   decoration: BoxDecoration(
                     color: AppColors.Color_FAFAFA,
                     borderRadius: BorderRadius.circular(10),
@@ -542,7 +609,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text("Select Wood Products"),
+                  buttonText: Text(provider.woodProducts.isEmpty 
+                    ? "Select Wood Products" 
+                    : "Selected: ${provider.woodProducts.join(', ')}"),
                   onConfirm: (values) {
                     provider.woodProducts = values.cast<String>();
                   },
@@ -572,6 +641,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   title: Expanded(child: Text("Stowage and Lashing Experience",overflow: TextOverflow.ellipsis,)),
                   selectedColor: AppColors.buttonColor,
                   searchable: true,
+                  initialValue: provider.stowageAndLashingExperience,
                   decoration: BoxDecoration(
                     color: AppColors.Color_FAFAFA,
                     borderRadius: BorderRadius.circular(10),
@@ -579,7 +649,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text("Select Stowage and Lashing Experience"),
+                  buttonText: Text(provider.stowageAndLashingExperience.isEmpty 
+                    ? "Select Stowage and Lashing Experience" 
+                    : "Selected: ${provider.stowageAndLashingExperience.join(', ')}"),
                   onConfirm: (values) {
                     provider.stowageAndLashingExperience =
                         values.cast<String>();
@@ -1656,6 +1728,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               title: Text("Trading Area"),
               selectedColor: AppColors.buttonColor,
               searchable: true,
+              initialValue: provider.tradingAreaExperience,
               decoration: BoxDecoration(
                 color: AppColors.Color_FAFAFA,
                 borderRadius: BorderRadius.circular(10),
@@ -1663,7 +1736,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               ),
               buttonIcon:
                   Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-              buttonText: Text("Select Trading Area"),
+              buttonText: Text(provider.tradingAreaExperience.isEmpty 
+                ? "Select Trading Area" 
+                : "Selected: ${provider.tradingAreaExperience.join(', ')}"),
               onConfirm: (values) {
                 provider.tradingAreaExperience = values.cast<String>();
               },
