@@ -26,9 +26,7 @@ class _ProfileScreenBottomMenuState extends State<ProfileScreenBottomMenu> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProfileBottommenuProvider>(
-          context,
-          listen: false).getProfileInfo(context);
+      Provider.of<ProfileBottommenuProvider>(context,listen: false).getProfileInfo(context);
     });
   }
 

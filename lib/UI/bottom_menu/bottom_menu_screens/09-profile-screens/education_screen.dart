@@ -56,9 +56,8 @@ class _EducationScreenState extends State<EducationScreen> {
                 child: GestureDetector(
                   onTap: () {
                     NetworkService.loading = 0;
-
+                    setState(() {}); // Show loader immediately
                     provider.fetchEducationData(context);
-                    setState(() {});
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -100,15 +99,23 @@ class _EducationScreenState extends State<EducationScreen> {
                   voidCallback: () async {
                   if (provider.languagesSpokenFormKey.currentState!.validate()) {
                       NetworkService.loading = 0;
+                      setState(() {}); // Trigger UI update to show loader
+                      
                       // Call the API to save education data
                       bool success = await provider.createOrUpdateEducationAPI(context);
+                      
                       if (success) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Reset loading state before calling getProfileInfo
+                        // NetworkService.loading = 2;
+                        
                           Provider.of<ProfileBottommenuProvider>(
                               context,
                               listen: false).getProfileInfo(context);
-                        });
-                    Navigator.pop(context);
+                        Navigator.pop(context);
+                      } else {
+                        // Reset loading state on failure
+                        NetworkService.loading = 2;
+                        setState(() {}); // Trigger UI update
                       }
                   } else {
                     setState(() {

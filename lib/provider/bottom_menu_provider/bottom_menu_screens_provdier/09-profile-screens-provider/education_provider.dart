@@ -254,6 +254,7 @@ class EducationProvider with ChangeNotifier {
         hasError = true;
         errorMessage = 'User ID not found';
         isLoading = false;
+        NetworkService.loading = 1; // Set error state
         notifyListeners();
         return;
       }
@@ -277,14 +278,17 @@ class EducationProvider with ChangeNotifier {
         } else {
           print("No education data found");
         }
+        NetworkService.loading = 2; // Set success state
       } else {
         hasError = true;
         errorMessage = response['message'] ?? 'Failed to fetch education data';
+        NetworkService.loading = 1; // Set error state
         print("Education API Error: $errorMessage");
       }
     } catch (e) {
       hasError = true;
       errorMessage = 'Network error: ${e.toString()}';
+      NetworkService.loading = 1; // Set error state
       print("Education API Exception: $e");
     } finally {
       isLoading = false;
