@@ -11,14 +11,11 @@ import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../network/network_services.dart';
 import '../../../../Utils/helper.dart';
-
 class JobConditionsAndPreferencesScreen extends StatefulWidget {
   const JobConditionsAndPreferencesScreen({super.key});
-
   @override
   State<JobConditionsAndPreferencesScreen> createState() => _JobConditionsAndPreferencesScreenState();
 }
-
 class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPreferencesScreen> {
   @override
   void initState() {
@@ -27,7 +24,6 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
       Provider.of<JobConditionsAndPreferencesProvider>(context, listen: false).fetchJobConditionsData(context);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<JobConditionsAndPreferencesProvider>(
@@ -245,7 +241,10 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                               ? "Select Preferred Vessel Types"
                               : "Selected: ${provider.preferredVesselTypes.join(', ')}"), // Join strings directly
                           onConfirm: (values) {
-                            provider.setPreferredVesselTypes(values.cast<String>()); // Cast to List<String>
+                            final selectedAreas = values.map((value) {
+                              return PreferredVesselType.values.firstWhere((e) => e.value == value.toString());
+                            }).toList();
+                            provider.setPreferredVesselTypes(selectedAreas.cast<String>()); // Cast to List<String>
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
