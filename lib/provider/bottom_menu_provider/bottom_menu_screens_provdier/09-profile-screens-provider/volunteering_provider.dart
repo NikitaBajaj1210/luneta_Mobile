@@ -34,7 +34,7 @@ class VolunteeringProvider extends ChangeNotifier {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: isFromDate ? fromDate ?? DateTime.now() : toDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
       lastDate: DateTime.now(),
     );
     if (picked != null) {

@@ -184,6 +184,7 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                         onBackPressed: () {
                           // Navigator.pop(context);
                         },
+                        isNotAllowBack: false
                       ),
                       SizedBox(height: 2.h),
                       customTextField(

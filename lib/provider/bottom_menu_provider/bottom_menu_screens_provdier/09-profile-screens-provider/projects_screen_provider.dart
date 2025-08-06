@@ -38,7 +38,7 @@ class ProjectsProfileScreenProvider with ChangeNotifier {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
       lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(

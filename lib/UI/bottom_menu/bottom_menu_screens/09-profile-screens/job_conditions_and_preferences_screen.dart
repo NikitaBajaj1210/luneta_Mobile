@@ -463,7 +463,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime(2101),
                           );
                           if (picked != null) {
@@ -843,7 +843,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime.now(),
                           );
                           if (picked != null) {

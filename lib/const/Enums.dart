@@ -58,6 +58,15 @@ final List<Map<String, String>> predefinedPositionList = [
   {'key': 'OTHER', 'value': 'Other'},
 ];
 
+final List<String> issuedByList = [
+  'Company',
+  'Agency',
+  'Captain',
+  'Chief Engineer',
+  'Training Center',
+  'Other',
+];
+
 final List<Map<String, String>> vesselTypeList = [
   {'key': 'BULK_CARRIER', 'value': 'Bulk Carrier'},
   {'key': 'CONTAINER_SHIP', 'value': 'Container Ship'},

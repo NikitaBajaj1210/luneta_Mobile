@@ -57,9 +57,9 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   List<String> get positionsHeld => _positionsHeld;
 
-  List<String> _empHis_positionsHeld = [];
+  String? _empHis_positionsHeld;
 
-  List<String> get empHisPositionsHeld => _empHis_positionsHeld;
+  String? get empHisPositionsHeld => _empHis_positionsHeld;
 
   // Vessel Type Experience (Multiselect)
   List<String> _vesselTypeExperience = [];
@@ -85,7 +85,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setEmpHisPositionsHeld(List<String> positions) {
+  void setEmpHisPositionsHeld(String? positions) {
     _empHis_positionsHeld = positions;
     print("_empHis_positionsHeld => ${_empHis_positionsHeld}");
     notifyListeners();
@@ -161,7 +161,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     _employmentHistory.clear();
     _references.clear();
     _positionsHeld.clear();
-    _empHis_positionsHeld.clear();
+    setEmpHisPositionsHeld(null);
     _vesselTypeExperience.clear();
     
     // Reset visibility states

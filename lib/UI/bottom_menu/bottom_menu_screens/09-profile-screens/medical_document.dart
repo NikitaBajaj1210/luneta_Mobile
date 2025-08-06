@@ -707,7 +707,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                                     lastDate: DateTime(2101),
                                   );
                                   if (picked != null) {
@@ -758,7 +758,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                                     lastDate: DateTime(2101),
                                   );
                                   if (picked != null) {
@@ -1301,7 +1301,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime(2101),
                           );
                           if (picked != null) {
@@ -1353,7 +1353,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime(2101),
                           );
                           if (picked != null) {
@@ -1837,7 +1837,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime(2101),
                           );
                           if (picked != null) {
@@ -1889,7 +1889,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime(2101),
                           );
                           if (picked != null) {

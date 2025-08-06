@@ -36,18 +36,18 @@ class _LandingScreenState extends State<LandingScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Back arrow button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context); // Pop to the previous screen
-                    },
-                    child: const Icon(Icons.arrow_back),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () {
+              //         Navigator.pop(context); // Pop to the previous screen
+              //       },
+              //       child: const Icon(Icons.arrow_back),
+              //     ),
+              //   ],
+              // ),
               // Logo
               SizedBox(height: 5.h),
               Image.asset(

@@ -208,6 +208,7 @@ class PersonalInformationProvider extends ChangeNotifier {
     directPhoneController.clear();
     _profileImage = null;
     _communicationList.clear();
+    setcommunicationVisibility(false);
     notifyListeners();
   }
 

@@ -31,11 +31,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
       
       // Reset form before fetching data
       provider.resetForm();
-      
-      String userId = NetworkHelper.loggedInUserId.isNotEmpty 
-          ? NetworkHelper.loggedInUserId 
-          : '510aa1e9-32e9-44ab-8b94-7d942c89d3e6';
-      provider.fetchProfessionalExperience(userId, context);
+      provider.fetchProfessionalExperience(NetworkHelper.loggedInUserId, context);
     });
   }
 
@@ -118,11 +114,11 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                       bool success = await provider.createOrUpdateProfessionalExperienceAPI(context);
                       Navigator.of(context).pop();
                       if(success) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // WidgetsBinding.instance.addPostFrameCallback((_) {
                           Provider.of<ProfileBottommenuProvider>(
                               context,
                               listen: false).getProfileInfo(context);
-                        });
+                        // });
                         // Hide loading indicator
                         Navigator.of(context).pop();
                       }
@@ -416,7 +412,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.startDate.clear();
                                   provider.endDate.clear();
                                   provider.responsibilitiesController.clear();
-                                  provider.empHisPositionsHeld.clear();
+                                  provider.setEmpHisPositionsHeld(null);
 
                                   provider.setEmploymentHistoryVisibility(true);
                                   provider.employment_Edit_Index=null;
@@ -510,7 +506,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                     GestureDetector(
                                                       onTap:(){
                                                        provider.companyController.text = empDetail.companyName ?? '';
-                                                       provider.setEmpHisPositionsHeld([empDetail.position ?? '']);
+                                                       provider.setEmpHisPositionsHeld(empDetail.position);
                                                        provider.startDate.text = empDetail.startDate ?? '';
                                                        provider.endDate.text = empDetail.endDate ?? '';
                                                        provider.responsibilitiesController.text = empDetail.responsibilities ?? '';
@@ -685,41 +681,35 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
 
 
-
                             Container(
-                                width: 90.w,
-                                padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                  border: Border.all(
-                                    color: AppColors.transparent,
-                                    width: 1,
-                                  ),
+                              width: 90.w,
+                              padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent,
+                                  width: 1,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                  child: MultiSelectDialogField(
-                                    searchable: true,
-                                    dialogHeight: 30.h,
-                                    searchHint: 'Search Position',
-                                    initialValue: provider.empHisPositionsHeld,
-                                    items: predefinedPositionList.map((e) => MultiSelectItem(e["value"], e["key"]!)).toList(),
-                                    title: Text('Position'),
-                                    selectedColor: AppColors.buttonColor,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.Color_FAFAFA,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: AppColors.buttonColor, width: 1),
-                                    ),
-                                    buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor,),
-                                    buttonText: Text('Select Position'),
-                                    onConfirm: (values) {
-                                        print("values ${values}");
-                                        provider.setEmpHisPositionsHeld(values.cast<String>());
-                                    },
-                                  ),
-                                )
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: DropdownButton<dynamic>(
+                                  value: provider.empHisPositionsHeld,
+                                  isExpanded: true,
+                                  hint: Text("Search Position"),
+                                  onChanged: (newValue) {
+                                    provider.setEmpHisPositionsHeld(newValue!);
+                                  },
+                                  items: predefinedPositionList.map((value) {
+                                    return DropdownMenuItem<dynamic>(
+                                      value: value['value'],
+                                      child: Text(value['value']!),
+                                    );
+                                  }).toList(),
+                                  underline: SizedBox(),
+                                ),
+                              ),
                             ),
 
                             Padding(
@@ -736,11 +726,15 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
+
+                                final String endDateString = provider.endDate.text;
+
+
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
+                                  firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                  lastDate: DateTime.now(),
                                 );
                                 if (picked != null) {
                                   // Check if this start date would be valid with existing end date
@@ -796,26 +790,45 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
+                                if(provider.startDate.text.isNotEmpty)
+                                  {
+                                final String startDateString = provider.startDate.text;
+                                DateTime firstDate = DateTime(DateTime.now().year-100); // default fallback
+
+                                if (startDateString.isNotEmpty) {
+                                  try {
+                                    firstDate = DateTime.parse(startDateString);
+                                  } catch (e) {
+                                    // handle invalid date format if necessary
+                                    print('Invalid date format: $e');
+                                  }
+                                }
+
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
+                                  firstDate: firstDate,
+                                  lastDate: DateTime(DateTime.now().year + 100),
                                 );
-                                if (picked != null) {
-                                  // Check if this end date would be valid with existing start date
-                                  String tempEndDate = "${picked.toLocal()}".split(' ')[0];
-                                  String? dateError = provider.validateDateRange(
-                                    provider.startDate.text,
-                                    tempEndDate
-                                  );
+                                  if (picked != null) {
+                                    // Check if this end date would be valid with existing start date
+                                    String tempEndDate = "${picked.toLocal()}"
+                                        .split(' ')[0];
+                                    String? dateError = provider
+                                        .validateDateRange(
+                                        provider.startDate.text,
+                                        tempEndDate
+                                    );
 
-                                  if (dateError != null) {
-                                    ShowToast("Error", dateError);
-                                    // Don't set the invalid date
-                                  } else {
-                                    provider.setEndDate(picked);
+                                    if (dateError != null) {
+                                      ShowToast("Error", dateError);
+                                      // Don't set the invalid date
+                                    } else {
+                                      provider.setEndDate(picked);
+                                    }
                                   }
+                                }else{
+                                  ShowToast("Error", "Please select Start Date First");
                                 }
                               },
                               child: AbsorbPointer(
@@ -898,7 +911,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       if (!provider.employment_IsEdit) {
                                         await provider.addEmploymentHistory(ProfessionalEmploymentHistory(
                                           companyName: provider.companyController.text,
-                                          position: provider.empHisPositionsHeld.isNotEmpty ? provider.empHisPositionsHeld.first : 'Other',
+                                          position: provider.empHisPositionsHeld,
                                           startDate: provider.startDate.text,
                                           endDate: provider.endDate.text,
                                           responsibilities: provider.responsibilitiesController.text,
@@ -906,7 +919,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                       } else {
                                         await provider.updateEmploymentHistory(provider.employment_Edit_Index!, ProfessionalEmploymentHistory(
                                           companyName: provider.companyController.text,
-                                          position: provider.empHisPositionsHeld.isNotEmpty ? provider.empHisPositionsHeld.first : 'Other',
+                                          position: provider.empHisPositionsHeld,
                                           startDate: provider.startDate.text,
                                           endDate: provider.endDate.text,
                                           responsibilities: provider.responsibilitiesController.text,
@@ -1337,7 +1350,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   onChanged: (newValue) {
                                     provider.setReferenceIssuedBy(newValue!);
                                   },
-                                  items: ['Company', 'Vessel'].map((value) {
+                                  items: issuedByList.map((value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(value),
@@ -1365,8 +1378,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
+                                  firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                  lastDate: DateTime.now(),
                                 );
                                 if (picked != null) {
                                   provider.setReferenceIssuingDate(picked);
@@ -1563,62 +1576,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
     );
   }
 }
-
-
-
-
-class EmploymentHistoryField extends StatelessWidget {
-  final ProfessionalEmploymentHistory history;
-  final Function(ProfessionalEmploymentHistory) onEdit;
-  final VoidCallback onDelete;
-
-  const EmploymentHistoryField({
-    Key? key,
-    required this.history,
-    required this.onEdit,
-    required this.onDelete,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 1.h),
-      child: Padding(
-        padding: EdgeInsets.all(2.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Company: ${history.companyName}"),
-                Text("Position: ${history.position}"),
-                Text("Start Date: ${history.startDate}"),
-                Text("End Date: ${history.endDate}"),
-                SizedBox(height: 1.h),
-                Text("Responsibilities: ${history.responsibilities}"),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => onEdit(history),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
 
 
 class backButtonWithTitle extends StatelessWidget {

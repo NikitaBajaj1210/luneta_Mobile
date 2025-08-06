@@ -126,7 +126,7 @@ class ProfessionalExamScreen extends StatelessWidget {
                       final DateTime? picked = await showDatePicker(
                         context: context,
                         initialDate: provider.dateTaken ?? DateTime.now(),
-                        firstDate: DateTime(2000),
+                        firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                         lastDate: DateTime.now(),
                       );
                       if (picked != null && picked != provider.dateTaken) {

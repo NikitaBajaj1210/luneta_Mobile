@@ -59,7 +59,7 @@ class SeminarsTrainingsProvider extends ChangeNotifier {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: isFromDate ? _fromDate ?? DateTime.now() : _toDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
       lastDate: DateTime.now(),
     );
     if (picked != null) {

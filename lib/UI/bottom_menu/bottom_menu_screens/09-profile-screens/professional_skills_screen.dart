@@ -1513,7 +1513,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                             lastDate: DateTime.now(),
                           );
                           if (picked != null) {
@@ -1654,7 +1654,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               final DateTime? picked = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
+                firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                 lastDate: DateTime.now(),
               );
               if (picked != null) {

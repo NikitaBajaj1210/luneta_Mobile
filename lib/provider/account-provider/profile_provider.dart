@@ -571,6 +571,7 @@ class ProfileProvider with ChangeNotifier {
       if (context.mounted) stopLoading(context);
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
+          print('Response of Profile Post ==> ${response.data}');
           ShowToast("Success", response.data['message'] ?? "Saved successfully");
           if (context.mounted) stopLoading(context);
           ChooseCountryProvider.clearGlobalSelectedCountry();
@@ -584,7 +585,7 @@ class ProfileProvider with ChangeNotifier {
             _nameController.text.trim(),
             _nickNameController.text.trim()
           ].where((part) => part.isNotEmpty).join(' ');
-          String profilePhotoPath='';
+          String profilePhotoPath=response.data['profileURl']??'';
 
           print('username :${name}:');
           NetworkHelper.loggedInUserProfilePicURL = profilePhotoPath;
@@ -618,6 +619,7 @@ class ProfileProvider with ChangeNotifier {
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
+          print(e.response?.data);
           ShowToast("Error", e.response?.data['message'] ?? "Something went wrong");
         } else {
           ShowToast("Error", "Something went wrong");

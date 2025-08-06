@@ -82,18 +82,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Back arrow button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.arrow_back),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         Navigator.pop(context);
+                      //       },
+                      //       child: const Icon(Icons.arrow_back),
+                      //     ),
+                      //   ],
+                      // ),
                       // Logo
                       SizedBox(height: 3.5.h),
                       Image.asset(

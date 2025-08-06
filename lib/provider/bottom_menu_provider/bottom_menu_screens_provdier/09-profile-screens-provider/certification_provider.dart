@@ -43,8 +43,8 @@ class CertificationProvider extends ChangeNotifier {
       initialDate: isIssueDate 
           ? (issueDate ?? DateTime.now())
           : (expirationDate ?? issueDate?.add(Duration(days: 1)) ?? DateTime.now().add(Duration(days: 1))),
-      firstDate: isIssueDate ? DateTime(1900) : (issueDate?.add(Duration(days: 1)) ?? DateTime(1900)),
-      lastDate: isIssueDate ? DateTime.now() : DateTime(2100),
+      firstDate: isIssueDate ? DateTime(DateTime.now().year-100) : (issueDate?.add(Duration(days: 1)) ?? DateTime(1900)),
+      lastDate: isIssueDate ? DateTime.now() : DateTime(DateTime.now().year+100),
     );
 
     if (picked != null) {

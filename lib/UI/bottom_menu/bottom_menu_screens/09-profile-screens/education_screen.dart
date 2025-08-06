@@ -525,7 +525,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
+                                    firstDate: DateTime(DateTime.now().year - 100),
                                     lastDate: DateTime.now(),
                                   );
                                   if (picked != null) {
@@ -976,7 +976,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
+                                    firstDate: DateTime(DateTime.now().year - 100),
                                     lastDate: DateTime.now(),
                                   );
                                   if (picked != null) {
@@ -1021,8 +1021,8 @@ class _EducationScreenState extends State<EducationScreen> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2101),
+                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                    lastDate: DateTime(DateTime.now().year+100),
                                   );
                                   if (picked != null) {
                                     provider.setExpiryDate(picked);

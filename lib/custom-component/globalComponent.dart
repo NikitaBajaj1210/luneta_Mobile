@@ -365,8 +365,8 @@ showPermissionDialog(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/Common/settings.png',height: 10.h,color: AppColors.Color_212121,),
-                    SizedBox(height: 2.h,),
+                    // Image.asset('assets/images/Common/settings.png',height: 10.h,color: AppColors.Color_212121,),
+                    // SizedBox(height: 2.h,),
                     Container(
                       width: 80.w,
                       child: Text(

@@ -6,11 +6,12 @@ import '../const/color.dart';
 Widget backButtonWithTitle({
   required String title,
   required VoidCallback onBackPressed,
+  bool? isNotAllowBack
 }) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      GestureDetector(
+      isNotAllowBack==false?Container():GestureDetector(
         onTap: onBackPressed,
         child: Image.asset(
           "assets/images/ArrowLeft.png",
