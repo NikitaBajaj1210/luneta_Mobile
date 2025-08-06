@@ -703,7 +703,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             GestureDetector(
                                               onTap: () {
                                                 // Open document URL
-                                                setState(() {});
+                                                setState(() {
+                                                  provider.travelDocumentData?.passportDocumentPath = '';
+                                                  provider.travelDocumentData?.passportDocumentOriginalName = '';
+                                                });
                                               },
                                               child: Icon(
                                                 Icons.close,
