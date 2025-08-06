@@ -8,6 +8,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
 import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
@@ -663,61 +664,57 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     ),
                                   SizedBox(height: 3.h),
                                   // Show existing passport document from API
-                                  // if (provider.travelDocumentData?.passportDocumentPath.isNotEmpty == true)
-                                  //   Container(
-                                  //     padding: EdgeInsets.symmetric(
-                                  //         horizontal: 4.w, vertical: 2.h),
-                                  //     decoration: BoxDecoration(
-                                  //       color: Colors.green.shade100,
-                                  //       borderRadius: BorderRadius.circular(1.h),
-                                  //     ),
-                                  //     child: Row(
-                                  //       children: [
-                                  //         Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                  //         SizedBox(width: 2.w),
-                                  //         Expanded(
-                                  //           child: Column(
-                                  //             crossAxisAlignment:
-                                  //             CrossAxisAlignment.start,
-                                  //             children: [
-                                  //               Text(
-                                  //                 provider.travelDocumentData!.passportDocumentOriginalName.isNotEmpty
-                                  //                     ? provider.travelDocumentData!.passportDocumentOriginalName
-                                  //                     : "Passport Document",
-                                  //                 style: TextStyle(
-                                  //                     fontSize: AppFontSize.fontSize16,
-                                  //                     fontWeight: FontWeight.w700,
-                                  //                     color: AppColors.Color_212121,
-                                  //                     fontFamily:
-                                  //                     AppColors.fontFamilyBold),
-                                  //                 overflow: TextOverflow.ellipsis,
-                                  //               ),
-                                  //               Text(
-                                  //                 "Existing document",
-                                  //                 style: TextStyle(
-                                  //                     fontSize: AppFontSize.fontSize12,
-                                  //                     color: Colors.green,
-                                  //                     fontWeight: FontWeight.w500,
-                                  //                     fontFamily:
-                                  //                     AppColors.fontFamilyMedium),
-                                  //               ),
-                                  //             ],
-                                  //           ),
-                                  //         ),
-                                  //         GestureDetector(
-                                  //           onTap: () {
-                                  //             // Open document URL
-                                  //             // You can implement document viewer here
-                                  //           },
-                                  //           child: Icon(
-                                  //             Icons.open_in_new,
-                                  //             color: Colors.green,
-                                  //             size: 24,
-                                  //           ),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ),
+                                  if (provider.travelDocumentData?.passportDocumentPath.isNotEmpty == true)
+                                    GestureDetector(
+                                      onTap: (){
+                                        OpenFile_View(provider.travelDocumentData?.passportDocumentPath,context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius: BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.travelDocumentData!.passportDocumentOriginalName.isNotEmpty
+                                                        ? provider.travelDocumentData!.passportDocumentOriginalName
+                                                        : "Passport Document",
+                                                    style: TextStyle(
+                                                        fontSize: AppFontSize.fontSize16,
+                                                        fontWeight: FontWeight.w700,
+                                                        color: AppColors.Color_212121,
+                                                        fontFamily:
+                                                        AppColors.fontFamilyBold),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // Open document URL
+                                                setState(() {});
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   if (provider.passportDocument != null)
                                     Container(
                                       padding: EdgeInsets.symmetric(

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -448,6 +450,34 @@ showPermissionDialog(
       );
     },
   );
+}
+
+
+OpenFile_View(url,context) async {
+  print("url------>>>${url}");
+  try {
+    startLoading(context);
+    var request = await HttpClient().getUrl(Uri.parse(url));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getApplicationCacheDirectory()).path;
+    // Find the last '/' in the URL
+    int lastIndex = url.lastIndexOf('/');
+
+    // Extract the substring after the last '/'
+    String fileNameWithExtension = url.substring(lastIndex + 1);
+    File file = new File('$dir/$fileNameWithExtension');
+
+    await file.writeAsBytes(bytes);
+
+    await OpenFile.open(file.path);
+
+    stopLoading(context);
+  }catch(ex){
+    stopLoading(context);
+    print("ex------->>>${ex}");
+    showToast('Unable to open the file, Try Again!');
+  }
 }
 
 /// Dio-based multipart function for travel documents

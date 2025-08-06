@@ -48,8 +48,8 @@ class TravelDocument {
   final String passportCountry;
   final String passportIssueDate;
   final String passportExpDate;
-  final String passportDocumentPath;
-  final String passportDocumentOriginalName;
+   String passportDocumentPath;
+   String passportDocumentOriginalName;
   final String seamansBookNo;
   final String seamansBookIssuingCountry;
   final String seamansBookIssuingAuthority;
