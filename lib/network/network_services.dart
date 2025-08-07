@@ -197,7 +197,14 @@ class NetworkService {
       // Check HTTP status code first
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Check the responseCode in the body for errors
-        if (res['statusCode'] != null && res['statusCode'] == 400) {
+        if (res['statusCode'] != null && res['statusCode'] == 200) {
+          loading = 2;
+          if (showLoading && context.mounted) stopLoading(context);
+          // if (context.mounted) {
+            // ShowToast("Error", res['message'] ?? "An error occurred");
+          // }
+          return res;
+        }else if (res['statusCode'] != null && res['statusCode'] == 400) {
           loading = 2;
           if (showLoading && context.mounted) stopLoading(context);
           if (context.mounted) {

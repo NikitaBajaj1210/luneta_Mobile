@@ -9,6 +9,7 @@ import '../../const/color.dart';
 import '../../custom-component/custom-button.dart';
 import '../../custom-component/back_button_with_title.dart';
 import '../../custom-component/customTextField.dart';
+import '../../network/network_helper.dart';
 import '../../provider/account-provider/choose_country_provider.dart';
 
 class ChooseCountryScreen extends StatefulWidget {
@@ -152,13 +153,13 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                             selectedCountry.code,
                           );
                           print("Global country set: ${selectedCountry.name}, ${selectedCountry.code}");
-
                           // Navigate to next screen (no need to pass arguments)
                           countryProvider.searchController.clear();
                           Navigator.of(context).pushNamed(chooseRole);
                         }
                       } else {
                         print("please select");
+                        ShowToast("Error", "Please select a country first");
                       }
                     },
                     buttonText: "Continue",

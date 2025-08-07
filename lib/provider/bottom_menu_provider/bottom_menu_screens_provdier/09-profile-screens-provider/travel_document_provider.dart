@@ -50,7 +50,7 @@ class TravelDocumentProvider extends ChangeNotifier {
     hasExistingSeafarerVisaDocument = false;
     hasExistingVisaDocument = false;
     hasExistingResidencePermitDocument = false;
-    
+    passportDocument=null;
     // Clear data
     travelDocumentData = null;
     
@@ -584,6 +584,9 @@ class TravelDocumentProvider extends ChangeNotifier {
         case 'passport':
           passportDocument = file;
           hasExistingPassportDocument = true;
+          travelDocumentData?.passportDocumentPath = '';
+          travelDocumentData?.passportDocumentOriginalName = '';
+          hasExistingPassportDocument=false;
           break;
         case 'seaman':
           seamanDocument = file;
@@ -628,6 +631,9 @@ if(file!=null) {
     case 'passport':
       passportDocument = file;
       hasExistingPassportDocument = true;
+      travelDocumentData?.passportDocumentPath = '';
+      travelDocumentData?.passportDocumentOriginalName = '';
+      hasExistingPassportDocument=false;
       break;
     case 'seaman':
       seamanDocument = file;
