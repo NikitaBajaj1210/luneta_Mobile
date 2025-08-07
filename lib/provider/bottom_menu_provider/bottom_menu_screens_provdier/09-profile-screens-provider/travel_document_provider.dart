@@ -50,7 +50,11 @@ class TravelDocumentProvider extends ChangeNotifier {
     hasExistingSeafarerVisaDocument = false;
     hasExistingVisaDocument = false;
     hasExistingResidencePermitDocument = false;
-    passportDocument=null;
+    passportDocument = null;
+    seamanDocument = null;
+    seafarerVisaDocument = null;
+    visaDocument = null;
+    residencePermitDocument = null;
     // Clear data
     travelDocumentData = null;
     
