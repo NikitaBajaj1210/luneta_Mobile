@@ -586,7 +586,6 @@ class TravelDocumentProvider extends ChangeNotifier {
           hasExistingPassportDocument = true;
           travelDocumentData?.passportDocumentPath = '';
           travelDocumentData?.passportDocumentOriginalName = '';
-          hasExistingPassportDocument=false;
           break;
         case 'seaman':
           seamanDocument = file;
@@ -633,7 +632,6 @@ if(file!=null) {
       hasExistingPassportDocument = true;
       travelDocumentData?.passportDocumentPath = '';
       travelDocumentData?.passportDocumentOriginalName = '';
-      hasExistingPassportDocument=false;
       break;
     case 'seaman':
       seamanDocument = file;
