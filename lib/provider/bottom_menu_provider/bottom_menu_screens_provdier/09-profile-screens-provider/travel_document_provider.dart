@@ -590,18 +590,26 @@ class TravelDocumentProvider extends ChangeNotifier {
         case 'seaman':
           seamanDocument = file;
           hasExistingSeamanDocument = true;
+          travelDocumentData?.seamansBookDocumentPath = '';
+          travelDocumentData?.seamansBookDocumentOriginalName = '';
           break;
         case 'seafarer_visa':
           seafarerVisaDocument = file;
           hasExistingSeafarerVisaDocument = true;
+          travelDocumentData?.seafarerVisaDocumentPath = '';
+          travelDocumentData?.seafarerVisaDocumentOriginalName = '';
           break;
         case 'visa':
           visaDocument = file;
           hasExistingVisaDocument = true;
+          travelDocumentData?.visaDocumentPath = '';
+          travelDocumentData?.visaDocumentOriginalName = '';
           break;
         case 'residence_permit':
           residencePermitDocument = file;
           hasExistingResidencePermitDocument = true;
+          travelDocumentData?.residencePermitDocumentPath = '';
+          travelDocumentData?.residencePermitDocumentOriginalName = '';
           break;
       }
       notifyListeners();
@@ -636,18 +644,26 @@ if(file!=null) {
     case 'seaman':
       seamanDocument = file;
       hasExistingSeamanDocument = true;
+      travelDocumentData?.seamansBookDocumentPath = '';
+      travelDocumentData?.seamansBookDocumentOriginalName = '';
       break;
     case 'seafarer_visa':
       seafarerVisaDocument = file;
       hasExistingSeafarerVisaDocument = true;
+      travelDocumentData?.seafarerVisaDocumentPath = '';
+      travelDocumentData?.seafarerVisaDocumentOriginalName = '';
       break;
     case 'visa':
       visaDocument = file;
       hasExistingVisaDocument = true;
+      travelDocumentData?.visaDocumentPath = '';
+      travelDocumentData?.visaDocumentOriginalName = '';
       break;
     case 'residence_permit':
       residencePermitDocument = file;
       hasExistingResidencePermitDocument = true;
+      travelDocumentData?.residencePermitDocumentPath = '';
+      travelDocumentData?.residencePermitDocumentOriginalName = '';
       break;
   }
 }
