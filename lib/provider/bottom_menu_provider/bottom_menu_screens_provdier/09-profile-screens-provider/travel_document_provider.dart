@@ -156,8 +156,8 @@ class TravelDocumentProvider extends ChangeNotifier {
 
       // If no new files are uploaded but we have existing documents, 
       // we need to include the existing document paths in the data
-      if (passportDocument == null && travelDocumentData?.passportDocumentPath.isNotEmpty == true) {
-        data['passportDocumentPath'] = travelDocumentData!.passportDocumentPath;
+      if (passportDocument == null) {
+        data['passportDocumentPath'] = travelDocumentData?.passportDocumentPath ?? '';
       }
       if (seamanDocument == null && travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true) {
         data['seamansBookDocumentPath'] = travelDocumentData!.seamansBookDocumentPath;
