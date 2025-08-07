@@ -56,9 +56,6 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
         },
       );
 
-      // Reset form before API call
-      provider.resetForm();
-
       // Call the create/update API
       bool success = await provider.createOrUpdateTravelDocumentsAPI(context);
       Navigator.of(context).pop();
@@ -69,6 +66,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
             .getProfileInfo(context);
         // });
         // Hide loading indicator
+        // Reset form before API call
+        provider.resetForm();
         Navigator.of(context).pop();
       }
       // if (success) {
