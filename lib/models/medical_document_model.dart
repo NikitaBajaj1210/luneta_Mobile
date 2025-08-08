@@ -74,16 +74,16 @@ class MedicalDocument {
 
 // MedicalFitness Model
 class MedicalFitness {
-  final String? documentType;
-  final String? certificateNo;
-  final String? issuingCountry;
-  final String? issuingAuthority;
-  final String? issuingDate;
-  final String? expDate;
-  final bool? neverExpire;
-  final String? documentOriginalName;
-  final String? documentPath;
-  final String? originalName;
+  String? documentType;
+  String? certificateNo;
+  String? issuingCountry;
+  String? issuingAuthority;
+  String? issuingDate;
+  String? expDate;
+  bool? neverExpire;
+  String? documentOriginalName;
+  String? documentPath;
+  String? originalName;
 
   MedicalFitness({
     this.documentType = '', // Default to empty string if null
@@ -131,16 +131,16 @@ class MedicalFitness {
 
 // DrugAlcoholTest Model
 class DrugAlcoholTest {
-  final String? documentType;
-  final String? certificateNo;
-  final String? issuingCountry;
-  final String? issuingAuthority;
-  final String? issuingDate;
-  final String? expDate; // Optional field
-  final bool? neverExpiry; // Optional field
-  final String? documentOriginalName;
-  final String? documentPath;
-  final String? originalName;
+  String? documentType;
+  String? certificateNo;
+  String? issuingCountry;
+  String? issuingAuthority;
+  String? issuingDate;
+  String? expDate; // Optional field
+  bool? neverExpiry; // Optional field
+  String? documentOriginalName;
+  String? documentPath;
+  String? originalName;
 
   DrugAlcoholTest({
     this.documentType = '', // Default to empty string if null
@@ -188,16 +188,16 @@ class DrugAlcoholTest {
 
 // VaccinationCertificate Model
 class VaccinationCertificate {
-  final String? documentType;
-  final String? certificateNo;
-  final String? issuingCountry;
-  final String? issuingAuthority;
-  final String? issuingDate;
-  final String? expDate;
-  final bool? neverExpire;
-  final String? documentOriginalName;
-  final String? documentPath;
-  final String? originalName;
+  String? documentType;
+  String? certificateNo;
+  String? issuingCountry;
+  String? issuingAuthority;
+  String? issuingDate;
+  String? expDate;
+  bool? neverExpire;
+  String? documentOriginalName;
+  String? documentPath;
+  String? originalName;
 
   VaccinationCertificate({
     this.documentType = '', // Default to empty string if null
