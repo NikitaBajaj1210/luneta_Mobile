@@ -211,13 +211,15 @@ class ProfessionalSkillsProvider with ChangeNotifier {
                 skillSelection: metalWorkingSkill!,
                 level: metalWorkingSkillLevel!,
                 certificate: metalWorkingSkillCertificate,
-                document: metalWorkingSkillDocument);
+                document: metalWorkingSkillDocument,
+                documentPath: metalWorkingSkillDocument?.path ?? metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath);
       } else {
         metalWorkingSkillsList.add(MetalWorkingSkill(
             skillSelection: metalWorkingSkill!,
             level: metalWorkingSkillLevel!,
             certificate: metalWorkingSkillCertificate,
-            document: metalWorkingSkillDocument));
+            document: metalWorkingSkillDocument,
+            documentPath: metalWorkingSkillDocument?.path ?? ''));
       }
       setMetalWorkingSkillsVisibility(false);
     }
@@ -235,6 +237,15 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void removeMetalWorkingSkill(int index) {
     metalWorkingSkillsList.removeAt(index);
+    // Reset edit index if we're removing the currently edited item
+    if (metalWorkingSkills_Edit_Index == index) {
+      metalWorkingSkills_Edit_Index = null;
+      metalWorkingSkills_IsEdit = false;
+    }
+    // Adjust edit index if we're removing an item before the currently edited item
+    else if (metalWorkingSkills_Edit_Index != null && metalWorkingSkills_Edit_Index! > index) {
+      metalWorkingSkills_Edit_Index = metalWorkingSkills_Edit_Index! - 1;
+    }
     notifyListeners();
   }
 
@@ -454,7 +465,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> _pickDocument(String type) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
     if (result != null) {
       final file = File(result.files.single.path!);
@@ -477,6 +488,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   void removeAttachment(String type) {
     if (type == 'metalWorkingSkill') {
       setMetalWorkingSkillDocument(null);
+      // Also clear documentPath if editing an existing item
+      if (metalWorkingSkills_Edit_Index != null &&
+          metalWorkingSkills_Edit_Index! < metalWorkingSkillsList.length) {
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = null;
+      }
     }
   }
 
@@ -512,6 +528,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     } catch (e) {
       print("Professional Skills Fetch Exception: $e");
     }
+    notifyListeners();
   }
 
   // Populate form data from API response
@@ -595,7 +612,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
               skillSelection: item['skill'] ?? '',
               level: item['level'] ?? '',
               certificate: item['certificate'] ?? false,
-              document: null, // Document path would need to be handled separately
+              document: null,
+              documentPath: item['documentPath'] ?? '',
             );
             metalWorkingSkillsList.add(metalWorking);
           }
@@ -746,7 +764,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'skill': item.skillSelection,
             'level': item.level,
             'certificate': item.certificate,
-            'documentPath': item.document?.path ?? '',
+            'documentPath': item.document?.path ?? item.documentPath ?? '',
           }).toList(),
         },
         'tankCoatingExperience': {
@@ -845,12 +863,15 @@ class MetalWorkingSkill {
   final String level;
   final bool certificate;
   final File? document;
+  String? documentPath;
 
-  MetalWorkingSkill(
-      {required this.skillSelection,
-      required this.level,
-      required this.certificate,
-      this.document});
+  MetalWorkingSkill({
+    required this.skillSelection,
+    required this.level,
+    required this.certificate,
+    this.document,
+    this.documentPath,
+  });
 }
 
 class TankCoatingExperience {
