@@ -490,6 +490,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             vesselOrCompanyName: reference.vesselOrCompanyName ?? '',
             experienceDocumentOriginalName: reference.experienceDocumentOriginalName ?? '',
             hasExistingReferenceDocument: (reference.experienceDocumentPath != null && reference.experienceDocumentPath!.isNotEmpty) || (reference.documentPath != null && reference.documentPath!.isNotEmpty),
+            experienceDocumentPath: reference.experienceDocumentPath
           );
           _references.add(localReference);
         }
@@ -586,6 +587,8 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
           'issuedBy': reference.issuedBy ?? '',
           'issuingDate': reference.issuingDate ?? '',
           'vesselOrCompanyName': reference.vesselOrCompanyName ?? '',
+          'experienceDocumentPath':reference.newReferenceDocument==null?reference.experienceDocumentPath:'',
+          'experienceDocumentOriginalName':reference.newReferenceDocument==null?reference.experienceDocumentOriginalName:reference.newReferenceDocument!.path.split('/').last
         }).toList(),
       };
 
@@ -601,13 +604,15 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       // Convert fileList to the format expected by Dio function
       List<Map<String, dynamic>> dioFileList = [];
 
+      // professionalExperienceFile[1].experienceDocument
+
       // Add references document if available
-      for (var reference in references) {
-        if (reference.newReferenceDocument != null) {
+      for(int index=0;index<references.length;index++) {
+        if (references[index].newReferenceDocument != null) {
           dioFileList.add({
-            'fieldName': 'referencesDocument',
-            'filePath': reference.newReferenceDocument!.path,
-            'fileName': reference.newReferenceDocument!.path.split('/').last,
+            'fieldName': 'professionalExperienceFile[${index}].experienceDocument',
+            'filePath': references[index].newReferenceDocument!.path,
+            'fileName': references[index].newReferenceDocument!.path.split('/').last,
           });
         }
       }

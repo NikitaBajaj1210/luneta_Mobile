@@ -10,6 +10,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../models/professional_experience_model.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
@@ -1488,137 +1489,152 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               ),
                             SizedBox(height: 3.h),
                             if (provider.newReference != null)
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 2.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.shade100,
-                                  borderRadius: BorderRadius.circular(1.h),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                    SizedBox(width: 2.w),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            provider.newReference!.path.split('/').last,
-                                            style: TextStyle(
-                                                fontSize: AppFontSize.fontSize16,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.Color_212121,
-                                                fontFamily:
-                                                AppColors.fontFamilyBold),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          FutureBuilder<int>(
-                                            future: provider.newReference!.length(),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                return Text(
-                                                  "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                  style: TextStyle(
-                                                      fontSize: AppFontSize.fontSize12,
-                                                      color: AppColors.Color_616161,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily:
-                                                      AppColors.fontFamilyMedium),
-                                                );
-                                              }
-                                              return SizedBox();
-                                            },
-                                          ),
-                                        ],
+                              GestureDetector(
+                                onTap: (){
+                                  OpenFile_View(provider.newReference!.path,context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade100,
+                                    borderRadius: BorderRadius.circular(1.h),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      SizedBox(width: 2.w),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              provider.newReference!.path.split('/').last,
+                                              style: TextStyle(
+                                                  fontSize: AppFontSize.fontSize16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.Color_212121,
+                                                  fontFamily:
+                                                  AppColors.fontFamilyBold),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            FutureBuilder<int>(
+                                              future: provider.newReference!.length(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                    "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                    style: TextStyle(
+                                                        fontSize: AppFontSize.fontSize12,
+                                                        color: AppColors.Color_616161,
+                                                        fontWeight: FontWeight.w500,
+                                                        fontFamily:
+                                                        AppColors.fontFamilyMedium),
+                                                  );
+                                                }
+                                                return SizedBox();
+                                              },
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        provider.removeAttachment();
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.red,
-                                        size: 24,
+                                      GestureDetector(
+                                        onTap: () {
+                                          provider.removeAttachment();
+                                        },
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                          size: 24,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             if (provider.reference_IsEdit && provider.reference_Edit_Index != null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 2.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade100,
-                                  borderRadius: BorderRadius.circular(1.h),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                    SizedBox(width: 2.w),
-                                    Expanded(
-                                      child: Text(
-                                        provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
+                              GestureDetector(
+                                onTap: (){
+                                  OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade100,
+                                    borderRadius: BorderRadius.circular(1.h),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      SizedBox(width: 2.w),
+                                      Expanded(
+                                        child: Text(
+                                          provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize16,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.Color_212121,
+                                              fontFamily:
+                                              AppColors.fontFamilyBold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        provider.removeAttachment(index: provider.reference_Edit_Index!);
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.red,
-                                        size: 24,
+                                      GestureDetector(
+                                        onTap: () {
+                                          provider.removeAttachment(index: provider.reference_Edit_Index!);
+                                        },
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                          size: 24,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            if (provider.reference_IsEdit && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 2.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade100,
-                                  borderRadius: BorderRadius.circular(1.h),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                    SizedBox(width: 2.w),
-                                    Expanded(
-                                      child: Text(
-                                        provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.Color_212121,
-                                            fontFamily:
-                                            AppColors.fontFamilyBold),
-                                        overflow: TextOverflow.ellipsis,
+                            if (provider.reference_IsEdit && provider.reference_Edit_Index == null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
+                              GestureDetector(
+                                onTap: (){
+                                  OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade100,
+                                    borderRadius: BorderRadius.circular(1.h),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      SizedBox(width: 2.w),
+                                      Expanded(
+                                        child: Text(
+                                          provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
+                                          style: TextStyle(
+                                              fontSize: AppFontSize.fontSize16,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.Color_212121,
+                                              fontFamily:
+                                              AppColors.fontFamilyBold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        provider.removeAttachment(index: provider.reference_Edit_Index!);
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.red,
-                                        size: 24,
+                                      GestureDetector(
+                                        onTap: () {
+                                          provider.removeAttachment(index: provider.reference_Edit_Index!);
+                                        },
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                          size: 24,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
 
