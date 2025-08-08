@@ -180,13 +180,24 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      backButtonWithTitle(
-                        title: "Your Country",
-                        onBackPressed: () {
-                          // Navigator.pop(context);
-                        },
-                        isNotAllowBack: false
+                      // backButtonWithTitle(
+                      //   title: "Your Country",
+                      //   onBackPressed: () {
+                      //     // Navigator.pop(context);
+                      //   },
+                      //   isNotAllowBack: false
+                      // ),
+SizedBox(height: 1.h,),
+                      Text(
+                        "Your Country",
+                        style: TextStyle(
+                            fontSize: AppFontSize.fontSize24, // Responsive font size
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.Color_212121,
+                            fontFamily: AppColors.fontFamilyBold
+                        ),
                       ),
+
                       SizedBox(height: 2.h),
                       customTextField(
                         context: context,

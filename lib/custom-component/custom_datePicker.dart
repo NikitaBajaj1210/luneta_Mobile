@@ -67,11 +67,11 @@ class CustomDatePicker extends StatelessWidget {
                     addDate,
                     style: TextStyle(
                       fontSize: AppFontSize.fontSize16,
-                      color: textColor,
-                      fontFamily: textColor == AppColors.Color_9E9E9E
+                      color: addDate == 'Date of Birth'?AppColors.Color_9E9E9E:textColor,
+                      fontFamily:addDate == 'Date of Birth'?AppColors.fontFamilyRegular: textColor == AppColors.Color_9E9E9E
                           ? AppColors.fontFamilyRegular
                           : AppColors.fontFamilySemiBold,
-                      fontWeight: textColor == AppColors.Color_9E9E9E ? FontWeight.w400 : FontWeight.w600,
+                      fontWeight:addDate == 'Date of Birth'?FontWeight.w400: textColor == AppColors.Color_9E9E9E ? FontWeight.w400 : FontWeight.w600,
                     ),
                   ),
                   Image.asset(

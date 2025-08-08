@@ -299,15 +299,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: AppColors.Color_424242,
                                 ),
                               ),
-                            ),                            CustomDatePicker(
+                            ),
+                            CustomDatePicker(
                               initialDate: DateTime.now(), // This is just for the date picker, not the display
                               addDate: profileProvider.addDate,
                               hintText: 'Date of Birth',
                               addDateApi: profileProvider.addDateApi,
                               width: 100.w,
-                              // borderColor: profileProvider.getFieldBorderColor(profileProvider.dateFocusNode, 'date'),
-                              // textColor: profileProvider.getFieldTextColor('date', hasValue: profileProvider.addDate != 'Date of Birth'),
-                              iconColor: profileProvider.getFieldIconColor(profileProvider.dateFocusNode, 'date', hasValue: profileProvider.addDate != 'Date of Birth'),
+                              iconColor: profileProvider.getFieldIconColor(profileProvider.dateFocusNode, 'date',
+                                  hasValue: profileProvider.addDate != 'Date of Birth'),
                               onTap: () async {
                                 // Unfocus current field before showing date picker
                                 profileProvider.unfocusAllFields();
@@ -328,10 +328,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 print("=== End Date Picker Debug ===");
 
                                 DateTime? selectedDate = await showDatePicker(
+
                                   context: context,
                                   initialDate: defaultDate, // Use default date (18 years ago)
                                   firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
                                   lastDate: maxDate, // Maximum date is 18 years ago
+                                  initialEntryMode: DatePickerEntryMode.calendarOnly, // <- this
+
                                 );
 
                                 if (selectedDate != null) {
@@ -354,10 +357,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   if (profileProvider.hasSubmitted) {
                                     profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
                                   }
+                                  setState(() {});
                                 }
-                                setState(() {
-
-                                });
                               },
                               onDateSelected: (selectedDate) {
                                 if (selectedDate != null) {
@@ -366,7 +367,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                   // Check if selected date is valid (18 years or older)
                                   if (selectedDate.isAfter(maxDate)) {
-                                    // Show error message for invalid date
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text('You must be at least 18 years old to register.'),
@@ -379,23 +379,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   profileProvider.addDate = formatToMMDDYYYY(selectedDate);
                                   profileProvider.addDateApi = formatToApiDate(selectedDate);
                                   profileProvider.markFieldAsSubmitted('date');
-                                  setState(() {
-
-                                  });
+                                  setState(() {});
                                 }
                                 if (profileProvider.hasSubmitted) {
                                   profileProvider.validateFieldIfFocused('date', profileProvider.addDate);
                                 }
-                                setState(() {
-
-                                });
+                                setState(() {});
                               },
                               validator: (value) => profileProvider.validateFieldIfFocused('date', value ?? '', notify: false),
                               autovalidateMode: profileProvider.autoValidateMode,
-
                               borderColor: AppColors.buttonColor,
                               textColor: Colors.black,
-
                             ),
                             if (profileProvider.dateError != null)
                               Padding(
