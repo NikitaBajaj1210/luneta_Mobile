@@ -85,13 +85,15 @@ class ProfessionalExperience {
 }
 
 class ProfessionalEmploymentHistory {
-  final String? id;
-  final String? companyName;
-  final String? position;
-  final String? startDate;
-  final String? professionalExperienceId;
-  final String? endDate;
-  final String? responsibilities;
+  String? id;
+  String? companyName;
+  String? position;
+  String? startDate;
+  String? professionalExperienceId;
+  String? endDate;
+  String? responsibilities;
+  String? documentPath;
+  String? documentOriginalName;
 
   ProfessionalEmploymentHistory({
     this.id,
@@ -101,6 +103,8 @@ class ProfessionalEmploymentHistory {
     this.professionalExperienceId,
     this.endDate,
     this.responsibilities,
+    this.documentPath,
+    this.documentOriginalName,
   });
 
   factory ProfessionalEmploymentHistory.fromJson(Map<String, dynamic> json) {
@@ -112,6 +116,8 @@ class ProfessionalEmploymentHistory {
       professionalExperienceId: json['professionalExperienceId'],
       endDate: json['endDate'],
       responsibilities: json['responsibilities'],
+      documentPath: json['documentPath'],
+      documentOriginalName: json['documentOriginalName'],
     );
   }
 
@@ -124,19 +130,21 @@ class ProfessionalEmploymentHistory {
       'professionalExperienceId': professionalExperienceId,
       'endDate': endDate,
       'responsibilities': responsibilities,
+      'documentPath': documentPath,
+      'documentOriginalName': documentOriginalName,
     };
   }
 }
 
 class Reference {
-  final String? id;
-  final String? issuedBy;
-  final String? issuingDate;
-  final String? vesselOrCompanyName;
-  final String? professionalExperienceId;
-  final String? experienceDocumentPath;
-  final String? experienceDocumentOriginalName;
-  final String? documentPath;
+  String? id;
+  String? issuedBy;
+  String? issuingDate;
+  String? vesselOrCompanyName;
+  String? professionalExperienceId;
+  String? experienceDocumentPath;
+  String? experienceDocumentOriginalName;
+  String? documentPath;
 
   Reference({
     this.id,
