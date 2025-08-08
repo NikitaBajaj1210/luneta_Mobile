@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class ProfessionalExperienceResponse {
   final int statusCode;
   final String message;
@@ -137,6 +139,8 @@ class Reference {
   final String? experienceDocumentPath;
   final String? experienceDocumentOriginalName;
   final String? documentPath;
+  File? newReferenceDocument;
+  bool hasExistingReferenceDocument;
 
   Reference({
     this.id,
@@ -147,6 +151,8 @@ class Reference {
     this.experienceDocumentPath,
     this.experienceDocumentOriginalName,
     this.documentPath,
+    this.newReferenceDocument,
+    this.hasExistingReferenceDocument = false,
   });
 
   factory Reference.fromJson(Map<String, dynamic> json) {
@@ -159,6 +165,7 @@ class Reference {
       experienceDocumentPath: json['experienceDocumentPath'],
       experienceDocumentOriginalName: json['experienceDocumentOriginalName'],
       documentPath: json['documentPath'],
+      hasExistingReferenceDocument: (json['experienceDocumentPath'] != null && json['experienceDocumentPath'].isNotEmpty) || (json['documentPath'] != null && json['documentPath'].isNotEmpty),
     );
   }
 

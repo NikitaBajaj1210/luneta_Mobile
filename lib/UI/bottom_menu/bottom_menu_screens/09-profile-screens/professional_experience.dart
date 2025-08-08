@@ -1056,7 +1056,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.referenceIssuedDate.clear();
                                   provider.referenceDocumentController.clear();
                                   provider.referenceIssuedBy = null;
-                                  provider.referenceDocument = null;
 
                                   provider.setReferenceVisibility(true);
                                   provider.reference_Edit_Index=null;
@@ -1238,7 +1237,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                         ),
                                         SizedBox(height: 0.8.h),
                                         Text(
-                                          referenceDetail.experienceDocumentOriginalName ?? '',
+                                          referenceDetail.newReferenceDocument?.path.split('/').last ?? referenceDetail.experienceDocumentOriginalName ?? '',
                                           style: TextStyle(
                                             fontSize:
                                             AppFontSize.fontSize14,
@@ -1454,8 +1453,41 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 ),
                               ),
                             ),
+                            if (provider.newReference == null &&
+                                !(provider.reference_IsEdit &&
+                                    provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
+                                provider.autovalidateMode ==
+                                    AutovalidateMode.always)
+                              Padding(
+                                padding:
+                                EdgeInsets.only(top: 1.h, left: 4.w),
+                                child: Text(
+                                  "Please select Reference",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: AppFontSize.fontSize12,
+                                  ),
+                                ),
+                              ),
+                            if (provider.newReference == null &&
+                                !(provider.reference_IsEdit &&
+                                    provider.reference_Edit_Index != null &&
+                                    provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
+                                provider.autovalidateMode ==
+                                    AutovalidateMode.always)
+                              Padding(
+                                padding:
+                                EdgeInsets.only(top: 1.h, left: 4.w),
+                                child: Text(
+                                  "Please select Reference",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: AppFontSize.fontSize12,
+                                  ),
+                                ),
+                              ),
                             SizedBox(height: 3.h),
-                            if (provider.referenceDocument != null)
+                            if (provider.newReference != null)
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 4.w, vertical: 2.h),
@@ -1473,7 +1505,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            provider.referenceDocument!.path.split('/').last,
+                                            provider.newReference!.path.split('/').last,
                                             style: TextStyle(
                                                 fontSize: AppFontSize.fontSize16,
                                                 fontWeight: FontWeight.w700,
@@ -1483,7 +1515,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           FutureBuilder<int>(
-                                            future: provider.referenceDocument!.length(),
+                                            future: provider.newReference!.length(),
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
                                                 return Text(
@@ -1505,6 +1537,80 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     GestureDetector(
                                       onTap: () {
                                         provider.removeAttachment();
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (provider.reference_IsEdit && provider.reference_Edit_Index != null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.w, vertical: 2.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade100,
+                                  borderRadius: BorderRadius.circular(1.h),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                    SizedBox(width: 2.w),
+                                    Expanded(
+                                      child: Text(
+                                        provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
+                                        style: TextStyle(
+                                            fontSize: AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.Color_212121,
+                                            fontFamily:
+                                            AppColors.fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        provider.removeAttachment(index: provider.reference_Edit_Index!);
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (provider.reference_IsEdit && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.w, vertical: 2.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade100,
+                                  borderRadius: BorderRadius.circular(1.h),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                    SizedBox(width: 2.w),
+                                    Expanded(
+                                      child: Text(
+                                        provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
+                                        style: TextStyle(
+                                            fontSize: AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.Color_212121,
+                                            fontFamily:
+                                            AppColors.fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        provider.removeAttachment(index: provider.reference_Edit_Index!);
                                       },
                                       child: Icon(
                                         Icons.close,

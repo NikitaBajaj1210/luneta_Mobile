@@ -21,8 +21,6 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   String errorMessage = '';
   ProfessionalExperience? professionalExperienceData;
 
-  File? referenceDocument;
-
   // Controllers for text fields
   final TextEditingController companyController = TextEditingController();
   final TextEditingController responsibilitiesController = TextEditingController();
@@ -174,9 +172,6 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     reference_IsEdit = false;
     reference_Edit_Index = null;
     
-    // Clear file
-    referenceDocument = null;
-    
     // Reset error states
     hasError = false;
     errorMessage = '';
@@ -197,6 +192,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   String? positionsHeldError;
   String? vesselTypeExperienceError;
+  File? newReference;
 
   Future<void> showAttachmentOptions(BuildContext context) async {
     showModalBottomSheet(
@@ -239,7 +235,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      referenceDocument = File(pickedFile.path);
+      newReference = File(pickedFile.path);
       notifyListeners();
     }
   }
@@ -250,13 +246,17 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
-      referenceDocument = File(result.files.single.path!);
+      newReference = File(result.files.single.path!);
       notifyListeners();
     }
   }
 
-  void removeAttachment() {
-    referenceDocument = null;
+  void removeAttachment({int? index}) {
+    if (index != null) {
+      _references[index].newReferenceDocument = null;
+      _references[index].hasExistingReferenceDocument = false;
+    }
+    newReference = null;
     notifyListeners();
   }
 
@@ -296,13 +296,17 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
     // Add Reference
          addReference(Reference reference) {
+    reference.newReferenceDocument = newReference;
     _references.add(reference);
+    newReference = null;
     notifyListeners();
   }
 
   // Update Reference
          updateReference(int index, Reference updatedReference) {
+    updatedReference.newReferenceDocument = newReference ?? _references[index].newReferenceDocument;
     _references[index] = updatedReference;
+    newReference = null;
     notifyListeners();
   }
 
@@ -485,6 +489,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             issuingDate: reference.issuingDate ?? '',
             vesselOrCompanyName: reference.vesselOrCompanyName ?? '',
             experienceDocumentOriginalName: reference.experienceDocumentOriginalName ?? '',
+            hasExistingReferenceDocument: (reference.experienceDocumentPath != null && reference.experienceDocumentPath!.isNotEmpty) || (reference.documentPath != null && reference.documentPath!.isNotEmpty),
           );
           _references.add(localReference);
         }
@@ -597,12 +602,14 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       List<Map<String, dynamic>> dioFileList = [];
 
       // Add references document if available
-      if (referenceDocument != null) {
-        dioFileList.add({
-          'fieldName': 'referencesDocument',
-          'filePath': referenceDocument!.path,
-          'fileName': referenceDocument!.path.split('/').last,
-        });
+      for (var reference in references) {
+        if (reference.newReferenceDocument != null) {
+          dioFileList.add({
+            'fieldName': 'referencesDocument',
+            'filePath': reference.newReferenceDocument!.path,
+            'fileName': reference.newReferenceDocument!.path.split('/').last,
+          });
+        }
       }
 
 
