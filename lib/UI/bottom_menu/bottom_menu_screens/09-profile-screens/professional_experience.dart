@@ -1143,7 +1143,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.referenceIssuedDate.clear();
                                   provider.referenceDocumentController.clear();
                                   provider.referenceIssuedBy = null;
-                                  provider.referenceDocument = null;
 
                                   provider.setReferenceVisibility(true);
                                   provider.reference_Edit_Index=null;
