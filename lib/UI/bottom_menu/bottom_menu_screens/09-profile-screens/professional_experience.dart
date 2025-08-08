@@ -614,105 +614,18 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 1.h),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await provider.showAttachmentOptions(context, 'employment', index);
-                                  },
-                                  child: DottedBorder(
-                                    borderType: BorderType.RRect,
-                                    radius: Radius.circular(15),
-                                    dashPattern: [10, 10],
-                                    color: AppColors.buttonColor,
-                                    strokeWidth: 1,
-                                    child: Container(
-                                      width: 100.w,
-                                      padding: EdgeInsets.symmetric(vertical: 3.h),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(1.h),
-                                        color: AppColors.Color_FAFAFA,
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset("assets/images/Upload.png", height: 5.h),
-                                          SizedBox(height: 1.h),
-                                          Text(
-                                            "Browse File",
-                                            style: TextStyle(
-                                                fontSize: AppFontSize.fontSize14,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: AppColors.fontFamilySemiBold,
-                                                color: AppColors.Color_9E9E9E),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 SizedBox(height: 3.h),
-                                if (provider.employmentHistoryDocuments.length > index && provider.employmentHistoryDocuments[index] != null)
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius: BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.employmentHistoryDocuments[index]!.path.split('/').last,
-                                                style: TextStyle(
-                                                    fontSize: AppFontSize.fontSize16,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: AppColors.Color_212121,
-                                                    fontFamily:
-                                                    AppColors.fontFamilyBold),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              FutureBuilder<int>(
-                                                future: provider.employmentHistoryDocuments[index]!.length(),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                      style: TextStyle(
-                                                          fontSize: AppFontSize.fontSize12,
-                                                          color: AppColors.Color_616161,
-                                                          fontWeight: FontWeight.w500,
-                                                          fontFamily:
-                                                          AppColors.fontFamilyMedium),
-                                                    );
-                                                  }
-                                                  return SizedBox();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider.removeAttachment('employment', index);
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                               ],
                             );
+
+                            //   EmploymentHistoryField(
+                            //   onEdit: (updatedHistory) {
+                            //     provider.updateEmploymentHistory(index, updatedHistory);
+                            //   },
+                            //   onDelete: () {
+                            //     provider.removeEmploymentHistory(index);
+                            //   }, history: provider.employmentHistory[index],
+                            // );
                           },
                         ),
 
@@ -1143,6 +1056,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.referenceIssuedDate.clear();
                                   provider.referenceDocumentController.clear();
                                   provider.referenceIssuedBy = null;
+                                  provider.referenceDocument = null;
 
                                   provider.setReferenceVisibility(true);
                                   provider.reference_Edit_Index=null;
@@ -1335,66 +1249,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                 .fontFamilyMedium,
                                           ),
                                         ),
-                                        if (provider.referenceDocuments.length > index && provider.referenceDocuments[index] != null)
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 4.w, vertical: 2.h),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(1.h),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                                SizedBox(width: 2.w),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        provider.referenceDocuments[index]!.path.split('/').last,
-                                                        style: TextStyle(
-                                                            fontSize: AppFontSize.fontSize16,
-                                                            fontWeight: FontWeight.w700,
-                                                            color: AppColors.Color_212121,
-                                                            fontFamily:
-                                                            AppColors.fontFamilyBold),
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                      FutureBuilder<int>(
-                                                        future: provider.referenceDocuments[index]!.length(),
-                                                        builder: (context, snapshot) {
-                                                          if (snapshot.hasData) {
-                                                            return Text(
-                                                              "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                              style: TextStyle(
-                                                                  fontSize: AppFontSize.fontSize12,
-                                                                  color: AppColors.Color_616161,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily:
-                                                                  AppColors.fontFamilyMedium),
-                                                            );
-                                                          }
-                                                          return SizedBox();
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    provider.removeAttachment('reference', index);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 24,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                       ],
                                     ),
                                   ),
@@ -1567,41 +1421,31 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
-                                await provider.showAttachmentOptions(context, 'reference', provider.references.length);
+                                await provider.showAttachmentOptions(context);
                               },
-                              child: DottedBorder(
-                                borderType: BorderType.RRect,
-                                radius: Radius.circular(15),
-                                dashPattern: [10, 10],
-                                color: AppColors.buttonColor,
-                                strokeWidth: 1,
-                                child: Container(
-                                  width: 100.w,
-                                  padding: EdgeInsets.symmetric(vertical: 3.h),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(1.h),
-                                    color: AppColors.Color_FAFAFA,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset("assets/images/Upload.png", height: 5.h),
-                                      SizedBox(height: 1.h),
-                                      Text(
-                                        "Browse File",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: AppColors.fontFamilySemiBold,
-                                            color: AppColors.Color_9E9E9E),
-                                      ),
-                                    ],
-                                  ),
+                              child: AbsorbPointer(
+                                child: customTextField(
+                                  context: context,
+                                  controller: provider.referenceDocumentController,
+                                  hintText: 'Browse File',
+                                  textInputType: TextInputType.text,
+                                  obscureText: false,
+                                  voidCallback: (value) {},
+                                  fontSize: AppFontSize.fontSize16,
+                                  inputFontSize: AppFontSize.fontSize16,
+                                  backgroundColor: AppColors.Color_FAFAFA,
+                                  borderColor: AppColors.buttonColor,
+                                  textColor: Colors.black,
+                                  labelColor: AppColors.Color_9E9E9E,
+                                  cursorColor: AppColors.Color_212121,
+                                  fillColor: provider.referenceDocumentFocusNode.hasFocus
+                                      ? AppColors.activeFieldBgColor
+                                      : AppColors.Color_FAFAFA,
+                                  onFieldSubmitted: (String ) {  },
                                 ),
                               ),
                             ),
-                            SizedBox(height: 3.h),
-                            if (provider.referenceDocuments.length > provider.references.length && provider.referenceDocuments[provider.references.length] != null)
+                            if (provider.referenceDocument != null)
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 4.w, vertical: 2.h),
@@ -1619,7 +1463,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            provider.referenceDocuments[provider.references.length]!.path.split('/').last,
+                                            provider.referenceDocument!.path.split('/').last,
                                             style: TextStyle(
                                                 fontSize: AppFontSize.fontSize16,
                                                 fontWeight: FontWeight.w700,
@@ -1629,7 +1473,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           FutureBuilder<int>(
-                                            future: provider.referenceDocuments[provider.references.length]!.length(),
+                                            future: provider.referenceDocument!.length(),
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
                                                 return Text(
@@ -1650,7 +1494,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        provider.removeAttachment('reference', provider.references.length);
+                                        provider.removeAttachment();
                                       },
                                       child: Icon(
                                         Icons.close,
