@@ -25,8 +25,6 @@ class PersonalInfoScreen extends StatefulWidget {
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   late var formKey = GlobalKey<FormState>();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-
   String? countryOfBirthError;
   String? nationalityError;
   @override
@@ -55,7 +53,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: customButton(
                 voidCallback: () async {
                   setState(() {
-                    autovalidateMode = AutovalidateMode.always;
                     // Validate Country of Birth
                     if (provider.countryOfBirthController.text.isEmpty) {
                       countryOfBirthError = 'Please select Country of Birth';
@@ -88,7 +85,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
-                  autovalidateMode: autovalidateMode,
+                  autovalidateMode: provider.autovalidateMode,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -596,12 +593,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.phone,
                       obscureText: false,
                       voidCallback: (value) {
-                        if ((value == null || value.isEmpty || (value.toString().trim().length<10)) && autovalidateMode == AutovalidateMode.always) {
+                        if (value == null || value.isEmpty) {
                           return 'Please enter Phone Number';
+                        }
+                        if (value.toString().trim().length < 10) {
+                          return 'Phone number must be at least 10 digits';
                         }
                         return null;
                       },
-                      autovalidateMode: autovalidateMode,
+                      
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.phoneFocusNode.hasFocus
@@ -639,7 +639,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       obscureText: false,
                       maxLength: 15,
                       voidCallback: (value){return;},
-                      autovalidateMode: autovalidateMode,
+                      
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.directPhoneFocusNode.hasFocus

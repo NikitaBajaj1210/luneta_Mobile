@@ -22,7 +22,7 @@ import '../../../authentication-provider/login_provider.dart';
 import '../profile_bottommenu_provider.dart';
 
 class PersonalInformationProvider extends ChangeNotifier {
-
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? _errorText;
 
 // Getter
