@@ -3,11 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
+import 'dart:io';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/medical_document_provider.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
 import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
@@ -852,9 +854,14 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   ),
                                 ),
                               ),
-                              if (provider.medicalFitnessDocument == null && provider.autovalidateModeMedical == AutovalidateMode.always)
+                              if (provider.medicalFitnessDocument == null &&
+                                  !provider.hasExistingMedicalFitnessDocument(
+                                      provider.medicalFitness_Edit_Index) &&
+                                  provider.autovalidateModeMedical ==
+                                      AutovalidateMode.always)
                                 Padding(
-                                  padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                  padding:
+                                      EdgeInsets.only(top: 1.h, left: 4.w),
                                   child: Text(
                                     "Please select Medical Fitness Document",
                                     style: TextStyle(
@@ -864,62 +871,160 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   ),
                                 ),
                               SizedBox(height: 3.h),
-                              if (provider.medicalFitnessDocument != null)
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              provider.medicalFitnessDocument!.path.split('/').last,
-                                              style: TextStyle(
-                                                fontSize: AppFontSize.fontSize16,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.Color_212121,
-                                                fontFamily: AppColors.fontFamilyBold,
+                              // Show existing medical fitness document from API
+                              if (provider.hasExistingMedicalFitnessDocument(
+                                  provider.medicalFitness_Edit_Index))
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider
+                                            .medicalDocumentData!
+                                            .medicalFitness![provider
+                                                .medicalFitness_Edit_Index!]
+                                            .documentPath,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider
+                                                        .medicalDocumentData!
+                                                        .medicalFitness![provider
+                                                            .medicalFitness_Edit_Index!]
+                                                        .documentOriginalName ??
+                                                    "Medical Fitness Document",
+                                                style: TextStyle(
+                                                    fontSize: AppFontSize
+                                                        .fontSize16,
+                                                    fontWeight:
+                                                        FontWeight.w700,
+                                                    color: AppColors
+                                                        .Color_212121,
+                                                    fontFamily: AppColors
+                                                        .fontFamilyBold),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            FutureBuilder<int>(
-                                              future: provider.medicalFitnessDocument!.length(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                    style: TextStyle(
-                                                      fontSize: AppFontSize.fontSize12,
-                                                      color: AppColors.Color_616161,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: AppColors.fontFamilyMedium,
-                                                    ),
-                                                  );
-                                                }
-                                                return SizedBox();
-                                              },
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment('medical_fitness');
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider
+                                                .removeExistingMedicalFitnessAttachment(
+                                                    provider
+                                                        .medicalFitness_Edit_Index!);
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              if (provider.medicalFitnessDocument != null)
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider.medicalFitnessDocument!.path,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider.medicalFitnessDocument!
+                                                    .path
+                                                    .split('/')
+                                                    .last,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      AppFontSize.fontSize16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color:
+                                                      AppColors.Color_212121,
+                                                  fontFamily:
+                                                      AppColors.fontFamilyBold,
+                                                ),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                              FutureBuilder<int>(
+                                                future: provider
+                                                    .medicalFitnessDocument!
+                                                    .length(),
+                                                builder:
+                                                    (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                      style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize12,
+                                                        color: AppColors
+                                                            .Color_616161,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyMedium,
+                                                      ),
+                                                    );
+                                                  }
+                                                  return SizedBox();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider.removeAttachment(
+                                                'medical_fitness');
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               Align(
@@ -1447,10 +1552,15 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.drugAndAlcoholTestDocument == null && provider.autovalidateMode==AutovalidateMode.always)
+                      if (provider.drugAndAlcoholTestDocument == null &&
+                          !provider.hasExistingDrugAndAlcoholTestDocument() &&
+                          provider.autovalidateMode ==
+                              AutovalidateMode.always)
                         Padding(
-                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                          child: Text("Please select Drug & Alcohol Test Document",
+                          padding:
+                              EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text(
+                            "Please select Drug & Alcohol Test Document",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: AppFontSize.fontSize12,
@@ -1458,64 +1568,145 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       SizedBox(height: 3.h),
-                      if (provider.drugAndAlcoholTestDocument != null)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 4.w, vertical: 2.h),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade100,
-                            borderRadius: BorderRadius.circular(1.h),
+                      // Show existing drug and alcohol test document from API
+                      if (provider.hasExistingDrugAndAlcoholTestDocument())
+                        GestureDetector(
+                          onTap: () {
+                            OpenFile_View(
+                                provider.medicalDocumentData!.drugAlcoholTest!
+                                    .first.documentPath,
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius:
+                                  BorderRadius.circular(1.h),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png",
+                                    height: 3.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        provider.medicalDocumentData!
+                                                .drugAlcoholTest!
+                                                .first
+                                                .documentOriginalName ??
+                                            "Drug & Alcohol Test Document",
+                                        style: TextStyle(
+                                            fontSize:
+                                                AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color:
+                                                AppColors.Color_212121,
+                                            fontFamily: AppColors
+                                                .fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    provider
+                                        .removeExistingDrugAndAlcoholTestAttachment();
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                              SizedBox(width: 2.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      provider.drugAndAlcoholTestDocument!.path.split('/').last,
-                                      style: TextStyle(
-                                          fontSize: AppFontSize.fontSize16,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.Color_212121,
-                                          fontFamily:
-                                          AppColors.fontFamilyBold),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    FutureBuilder<int>(
-                                      future: provider.drugAndAlcoholTestDocument!.length(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                            "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                            style: TextStyle(
-                                                fontSize: AppFontSize.fontSize12,
-                                                color: AppColors.Color_616161,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily:
-                                                AppColors.fontFamilyMedium),
-                                          );
-                                        }
-                                        return SizedBox();
-                                      },
-                                    ),
-                                  ],
+                        ),
+                      if (provider.drugAndAlcoholTestDocument != null)
+                        GestureDetector(
+                          onTap: () {
+                            OpenFile_View(
+                                provider.drugAndAlcoholTestDocument!.path,
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius:
+                                  BorderRadius.circular(1.h),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png",
+                                    height: 3.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        provider.drugAndAlcoholTestDocument!
+                                            .path
+                                            .split('/')
+                                            .last,
+                                        style: TextStyle(
+                                            fontSize:
+                                                AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color:
+                                                AppColors.Color_212121,
+                                            fontFamily: AppColors
+                                                .fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      FutureBuilder<int>(
+                                        future: provider
+                                            .drugAndAlcoholTestDocument!
+                                            .length(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                              style: TextStyle(
+                                                  fontSize: AppFontSize
+                                                      .fontSize12,
+                                                  color: AppColors
+                                                      .Color_616161,
+                                                  fontWeight:
+                                                      FontWeight.w500,
+                                                  fontFamily: AppColors
+                                                      .fontFamilyMedium),
+                                            );
+                                          }
+                                          return SizedBox();
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  provider.removeAttachment('drug_alcohol_test');
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                  size: 24,
+                                GestureDetector(
+                                  onTap: () {
+                                    provider.removeAttachment(
+                                        'drug_alcohol_test');
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
 
@@ -1983,10 +2174,16 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       ),
-                      if (provider.vaccinationCertificateDocument == null  && provider.autovalidateMode==AutovalidateMode.always)
+                      if (provider.vaccinationCertificateDocument == null &&
+                          !provider
+                              .hasExistingVaccinationCertificateDocument() &&
+                          provider.autovalidateMode ==
+                              AutovalidateMode.always)
                         Padding(
-                          padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                          child: Text("Please select Vaccination Certificate Document",
+                          padding:
+                              EdgeInsets.only(top: 1.h, left: 4.w),
+                          child: Text(
+                            "Please select Vaccination Certificate Document",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: AppFontSize.fontSize12,
@@ -1994,64 +2191,150 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           ),
                         ),
                       SizedBox(height: 3.h),
-                      if (provider.vaccinationCertificateDocument != null)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 4.w, vertical: 2.h),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade100,
-                            borderRadius: BorderRadius.circular(1.h),
+                      // Show existing vaccination certificate document from API
+                      if (provider
+                          .hasExistingVaccinationCertificateDocument())
+                        GestureDetector(
+                          onTap: () {
+                            OpenFile_View(
+                                provider.medicalDocumentData!
+                                    .vaccinationCertificates!
+                                    .first
+                                    .documentPath,
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius:
+                                  BorderRadius.circular(1.h),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png",
+                                    height: 3.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        provider.medicalDocumentData!
+                                                .vaccinationCertificates!
+                                                .first
+                                                .documentOriginalName ??
+                                            "Vaccination Certificate Document",
+                                        style: TextStyle(
+                                            fontSize:
+                                                AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color:
+                                                AppColors.Color_212121,
+                                            fontFamily: AppColors
+                                                .fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    provider
+                                        .removeExistingVaccinationCertificateAttachment();
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                              SizedBox(width: 2.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      provider.vaccinationCertificateDocument!.path.split('/').last,
-                                      style: TextStyle(
-                                          fontSize: AppFontSize.fontSize16,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.Color_212121,
-                                          fontFamily:
-                                          AppColors.fontFamilyBold),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    FutureBuilder<int>(
-                                      future: provider.vaccinationCertificateDocument!.length(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                            "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                            style: TextStyle(
-                                                fontSize: AppFontSize.fontSize12,
-                                                color: AppColors.Color_616161,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily:
-                                                AppColors.fontFamilyMedium),
-                                          );
-                                        }
-                                        return SizedBox();
-                                      },
-                                    ),
-                                  ],
+                        ),
+                      if (provider.vaccinationCertificateDocument != null)
+                        GestureDetector(
+                          onTap: () {
+                            OpenFile_View(
+                                provider
+                                    .vaccinationCertificateDocument!.path,
+                                context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius:
+                                  BorderRadius.circular(1.h),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png",
+                                    height: 3.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        provider
+                                            .vaccinationCertificateDocument!
+                                            .path
+                                            .split('/')
+                                            .last,
+                                        style: TextStyle(
+                                            fontSize:
+                                                AppFontSize.fontSize16,
+                                            fontWeight: FontWeight.w700,
+                                            color:
+                                                AppColors.Color_212121,
+                                            fontFamily: AppColors
+                                                .fontFamilyBold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      FutureBuilder<int>(
+                                        future: provider
+                                            .vaccinationCertificateDocument!
+                                            .length(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                              style: TextStyle(
+                                                  fontSize: AppFontSize
+                                                      .fontSize12,
+                                                  color: AppColors
+                                                      .Color_616161,
+                                                  fontWeight:
+                                                      FontWeight.w500,
+                                                  fontFamily: AppColors
+                                                      .fontFamilyMedium),
+                                            );
+                                          }
+                                          return SizedBox();
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  provider.removeAttachment('vaccination_certificate');
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                  size: 24,
+                                GestureDetector(
+                                  onTap: () {
+                                    provider.removeAttachment(
+                                        'vaccination_certificate');
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                     ],

@@ -627,6 +627,47 @@ class MedicalDocumentProvider extends ChangeNotifier {
     }
   }
 
+  bool hasExistingVaccinationCertificateDocument() {
+    return medicalDocumentData != null &&
+        medicalDocumentData!.vaccinationCertificates != null &&
+        medicalDocumentData!.vaccinationCertificates!.isNotEmpty &&
+        medicalDocumentData!
+                .vaccinationCertificates!.first.documentPath !=
+            null &&
+        medicalDocumentData!
+            .vaccinationCertificates!.first.documentPath!.isNotEmpty;
+  }
+
+  void removeExistingVaccinationCertificateAttachment() {
+    if (medicalDocumentData != null &&
+        medicalDocumentData!.vaccinationCertificates != null &&
+        medicalDocumentData!.vaccinationCertificates!.isNotEmpty) {
+      medicalDocumentData!.vaccinationCertificates!.first.documentPath =
+          '';
+      medicalDocumentData!.vaccinationCertificates!.first
+          .documentOriginalName = '';
+      notifyListeners();
+    }
+  }
+
+  bool hasExistingDrugAndAlcoholTestDocument() {
+    return medicalDocumentData != null &&
+        medicalDocumentData!.drugAlcoholTest != null &&
+        medicalDocumentData!.drugAlcoholTest!.isNotEmpty &&
+        medicalDocumentData!.drugAlcoholTest!.first.documentPath != null &&
+        medicalDocumentData!.drugAlcoholTest!.first.documentPath!.isNotEmpty;
+  }
+
+  void removeExistingDrugAndAlcoholTestAttachment() {
+    if (medicalDocumentData != null &&
+        medicalDocumentData!.drugAlcoholTest != null &&
+        medicalDocumentData!.drugAlcoholTest!.isNotEmpty) {
+      medicalDocumentData!.drugAlcoholTest!.first.documentPath = '';
+      medicalDocumentData!.drugAlcoholTest!.first.documentOriginalName = '';
+      notifyListeners();
+    }
+  }
+
   // Populate form data from API response
   void _populateFormData() {
     if (medicalDocumentData == null) return;
@@ -928,6 +969,27 @@ class MedicalDocumentProvider extends ChangeNotifier {
         break;
     }
     notifyListeners();
+  }
+
+  bool hasExistingMedicalFitnessDocument(int? index) {
+    if (index != null &&
+        medicalDocumentData != null &&
+        medicalDocumentData!.medicalFitness != null &&
+        index < medicalDocumentData!.medicalFitness!.length) {
+      return medicalDocumentData!.medicalFitness![index].documentPath != null &&
+          medicalDocumentData!.medicalFitness![index].documentPath!.isNotEmpty;
+    }
+    return false;
+  }
+
+  void removeExistingMedicalFitnessAttachment(int index) {
+    if (medicalDocumentData != null &&
+        medicalDocumentData!.medicalFitness != null &&
+        index < medicalDocumentData!.medicalFitness!.length) {
+      medicalDocumentData!.medicalFitness![index].documentPath = '';
+      medicalDocumentData!.medicalFitness![index].documentOriginalName = '';
+      notifyListeners();
+    }
   }
 
   // API call to create or update medical documents
