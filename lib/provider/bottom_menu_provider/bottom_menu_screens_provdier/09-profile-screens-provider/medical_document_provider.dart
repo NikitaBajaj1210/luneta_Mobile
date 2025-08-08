@@ -753,6 +753,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
           .vaccinationCertificates!.first; // Take the first entry
       vaccinationCertificateDocumentType = cert.documentType ?? '';
       vaccinationCertificateIssuingCountry = cert.issuingCountry ?? '';
+      vaccinationCertificateCertificateNoController.text =
+          cert.certificateNo ?? '';
       vaccinationCertificateIssuingAuthorityController.text =
           cert.issuingAuthority ?? '';
       vaccinationCertificateIssueDateController.text = cert.issuingDate ?? '';
@@ -822,6 +824,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
   bool medicalFitnessNeverExpire = false;
   String? medicalFitnessDocumentType;
   String? medicalFitnessIssuingCountry;
+  String? medicalFitnessDocumentPath_temp;
+  String? medicalFitnessDocumentOriginalName_temp;
 
   void setMedicalFitnessNeverExpire(bool value) {
     medicalFitnessNeverExpire = value;
@@ -962,12 +966,18 @@ class MedicalDocumentProvider extends ChangeNotifier {
       switch (type) {
         case 'medical_fitness':
           medicalFitnessDocument = file;
+          medicalFitnessDocumentPath_temp = null;
+          medicalFitnessDocumentOriginalName_temp = null;
           break;
         case 'drug_alcohol_test':
           drugAndAlcoholTestDocument = file;
+          drugAndAlcoholTestDocumentPath = null;
+          drugAndAlcoholTestDocumentOriginalName = null;
           break;
         case 'vaccination_certificate':
           vaccinationCertificateDocument = file;
+          vaccinationCertificateDocumentPath = null;
+          vaccinationCertificateDocumentOriginalName = null;
           break;
       }
       notifyListeners();
@@ -995,12 +1005,18 @@ class MedicalDocumentProvider extends ChangeNotifier {
         switch (type) {
           case 'medical_fitness':
             medicalFitnessDocument = file;
+            medicalFitnessDocumentPath_temp = null;
+            medicalFitnessDocumentOriginalName_temp = null;
             break;
           case 'drug_alcohol_test':
             drugAndAlcoholTestDocument = file;
+            drugAndAlcoholTestDocumentPath = null;
+            drugAndAlcoholTestDocumentOriginalName = null;
             break;
           case 'vaccination_certificate':
             vaccinationCertificateDocument = file;
+            vaccinationCertificateDocumentPath = null;
+            vaccinationCertificateDocumentOriginalName = null;
             break;
         }
         notifyListeners();
