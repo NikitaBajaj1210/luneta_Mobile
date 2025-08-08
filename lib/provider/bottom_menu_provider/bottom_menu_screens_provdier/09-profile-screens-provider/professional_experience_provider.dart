@@ -21,8 +21,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   String errorMessage = '';
   ProfessionalExperience? professionalExperienceData;
 
-  List<File?> employmentHistoryDocuments = [];
-  List<File?> referenceDocuments = [];
+  File? referenceDocument;
 
   // Controllers for text fields
   final TextEditingController companyController = TextEditingController();
@@ -176,8 +175,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     reference_Edit_Index = null;
     
     // Clear file
-    employmentHistoryDocuments.clear();
-    referenceDocuments.clear();
+    referenceDocument = null;
     
     // Reset error states
     hasError = false;
@@ -200,7 +198,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   String? positionsHeldError;
   String? vesselTypeExperienceError;
 
-  Future<void> showAttachmentOptions(BuildContext context, String type, int index) async {
+  Future<void> showAttachmentOptions(BuildContext context) async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -211,7 +209,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
                 leading: Icon(Icons.photo_library),
                 title: Text('Choose from gallery'),
                 onTap: () {
-                  _pickImage(ImageSource.gallery, type, index);
+                  _pickImage(ImageSource.gallery);
                   Navigator.of(context).pop();
                 },
               ),
@@ -219,7 +217,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
                 leading: Icon(Icons.photo_camera),
                 title: Text('Take a picture'),
                 onTap: () {
-                  _pickImage(ImageSource.camera, type, index);
+                  _pickImage(ImageSource.camera);
                   Navigator.of(context).pop();
                 },
               ),
@@ -227,7 +225,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
                 leading: Icon(Icons.description),
                 title: Text('Choose a document'),
                 onTap: () {
-                  _pickDocument(type, index);
+                  _pickDocument();
                   Navigator.of(context).pop();
                 },
               ),
@@ -238,55 +236,27 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> _pickImage(ImageSource source, String type, int index) async {
+  Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      if (type == 'employment') {
-        while (employmentHistoryDocuments.length <= index) {
-          employmentHistoryDocuments.add(null);
-        }
-        employmentHistoryDocuments[index] = File(pickedFile.path);
-      } else if (type == 'reference') {
-        while (referenceDocuments.length <= index) {
-          referenceDocuments.add(null);
-        }
-        referenceDocuments[index] = File(pickedFile.path);
-      }
+      referenceDocument = File(pickedFile.path);
       notifyListeners();
     }
   }
 
-  Future<void> _pickDocument(String type, int index) async {
+  Future<void> _pickDocument() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
-      if (type == 'employment') {
-        while (employmentHistoryDocuments.length <= index) {
-          employmentHistoryDocuments.add(null);
-        }
-        employmentHistoryDocuments[index] = File(result.files.single.path!);
-      } else if (type == 'reference') {
-        while (referenceDocuments.length <= index) {
-          referenceDocuments.add(null);
-        }
-        referenceDocuments[index] = File(result.files.single.path!);
-      }
+      referenceDocument = File(result.files.single.path!);
       notifyListeners();
     }
   }
 
-  void removeAttachment(String type, int index) {
-    if (type == 'employment') {
-      if (index < employmentHistoryDocuments.length) {
-        employmentHistoryDocuments[index] = null;
-      }
-    } else if (type == 'reference') {
-      if (index < referenceDocuments.length) {
-        referenceDocuments[index] = null;
-      }
-    }
+  void removeAttachment() {
+    referenceDocument = null;
     notifyListeners();
   }
 
@@ -626,26 +596,13 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       // Convert fileList to the format expected by Dio function
       List<Map<String, dynamic>> dioFileList = [];
 
-      // Add employment history documents if available
-      for (int i = 0; i < employmentHistoryDocuments.length; i++) {
-        if (employmentHistoryDocuments[i] != null) {
-          dioFileList.add({
-            'fieldName': 'employmentHistoryDocuments[$i]',
-            'filePath': employmentHistoryDocuments[i]!.path,
-            'fileName': employmentHistoryDocuments[i]!.path.split('/').last,
-          });
-        }
-      }
-
-      // Add references documents if available
-      for (int i = 0; i < referenceDocuments.length; i++) {
-        if (referenceDocuments[i] != null) {
-          dioFileList.add({
-            'fieldName': 'referenceDocuments[$i]',
-            'filePath': referenceDocuments[i]!.path,
-            'fileName': referenceDocuments[i]!.path.split('/').last,
-          });
-        }
+      // Add references document if available
+      if (referenceDocument != null) {
+        dioFileList.add({
+          'fieldName': 'referencesDocument',
+          'filePath': referenceDocument!.path,
+          'fileName': referenceDocument!.path.split('/').last,
+        });
       }
 
 
