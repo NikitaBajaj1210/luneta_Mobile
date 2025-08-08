@@ -562,19 +562,54 @@ class MedicalDocumentProvider extends ChangeNotifier {
     // Reset error states
     hasError = false;
     errorMessage = '';
-    
+
     // Reset validation modes
     autovalidateMode = AutovalidateMode.disabled;
     autovalidateModeMedical = AutovalidateMode.disabled;
-    
+
     // Clear data
     medicalDocumentData = null;
-    
-    // Clear lists (you may need to add these lists if they don't exist)
-    // medicalFitnessList.clear();
-    // drugAndAlcoholTestList.clear();
-    // vaccinationCertificateList.clear();
-    
+
+    // Clear lists
+    medicalFitnessList.clear();
+
+    // Clear Drug & Alcohol Test fields
+    drugAndAlcoholTestDocumentType = null;
+    drugAndAlcoholTestCertificateNoController.clear();
+    drugAndAlcoholTestIssuingCountry = null;
+    drugAndAlcoholTestIssuingAuthorityController.clear();
+    drugAndAlcoholTestIssueDateController.clear();
+    drugAndAlcoholTestExpiryDateController.clear();
+    drugAndAlcoholTestNeverExpire = false;
+    drugAndAlcoholTestDocument = null;
+    drugAndAlcoholTestDocumentPath = null;
+    drugAndAlcoholTestDocumentOriginalName = null;
+
+    // Clear Vaccination Certificate fields
+    vaccinationCertificateDocumentType = null;
+    vaccinationCertificateCertificateNoController.clear();
+    vaccinationCertificateIssuingCountry = null;
+    vaccinationCertificateIssuingAuthorityController.clear();
+    vaccinationCertificateIssueDateController.clear();
+    vaccinationCertificateExpiryDateController.clear();
+    vaccinationCertificateNeverExpire = false;
+    vaccinationCertificateDocument = null;
+    vaccinationCertificateDocumentPath = null;
+    vaccinationCertificateDocumentOriginalName = null;
+
+    // Clear medical fitness form fields
+    medicalFitnessDocumentType = null;
+    medicalFitnessCertificateNoController.clear();
+    medicalFitnessIssuingCountry = null;
+    medicalFitnessIssuingAuthorityController.clear();
+    medicalFitnessIssueDateController.clear();
+    medicalFitnessExpiryDateController.clear();
+    medicalFitnessNeverExpire = false;
+    medicalFitnessDocument = null;
+    showAddSection_medicalFitness = false;
+    medicalFitness_Edit_Index = null;
+    medicalFitness_IsEdit = false;
+
     notifyListeners();
   }
 
@@ -646,6 +681,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
           '';
       medicalDocumentData!.vaccinationCertificates!.first
           .documentOriginalName = '';
+      vaccinationCertificateDocumentPath = null;
+      vaccinationCertificateDocumentOriginalName = null;
       notifyListeners();
     }
   }
@@ -664,6 +701,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
         medicalDocumentData!.drugAlcoholTest!.isNotEmpty) {
       medicalDocumentData!.drugAlcoholTest!.first.documentPath = '';
       medicalDocumentData!.drugAlcoholTest!.first.documentOriginalName = '';
+      drugAndAlcoholTestDocumentPath = null;
+      drugAndAlcoholTestDocumentOriginalName = null;
       notifyListeners();
     }
   }
@@ -685,6 +724,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
           expiryDate: fitness.expDate ?? '',
           neverExpire: fitness.neverExpire ?? false,
           document: null, // We don't have the actual file, just the path
+          documentPath: fitness.documentPath,
+          documentOriginalName: fitness.documentOriginalName,
         );
         medicalFitnessList.add(localFitness);
       }
@@ -697,21 +738,28 @@ class MedicalDocumentProvider extends ChangeNotifier {
       drugAndAlcoholTestDocumentType = test.documentType ?? '';
       drugAndAlcoholTestCertificateNoController.text = test.certificateNo ?? '';
       drugAndAlcoholTestIssuingCountry = test.issuingCountry ?? '';
-      drugAndAlcoholTestIssuingAuthorityController.text = test.issuingAuthority ?? '';
+      drugAndAlcoholTestIssuingAuthorityController.text =
+          test.issuingAuthority ?? '';
       drugAndAlcoholTestIssueDateController.text = test.issuingDate ?? '';
       drugAndAlcoholTestExpiryDateController.text = test.expDate ?? '';
+      drugAndAlcoholTestDocumentPath = test.documentPath;
+      drugAndAlcoholTestDocumentOriginalName = test.documentOriginalName;
     }
 
     // Populate Vaccination Certificate data
     if (medicalDocumentData!.vaccinationCertificates != null &&
         medicalDocumentData!.vaccinationCertificates!.isNotEmpty) {
-      var cert = medicalDocumentData!.vaccinationCertificates!.first; // Take the first entry
+      var cert = medicalDocumentData!
+          .vaccinationCertificates!.first; // Take the first entry
       vaccinationCertificateDocumentType = cert.documentType ?? '';
       vaccinationCertificateIssuingCountry = cert.issuingCountry ?? '';
-      vaccinationCertificateIssuingAuthorityController.text = cert.issuingAuthority ?? '';
+      vaccinationCertificateIssuingAuthorityController.text =
+          cert.issuingAuthority ?? '';
       vaccinationCertificateIssueDateController.text = cert.issuingDate ?? '';
       vaccinationCertificateExpiryDateController.text = cert.expDate ?? '';
       vaccinationCertificateNeverExpire = cert.neverExpire ?? false;
+      vaccinationCertificateDocumentPath = cert.documentPath;
+      vaccinationCertificateDocumentOriginalName = cert.documentOriginalName;
     }
   }
 
@@ -804,6 +852,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
   String? drugAndAlcoholTestDocumentType;
   String? drugAndAlcoholTestIssuingCountry;
   bool? drugAndAlcoholTestNeverExpire;
+  String? drugAndAlcoholTestDocumentPath;
+  String? drugAndAlcoholTestDocumentOriginalName;
 
   void setDrugAndAlcoholTestDocumentType(String value) {
     drugAndAlcoholTestDocumentType = value;
@@ -834,6 +884,8 @@ class MedicalDocumentProvider extends ChangeNotifier {
   bool? vaccinationCertificateNeverExpire=false; // Made optional
   String? vaccinationCertificateDocumentType;
   String? vaccinationCertificateIssuingCountry;
+  String? vaccinationCertificateDocumentPath;
+  String? vaccinationCertificateDocumentOriginalName;
 
   void setVaccinationCertificateNeverExpire(bool value) {
     vaccinationCertificateNeverExpire = value;
@@ -1003,38 +1055,49 @@ class MedicalDocumentProvider extends ChangeNotifier {
       Map<String, dynamic> medicalDocument = {
         'userId': NetworkHelper.loggedInUserId,
         'medicalFitness': medicalFitnessList.map((fitness) => {
-          'documentType': fitness.documentType ?? '',
-          'certificateNo': fitness.certificateNo ?? '',
-          'issuingCountry': fitness.issuingCountry ?? '',
-          'issuingAuthority': fitness.issuingAuthority ?? '',
-          'issuingDate': fitness.issueDate ?? '',
-          'expDate': fitness.expiryDate ?? '',
-          'neverExpiry': fitness.neverExpire ?? false,
-        }).toList(),
+              'documentType': fitness.documentType ?? '',
+              'certificateNo': fitness.certificateNo ?? '',
+              'issuingCountry': fitness.issuingCountry ?? '',
+              'issuingAuthority': fitness.issuingAuthority ?? '',
+              'issuingDate': fitness.issueDate ?? '',
+              'expDate': fitness.expiryDate ?? '',
+              'neverExpiry': fitness.neverExpire ?? false,
+              'documentPath': fitness.documentPath,
+              'documentOriginalName': fitness.documentOriginalName,
+            }).toList(),
         'drugAlcoholTest': [
           {
             'documentType': drugAndAlcoholTestDocumentType ?? '',
             'certificateNo': drugAndAlcoholTestCertificateNoController.text,
             'issuingCountry': drugAndAlcoholTestIssuingCountry ?? '',
-            'issuingAuthority': drugAndAlcoholTestIssuingAuthorityController.text,
+            'issuingAuthority':
+                drugAndAlcoholTestIssuingAuthorityController.text,
             'issuingDate': drugAndAlcoholTestIssueDateController.text,
             'expDate': drugAndAlcoholTestExpiryDateController.text.isEmpty
                 ? null
                 : drugAndAlcoholTestExpiryDateController.text,
             'neverExpiry': drugAndAlcoholTestNeverExpire ?? false,
+            'documentPath': drugAndAlcoholTestDocumentPath,
+            'documentOriginalName': drugAndAlcoholTestDocumentOriginalName,
           }
         ],
         'vaccinationCertificates': [
           {
             'documentType': vaccinationCertificateDocumentType ?? '',
-            'certificateNo': vaccinationCertificateCertificateNoController.text,
+            'certificateNo':
+                vaccinationCertificateCertificateNoController.text,
             'issuingCountry': vaccinationCertificateIssuingCountry ?? '',
-            'issuingAuthority': vaccinationCertificateIssuingAuthorityController.text,
+            'issuingAuthority':
+                vaccinationCertificateIssuingAuthorityController.text,
             'issuingDate': vaccinationCertificateIssueDateController.text,
-            'expDate': vaccinationCertificateExpiryDateController.text.isEmpty
-                ? null
-                : vaccinationCertificateExpiryDateController.text,
+            'expDate':
+                vaccinationCertificateExpiryDateController.text.isEmpty
+                    ? null
+                    : vaccinationCertificateExpiryDateController.text,
             'neverExpiry': vaccinationCertificateNeverExpire ?? false,
+            'documentPath': vaccinationCertificateDocumentPath,
+            'documentOriginalName':
+                vaccinationCertificateDocumentOriginalName,
           }
         ],
       };
@@ -1098,6 +1161,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
         // if (userId.isNotEmpty) {
         //   await fetchMedicalDocuments(userId, context);
         // }
+        resetForm();
         ShowToast("Success", "Medical documents saved successfully");
         return true;
       } else {
@@ -1127,6 +1191,8 @@ class MedicalFitness {
   String? expiryDate; // Made optional
   bool? neverExpire; // Made optional
   File? document; // Already optional
+  String? documentPath;
+  String? documentOriginalName;
 
   MedicalFitness({
     this.documentType = '', // Default to empty string
@@ -1137,5 +1203,7 @@ class MedicalFitness {
     this.expiryDate, // Optional
     this.neverExpire = false, // Default to false
     this.document,
+    this.documentPath,
+    this.documentOriginalName,
   });
 }
