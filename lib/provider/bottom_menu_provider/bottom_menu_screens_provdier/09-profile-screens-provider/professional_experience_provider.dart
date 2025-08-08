@@ -242,19 +242,11 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
       if (type == 'employment') {
-        if (index < _employmentHistory.length) {
-          _employmentHistory[index].documentPath = '';
-          _employmentHistory[index].documentOriginalName = '';
-        }
         while (employmentHistoryDocuments.length <= index) {
           employmentHistoryDocuments.add(null);
         }
         employmentHistoryDocuments[index] = File(pickedFile.path);
       } else if (type == 'reference') {
-        if (index < _references.length) {
-          _references[index].experienceDocumentPath = '';
-          _references[index].experienceDocumentOriginalName = '';
-        }
         while (referenceDocuments.length <= index) {
           referenceDocuments.add(null);
         }
@@ -271,19 +263,11 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     );
     if (result != null) {
       if (type == 'employment') {
-        if (index < _employmentHistory.length) {
-          _employmentHistory[index].documentPath = '';
-          _employmentHistory[index].documentOriginalName = '';
-        }
         while (employmentHistoryDocuments.length <= index) {
           employmentHistoryDocuments.add(null);
         }
         employmentHistoryDocuments[index] = File(result.files.single.path!);
       } else if (type == 'reference') {
-        if (index < _references.length) {
-          _references[index].experienceDocumentPath = '';
-          _references[index].experienceDocumentOriginalName = '';
-        }
         while (referenceDocuments.length <= index) {
           referenceDocuments.add(null);
         }
@@ -291,21 +275,6 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
       }
       notifyListeners();
     }
-  }
-
-  void removeExistingAttachment(String type, int index) {
-    if (type == 'employment') {
-      if (index < _employmentHistory.length) {
-        _employmentHistory[index].documentPath = '';
-        _employmentHistory[index].documentOriginalName = '';
-      }
-    } else if (type == 'reference') {
-      if (index < _references.length) {
-        _references[index].experienceDocumentPath = '';
-        _references[index].experienceDocumentOriginalName = '';
-      }
-    }
-    notifyListeners();
   }
 
   void removeAttachment(String type, int index) {
