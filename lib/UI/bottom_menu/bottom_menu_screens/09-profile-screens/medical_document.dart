@@ -178,11 +178,11 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                     bool success = await provider.createOrUpdateMedicalDocumentsAPI(context);
                     
                       if (success) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // WidgetsBinding.instance.addPostFrameCallback((_) {
                           Provider.of<ProfileBottommenuProvider>(
                               context,
                               listen: false).getProfileInfo(context);
-                        });
+                        // });
                     Navigator.of(context).pop();
                         // Show success message
                         // ShowToast("Success", "Medical documents saved successfully!");
