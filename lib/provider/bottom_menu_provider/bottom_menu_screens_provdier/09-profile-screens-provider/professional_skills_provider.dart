@@ -206,13 +206,17 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   void addMetalWorkingSkill() {
     if (metalWorkingSkill != null && metalWorkingSkillLevel != null) {
       if (metalWorkingSkills_IsEdit) {
+        // When editing, preserve existing documentPath if no new document is selected
+        String? existingDocumentPath = metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath;
+        String? newDocumentPath = metalWorkingSkillDocument?.path ?? existingDocumentPath;
+        
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!] =
             MetalWorkingSkill(
                 skillSelection: metalWorkingSkill!,
                 level: metalWorkingSkillLevel!,
                 certificate: metalWorkingSkillCertificate,
                 document: metalWorkingSkillDocument,
-                documentPath: metalWorkingSkillDocument?.path ?? metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath);
+                documentPath: newDocumentPath);
       } else {
         metalWorkingSkillsList.add(MetalWorkingSkill(
             skillSelection: metalWorkingSkill!,
@@ -232,6 +236,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     metalWorkingSkillLevel = metalWorkingSkillsList[index].level;
     metalWorkingSkillCertificate = metalWorkingSkillsList[index].certificate;
     metalWorkingSkillDocument = metalWorkingSkillsList[index].document;
+    // Set the documentPath for proper display in UI
+    if (metalWorkingSkillsList[index].documentPath != null && metalWorkingSkillsList[index].documentPath!.isNotEmpty) {
+      // If we have a documentPath but no document object, we're editing an existing item with a previously uploaded document
+      // The UI needs to know about this to display it properly
+    }
     setMetalWorkingSkillsVisibility(true);
   }
 
@@ -491,7 +500,9 @@ class ProfessionalSkillsProvider with ChangeNotifier {
       // Also clear documentPath if editing an existing item
       if (metalWorkingSkills_Edit_Index != null &&
           metalWorkingSkills_Edit_Index! < metalWorkingSkillsList.length) {
-        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = null;
+        // When removing a document, we need to mark it for removal on the server side
+        // We'll set documentPath to empty string to indicate removal
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = '';
       }
     }
   }

@@ -1037,8 +1037,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                             margin: EdgeInsets.only(top: 1.h),
                             padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
                             decoration: BoxDecoration(
-                              color: Colors.red.shade100,
+                              color: Colors.blue.shade50,
                               borderRadius: BorderRadius.circular(1.h),
+                              border: Border.all(color: AppColors.buttonColor, width: 1),
                             ),
                             child: Row(
                               children: [
@@ -1173,14 +1174,16 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath != null &&
                                provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty))
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                              margin: EdgeInsets.only(top: 1.h),
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
                               decoration: BoxDecoration(
-                                color: Colors.red.shade100,
+                                color: Colors.blue.shade50,
                                 borderRadius: BorderRadius.circular(1.h),
+                                border: Border.all(color: AppColors.buttonColor, width: 1),
                               ),
                               child: Row(
                                 children: [
-                                  Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                  Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
                                   SizedBox(width: 2.w),
                                   Expanded(
                                     child: Text(
@@ -1188,10 +1191,10 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                         ? provider.metalWorkingSkillDocument!.path.split('/').last
                                         : provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.split('/').last,
                                       style: TextStyle(
-                                        fontSize: AppFontSize.fontSize16,
-                                        fontWeight: FontWeight.w700,
+                                        fontSize: AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w500,
                                         color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyBold,
+                                        fontFamily: AppColors.fontFamilyMedium,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -1203,7 +1206,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                     child: Icon(
                                       Icons.close,
                                       color: Colors.red,
-                                      size: 24,
+                                      size: 20,
                                     ),
                                   ),
                                 ],
