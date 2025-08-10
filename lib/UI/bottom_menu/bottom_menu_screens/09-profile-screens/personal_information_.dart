@@ -25,8 +25,8 @@ class PersonalInfoScreen extends StatefulWidget {
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   late var formKey = GlobalKey<FormState>();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-
+  String? countryOfBirthError;
+  String? nationalityError;
   @override
   void initState() {
     super.initState();
@@ -52,12 +52,22 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () async {
-                  if (formKey.currentState!.validate()) {
-                  provider.updatePersonalInfo(context);
-                  } else {
-                    setState(() {
-                      autovalidateMode = AutovalidateMode.always;
-                    });
+                  setState(() {
+                    // Validate Country of Birth
+                    if (provider.countryOfBirthController.text.isEmpty) {
+                      countryOfBirthError = 'Please select Country of Birth';
+                    } else {
+                      countryOfBirthError = null;
+                    }
+                    // Validate Nationality
+                    if (provider.nationalityController.text.isEmpty) {
+                      nationalityError = 'Please select Nationality';
+                    } else {
+                      nationalityError = null;
+                    }
+                  });
+                  if (formKey.currentState!.validate() && countryOfBirthError == null && nationalityError == null) {
+                    provider.updatePersonalInfo(context);
                   }
                 },
                 buttonText: "Save",
@@ -75,7 +85,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
-                  autovalidateMode: autovalidateMode,
+                  autovalidateMode: provider.autovalidateMode,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -174,6 +184,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.name,
                       obscureText: false,
                       voidCallback: (value) {
+                        if (value == null || value.toString().trim().isEmpty) {
+                          return 'Please enter Last Name';
+                        }
                         return null;
                       },
                       fontSize: AppFontSize.fontSize16,
@@ -274,6 +287,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         borderRadius: BorderRadius.circular(2.h),
                       ),
                       child: SearchChoices.single(
+                        
                         items: provider.countries.map((String country) {
                           return DropdownMenuItem<String>(
                             value: country,
@@ -294,7 +308,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         onClear: () {
                           provider.countryOfBirthController.clear();
                         },
-                          underline: SizedBox(),
+                        underline: SizedBox(),
                         displayItem: (item, selected) {
                           return Container(
                             decoration: BoxDecoration(
@@ -312,6 +326,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         },
                       ),
                     ),
+                    if (countryOfBirthError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
+                        child: Text(
+                          countryOfBirthError!,
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -458,12 +480,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
                         },
                         searchHint: "Search for a nationality",
-                        validator: (value) {
-                          if ((value == null || value.isEmpty) && autovalidateMode == AutovalidateMode.always) {
-                            return '      Please select Nationality';
-                          }
-                          return null;
-                        },
                         onChanged: (value) {
                           setState(() {
                             provider.nationalityController.text = value as String;
@@ -488,6 +504,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         },
                       ),
                     ),
+                    if (nationalityError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
+                        child: Text(
+                          nationalityError!,
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
 
                     // Contact Information
                     // Email, Phone Number, Address, Nearest Airport (Phone number inputs)
@@ -569,12 +593,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.phone,
                       obscureText: false,
                       voidCallback: (value) {
-                        if ((value == null || value.isEmpty || (value.toString().trim().length<10)) && autovalidateMode == AutovalidateMode.always) {
-                          return '      Please enter Phone Number';
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Phone Number';
+                        }
+                        if (value.toString().trim().length < 10) {
+                          return 'Phone number must be at least 10 digits';
                         }
                         return null;
                       },
-                      autovalidateMode: autovalidateMode,
+                      
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.phoneFocusNode.hasFocus
@@ -590,13 +617,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       onFieldSubmitted: (value) {
                       },
                     ),
-                   if ((provider.phoneController.text == '' || provider.phoneController.text.isEmpty || (provider.phoneController.text.toString().trim().length<10)) && autovalidateMode == AutovalidateMode.always)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
-                        child: Text('Please enter Phone Number',
-                          style: TextStyle(color: Colors.red, fontSize: 12),
-                        ),
-                      ),
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -619,7 +639,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       obscureText: false,
                       maxLength: 15,
                       voidCallback: (value){return;},
-                      autovalidateMode: autovalidateMode,
+                      
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       backgroundColor: provider.directPhoneFocusNode.hasFocus

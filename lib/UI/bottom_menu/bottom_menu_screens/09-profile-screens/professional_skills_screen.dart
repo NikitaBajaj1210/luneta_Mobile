@@ -980,53 +980,86 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       provider.metalWorkingSkillsList[index];
                   return Container(
                     margin: EdgeInsets.only(top: 1.h, bottom: 1.h),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Column(
                       children: [
-                        Container(
-                          width: 15.w,
-                          height: 15.w,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 0.1.h, color: AppColors.Color_EEEEEE),
-                            borderRadius: BorderRadius.circular(2.h),
-                          ),
-                          child: Center(
-                            child: Image.asset(
-                              "assets/images/TicketStar.png",
-                              // Replace with appropriate icon
-                              width: 8.w,
-                              height: 8.w,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 15.w,
+                              height: 15.w,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 0.1.h, color: AppColors.Color_EEEEEE),
+                                borderRadius: BorderRadius.circular(2.h),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  "assets/images/TicketStar.png",
+                                  // Replace with appropriate icon
+                                  width: 8.w,
+                                  height: 8.w,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 3.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.skillSelection,
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.Color_212121,
+                                      fontFamily: AppColors.fontFamilyBold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    item.level,
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.Color_212121,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Display document if it exists
+                        if (item.documentPath != null && item.documentPath!.isNotEmpty)
+                          Container(
+                            margin: EdgeInsets.only(top: 1.h),
+                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(1.h),
+                              border: Border.all(color: AppColors.buttonColor, width: 1),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Text(
+                                    item.documentPath!.split('/').last,
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.Color_212121,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        SizedBox(width: 3.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.skillSelection,
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.Color_212121,
-                                  fontFamily: AppColors.fontFamilyBold,
-                                ),
-                              ),
-                              SizedBox(height: 0.5.h),
-                              Text(
-                                item.level,
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.Color_212121,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   );
@@ -1117,20 +1150,74 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       ],
                     ),
                     if (provider.metalWorkingSkillCertificate)
-                      customButton(
-                        voidCallback: () {
-                          provider.showAttachmentOptions(
-                              context, 'metalWorkingSkill');
-                        },
-                        buttonText: "Attach Document",
-                        width: 40.w,
-                        height: 10.w,
-                        color: AppColors.buttonColor,
-                        buttonTextColor: AppColors.buttonTextWhiteColor,
-                        shadowColor: AppColors.buttonBorderColor,
-                        fontSize: AppFontSize.fontSize18,
-                        showShadow: true,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          customButton(
+                            voidCallback: () {
+                              provider.showAttachmentOptions(
+                                  context, 'metalWorkingSkill');
+                            },
+                            buttonText: "Attach Document",
+                            width: 40.w,
+                            height: 10.w,
+                            color: AppColors.buttonColor,
+                            buttonTextColor: AppColors.buttonTextWhiteColor,
+                            shadowColor: AppColors.buttonBorderColor,
+                            fontSize: AppFontSize.fontSize18,
+                            showShadow: true,
+                          ),
+                          SizedBox(height: 1.h),
+                          // Display existing document
+                          if (provider.metalWorkingSkillDocument != null ||
+                              (provider.metalWorkingSkills_Edit_Index != null &&
+                               provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath != null &&
+                               provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty))
+                            Container(
+                              margin: EdgeInsets.only(top: 1.h),
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade50,
+                                borderRadius: BorderRadius.circular(1.h),
+                                border: Border.all(color: AppColors.buttonColor, width: 1),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
+                                  SizedBox(width: 2.w),
+                                  Expanded(
+                                    child: Text(
+                                      provider.metalWorkingSkillDocument != null
+                                        ? provider.metalWorkingSkillDocument!.path.split('/').last
+                                        : provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.split('/').last,
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize14,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.Color_212121,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      provider.removeAttachment('metalWorkingSkill');
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
+                    if (provider.metalWorkingSkillDocument != null ||
+                        (provider.metalWorkingSkills_Edit_Index != null &&
+                            provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath != null &&
+                            provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty)) SizedBox(height: 1.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: customButton(

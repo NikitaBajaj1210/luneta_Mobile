@@ -62,12 +62,55 @@ class EducationProvider with ChangeNotifier {
   }
 
   void addAcademicQualification(AcademicQualification qualification) {
-    academicQualificationList.add(qualification);
+    // When adding a new qualification, set documentPath to the document's path if it exists
+    AcademicQualification newQualification = AcademicQualification(
+      educationalDegree: qualification.educationalDegree,
+      fieldOfStudy: qualification.fieldOfStudy,
+      educationalInstitution: qualification.educationalInstitution,
+      country: qualification.country,
+      graduationDate: qualification.graduationDate,
+      document: qualification.document,
+      documentPath: qualification.document?.path ?? '',
+    );
+    academicQualificationList.add(newQualification);
+    notifyListeners();
+  }
+  
+  void addAcademicQualificationWithDocument(AcademicQualification qualification, File? document) {
+    AcademicQualification qual = AcademicQualification(
+      educationalDegree: qualification.educationalDegree,
+      fieldOfStudy: qualification.fieldOfStudy,
+      educationalInstitution: qualification.educationalInstitution,
+      country: qualification.country,
+      graduationDate: qualification.graduationDate,
+      document: document,
+    );
+    academicQualificationList.add(qual);
     notifyListeners();
   }
 
   void updateAcademicQualification(int index, AcademicQualification qualification) {
-    academicQualificationList[index] = qualification;
+    // Preserve existing document if no new document is provided
+    File? existingDocument = academicQualificationList[index].document;
+    File? newDocument = qualification.document ?? existingDocument;
+    
+    // Preserve existing documentPath if no new document is provided
+    String? existingDocumentPath = academicQualificationList[index].documentPath;
+    String? newDocumentPath = qualification.document != null
+        ? qualification.document!.path
+        : (qualification.documentPath ?? existingDocumentPath);
+    
+    AcademicQualification updatedQual = AcademicQualification(
+      educationalDegree: qualification.educationalDegree,
+      fieldOfStudy: qualification.fieldOfStudy,
+      educationalInstitution: qualification.educationalInstitution,
+      country: qualification.country,
+      graduationDate: qualification.graduationDate,
+      document: newDocument,
+      documentPath: newDocumentPath,
+    );
+    
+    academicQualificationList[index] = updatedQual;
     notifyListeners();
   }
 
@@ -116,12 +159,52 @@ class EducationProvider with ChangeNotifier {
   }
 
   void addCertification(Certification certification) {
-    certificationList.add(certification);
+    // When adding a new certification, set documentPath to the document's path if it exists
+    Certification newCertification = Certification(
+      typeOfCertification: certification.typeOfCertification,
+      issuingAuthority: certification.issuingAuthority,
+      issueDate: certification.issueDate,
+      expiryDate: certification.expiryDate,
+      document: certification.document,
+      documentPath: certification.document?.path ?? '',
+    );
+    certificationList.add(newCertification);
+    notifyListeners();
+  }
+  
+  void addCertificationWithDocument(Certification certification, File? document) {
+    Certification cert = Certification(
+      typeOfCertification: certification.typeOfCertification,
+      issuingAuthority: certification.issuingAuthority,
+      issueDate: certification.issueDate,
+      expiryDate: certification.expiryDate,
+      document: document,
+    );
+    certificationList.add(cert);
     notifyListeners();
   }
 
   void updateCertification(int index, Certification certification) {
-    certificationList[index] = certification;
+    // Preserve existing document if no new document is provided
+    File? existingDocument = certificationList[index].document;
+    File? newDocument = certification.document ?? existingDocument;
+    
+    // Preserve existing documentPath if no new document is provided
+    String? existingDocumentPath = certificationList[index].documentPath;
+    String? newDocumentPath = certification.document != null
+        ? certification.document!.path
+        : (certification.documentPath ?? existingDocumentPath);
+    
+    Certification updatedCert = Certification(
+      typeOfCertification: certification.typeOfCertification,
+      issuingAuthority: certification.issuingAuthority,
+      issueDate: certification.issueDate,
+      expiryDate: certification.expiryDate,
+      document: newDocument,
+      documentPath: newDocumentPath,
+    );
+    
+    certificationList[index] = updatedCert;
     notifyListeners();
   }
 
@@ -234,6 +317,37 @@ class EducationProvider with ChangeNotifier {
       setCertificationDocument(null);
     }
   }
+  
+  // Remove document from an existing academic qualification
+  void removeAcademicQualificationDocument(int index) {
+    AcademicQualification qualification = academicQualificationList[index];
+    AcademicQualification updatedQual = AcademicQualification(
+      educationalDegree: qualification.educationalDegree,
+      fieldOfStudy: qualification.fieldOfStudy,
+      educationalInstitution: qualification.educationalInstitution,
+      country: qualification.country,
+      graduationDate: qualification.graduationDate,
+      document: null,
+      documentPath: '', // Set to empty string to indicate removal
+    );
+    academicQualificationList[index] = updatedQual;
+    notifyListeners();
+  }
+  
+  // Remove document from an existing certification
+  void removeCertificationDocument(int index) {
+    Certification certification = certificationList[index];
+    Certification updatedCert = Certification(
+      typeOfCertification: certification.typeOfCertification,
+      issuingAuthority: certification.issuingAuthority,
+      issueDate: certification.issueDate,
+      expiryDate: certification.expiryDate,
+      document: null,
+      documentPath: '', // Set to empty string to indicate removal
+    );
+    certificationList[index] = updatedCert;
+    notifyListeners();
+  }
 
   // API Methods
   bool isLoading = false;
@@ -314,7 +428,8 @@ class EducationProvider with ChangeNotifier {
           educationalInstitution: qualification.educationalInstitution ?? '',
           country: qualification.country ?? '',
           graduationDate: qualification.graduationDate ?? '',
-          document: null, // Document path would need to be handled separately
+          document: null, // Document file would need to be handled separately
+          documentPath: qualification.document, // Store the document path from API
         );
         academicQualificationList.add(academicQual);
       }
@@ -328,7 +443,8 @@ class EducationProvider with ChangeNotifier {
           issuingAuthority: certification.issuingAuthority ?? '',
           issueDate: certification.issueDate ?? '',
           expiryDate: certification.expiryDate ?? '',
-          document: null, // Document path would need to be handled separately
+          document: null, // Document file would need to be handled separately
+          documentPath: certification.document, // Store the document path from API
         );
         certificationList.add(cert);
       }
@@ -373,7 +489,7 @@ class EducationProvider with ChangeNotifier {
           'educationalInstitution': qual.educationalInstitution,
           'country': qual.country,
           'graduationDate': qual.graduationDate,
-          'document': qual.document?.path.split('/').last ?? '',
+          'document': qual.document?.path.split('/').last ?? (qual.documentPath == '' ? null : qual.documentPath),
         }).toList(),
         'certificationsAndTrainings': certificationList.map((cert) => {
           'certificationType': cert.typeOfCertification,
@@ -381,7 +497,7 @@ class EducationProvider with ChangeNotifier {
           'issueDate': cert.issueDate,
           'expiryDate': cert.expiryDate,
           'neverExpire': false, // Default value
-          'document': cert.document?.path.split('/').last ?? '',
+          'document': cert.document?.path.split('/').last ?? (cert.documentPath == '' ? null : cert.documentPath),
         }).toList(),
         'languagesSpoken': [
           {
@@ -402,7 +518,8 @@ class EducationProvider with ChangeNotifier {
 
       // Add academic qualification files
       for (int i = 0; i < academicQualificationList.length; i++) {
-        if (academicQualificationList[i].document != null) {
+        // Only add files that are not marked for removal
+        if (academicQualificationList[i].document != null && academicQualificationList[i].documentPath != '') {
           dioFileList.add({
             'fieldName': 'academicQualificationFiles',
             'filePath': academicQualificationList[i].document!.path,
@@ -413,7 +530,8 @@ class EducationProvider with ChangeNotifier {
 
       // Add certification files
       for (int i = 0; i < certificationList.length; i++) {
-        if (certificationList[i].document != null) {
+        // Only add files that are not marked for removal
+        if (certificationList[i].document != null && certificationList[i].documentPath != '') {
           dioFileList.add({
             'fieldName': 'certificationsAndTrainingsFiles',
             'filePath': certificationList[i].document!.path,
@@ -482,6 +600,7 @@ class AcademicQualification {
   final String country;
   final String graduationDate;
   final File? document;
+  final String? documentPath;
 
   AcademicQualification({
     required this.educationalDegree,
@@ -490,6 +609,7 @@ class AcademicQualification {
     required this.country,
     required this.graduationDate,
     this.document,
+    this.documentPath,
   });
 }
 
@@ -499,6 +619,7 @@ class Certification {
   final String issueDate;
   final String expiryDate;
   final File? document;
+  final String? documentPath;
 
   Certification({
     required this.typeOfCertification,
@@ -506,5 +627,6 @@ class Certification {
     required this.issueDate,
     required this.expiryDate,
     this.document,
+    this.documentPath,
   });
 }

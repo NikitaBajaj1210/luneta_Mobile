@@ -112,6 +112,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   DateTime? lastPromotedDate;
   Currency? currency; // Updated to enum
   File? justificationDocument;
+  String? justificationDocumentPath;
 
   // Constructor to ensure proper initialization
   JobConditionsAndPreferencesProvider() {
@@ -234,13 +235,33 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setJustificationDocument(File? file) {
+  Future<void> setJustificationDocument(File? file, BuildContext? context) async {
+    // Add file size validation (20MB limit)
+    if (file != null) {
+      final maxSize = 20 * 1024 * 1024; // 20MB in bytes
+      final size = await file.length();
+      if (size > maxSize) {
+        // Show error message
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('File size exceeds 20MB limit'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          print('File size exceeds 20MB limit');
+        }
+        return;
+      }
+    }
     justificationDocument = file;
     notifyListeners();
   }
 
-  void removeJustificationDocument() {
+  Future<void> removeJustificationDocument(BuildContext? context) async {
     justificationDocument = null;
+    justificationDocumentPath = null;
     notifyListeners();
   }
 
@@ -257,24 +278,24 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
               ListTile(
                 leading: Icon(Icons.photo_library),
                 title: Text('Choose from gallery'),
-                onTap: () {
-                  _pickImage(ImageSource.gallery);
+                onTap: () async {
+                  await _pickImage(ImageSource.gallery,context);
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
                 leading: Icon(Icons.photo_camera),
                 title: Text('Take a picture'),
-                onTap: () {
-                  _pickImage(ImageSource.camera);
+                onTap: () async {
+                  await _pickImage(ImageSource.camera,context);
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
                 leading: Icon(Icons.description),
                 title: Text('Choose a document'),
-                onTap: () {
-                  _pickDocument();
+                onTap: () async {
+                  await _pickDocument(context);
                   Navigator.of(context).pop();
                 },
               ),
@@ -285,22 +306,22 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     );
   }
 
-  Future<void> _pickDocument() async {
+  Future<void> _pickDocument(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
     if (result != null) {
       final file = File(result.files.single.path!);
-      setJustificationDocument(file);
+      await setJustificationDocument(file, context);
     }
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage(ImageSource source,BuildContext context) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-      setJustificationDocument(file);
+      await setJustificationDocument(file, context);
     }
   }
 
@@ -315,10 +336,6 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
         return 'image/jpeg';
       case 'png':
         return 'image/png';
-      case 'doc':
-        return 'application/msword';
-      case 'docx':
-        return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
       default:
         return 'application/octet-stream';
     }
@@ -383,7 +400,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   }
 
   // Method to reset all form fields to their initial state
-  void _resetAllFields() {
+  Future<void> _resetAllFields() async {
     currentRank = null;
     alternateRank = null;
     preferredVesselTypes.clear();
@@ -402,7 +419,8 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     _lastRankJoined = null;
     lastPromotedDate = null;
     currency = null;
-    justificationDocument = null;
+    await removeJustificationDocument(null);
+    justificationDocumentPath = null;
     
     print("All form fields have been reset to initial state");
   }
@@ -413,7 +431,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     errorMessage = '';
     
     // Reset all fields before fetching new data
-    _resetAllFields();
+    await _resetAllFields();
     notifyListeners();
 
     try {
@@ -527,6 +545,9 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     currency = currencyValue != null && currencies.contains(currencyValue)
         ? Currency.values.firstWhere((e) => e.value == currencyValue)
         : null;
+    
+    // Handle justificationDocumentPath
+    justificationDocumentPath = data['justificationDocumentPath'] as String?;
 
     notifyListeners();
   }

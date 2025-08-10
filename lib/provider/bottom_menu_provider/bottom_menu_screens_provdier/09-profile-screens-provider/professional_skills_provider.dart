@@ -206,18 +206,24 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   void addMetalWorkingSkill() {
     if (metalWorkingSkill != null && metalWorkingSkillLevel != null) {
       if (metalWorkingSkills_IsEdit) {
+        // When editing, preserve existing documentPath if no new document is selected
+        String? existingDocumentPath = metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath;
+        String? newDocumentPath = metalWorkingSkillDocument?.path ?? existingDocumentPath;
+        
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!] =
             MetalWorkingSkill(
                 skillSelection: metalWorkingSkill!,
                 level: metalWorkingSkillLevel!,
                 certificate: metalWorkingSkillCertificate,
-                document: metalWorkingSkillDocument);
+                document: metalWorkingSkillDocument,
+                documentPath: newDocumentPath);
       } else {
         metalWorkingSkillsList.add(MetalWorkingSkill(
             skillSelection: metalWorkingSkill!,
             level: metalWorkingSkillLevel!,
             certificate: metalWorkingSkillCertificate,
-            document: metalWorkingSkillDocument));
+            document: metalWorkingSkillDocument,
+            documentPath: metalWorkingSkillDocument?.path ?? ''));
       }
       setMetalWorkingSkillsVisibility(false);
     }
@@ -230,11 +236,25 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     metalWorkingSkillLevel = metalWorkingSkillsList[index].level;
     metalWorkingSkillCertificate = metalWorkingSkillsList[index].certificate;
     metalWorkingSkillDocument = metalWorkingSkillsList[index].document;
+    // Set the documentPath for proper display in UI
+    if (metalWorkingSkillsList[index].documentPath != null && metalWorkingSkillsList[index].documentPath!.isNotEmpty) {
+      // If we have a documentPath but no document object, we're editing an existing item with a previously uploaded document
+      // The UI needs to know about this to display it properly
+    }
     setMetalWorkingSkillsVisibility(true);
   }
 
   void removeMetalWorkingSkill(int index) {
     metalWorkingSkillsList.removeAt(index);
+    // Reset edit index if we're removing the currently edited item
+    if (metalWorkingSkills_Edit_Index == index) {
+      metalWorkingSkills_Edit_Index = null;
+      metalWorkingSkills_IsEdit = false;
+    }
+    // Adjust edit index if we're removing an item before the currently edited item
+    else if (metalWorkingSkills_Edit_Index != null && metalWorkingSkills_Edit_Index! > index) {
+      metalWorkingSkills_Edit_Index = metalWorkingSkills_Edit_Index! - 1;
+    }
     notifyListeners();
   }
 
@@ -454,7 +474,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> _pickDocument(String type) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
     if (result != null) {
       final file = File(result.files.single.path!);
@@ -477,6 +497,13 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   void removeAttachment(String type) {
     if (type == 'metalWorkingSkill') {
       setMetalWorkingSkillDocument(null);
+      // Also clear documentPath if editing an existing item
+      if (metalWorkingSkills_Edit_Index != null &&
+          metalWorkingSkills_Edit_Index! < metalWorkingSkillsList.length) {
+        // When removing a document, we need to mark it for removal on the server side
+        // We'll set documentPath to empty string to indicate removal
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = '';
+      }
     }
   }
 
@@ -512,6 +539,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     } catch (e) {
       print("Professional Skills Fetch Exception: $e");
     }
+    notifyListeners();
   }
 
   // Populate form data from API response
@@ -595,7 +623,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
               skillSelection: item['skill'] ?? '',
               level: item['level'] ?? '',
               certificate: item['certificate'] ?? false,
-              document: null, // Document path would need to be handled separately
+              document: null,
+              documentPath: item['documentPath'] ?? '',
             );
             metalWorkingSkillsList.add(metalWorking);
           }
@@ -746,7 +775,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'skill': item.skillSelection,
             'level': item.level,
             'certificate': item.certificate,
-            'documentPath': item.document?.path ?? '',
+            'documentPath': item.document?.path ?? item.documentPath ?? '',
           }).toList(),
         },
         'tankCoatingExperience': {
@@ -845,12 +874,15 @@ class MetalWorkingSkill {
   final String level;
   final bool certificate;
   final File? document;
+  String? documentPath;
 
-  MetalWorkingSkill(
-      {required this.skillSelection,
-      required this.level,
-      required this.certificate,
-      this.document});
+  MetalWorkingSkill({
+    required this.skillSelection,
+    required this.level,
+    required this.certificate,
+    this.document,
+    this.documentPath,
+  });
 }
 
 class TankCoatingExperience {

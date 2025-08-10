@@ -9,6 +9,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/network_services.dart';
 import '../../../../Utils/helper.dart';
 class JobConditionsAndPreferencesScreen extends StatefulWidget {
@@ -244,7 +245,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             final selectedAreas = values.map((value) {
                               return PreferredVesselType.values.firstWhere((e) => e.value == value.toString());
                             }).toList();
-                            provider.setPreferredVesselTypes(selectedAreas.cast<String>()); // Cast to List<String>
+                            provider.setPreferredVesselTypes(selectedAreas.map((e) => e.value).toList()); // Map to String values
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -972,62 +973,73 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         ),
                       ),
                       SizedBox(height: 10,),
-                      if (provider.justificationDocument != null)
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade100,
-                            borderRadius: BorderRadius.circular(1.h),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                              SizedBox(width: 2.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      provider.justificationDocument!.path.split('/').last,
-                                      style: TextStyle(
-                                        fontSize: AppFontSize.fontSize16,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyBold,
+                      if (provider.justificationDocument != null || provider.justificationDocumentPath != null)
+                        GestureDetector(
+                          onTap: (){
+                            OpenFile_View(provider.justificationDocument==null?provider.justificationDocumentPath:provider.justificationDocument!.path,context);
+
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade100,
+                              borderRadius: BorderRadius.circular(1.h),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        provider.justificationDocument != null
+                                          ? provider.justificationDocument!.path.split('/').last
+                                          : provider.justificationDocumentPath != null
+                                            ? provider.justificationDocumentPath!.split('/').last
+                                            : '',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.Color_212121,
+                                          fontFamily: AppColors.fontFamilyBold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    FutureBuilder<int>(
-                                      future: provider.justificationDocument!.length(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                            "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                            style: TextStyle(
-                                              fontSize: AppFontSize.fontSize12,
-                                              color: AppColors.Color_616161,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: AppColors.fontFamilyMedium,
-                                            ),
-                                          );
-                                        }
-                                        return SizedBox();
-                                      },
-                                    ),
-                                  ],
+                                      if (provider.justificationDocument != null)
+                                        FutureBuilder<int>(
+                                          future: provider.justificationDocument!.length(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                style: TextStyle(
+                                                  fontSize: AppFontSize.fontSize12,
+                                                  color: AppColors.Color_616161,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: AppColors.fontFamilyMedium,
+                                                ),
+                                              );
+                                            }
+                                            return SizedBox();
+                                          },
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  provider.removeJustificationDocument();
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                  size: 24,
+                                GestureDetector(
+                                  onTap: () async {
+                                    await provider.removeJustificationDocument(context);
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       SizedBox(height: 10,)
