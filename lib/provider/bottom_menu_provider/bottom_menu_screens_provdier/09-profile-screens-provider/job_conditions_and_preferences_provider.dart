@@ -106,7 +106,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   TextEditingController minAtHomeDurationController = TextEditingController();
   TextEditingController maxAtHomeDurationController = TextEditingController();
   RotationPattern? preferredRotationPattern; // Updated to enum
-  List<TradingArea> tradingAreaExclusions = []; // Updated to enum list
+  String? tradingAreaExclusions ; // Updated to enum list
   TextEditingController lastJobSalaryController = TextEditingController();
   RankData? _lastRankJoined;
   DateTime? lastPromotedDate;
@@ -215,7 +215,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setTradingAreaExclusions(List<TradingArea> values) {
+  void setTradingAreaExclusions(String values) {
     tradingAreaExclusions = values;
     notifyListeners();
   }
@@ -261,7 +261,6 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
 
   Future<void> removeJustificationDocument(BuildContext? context) async {
     justificationDocument = null;
-    justificationDocumentPath = null;
     notifyListeners();
   }
 
@@ -414,7 +413,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     minAtHomeDurationController.clear();
     maxAtHomeDurationController.clear();
     preferredRotationPattern = null;
-    tradingAreaExclusions.clear();
+    tradingAreaExclusions=null;
     lastJobSalaryController.clear();
     _lastRankJoined = null;
     lastPromotedDate = null;
@@ -526,17 +525,19 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
         ? RotationPattern.values.firstWhere((e) => e.value == rotationPatternValue)
         : null;
 
-    if (data['tradingAreaExclusions'] is List) {
-      tradingAreaExclusions = (data['tradingAreaExclusions'] as List)
-          .map((e) => e.toString())
-          .where((e) => tradingAreas.contains(e))
-          .map((e) => TradingArea.values.firstWhere((ta) => ta.value == e))
-          .toList();
-    } else if (data['tradingAreaExclusions'] is String) {
-      tradingAreaExclusions = [TradingArea.values.firstWhere((ta) => ta.value == data['tradingAreaExclusions'] as String)];
-    } else {
-      tradingAreaExclusions = [];
-    }
+    // if (data['tradingAreaExclusions'] is List) {
+    //   tradingAreaExclusions = (data['tradingAreaExclusions'] as List)
+    //       .map((e) => e.toString())
+    //       .where((e) => tradingAreas.contains(e))
+    //       .map((e) => TradingArea.values.firstWhere((ta) => ta.value == e))
+    //       .toList();
+    // } else if (data['tradingAreaExclusions'] is String) {
+    //   tradingAreaExclusions = [TradingArea.values.firstWhere((ta) => ta.value == data['tradingAreaExclusions'] as String)];
+    // } else {
+    //   tradingAreaExclusions = [];
+    // }
+    tradingAreaExclusions=data['tradingAreaExclusions'];
+
 
     lastJobSalaryController.text = (data['lastJobSalary'] as num?)?.toString() ?? '';
     lastPromotedDate = data['lastPromotedDate'] != null ? DateTime.tryParse(data['lastPromotedDate'] as String) : null;
@@ -576,31 +577,35 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
         'minAtHomeDuration': minAtHomeDurationController.text.isNotEmpty ? int.tryParse(minAtHomeDurationController.text) : null,
         'maxAtHomeDuration': maxAtHomeDurationController.text.isNotEmpty ? int.tryParse(maxAtHomeDurationController.text) : null,
         'preferredRotationPattern': preferredRotationPattern?.value ?? '',
-        'tradingAreaExclusions': tradingAreaExclusions.map((e) => e.value).join(','),
+        'tradingAreaExclusions': tradingAreaExclusions,
         'lastJobSalary': lastJobSalaryController.text.isNotEmpty ? double.tryParse(lastJobSalaryController.text) : null,
         'lastRankJoined': _lastRankJoined?.id ?? '',
         'lastPromotedDate': lastPromotedDate != null ? DateFormat('yyyy-MM-dd').format(lastPromotedDate!) : '',
         'currency': currency?.value ?? '',
+        'justificationDocumentPath':justificationDocument==null?justificationDocumentPath:'',
       };
 
+      if(justificationDocumentPath==''||justificationDocumentPath==null) {
+        dioFieldData['justificationDocumentOriginalName'] = '';
+      }
       // Add preferredVesselType array elements individually
       for (int i = 0; i < preferredVesselTypes.length; i++) {
         dioFieldData['preferredVesselType[$i]'] = preferredVesselTypes[i];
       }
 
-      print("Job Conditions Payload: $dioFieldData");
 
       // Prepare file list for justification document
       List<Map<String, dynamic>> dioFileList = [];
       if (justificationDocument != null) {
-        dioFileList.add({
+        dioFieldData['justificationDocumentOriginalName'] = justificationDocument!.path.split('/').last;
+    dioFileList.add({
           'fieldName': 'justificationDocument',
           'filePath': justificationDocument!.path,
           'fileName': justificationDocument!.path.split('/').last,
           'mimeType': _getMimeType(justificationDocument!.path),
         });
       }
-
+      print("Job Conditions Payload: $dioFieldData");
       print("File List: $dioFileList");
 
       // Make the API call

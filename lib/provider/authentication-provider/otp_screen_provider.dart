@@ -137,11 +137,9 @@ class OtpScreenProvider with ChangeNotifier {
                     (route) => false, // Remove all previous routes
               );
             }else{
-              WidgetsBinding.instance.addPostFrameCallback((_) {
                 Provider.of<BottomMenuProvider>(
                     context,
                     listen: false).updateSelectedIndex(0);
-              });
               Navigator.of(context).pushNamedAndRemoveUntil(
                 bottomMenu,
                     (route) => false, // Remove all previous routes

@@ -126,7 +126,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Current Rank / Position*',
+                          'Current Rank / Position',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -197,6 +197,10 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           value: provider.alternateRank,
                           hint: "Select Rank",
                           searchHint: "Search for a rank",
+                          onClear: (){
+                            provider.setAlternateRank(null);
+
+                          },
                           onChanged: (value) {
                             provider.setAlternateRank(value);
                           },
@@ -210,7 +214,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Preferred Vessel Type*',
+                          'Preferred Vessel Type',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -238,9 +242,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             border: Border.all(color: AppColors.buttonColor, width: 1),
                           ),
                           buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                          buttonText: Text(provider.preferredVesselTypes.isEmpty
-                              ? "Select Preferred Vessel Types"
-                              : "Selected: ${provider.preferredVesselTypes.join(', ')}"), // Join strings directly
+                          buttonText: Text("Select Preferred Vessel Types"), // Join strings directly
                           onConfirm: (values) {
                             final selectedAreas = values.map((value) {
                               return PreferredVesselType.values.firstWhere((e) => e.value == value.toString());
@@ -335,7 +337,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Manning Agency*',
+                          'Manning Agency',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -403,7 +405,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Current Availability Status*',
+                          'Current Availability Status',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -450,7 +452,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Available From*',
+                          'Available From',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -680,7 +682,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Trading Area Exclusions*',
+                          'Trading Area Exclusions',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -689,42 +691,66 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           ),
                         ),
                       ),
+
+
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.Color_FAFAFA,
                           borderRadius: BorderRadius.circular(2.h),
                         ),
-                        child: MultiSelectDialogField(
-                          items: TradingArea.values.map((e) {
-                            return MultiSelectItem(e.value, e.value);
+                        child: SearchChoices.single(
+                          items:TradingArea.values.map((area) {
+                            return DropdownMenuItem(
+                              child: Text(area.value),
+                              value: area.value,
+                            );
                           }).toList(),
-                          title: Text("Trading Area Exclusions"),
-                          selectedColor: AppColors.buttonColor,
-                          searchable: true,
-                          initialValue: provider.tradingAreaExclusions,
-                          decoration: BoxDecoration(
-                            color: AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.buttonColor, width: 1),
-                          ),
-                          buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                          buttonText: Text(provider.tradingAreaExclusions.isEmpty
-                              ? "Select Trading Area Exclusions"
-                              : "Selected: ${provider.tradingAreaExclusions.join(', ')}"),
-                          onConfirm: (values) {
-                            final selectedAreas = values.map((value) {
-                              return TradingArea.values.firstWhere((e) => e.value == value.toString());
-                            }).toList();
-                            provider.setTradingAreaExclusions(selectedAreas);
+                          value: provider.tradingAreaExclusions,
+                          hint: "Trading Area Exclusions",
+                          searchHint: "Search for a Trading Area",
+                          onChanged: (value) {
+                            provider.setTradingAreaExclusions(value);
                           },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select at least one trading area exclusion';
-                            }
-                            return null;
-                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
                         ),
                       ),
+
+
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: AppColors.Color_FAFAFA,
+                      //     borderRadius: BorderRadius.circular(2.h),
+                      //   ),
+                      //   child: MultiSelectDialogField(
+                      //     items: TradingArea.values.map((e) {
+                      //       return MultiSelectItem(e.value, e.value);
+                      //     }).toList(),
+                      //     title: Text("Trading Area Exclusions"),
+                      //     selectedColor: AppColors.buttonColor,
+                      //     searchable: true,
+                      //     initialValue: provider.tradingAreaExclusions,
+                      //     decoration: BoxDecoration(
+                      //       color: AppColors.Color_FAFAFA,
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       border: Border.all(color: AppColors.buttonColor, width: 1),
+                      //     ),
+                      //     buttonIcon: Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
+                      //     buttonText: Text("Select Trading Area Exclusions"),
+                      //     onConfirm: (values) {
+                      //       final selectedAreas = values.map((value) {
+                      //         return TradingArea.values.firstWhere((e) => e.value == value.toString());
+                      //       }).toList();
+                      //       provider.setTradingAreaExclusions(selectedAreas);
+                      //     },
+                      //     validator: (value) {
+                      //       if (value == null || value.isEmpty) {
+                      //         return 'Please select at least one trading area exclusion';
+                      //       }
+                      //       return null;
+                      //     },
+                      //   ),
+                      // ),
                       SizedBox(height: 1.h),
 
                       // Salary
@@ -745,7 +771,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Last Job Salary*',
+                          'Last Job Salary',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -782,7 +808,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Last Rank Joined*',
+                          'Last Rank Joined',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -880,7 +906,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Currency*',
+                          'Currency',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -1030,7 +1056,13 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    await provider.removeJustificationDocument(context);
+                                    if(provider.justificationDocument!=null) {
+                                      await provider
+                                          .removeJustificationDocument(context);
+                                    }else{
+                                      provider.justificationDocumentPath = null;
+                                      setState(() {});
+                                      }
                                   },
                                   child: Icon(
                                     Icons.close,
