@@ -728,9 +728,6 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             GestureDetector(
                               onTap: () async {
 
-                                final String endDateString = provider.endDate.text;
-
-
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
