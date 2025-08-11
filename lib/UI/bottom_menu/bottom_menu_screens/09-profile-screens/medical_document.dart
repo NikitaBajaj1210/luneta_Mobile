@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'dart:io';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/medical_document_provider.dart';
+import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
@@ -617,10 +618,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   borderRadius: BorderRadius.circular(2.h),
                                 ),
                                 child: SearchChoices.single(
-                                  items: provider.countries.map((country) {
+                                  items: countries.map((country) {
                                     return DropdownMenuItem(
-                                      child: Text(country),
-                                      value: country,
+                                      child: Text(country['name']),
+                                      value: country['name'],
                                     );
                                   }).toList(),
                                   value: provider.medicalFitnessIssuingCountry,
@@ -630,7 +631,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   hint: "Select Country",
                                   autovalidateMode: provider.autovalidateModeMedical,
                                   validator: (value) {
-                                    if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
+                                    if ((value == null) && provider.autovalidateModeMedical == AutovalidateMode.always) {
                                       return '      Please select Country';
                                     }
                                     return null;
@@ -709,11 +710,14 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  final DateTime? picked = await showDatePicker(
+                                  final DateTime? picked =
+                                  await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                                    lastDate: DateTime(2101),
+                                    firstDate: DateTime(
+                                        DateTime.now().year -
+                                            100), // 100 years ago
+                                    lastDate: DateTime.now(),
                                   );
                                   if (picked != null) {
                                     provider.setMedicalFitnessIssueDate(picked);
@@ -760,14 +764,43 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  final DateTime? picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                                    lastDate: DateTime(2101),
-                                  );
+                                  if (provider
+                                      .medicalFitnessIssueDateController
+                                      .text
+                                      .isNotEmpty) {
+                                    final String startDateString =
+                                        provider
+                                            .medicalFitnessIssueDateController
+                                            .text;
+                                    DateTime firstDate = DateTime(
+                                        DateTime.now().year -
+                                            100); // default fallback
+
+                                    if (startDateString.isNotEmpty) {
+                                      try {
+                                        firstDate = DateTime.parse(
+                                            startDateString);
+                                      } catch (e) {
+                                        // handle invalid date format if necessary
+                                        print(
+                                            'Invalid date format: $e');
+                                      }
+                                    }
+
+                                    final DateTime? picked =
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: firstDate,
+                                      lastDate: DateTime(
+                                          DateTime.now().year + 100),
+                                    );
                                   if (picked != null) {
                                     provider.setMedicalFitnessExpiryDate(picked);
+                                  }
+                                  } else {
+                                    ShowToast("Error",
+                                        "Please select Issue Date First");
                                   }
                                 },
                                 child: AbsorbPointer(
@@ -1315,10 +1348,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.countries.map((country) {
+                          items: countries.map((country) {
                             return DropdownMenuItem(
-                              child: Text(country),
-                              value: country,
+                              child: Text(country['name']),
+                              value: country['name'],
                             );
                           }).toList(),
                           value: provider.drugAndAlcoholTestIssuingCountry,
@@ -1328,7 +1361,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
-                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                            if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
                               return '      Please select Country';
                             }
                             return null;
@@ -1408,11 +1441,14 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          final DateTime? picked = await showDatePicker(
+                          final DateTime? picked =
+                          await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                            lastDate: DateTime(2101),
+                            firstDate: DateTime(
+                                DateTime.now().year -
+                                    100), // 100 years ago
+                            lastDate: DateTime.now(),
                           );
                           if (picked != null) {
                             provider.setDrugAndAlcoholTestIssueDate(picked);
@@ -1460,14 +1496,44 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          final DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                            lastDate: DateTime(2101),
-                          );
-                          if (picked != null) {
+                          if (provider
+                              .drugAndAlcoholTestIssueDateController
+                              .text
+                              .isNotEmpty) {
+                            final String startDateString =
+                                provider
+                                    .drugAndAlcoholTestIssueDateController
+                                    .text;
+                            DateTime firstDate = DateTime(
+                                DateTime.now().year -
+                                    100); // default fallback
+
+                            if (startDateString.isNotEmpty) {
+                              try {
+                                firstDate = DateTime.parse(
+                                    startDateString);
+                              } catch (e) {
+                                // handle invalid date format if necessary
+                                print(
+                                    'Invalid date format: $e');
+                              }
+                            }
+
+                            final DateTime? picked =
+                            await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: firstDate,
+                              lastDate: DateTime(
+                                  DateTime.now().year + 100),
+                            );
+
+                            if (picked != null) {
                             provider.setDrugAndAlcoholTestExpiryDate(picked);
+                          }
+                          } else {
+                            ShowToast("Error",
+                                "Please select Issue Date First");
                           }
                         },
                         child: AbsorbPointer(
@@ -1937,10 +2003,10 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.countries.map((country) {
+                          items: vaccinationCountry.map((country) {
                             return DropdownMenuItem(
-                              child: Text(country),
-                              value: country,
+                              child: Text(country['value']!),
+                              value: country['value'],
                             );
                           }).toList(),
                           value: provider.vaccinationCertificateIssuingCountry,
@@ -1950,7 +2016,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
-                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
+                            if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
                               return '      Please select Country';
                             }
                             return null;
@@ -2030,13 +2096,16 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          final DateTime? picked = await showDatePicker(
+                          final DateTime? picked =
+                          await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                            lastDate: DateTime(2101),
+                            firstDate: DateTime(
+                                DateTime.now().year -
+                                    100), // 100 years ago
+                            lastDate: DateTime.now(),
                           );
-                          if (picked != null) {
+                            if (picked != null) {
                             provider.setVaccinationCertificateIssueDate(picked);
                           }
                         },
@@ -2082,15 +2151,45 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          final DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                            lastDate: DateTime(2101),
-                          );
-                          if (picked != null) {
+        if (provider
+            .vaccinationCertificateIssueDateController
+            .text
+            .isNotEmpty) {
+        final String startDateString =
+        provider
+            .vaccinationCertificateIssueDateController
+            .text;
+        DateTime firstDate = DateTime(
+        DateTime.now().year -
+        100); // default fallback
+
+        if (startDateString.isNotEmpty) {
+        try {
+        firstDate = DateTime.parse(
+        startDateString);
+        } catch (e) {
+        // handle invalid date format if necessary
+        print(
+        'Invalid date format: $e');
+        }
+        }
+
+        final DateTime? picked =
+        await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: firstDate,
+        lastDate: DateTime(
+        DateTime.now().year + 100),
+        );
+
+        if (picked != null) {
                             provider.setVaccinationCertificateExpiryDate(picked);
                           }
+        } else {
+          ShowToast("Error",
+              "Please select Issue Date First");
+        }
                         },
                         child: AbsorbPointer(
                           child: customTextField(

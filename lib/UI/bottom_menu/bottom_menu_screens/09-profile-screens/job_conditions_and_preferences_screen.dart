@@ -466,8 +466,8 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                            lastDate: DateTime(2101),
+                            firstDate: DateTime(DateTime.now().year - 100),
+                            lastDate: DateTime.now(),
                           );
                           if (picked != null) {
                             provider.setAvailableFrom(picked);
@@ -870,7 +870,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                            firstDate: DateTime(DateTime.now().year - 100),
                             lastDate: DateTime.now(),
                           );
                           if (picked != null) {

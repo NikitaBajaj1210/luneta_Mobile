@@ -79,7 +79,14 @@ enum TradingArea {
 enum Currency {
   usd('USD'),
   eur('EUR'),
-  gbp('GBP');
+  gbp('GBP'),
+  inr('INR'),
+  aud('AUD'),
+  cad('CAD'),
+  chf('CHF'),
+  nzd('NZD'),
+  sgd('SGD'),
+  zar('ZAR');
 
   const Currency(this.value);
   final String value;

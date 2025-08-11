@@ -540,9 +540,9 @@ class MedicalDocumentProvider extends ChangeNotifier {
   String errorMessage = '';
   MedicalDocument? medicalDocumentData; // Optional, can be null
 
-  List<String> countries = [];
-  List<String> medicalFitnessDocumentTypes = ["PEME", "HMO", "Standard Medical Exam"];
-  List<String> drugAndAlcoholTestDocumentTypes = ["Type A", "Type B", "Type C"];
+  // List<String> countries = [];
+  List<String> medicalFitnessDocumentTypes = ["PEME", "HMO", "Standard Medical Exam","Other"];
+  List<String> drugAndAlcoholTestDocumentTypes = ["Standard", "Random", "Other"];
   List<String> vaccinationCertificateDocumentTypes = [
     "COVID 19",
     "Yellow Fever",
@@ -550,12 +550,9 @@ class MedicalDocumentProvider extends ChangeNotifier {
     "Diphtheria",
     "Hepatitis A",
     "Hepatitis B",
-    "Cholera"
+    "Cholera",
+    "Other"
   ];
-
-  MedicalDocumentProvider() {
-    countries = CountryService().getAll().map((country) => country.name).toList();
-  }
 
   // Reset all form data
   void resetForm() {

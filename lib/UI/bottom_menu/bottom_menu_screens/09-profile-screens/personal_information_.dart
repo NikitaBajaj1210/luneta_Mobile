@@ -288,10 +288,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       ),
                       child: SearchChoices.single(
                         
-                        items: provider.countries.map((String country) {
-                          return DropdownMenuItem<String>(
-                            value: country,
-                            child: Text(country),
+                        items: countries.map((country) {
+                          return DropdownMenuItem<dynamic>(
+                            value: country['name'],
+                            child: Text(country['name']),
                           );
                         }).toList(),
                         value: provider.countryOfBirthController.text.isEmpty
@@ -848,7 +848,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                               },
                               items: platformList.map((value) {
                                 return DropdownMenuItem<dynamic>(
-                                    value: value["key"],
+                                    value: value["value"],
                                     child: Text(
                                       // value.Type!,
                                       value["value"].toString(),

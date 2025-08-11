@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_provider.dart';
+import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
@@ -534,10 +535,10 @@ class _EducationScreenState extends State<EducationScreen> {
                                   borderRadius: BorderRadius.circular(2.h),
                                 ),
                                 child: SearchChoices.single(
-                                  items: provider.countries.map((country) {
+                                  items: countries.map((country) {
                                     return DropdownMenuItem(
-                                      child: Text(country),
-                                      value: country,
+                                      child: Text(country['name']),
+                                      value: country['name'],
                                     );
                                   }).toList(),
                                   value: provider.country,
@@ -1550,7 +1551,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 borderRadius: BorderRadius.circular(2.h),
                               ),
                               child: MultiSelectDialogField(
-                                items: provider.allLanguages.map((e) => MultiSelectItem(e, e)).toList(),
+                                items: provider.allNativeLanguages.map((e) => MultiSelectItem(e, e)).toList(),
                                 title: Text("Native Languages"),
                                 selectedColor: AppColors.buttonColor,
                                 searchable: true,

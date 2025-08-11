@@ -13,12 +13,12 @@ import 'ProfileInfo_Model.dart'; // Import the intl package for DateFormat
 
 class ProfileBottommenuProvider with ChangeNotifier {
   // **User Information**
-  String _userName = "Andrew Ainsley";
-  String _userRole = "UI/UX Designer at Paypal Inc.";
+  String _userName = "";
+  // String _userRole = "";
 
   // **Getters**
   String get userName => _userName;
-  String get userRole => _userRole;
+  // String get userRole => _userRole;
 
   // **Setters**
   void setUserName(String name) {
@@ -26,10 +26,10 @@ class ProfileBottommenuProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserRole(String role) {
-    _userRole = role;
-    notifyListeners();
-  }
+  // void setUserRole(String role) {
+  //   _userRole = role;
+  //   notifyListeners();
+  // }
 
   Future<void> getProfileData(BuildContext context) async {
     try {

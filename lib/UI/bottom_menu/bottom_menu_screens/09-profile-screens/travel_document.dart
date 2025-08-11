@@ -4,6 +4,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/travel_document_provider.dart';
+import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
@@ -396,10 +397,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
                                     child: SearchChoices.single(
-                                      items: provider.countries.map((country) {
+                                      items: countries.map((country) {
                                         return DropdownMenuItem(
-                                          child: Text(country),
-                                          value: country,
+                                          child: Text(country['name']),
+                                          value: country['name'],
                                         );
                                       }).toList(),
                                       value: provider.passportCountry,
@@ -410,7 +411,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       autovalidateMode:
                                           provider.autovalidateMode,
                                       validator: (value) {
-                                        if ((value == null || value.isEmpty) &&
+                                        if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
                                           return '      Please select Country';
@@ -876,10 +877,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
                                     child: SearchChoices.single(
-                                      items: provider.countries.map((country) {
+                                      items: countries.map((country) {
                                         return DropdownMenuItem(
-                                          child: Text(country),
-                                          value: country,
+                                          child: Text(country['name']),
+                                          value: country['name'],
                                         );
                                       }).toList(),
                                       value: provider.seamanIssuingCountry,
@@ -890,7 +891,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       autovalidateMode:
                                           provider.autovalidateMode,
                                       validator: (value) {
-                                        if ((value == null || value.isEmpty) &&
+                                        if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
                                           return '      Please select Country';
@@ -1143,10 +1144,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
                                     child: SearchChoices.single(
-                                      items: provider.countries.map((country) {
+                                      items: nationalityList.map((nationality) {
                                         return DropdownMenuItem(
-                                          child: Text(country),
-                                          value: country,
+                                          child: Text(nationality['value']!),
+                                          value: nationality['value'],
                                         );
                                       }).toList(),
                                       value: provider.seamanNationality,
@@ -1461,11 +1462,11 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                                 BorderRadius.circular(2.h),
                                           ),
                                           child: SearchChoices.single(
-                                            items: provider.countries
+                                            items: countries
                                                 .map((country) {
                                               return DropdownMenuItem(
-                                                child: Text(country),
-                                                value: country,
+                                                child: Text(country['name']),
+                                                value: country['name'],
                                               );
                                             }).toList(),
                                             value: provider
@@ -1479,8 +1480,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             autovalidateMode:
                                                 provider.autovalidateMode,
                                             validator: (value) {
-                                              if ((value == null ||
-                                                      value.isEmpty) &&
+                                              if ((value == null) &&
                                                   provider.autovalidateMode ==
                                                       AutovalidateMode.always) {
                                                 return '      Please select Country';
@@ -1994,10 +1994,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
                                     child: SearchChoices.single(
-                                      items: provider.countries.map((country) {
+                                      items: countries.map((country) {
                                         return DropdownMenuItem(
-                                          child: Text(country),
-                                          value: country,
+                                          child: Text(country['name']),
+                                          value: country['name'],
                                         );
                                       }).toList(),
                                       value: provider.visaIssuingCountry,
@@ -2008,7 +2008,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       autovalidateMode:
                                           provider.autovalidateMode,
                                       validator: (value) {
-                                        if ((value == null || value.isEmpty) &&
+                                        if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
                                           return '      Please select Country';
@@ -2461,10 +2461,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
                                     child: SearchChoices.single(
-                                      items: provider.countries.map((country) {
+                                      items: countries.map((country) {
                                         return DropdownMenuItem(
-                                          child: Text(country),
-                                          value: country,
+                                          child: Text(country['name']),
+                                          value: country['name'],
                                         );
                                       }).toList(),
                                       value: provider
@@ -2478,7 +2478,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       autovalidateMode:
                                           provider.autovalidateMode,
                                       validator: (value) {
-                                        if ((value == null || value.isEmpty) &&
+                                        if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
                                           return '      Please select Country';

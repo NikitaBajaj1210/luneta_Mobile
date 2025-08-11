@@ -40,8 +40,8 @@ class EducationProvider with ChangeNotifier {
   String? academicDocumentPath_temp;
   String? academicDocumentOriginalName_temp;
 
-  List<String> educationalDegrees = ["Bachelor's", "Master's", "PhD"];
-  List<String> countries = ["USA", "UK", "Canada", "Australia"]; // Example list
+  List<String> educationalDegrees = ["Bachelors", "Masters", "Doctorate","Diploma","Certificate","Other"];
+  // List<String> countries = ["USA", "UK", "Canada", "Australia"]; // Example list
 
   void setEducationalDegree(String value) {
     educationalDegree = value;
@@ -140,7 +140,7 @@ class EducationProvider with ChangeNotifier {
   String? certificationDocumentPath_temp;
   String? certificationDocumentOriginalName_temp;
 
-  List<String> certificationTypes = ["Certificate A", "Certificate B", "Certificate C"];
+  List<String> certificationTypes = ["Safety", "Technical", "Language","Management","Other"];
 
   void setTypeOfCertification(String value) {
     typeOfCertification = value;
@@ -229,6 +229,7 @@ class EducationProvider with ChangeNotifier {
   String? additionalLanguageLevel;
 
   List<String> allLanguages = ["English", "Spanish", "French", "German"]; // Example list
+  List<String> allNativeLanguages = ["English", "Spanish", "Mandarin", "Hindi","Arabic","French","German","Russian","Portuguese","Japanese","Other"]; // Example list
   List<String> languageLevels = ["Fair", "Good", "Very Good", "Excellent"];
 
   void setNativeLanguages(List<String> languages) {

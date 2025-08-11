@@ -494,9 +494,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text(provider.bulkCargo.isEmpty 
-                    ? "Select Bulk Cargo" 
-                    : "Selected: ${provider.bulkCargo.join(', ')}"),
+                  buttonText: Text("Select Bulk Cargo"),
                   onConfirm: (values) {
                     provider.bulkCargo = values.cast<String>();
                   },
@@ -534,9 +532,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text(provider.tankerCargo.isEmpty 
-                    ? "Select Tanker Cargo" 
-                    : "Selected: ${provider.tankerCargo.join(', ')}"),
+                  buttonText: Text("Select Tanker Cargo"),
                   onConfirm: (values) {
                     provider.tankerCargo = values.cast<String>();
                   },
@@ -574,9 +570,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text(provider.generalCargo.isEmpty 
-                    ? "Select General Cargo" 
-                    : "Selected: ${provider.generalCargo.join(', ')}"),
+                  buttonText: Text("Select General Cargo"),
                   onConfirm: (values) {
                     provider.generalCargo = values.cast<String>();
                   },
@@ -614,9 +608,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text(provider.woodProducts.isEmpty 
-                    ? "Select Wood Products" 
-                    : "Selected: ${provider.woodProducts.join(', ')}"),
+                  buttonText: Text("Select Wood Products"),
                   onConfirm: (values) {
                     provider.woodProducts = values.cast<String>();
                   },
@@ -654,9 +646,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ),
                   buttonIcon:
                       Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-                  buttonText: Text(provider.stowageAndLashingExperience.isEmpty 
-                    ? "Select Stowage and Lashing Experience" 
-                    : "Selected: ${provider.stowageAndLashingExperience.join(', ')}"),
+                  buttonText: Text("Select Stowage and Lashing Experience"),
                   onConfirm: (values) {
                     provider.stowageAndLashingExperience =
                         values.cast<String>();
@@ -1142,7 +1132,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         ),
                         child: SearchChoices.single(
                           items:
-                              provider.metalWorkingSkillLevelList.map((item) {
+                              provider.levelList.map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -2062,9 +2052,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               ),
               buttonIcon:
                   Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),
-              buttonText: Text(provider.tradingAreaExperience.isEmpty 
-                ? "Select Trading Area" 
-                : "Selected: ${provider.tradingAreaExperience.join(', ')}"),
+              buttonText: Text("Select Trading Area"),
               onConfirm: (values) {
                 provider.tradingAreaExperience = values.cast<String>();
               },

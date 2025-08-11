@@ -63,8 +63,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   bool computerAndSoftware_IsEdit = false;
   String? software;
   String? level;
-  List<String> softwareList = ["Danaos", "Benefit", "BASS net"];
-  List<String> levelList = ["Fair", "Good", "Very Good", "Excellent"];
+  List<String> softwareList = ["Danaos", "Benefit", "BASS net","Other"];
+  List<String> levelList = ["Fair", "Good", "Very Good", "Excellent","Beginner","Intermediate","Advanced"];
 
   void setSoftware(String value) {
     software = value;
@@ -212,10 +212,10 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   List<String> metalWorkingSkillsTypes = [
     "Arc welding",
     "Gas welding",
-    "Inert gas welding",
+    // "Inert gas welding",
     "Lathe"
   ];
-  List<String> metalWorkingSkillLevelList = ["Beginner", "Intermediate"];
+  // List<String> metalWorkingSkillLevelList = ["Beginner", "Intermediate"];
 
   void setMetalWorkingSkills(bool value) {
     metalWorkingSkills = value;
@@ -340,7 +340,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   int? tankCoatingExperience_Edit_Index;
   bool tankCoatingExperience_IsEdit = false;
   String? tankCoatingType;
-  List<String> tankCoatingTypes = ["Epoxy", "Steel", "Stainless steel"];
+  List<String> tankCoatingTypes = ["Epoxy", "Steel", "Stainless Steel"];
 
   void setTankCoatingExperience(bool value) {
     tankCoatingExperience = value;
@@ -397,8 +397,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   String? port;
   final dateController = TextEditingController();
   final observationsController = TextEditingController();
-  List<String> regionalAgreements = ["USCG", "AMSA", "China Federation"];
-  List<String> ports = ["New York", "Los Angeles", "Shanghai"];
+  List<String> regionalAgreements = ["AMSA", "China Federation"];
+  List<String> ports = ["DOCKED", "AT_SEA", "ANCHORAGE","IN_TRANSIT","IN_PORT","LOADING","UNLOADING","MAINTENANCE"];
 
   void setPortStateControlExperience(bool value) {
     portStateControlExperience = value;
@@ -490,7 +490,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   // Trading Area Experience
   List<String> tradingAreaExperience = [];
-  List<String> tradingAreaList = ["Worldwide", "Europe", "Asia"];
+  List<String> tradingAreaList = ["Asia", "Europe", "Middle East","Africa","North America","South America","Australia"];
 
   // File Picker
   final ImagePicker _picker = ImagePicker();

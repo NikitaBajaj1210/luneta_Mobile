@@ -16,7 +16,7 @@ class TravelDocumentProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
-  List<String> countries = [];
+  // List<String> countries = [];
   
   // Loading states
   bool isLoading = false;
@@ -31,9 +31,9 @@ class TravelDocumentProvider extends ChangeNotifier {
   bool hasExistingVisaDocument = false;
   bool hasExistingResidencePermitDocument = false;
 
-  TravelDocumentProvider() {
-    countries = CountryService().getAll().map((country) => country.name).toList();
-  }
+  // TravelDocumentProvider() {
+  //   countries = CountryService().getAll().map((country) => country.name).toList();
+  // }
 
   // Reset all form data
   void resetForm() {

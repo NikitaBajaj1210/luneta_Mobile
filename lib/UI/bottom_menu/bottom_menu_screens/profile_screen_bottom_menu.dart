@@ -3297,24 +3297,13 @@ Widget _buildProfileSection(
       ),
       SizedBox(width: 4.w),
       Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(provider.userName,
-                style: TextStyle(
-                    fontSize: AppFontSize.fontSize24,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.Color_212121)),
-            SizedBox(height: 0.5.h),
-            Text(provider.userRole,
-                style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.Color_616161)),
-          ],
+          child: Text(provider.userName,maxLines: 1,
+              style: TextStyle(
+                overflow: TextOverflow.ellipsis,
+                  fontSize: AppFontSize.fontSize24,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.Color_212121)),
         ),
-      ),
       GestureDetector(
           onTap: () {
             // Navigator.of(context).pushNamed(editProfile);
