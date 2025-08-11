@@ -9,6 +9,7 @@ import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
+import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/network_services.dart';
 import '../../../../Utils/helper.dart';
 
@@ -26,7 +27,9 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfessionalSkillsProvider>(context, listen: false);
-      provider.resetForm();
+      // Clear only the form inputs first, preserving existing data
+      provider.clearFormInputs();
+      // Then fetch the data
       provider.fetchProfessionalSkillsData(context);
     });
   }
@@ -48,6 +51,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
+                    var provider = Provider.of<ProfessionalSkillsProvider>(context, listen: false);
+                    provider.clearFormInputs();
                     provider.fetchProfessionalSkillsData(context);
                   },
                   child: Column(
@@ -1026,27 +1031,18 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                       fontFamily: AppColors.fontFamilyMedium,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        // Display document if it exists
-                        if (item.documentPath != null && item.documentPath!.isNotEmpty)
-                          Container(
-                            margin: EdgeInsets.only(top: 1.h),
-                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(1.h),
-                              border: Border.all(color: AppColors.buttonColor, width: 1),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
-                                SizedBox(width: 2.w),
-                                Expanded(
-                                  child: Text(
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    item.certificate ? "Certificate: Yes" : "Certificate: No",
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.Color_212121,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5,),
+                                  if (item.documentPath != null && item.documentPath!.isNotEmpty) Text(
                                     item.documentPath!.split('/').last,
                                     style: TextStyle(
                                       fontSize: AppFontSize.fontSize14,
@@ -1056,10 +1052,50 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                provider.editMetalWorkingSkill(index);
+                              },
+                              child: Image.asset(
+                                "assets/images/Edit.png",
+                                height: 2.h,
+                              ),
+                            ),
+                            SizedBox(width: 2.w),
+                            GestureDetector(
+                              onTap: () {
+                                provider.removeMetalWorkingSkill(index);
+                              },
+                              child: Image.asset(
+                                "assets/images/Delete.png",
+                                height: 2.h,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Display document if it exists
+                        // if (item.documentPath != null && item.documentPath!.isNotEmpty)
+                        //   Container(
+                        //     margin: EdgeInsets.only(top: 1.h),
+                        //     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.blue.shade50,
+                        //       borderRadius: BorderRadius.circular(1.h),
+                        //       border: Border.all(color: AppColors.buttonColor, width: 1),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
+                        //         SizedBox(width: 2.w),
+                        //         Expanded(
+                        //           child:
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                       ],
                     ),
                   );
@@ -1153,71 +1189,120 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          customButton(
-                            voidCallback: () {
+                          GestureDetector(
+                            onTap: () async {
                               provider.showAttachmentOptions(
                                   context, 'metalWorkingSkill');
                             },
-                            buttonText: "Attach Document",
-                            width: 40.w,
-                            height: 10.w,
-                            color: AppColors.buttonColor,
-                            buttonTextColor: AppColors.buttonTextWhiteColor,
-                            shadowColor: AppColors.buttonBorderColor,
-                            fontSize: AppFontSize.fontSize18,
-                            showShadow: true,
-                          ),
-                          SizedBox(height: 1.h),
-                          // Display existing document
-                          if (provider.metalWorkingSkillDocument != null ||
-                              (provider.metalWorkingSkills_Edit_Index != null &&
-                               provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath != null &&
-                               provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty))
-                            Container(
-                              margin: EdgeInsets.only(top: 1.h),
-                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                borderRadius: BorderRadius.circular(1.h),
-                                border: Border.all(color: AppColors.buttonColor, width: 1),
-                              ),
-                              child: Row(
-                                children: [
-                                  Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
-                                  SizedBox(width: 2.w),
-                                  Expanded(
-                                    child: Text(
-                                      provider.metalWorkingSkillDocument != null
-                                        ? provider.metalWorkingSkillDocument!.path.split('/').last
-                                        : provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.split('/').last,
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(15),
+                              dashPattern: [10, 10],
+                              color: AppColors.buttonColor,
+                              strokeWidth: 1,
+                              child: Container(
+                                width: 100.w,
+                                padding: EdgeInsets.symmetric(vertical: 3.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1.h),
+                                  color: AppColors.Color_FAFAFA,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/images/Upload.png", height: 5.h),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      "Browse File",
                                       style: TextStyle(
                                         fontSize: AppFontSize.fontSize14,
                                         fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilySemiBold,
+                                        color: AppColors.Color_9E9E9E,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 1.h),
+                        ],
+                      ),
+                    // Display existing or newly selected document
+                    if (provider.getCurrentMetalWorkingSkillDocumentPath() != null)
+                      GestureDetector(
+                        onTap: () {
+                          String? documentPath = provider.getCurrentMetalWorkingSkillDocumentPath();
+                          print("Document path for opening: $documentPath"); // Debug print
+                          if (documentPath != null && documentPath.isNotEmpty) {
+                            OpenFile_View(documentPath, context);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade100,
+                            borderRadius: BorderRadius.circular(1.h),
+                            border: Border.all(color: AppColors.buttonColor, width: 1),
+                          ),
+
+                          child: Row(
+                            children: [
+                              Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                              SizedBox(width: 2.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      " ${provider.getCurrentMetalWorkingSkillDocumentPath()?.split('/').last ?? 'Unknown'}", // Debug text
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w700,
                                         color: AppColors.Color_212121,
-                                        fontFamily: AppColors.fontFamilyMedium,
+                                        fontFamily: AppColors.fontFamilyBold,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      provider.removeAttachment('metalWorkingSkill');
-                                    },
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.red,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ],
+
+                                    if (provider.metalWorkingSkillDocument != null)
+                                      FutureBuilder<int>(
+                                        future: provider.metalWorkingSkillDocument!.length(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize12,
+                                                color: AppColors.Color_616161,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: AppColors.fontFamilyMedium,
+                                              ),
+                                            );
+                                          }
+                                          return SizedBox();
+                                        },
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                        ],
+                              GestureDetector(
+                                onTap: () {
+                                  provider.removeMetalWorkingSkillDocument();
+                                },
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                  size: 24,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    if (provider.metalWorkingSkillDocument != null ||
-                        (provider.metalWorkingSkills_Edit_Index != null &&
-                            provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath != null &&
-                            provider.metalWorkingSkillsList[provider.metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty)) SizedBox(height: 1.h),
+                    // Debug: Always show the current state
+                    SizedBox(height: 1.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: customButton(
@@ -1239,8 +1324,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   ],
                 ),
             ],
-          ),
-      ],
+          )
+      ]
     );
   }
 
@@ -1526,7 +1611,38 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                   fontFamily: AppColors.fontFamilyMedium,
                                 ),
                               ),
+                              if (item.observations.isNotEmpty)
+                                SizedBox(height: 0.5.h),
+                              if (item.observations.isNotEmpty)
+                                Text(
+                                  "Observations: ${item.observations}",
+                                  style: TextStyle(
+                                    fontSize: AppFontSize.fontSize14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.Color_212121,
+                                    fontFamily: AppColors.fontFamilyMedium,
+                                  ),
+                                ),
                             ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            provider.editPortStateControlExperience(index);
+                          },
+                          child: Image.asset(
+                            "assets/images/Edit.png",
+                            height: 2.h,
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+                        GestureDetector(
+                          onTap: () {
+                            provider.removePortStateControlExperience(index);
+                          },
+                          child: Image.asset(
+                            "assets/images/Delete.png",
+                            height: 2.h,
                           ),
                         ),
                       ],
@@ -1791,6 +1907,129 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
             onFieldSubmitted: (String) {},
           ),
         ),
+        SizedBox(height: 1.h),
+        // Document Attachment
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.h),
+          child: Text(
+            'Document',
+            style: TextStyle(
+              fontSize: AppFontSize.fontSize16,
+              fontWeight: FontWeight.w500,
+              fontFamily: AppColors.fontFamilyMedium,
+              color: AppColors.Color_424242,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await provider.showAttachmentOptions(context, 'vettingDocument');
+          },
+          child: DottedBorder(
+            borderType: BorderType.RRect,
+            radius: Radius.circular(15),
+            dashPattern: [10, 10],
+            color: AppColors.buttonColor,
+            strokeWidth: 1,
+            child: Container(
+              width: 100.w,
+              padding: EdgeInsets.symmetric(vertical: 3.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(1.h),
+                color: AppColors.Color_FAFAFA,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/Upload.png", height: 5.h),
+                  SizedBox(height: 1.h),
+                  Text(
+                    "Browse File",
+                    style: TextStyle(
+                      fontSize: AppFontSize.fontSize14,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: AppColors.fontFamilySemiBold,
+                      color: AppColors.Color_9E9E9E,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
+        if ((provider.vettingInspectionDocument != null && provider.vettingInspectionDocument!.path.isNotEmpty) ||
+            (provider.vettingInspectionDocumentPath != null && provider.vettingInspectionDocumentPath!.isNotEmpty))
+          GestureDetector(
+            onTap: (){
+              OpenFile_View(provider.vettingInspectionDocument==null?provider.vettingInspectionDocumentPath:provider.vettingInspectionDocument!.path,context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+              decoration: BoxDecoration(
+                color: Colors.red.shade100,
+                borderRadius: BorderRadius.circular(1.h),
+              ),
+              child: Row(
+                children: [
+                  Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                  SizedBox(width: 2.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          provider.vettingInspectionDocument != null
+                            ? provider.vettingInspectionDocument!.path.split('/').last
+                            : provider.vettingInspectionDocumentPath != null
+                              ? provider.vettingInspectionDocumentPath!.split('/').last
+                              : '',
+                          style: TextStyle(
+                            fontSize: AppFontSize.fontSize16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.Color_212121,
+                            fontFamily: AppColors.fontFamilyBold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (provider.vettingInspectionDocument != null)
+                          FutureBuilder<int>(
+                            future: provider.vettingInspectionDocument!.length(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                  style: TextStyle(
+                                    fontSize: AppFontSize.fontSize12,
+                                    color: AppColors.Color_616161,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: AppColors.fontFamilyMedium,
+                                  ),
+                                );
+                              }
+                              return SizedBox();
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      provider.removeAttachment('vettingDocument');
+                      // Update the UI
+                      (context as Element).markNeedsBuild();
+                    },
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        SizedBox(height: 10,)
       ],
     );
   }
@@ -1869,3 +2108,4 @@ class backButtonWithTitle extends StatelessWidget {
     );
   }
 }
+

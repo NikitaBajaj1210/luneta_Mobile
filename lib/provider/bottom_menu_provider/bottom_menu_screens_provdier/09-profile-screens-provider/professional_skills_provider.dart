@@ -17,6 +17,45 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   // Data state
   Map<String, dynamic>? professionalSkillsData;
 
+  // Vetting Inspection Document
+  File? _vettingInspectionDocument;
+  String? _vettingInspectionDocumentPath;
+
+  File? get vettingInspectionDocument => _vettingInspectionDocument;
+  String? get vettingInspectionDocumentPath => _vettingInspectionDocumentPath;
+
+
+  Future<void> setVettingInspectionDocument(File? file, BuildContext? context) async {
+    // Add file size validation (20MB limit)
+    if (file != null) {
+      final maxSize = 20 * 1024 * 1024; // 20MB in bytes
+      final size = await file.length();
+      if (size > maxSize) {
+        // Show error message
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('File size exceeds 20MB limit'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          print('File size exceeds 20MB limit');
+        }
+        return;
+      }
+    }
+    _vettingInspectionDocument = file;
+    notifyListeners();
+  }
+
+  Future<void> removeVettingInspectionDocument(BuildContext? context) async {
+    _vettingInspectionDocument = null;
+    _vettingInspectionDocumentPath = null;
+    notifyListeners();
+  }
+
+
   // Computer and Software
   List<ComputerAndSoftware> computerAndSoftwareList = [];
   bool showAddSection_computerAndSoftware = false;
@@ -203,6 +242,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeMetalWorkingSkillDocument() {
+    metalWorkingSkillDocument = null;
+    notifyListeners();
+  }
+
   void addMetalWorkingSkill() {
     if (metalWorkingSkill != null && metalWorkingSkillLevel != null) {
       if (metalWorkingSkills_IsEdit) {
@@ -236,12 +280,30 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     metalWorkingSkillLevel = metalWorkingSkillsList[index].level;
     metalWorkingSkillCertificate = metalWorkingSkillsList[index].certificate;
     metalWorkingSkillDocument = metalWorkingSkillsList[index].document;
-    // Set the documentPath for proper display in UI
-    if (metalWorkingSkillsList[index].documentPath != null && metalWorkingSkillsList[index].documentPath!.isNotEmpty) {
-      // If we have a documentPath but no document object, we're editing an existing item with a previously uploaded document
-      // The UI needs to know about this to display it properly
-    }
+    // Note: documentPath is already available in the object for UI display
     setMetalWorkingSkillsVisibility(true);
+  }
+
+  // Get the current document path for display (either new document or existing one)
+  String? getCurrentMetalWorkingSkillDocumentPath() {
+    print("getCurrentMetalWorkingSkillDocumentPath called");
+    print("metalWorkingSkillDocument: ${metalWorkingSkillDocument?.path}");
+    print("metalWorkingSkills_IsEdit: $metalWorkingSkills_IsEdit");
+    print("metalWorkingSkills_Edit_Index: $metalWorkingSkills_Edit_Index");
+    
+    if (metalWorkingSkillDocument != null) {
+      print("Returning new document path: ${metalWorkingSkillDocument!.path}");
+      return metalWorkingSkillDocument!.path;
+    } else if (metalWorkingSkills_IsEdit && 
+               metalWorkingSkills_Edit_Index != null &&
+               metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath != null &&
+               metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty) {
+      String existingPath = metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath!;
+      print("Returning existing document path: $existingPath");
+      return existingPath;
+    }
+    print("No document path found");
+    return null;
   }
 
   void removeMetalWorkingSkill(int index) {
@@ -444,7 +506,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
                 leading: Icon(Icons.photo_library),
                 title: Text('Choose from gallery'),
                 onTap: () {
-                  _pickImage(ImageSource.gallery, type);
+                  _pickImage(ImageSource.gallery, type, context);
                   Navigator.of(context).pop();
                 },
               ),
@@ -452,7 +514,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
                 leading: Icon(Icons.photo_camera),
                 title: Text('Take a picture'),
                 onTap: () {
-                  _pickImage(ImageSource.camera, type);
+                  _pickImage(ImageSource.camera, type, context);
                   Navigator.of(context).pop();
                 },
               ),
@@ -460,7 +522,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
                 leading: Icon(Icons.description),
                 title: Text('Choose a document'),
                 onTap: () {
-                  _pickDocument(type);
+                  _pickDocument(type, context);
                   Navigator.of(context).pop();
                 },
               ),
@@ -471,7 +533,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     );
   }
 
-  Future<void> _pickDocument(String type) async {
+  Future<void> _pickDocument(String type, BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
@@ -480,16 +542,20 @@ class ProfessionalSkillsProvider with ChangeNotifier {
       final file = File(result.files.single.path!);
       if (type == 'metalWorkingSkill') {
         setMetalWorkingSkillDocument(file);
+      } else if (type == 'vettingDocument') {
+        await setVettingInspectionDocument(file, context);
       }
     }
   }
 
-  Future<void> _pickImage(ImageSource source, String type) async {
+  Future<void> _pickImage(ImageSource source, String type, BuildContext context) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
       if (type == 'metalWorkingSkill') {
         setMetalWorkingSkillDocument(file);
+      } else if (type == 'vettingDocument') {
+        await setVettingInspectionDocument(file, context);
       }
     }
   }
@@ -502,8 +568,12 @@ class ProfessionalSkillsProvider with ChangeNotifier {
           metalWorkingSkills_Edit_Index! < metalWorkingSkillsList.length) {
         // When removing a document, we need to mark it for removal on the server side
         // We'll set documentPath to empty string to indicate removal
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].document = null;
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = '';
       }
+    } else if (type == 'vettingDocument') {
+      _vettingInspectionDocument = null;
+      _vettingInspectionDocumentPath = null;
     }
   }
 
@@ -672,9 +742,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         if (vettingData.isNotEmpty) {
           var vettingItem = vettingData[0]; // Get first item
           inspectionByController.text = vettingItem['inspectionBy'] ?? '';
-          vettingPort = vettingItem['port'];
+          vettingPort = vettingItem['port'] ?? '';
           vettingDateController.text = vettingItem['date'] ?? '';
           vettingObservationsController.text = vettingItem['observations'] ?? '';
+          // Handle vetting inspection document path
+          _vettingInspectionDocumentPath = vettingItem['documentPath']?.isNotEmpty == true ? vettingItem['documentPath'] : null;
         }
       }
 
@@ -703,6 +775,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   // Reset form data
   void resetForm() {
+    // Reset all lists
     computerAndSoftwareList.clear();
     cargoGearExperienceList.clear();
     metalWorkingSkillsList.clear();
@@ -728,18 +801,108 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     inspectionByController.clear();
     vettingDateController.clear();
     vettingObservationsController.clear();
+    cargoGearMakerController.clear();
+    cargoGearSWLController.clear();
+    dateController.clear();
+    observationsController.clear();
     
     // Reset other values
     vettingPort = null;
+    software = null;
+    level = null;
+    cargoGearType = null;
+    metalWorkingSkill = null;
+    metalWorkingSkillLevel = null;
+    metalWorkingSkillCertificate = false;
+    tankCoatingType = null;
+    regionalAgreement = null;
+    port = null;
     
+    // Reset document attachments
+    _vettingInspectionDocument = null;
+    _vettingInspectionDocumentPath = null;
+    metalWorkingSkillDocument = null;
+    
+    // Reset UI visibility states
+    showAddSection_computerAndSoftware = false;
+    showAddSection_cargoGearExperience = false;
+    showAddSection_metalWorkingSkills = false;
+    showAddSection_tankCoatingExperience = false;
+    showAddSection_portStateControlExperience = false;
+    
+    // Reset edit states
+    computerAndSoftware_IsEdit = false;
+    computerAndSoftware_Edit_Index = null;
+    cargoGearExperience_IsEdit = false;
+    cargoGearExperience_Edit_Index = null;
+    metalWorkingSkills_IsEdit = false;
+    metalWorkingSkills_Edit_Index = null;
+    tankCoatingExperience_IsEdit = false;
+    tankCoatingExperience_Edit_Index = null;
+    portStateControlExperience_IsEdit = false;
+    portStateControlExperience_Edit_Index = null;
+    
+    // Reset form state
     professionalSkillsData = null;
     autovalidateMode = AutovalidateMode.disabled;
+    
+    notifyListeners();
+  }
+
+  // Clear only the form inputs without clearing the existing data
+  void clearFormInputs() {
+    // Reset form inputs only
+    software = null;
+    level = null;
+    cargoGearType = null;
+    metalWorkingSkill = null;
+    metalWorkingSkillLevel = null;
+    metalWorkingSkillCertificate = false;
+    tankCoatingType = null;
+    regionalAgreement = null;
+    port = null;
+    
+    // Reset controllers
+    inspectionByController.clear();
+    vettingDateController.clear();
+    vettingObservationsController.clear();
+    cargoGearMakerController.clear();
+    cargoGearSWLController.clear();
+    dateController.clear();
+    observationsController.clear();
+    
+    // Reset document attachments (but keep existing data)
+    _vettingInspectionDocument = null;
+    metalWorkingSkillDocument = null;
+    
+    // Reset UI visibility states
+    showAddSection_computerAndSoftware = false;
+    showAddSection_cargoGearExperience = false;
+    showAddSection_metalWorkingSkills = false;
+    showAddSection_tankCoatingExperience = false;
+    showAddSection_portStateControlExperience = false;
+    
+    // Reset edit states
+    computerAndSoftware_IsEdit = false;
+    computerAndSoftware_Edit_Index = null;
+    cargoGearExperience_IsEdit = false;
+    cargoGearExperience_Edit_Index = null;
+    metalWorkingSkills_IsEdit = false;
+    metalWorkingSkills_Edit_Index = null;
+    tankCoatingExperience_IsEdit = false;
+    tankCoatingExperience_Edit_Index = null;
+    portStateControlExperience_IsEdit = false;
+    portStateControlExperience_Edit_Index = null;
+    
+    // Reset form state
+    autovalidateMode = AutovalidateMode.disabled;
+    
     notifyListeners();
   }
 
   // Create or update professional skills data
   Future<bool> createOrUpdateProfessionalSkillsAPI(BuildContext context) async {
-    try {
+    // try {
       String userId = NetworkHelper.loggedInUserId;
       if (userId.isEmpty) {
         print('User ID not found');
@@ -799,6 +962,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'port': vettingPort ?? '',
             'date': vettingDateController.text,
             'observations': vettingObservationsController.text,
+            'documentPath': _vettingInspectionDocument?.path ?? _vettingInspectionDocumentPath ?? '',
           }
         ],
         'tradingAreaExperience': {
@@ -818,12 +982,23 @@ class ProfessionalSkillsProvider with ChangeNotifier {
       
       for (int i = 0; i < metalWorkingSkillsList.length; i++) {
         var item = metalWorkingSkillsList[i];
-        if (item.document != null) {
+        // Only add files that are not marked for removal
+        if (item.document != null && (item.documentPath == null || item.documentPath!.isNotEmpty)) {
           dioFileList.add({
             'fieldName': 'msattachDocument[$i]',
-            'file': item.document!,
+            'filePath': item.document!.path,
+            'fileName': item.document!.path.split('/').last,
           });
         }
+      }
+
+      // Add vetting inspection document if it exists
+      if (_vettingInspectionDocument != null) {
+        dioFileList.add({
+          'fieldName': 'vettingDocument',
+          'filePath': _vettingInspectionDocument!.path,
+          'fileName': _vettingInspectionDocument!.path.split('/').last,
+        });
       }
 
       print("File List: $dioFileList");
@@ -846,10 +1021,10 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         print("Professional Skills Save Error: ${response['message'] ?? 'Failed to save professional skills'}");
         return false;
       }
-    } catch (e) {
-      print("Professional Skills Save Exception: $e");
-      return false;
-    }
+    // } catch (e) {
+    //   print("Professional Skills Save Exception: $e");
+    //   return false;
+    // }
   }
 }
 
@@ -873,7 +1048,7 @@ class MetalWorkingSkill {
   final String skillSelection;
   final String level;
   final bool certificate;
-  final File? document;
+  late File? document;
   String? documentPath;
 
   MetalWorkingSkill({
