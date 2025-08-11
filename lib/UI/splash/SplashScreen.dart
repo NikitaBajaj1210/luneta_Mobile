@@ -5,6 +5,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../network/network_helper.dart';
+import '../../provider/authentication-provider/login_provider.dart';
 import '../../provider/bottom_menu_provider/bottom_menu_provider.dart';
 import '../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 import '../../route/route_constants.dart';
@@ -36,11 +37,12 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       // Check if user is logged in and has valid credentials
       if (isLoggedIn && userId.isNotEmpty && token.isNotEmpty) {
         // Check user's profile completion status
-        bool isProfileComplete = await _checkProfileCompletion(userId, token, context);
+        bool? isProfileComplete = await _checkProfileCompletion(userId, token, context);
 
         // Navigate to home screen
         NetworkHelper.syncUserData();
         if (context.mounted) {
+          if(isProfileComplete!=null){
           if (isProfileComplete) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Provider.of<BottomMenuProvider>(
@@ -51,6 +53,12 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
             Navigator.of(context).pushReplacementNamed(bottomMenu);
           } else {
             Navigator.of(context).pushReplacementNamed(chooseCountry);
+          }
+        }else{
+            var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+            await loginProvider.clearStoredLoginData();
+            NetworkHelper().removeToken(context);
+            Navigator.of(context).pushReplacementNamed(login);
           }
         }
       } else {
@@ -69,7 +77,7 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
   }
 
   // Method to check if user's profile is complete
-  Future<bool> _checkProfileCompletion(String userId, String token, BuildContext context) async {
+  Future<bool?> _checkProfileCompletion(String userId, String token, BuildContext context) async {
     try {
       // Make API call to get user's complete profile
       final response = await NetworkService().getResponse(
@@ -103,11 +111,11 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
 
       // Default to false if API call fails or data is missing
       print("SplashScreen - Could not determine profile completion, defaulting to false");
-      return false;
+      return null;
     } catch (e) {
       print("SplashScreen - Profile completion check error: $e");
       // Default to false on error
-      return false;
+      return null;
     }
   }
 

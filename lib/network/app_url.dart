@@ -1,6 +1,7 @@
 
 // Whole App's API URL
-const baseUrl = 'https://luneta.microlent.com/api/'; // Base URL
+// const baseUrl = 'https://luneta.microlent.com/api/'; // Base URL
+const baseUrl = 'https://stage-luneta.nanobyte.gr/api/'; // Base URL
 
 const loginUrl = '${baseUrl}user/login';
 const signupUrl = '${baseUrl}user/register';

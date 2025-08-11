@@ -101,7 +101,7 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
                             height:1.h,
                           ),
                           Text(
-                            "Tab to Try Again",
+                            "Tap to Try Again",
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontFamily: AppColors.fontFamilyBold,

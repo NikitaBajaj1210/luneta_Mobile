@@ -521,7 +521,7 @@ class EducationProvider with ChangeNotifier {
         // Only add files that are not marked for removal
         if (academicQualificationList[i].document != null && academicQualificationList[i].documentPath != '') {
           dioFileList.add({
-            'fieldName': 'academicQualificationFiles',
+            'fieldName': 'academicQualificationFiles${i}',
             'filePath': academicQualificationList[i].document!.path,
             'fileName': academicQualificationList[i].document!.path.split('/').last,
           });
@@ -533,7 +533,7 @@ class EducationProvider with ChangeNotifier {
         // Only add files that are not marked for removal
         if (certificationList[i].document != null && certificationList[i].documentPath != '') {
           dioFileList.add({
-            'fieldName': 'certificationsAndTrainingsFiles',
+            'fieldName': 'certificationsAndTrainingsFiles${i}',
             'filePath': certificationList[i].document!.path,
             'fileName': certificationList[i].document!.path.split('/').last,
           });
