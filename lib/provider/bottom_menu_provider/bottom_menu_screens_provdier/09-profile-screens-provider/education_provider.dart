@@ -37,6 +37,8 @@ class EducationProvider with ChangeNotifier {
   String? country;
   final graduationDateController = TextEditingController();
   File? academicDocument;
+  String? academicDocumentPath_temp;
+  String? academicDocumentOriginalName_temp;
 
   List<String> educationalDegrees = ["Bachelor's", "Master's", "PhD"];
   List<String> countries = ["USA", "UK", "Canada", "Australia"]; // Example list
@@ -135,6 +137,8 @@ class EducationProvider with ChangeNotifier {
   final issueDateController = TextEditingController();
   final expiryDateController = TextEditingController();
   File? certificationDocument;
+  String? certificationDocumentPath_temp;
+  String? certificationDocumentOriginalName_temp;
 
   List<String> certificationTypes = ["Certificate A", "Certificate B", "Certificate C"];
 
@@ -313,8 +317,66 @@ class EducationProvider with ChangeNotifier {
   void removeAttachment(String type) {
     if (type == 'academic') {
       setAcademicDocument(null);
+      academicDocumentPath_temp = null;
+      academicDocumentOriginalName_temp = null;
     } else if (type == 'certification') {
       setCertificationDocument(null);
+      certificationDocumentPath_temp = null;
+      certificationDocumentOriginalName_temp = null;
+    }
+    notifyListeners();
+  }
+
+  bool hasExistingAcademicQualificationDocument(int? index) {
+    if (index != null &&
+        academicQualificationList.length > index &&
+        academicQualificationList[index].documentPath != null &&
+        academicQualificationList[index].documentPath!.isNotEmpty) {
+      return true;
+    }
+    return academicDocumentPath_temp != null && academicDocumentPath_temp!.isNotEmpty;
+  }
+
+  void removeExistingAcademicQualificationAttachment(int index) {
+    if (index < academicQualificationList.length) {
+      academicQualificationList[index] = AcademicQualification(
+        educationalDegree: academicQualificationList[index].educationalDegree,
+        fieldOfStudy: academicQualificationList[index].fieldOfStudy,
+        educationalInstitution: academicQualificationList[index].educationalInstitution,
+        country: academicQualificationList[index].country,
+        graduationDate: academicQualificationList[index].graduationDate,
+        document: null,
+        documentPath: null, // Mark as removed
+      );
+      academicDocumentPath_temp = null;
+      academicDocumentOriginalName_temp = null;
+      notifyListeners();
+    }
+  }
+
+  bool hasExistingCertificationDocument(int? index) {
+    if (index != null &&
+        certificationList.length > index &&
+        certificationList[index].documentPath != null &&
+        certificationList[index].documentPath!.isNotEmpty) {
+      return true;
+    }
+    return certificationDocumentPath_temp != null && certificationDocumentPath_temp!.isNotEmpty;
+  }
+
+  void removeExistingCertificationAttachment(int index) {
+    if (index < certificationList.length) {
+      certificationList[index] = Certification(
+        typeOfCertification: certificationList[index].typeOfCertification,
+        issuingAuthority: certificationList[index].issuingAuthority,
+        issueDate: certificationList[index].issueDate,
+        expiryDate: certificationList[index].expiryDate,
+        document: null,
+        documentPath: null, // Mark as removed
+      );
+      certificationDocumentPath_temp = null;
+      certificationDocumentOriginalName_temp = null;
+      notifyListeners();
     }
   }
   

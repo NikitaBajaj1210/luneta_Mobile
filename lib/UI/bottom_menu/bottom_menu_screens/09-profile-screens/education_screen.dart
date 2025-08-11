@@ -256,6 +256,8 @@ class _EducationScreenState extends State<EducationScreen> {
                                                       provider.country = qualification.country;
                                                       provider.graduationDateController.text = qualification.graduationDate;
                                                       provider.academicDocument = qualification.document;
+                                                      provider.academicDocumentPath_temp = qualification.documentPath;
+                                                      provider.academicDocumentOriginalName_temp = qualification.documentPath?.split('/').last;
                                                       provider.setAcademicQualificationVisibility(true);
                                                       provider.academicQualification_Edit_Index = index;
                                                       provider.academicQualification_IsEdit = true;
@@ -300,70 +302,70 @@ class _EducationScreenState extends State<EducationScreen> {
                                             ),
                                           ),
                                           // Display existing document if it exists
-                                          if (qualification.document != null || (qualification.documentPath != null && qualification.documentPath!.isNotEmpty))
-                                            Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                              margin: EdgeInsets.only(top: 1.h),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red.shade100,
-                                                borderRadius: BorderRadius.circular(1.h),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset("assets/images/pdfIcon.png", height: 3.h),
-                                                  SizedBox(width: 2.w),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          qualification.document != null
-                                                              ? qualification.document!.path.split('/').last
-                                                              : qualification.documentPath!.split('/').last,
-                                                          style: TextStyle(
-                                                            fontSize: AppFontSize.fontSize14,
-                                                            fontWeight: FontWeight.w700,
-                                                            color: AppColors.Color_212121,
-                                                            fontFamily: AppColors.fontFamilyBold,
-                                                          ),
-                                                          overflow: TextOverflow.ellipsis,
-                                                        ),
-                                                        if (qualification.document != null)
-                                                          FutureBuilder<int>(
-                                                            future: qualification.document!.length(),
-                                                            builder: (context, snapshot) {
-                                                              if (snapshot.hasData) {
-                                                                return Text(
-                                                                  "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                                  style: TextStyle(
-                                                                    fontSize: AppFontSize.fontSize12,
-                                                                    color: AppColors.Color_616161,
-                                                                    fontWeight: FontWeight.w500,
-                                                                    fontFamily: AppColors.fontFamilyMedium,
-                                                                  ),
-                                                                );
-                                                              }
-                                                              return SizedBox();
-                                                            },
-                                                          ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      // Remove document from existing qualification
-                                                      Provider.of<EducationProvider>(context, listen: false)
-                                                          .removeAcademicQualificationDocument(index);
-                                                    },
-                                                    child: Icon(
-                                                      Icons.close,
-                                                      color: Colors.red,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                          // if (qualification.document != null || (qualification.documentPath != null && qualification.documentPath!.isNotEmpty))
+                                          //   Container(
+                                          //     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                                          //     margin: EdgeInsets.only(top: 1.h),
+                                          //     decoration: BoxDecoration(
+                                          //       color: Colors.red.shade100,
+                                          //       borderRadius: BorderRadius.circular(1.h),
+                                          //     ),
+                                          //     child: Row(
+                                          //       children: [
+                                          //         Image.asset("assets/images/pdfIcon.png", height: 3.h),
+                                          //         SizedBox(width: 2.w),
+                                          //         Expanded(
+                                          //           child: Column(
+                                          //             crossAxisAlignment: CrossAxisAlignment.start,
+                                          //             children: [
+                                          //               Text(
+                                          //                 qualification.document != null
+                                          //                   ? qualification.document!.path.split('/').last
+                                          //                   : qualification.documentPath!.split('/').last,
+                                          //                 style: TextStyle(
+                                          //                   fontSize: AppFontSize.fontSize14,
+                                          //                   fontWeight: FontWeight.w700,
+                                          //                   color: AppColors.Color_212121,
+                                          //                   fontFamily: AppColors.fontFamilyBold,
+                                          //                 ),
+                                          //                 overflow: TextOverflow.ellipsis,
+                                          //               ),
+                                          //               if (qualification.document != null)
+                                          //                 FutureBuilder<int>(
+                                          //                   future: qualification.document!.length(),
+                                          //                   builder: (context, snapshot) {
+                                          //                     if (snapshot.hasData) {
+                                          //                       return Text(
+                                          //                         "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                          //                         style: TextStyle(
+                                          //                           fontSize: AppFontSize.fontSize12,
+                                          //                           color: AppColors.Color_616161,
+                                          //                           fontWeight: FontWeight.w500,
+                                          //                           fontFamily: AppColors.fontFamilyMedium,
+                                          //                         ),
+                                          //                       );
+                                          //                     }
+                                          //                     return SizedBox();
+                                          //                   },
+                                          //                 ),
+                                          //             ],
+                                          //           ),
+                                          //         ),
+                                          //         GestureDetector(
+                                          //           onTap: () {
+                                          //             // Remove document from existing qualification
+                                          //             Provider.of<EducationProvider>(context, listen: false)
+                                          //                 .removeAcademicQualificationDocument(index);
+                                          //           },
+                                          //           child: Icon(
+                                          //             Icons.close,
+                                          //             color: Colors.red,
+                                          //             size: 20,
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //   ),
                                         ],
                                       ),
                                     ),
@@ -685,61 +687,148 @@ class _EducationScreenState extends State<EducationScreen> {
                                 ),
                               SizedBox(height: 3.h),
                               if (provider.academicDocument != null)
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              provider.academicDocument!.path.split('/').last,
-                                              style: TextStyle(
-                                                fontSize: AppFontSize.fontSize16,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.Color_212121,
-                                                fontFamily: AppColors.fontFamilyBold,
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider.academicDocument!.path,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider.academicDocument!
+                                                    .path
+                                                    .split('/')
+                                                    .last,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      AppFontSize.fontSize16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color:
+                                                      AppColors.Color_212121,
+                                                  fontFamily:
+                                                      AppColors.fontFamilyBold,
+                                                ),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            FutureBuilder<int>(
-                                              future: provider.academicDocument!.length(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                    style: TextStyle(
-                                                      fontSize: AppFontSize.fontSize12,
-                                                      color: AppColors.Color_616161,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: AppColors.fontFamilyMedium,
-                                                    ),
-                                                  );
-                                                }
-                                                return SizedBox();
-                                              },
-                                            ),
-                                          ],
+                                              FutureBuilder<int>(
+                                                future: provider
+                                                    .academicDocument!
+                                                    .length(),
+                                                builder:
+                                                    (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                      style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize12,
+                                                        color: AppColors
+                                                            .Color_616161,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyMedium,
+                                                      ),
+                                                    );
+                                                  }
+                                                  return SizedBox();
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment('academic');
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider.removeAttachment(
+                                                'academic');
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              else if (provider.hasExistingAcademicQualificationDocument(
+                                  provider.academicQualification_Edit_Index))
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider.academicDocumentPath_temp!,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider.academicDocumentOriginalName_temp ??
+                                                    "Document",
+                                                style: TextStyle(
+                                                    fontSize: AppFontSize
+                                                        .fontSize16,
+                                                    fontWeight:
+                                                        FontWeight.w700,
+                                                    color: AppColors
+                                                        .Color_212121,
+                                                    fontFamily: AppColors
+                                                        .fontFamilyBold),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider.removeExistingAcademicQualificationAttachment(
+                                                    provider.academicQualification_Edit_Index!);
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               Align(
@@ -894,6 +983,8 @@ class _EducationScreenState extends State<EducationScreen> {
                                                       provider.issueDateController.text = certification.issueDate;
                                                       provider.expiryDateController.text = certification.expiryDate;
                                                       provider.certificationDocument = certification.document;
+                                                      provider.certificationDocumentPath_temp = certification.documentPath;
+                                                      provider.certificationDocumentOriginalName_temp = certification.documentPath?.split('/').last;
                                                       provider.setCertificationVisibility(true);
                                                       provider.certification_Edit_Index = index;
                                                       provider.certification_IsEdit = true;
@@ -928,70 +1019,70 @@ class _EducationScreenState extends State<EducationScreen> {
                                             ),
                                           ),
                                         // Display existing document if it exists
-                                        if (certification.document != null || (certification.documentPath != null && certification.documentPath!.isNotEmpty))
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                            margin: EdgeInsets.only(top: 1.h),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(1.h),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Image.asset("assets/images/pdfIcon.png", height: 3.h),
-                                                SizedBox(width: 2.w),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        certification.document != null
-                                                          ? certification.document!.path.split('/').last
-                                                          : certification.documentPath!.split('/').last,
-                                                        style: TextStyle(
-                                                          fontSize: AppFontSize.fontSize14,
-                                                          fontWeight: FontWeight.w700,
-                                                          color: AppColors.Color_212121,
-                                                          fontFamily: AppColors.fontFamilyBold,
-                                                        ),
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                      if (certification.document != null)
-                                                        FutureBuilder<int>(
-                                                          future: certification.document!.length(),
-                                                          builder: (context, snapshot) {
-                                                            if (snapshot.hasData) {
-                                                              return Text(
-                                                                "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                                style: TextStyle(
-                                                                  fontSize: AppFontSize.fontSize12,
-                                                                  color: AppColors.Color_616161,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: AppColors.fontFamilyMedium,
-                                                                ),
-                                                              );
-                                                            }
-                                                            return SizedBox();
-                                                          },
-                                                        ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    // Remove document from existing certification
-                                                    Provider.of<EducationProvider>(context, listen: false)
-                                                        .removeCertificationDocument(index);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                        // if (certification.document != null || (certification.documentPath != null && certification.documentPath!.isNotEmpty))
+                                        //   Container(
+                                        //     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                                        //     margin: EdgeInsets.only(top: 1.h),
+                                        //     decoration: BoxDecoration(
+                                        //       color: Colors.red.shade100,
+                                        //       borderRadius: BorderRadius.circular(1.h),
+                                        //     ),
+                                        //     child: Row(
+                                        //       children: [
+                                        //         Image.asset("assets/images/pdfIcon.png", height: 3.h),
+                                        //         SizedBox(width: 2.w),
+                                        //         Expanded(
+                                        //           child: Column(
+                                        //             crossAxisAlignment: CrossAxisAlignment.start,
+                                        //             children: [
+                                        //               Text(
+                                        //                 certification.document != null
+                                        //                   ? certification.document!.path.split('/').last
+                                        //                   : certification.documentPath!.split('/').last,
+                                        //                 style: TextStyle(
+                                        //                   fontSize: AppFontSize.fontSize14,
+                                        //                   fontWeight: FontWeight.w700,
+                                        //                   color: AppColors.Color_212121,
+                                        //                   fontFamily: AppColors.fontFamilyBold,
+                                        //                 ),
+                                        //                 overflow: TextOverflow.ellipsis,
+                                        //               ),
+                                        //               if (certification.document != null)
+                                        //                 FutureBuilder<int>(
+                                        //                   future: certification.document!.length(),
+                                        //                   builder: (context, snapshot) {
+                                        //                     if (snapshot.hasData) {
+                                        //                       return Text(
+                                        //                         "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                        //                         style: TextStyle(
+                                        //                           fontSize: AppFontSize.fontSize12,
+                                        //                           color: AppColors.Color_616161,
+                                        //                           fontWeight: FontWeight.w500,
+                                        //                           fontFamily: AppColors.fontFamilyMedium,
+                                        //                         ),
+                                        //                       );
+                                        //                     }
+                                        //                     return SizedBox();
+                                        //                   },
+                                        //                 ),
+                                        //             ],
+                                        //           ),
+                                        //         ),
+                                        //         GestureDetector(
+                                        //           onTap: () {
+                                        //             // Remove document from existing certification
+                                        //             Provider.of<EducationProvider>(context, listen: false)
+                                        //                 .removeCertificationDocument(index);
+                                        //           },
+                                        //           child: Icon(
+                                        //             Icons.close,
+                                        //             color: Colors.red,
+                                        //             size: 20,
+                                        //           ),
+                                        //         ),
+                                        //       ],
+                                        //     ),
+                                        //   ),
                                         ],
                                       ),
                                     ),
@@ -1229,61 +1320,149 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                                 SizedBox(height: 3.h),
                               if (provider.certificationDocument != null)
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              provider.certificationDocument!.path.split('/').last,
-                                              style: TextStyle(
-                                                fontSize: AppFontSize.fontSize16,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.Color_212121,
-                                                fontFamily: AppColors.fontFamilyBold,
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider.certificationDocument!.path,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider.certificationDocument!
+                                                    .path
+                                                    .split('/')
+                                                    .last,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      AppFontSize.fontSize16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color:
+                                                      AppColors.Color_212121,
+                                                  fontFamily:
+                                                      AppColors.fontFamilyBold,
+                                                ),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            FutureBuilder<int>(
-                                              future: provider.certificationDocument!.length(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                    style: TextStyle(
-                                                      fontSize: AppFontSize.fontSize12,
-                                                      color: AppColors.Color_616161,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: AppColors.fontFamilyMedium,
-                                                    ),
-                                                  );
-                                                }
-                                                return SizedBox();
-                                              },
-                                            ),
-                                          ],
+                                              FutureBuilder<int>(
+                                                future: provider
+                                                    .certificationDocument!
+                                                    .length(),
+                                                builder:
+                                                    (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                      style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize12,
+                                                        color: AppColors
+                                                            .Color_616161,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyMedium,
+                                                      ),
+                                                    );
+                                                  }
+                                                  return SizedBox();
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment('certification');
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider.removeAttachment(
+                                                'certification');
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              else if (provider.hasExistingCertificationDocument(
+                                  provider.certification_Edit_Index))
+                                GestureDetector(
+                                  onTap: () {
+                                    OpenFile_View(
+                                        provider.certificationDocumentPath_temp!,
+                                        context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(1.h),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/pdfIcon.png",
+                                            height: 3.5.h),
+                                        SizedBox(width: 2.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                provider.certificationDocumentOriginalName_temp ??
+                                                    "Document",
+                                                style: TextStyle(
+                                                    fontSize: AppFontSize
+                                                        .fontSize16,
+                                                    fontWeight:
+                                                        FontWeight.w700,
+                                                    color: AppColors
+                                                        .Color_212121,
+                                                    fontFamily: AppColors
+                                                        .fontFamilyBold),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            provider
+                                                .removeExistingCertificationAttachment(
+                                                    provider.certification_Edit_Index!);
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               Align(
