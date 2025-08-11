@@ -1132,7 +1132,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
       for (int i = 0; i < medicalFitnessList.length; i++) {
         if (medicalFitnessList[i].document != null) {
           dioFileList.add({
-            'fieldName': 'medicalFitnessFiles',
+            'fieldName': 'medicalFitnessFiles[${i}]',
             'filePath': medicalFitnessList[i].document!.path,
             'fileName': medicalFitnessList[i].document!.path.split('/').last,
           });
