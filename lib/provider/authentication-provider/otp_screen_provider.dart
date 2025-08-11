@@ -28,7 +28,7 @@ class OtpScreenProvider with ChangeNotifier {
   }
 
   // Method to store user data in SharedPreferences
-  Future<void> _storeUserData(String userId, String email, String token,String fullName,String profilePath) async {
+  Future<void> _storeUserData(String userId, String email, String token,String fullName,String profilePath,String firstName, String lastName) async {
     try {
       print("OTP Provider - _storeUserData called with:");
       print("OTP Provider - userId: $userId");
@@ -43,16 +43,18 @@ class OtpScreenProvider with ChangeNotifier {
         profilePicURL: profilePath, // Will be updated when profile is loaded
         fullName: fullName, // Will be updated when profile is loaded
         refreshToken: null, // Will be updated when available
+        firstName: firstName,
+        lastName: lastName
       );
       
       // Also store in SharedPreferences for persistence
-      var prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userid', userId);
-      await prefs.setString('email', email);
-      await prefs.setString('token', token);
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('profilePicURL', profilePath);
-      await prefs.setString('fullName', fullName);
+      // var prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('userid', userId);
+      // await prefs.setString('email', email);
+      // await prefs.setString('token', token);
+      // await prefs.setBool('isLoggedIn', true);
+      // await prefs.setString('profilePicURL', profilePath);
+      // await prefs.setString('fullName', fullName);
 
 
       print("OTP Provider - User data stored in both NetworkHelper and SharedPreferences");
@@ -120,6 +122,9 @@ class OtpScreenProvider with ChangeNotifier {
               userToken ?? '',
               ((otpResponse.user!.seafarerProfile!.firstName ?? '')+" "+(otpResponse.user!.seafarerProfile!.lastName ?? '')),
               otpResponse.user!.seafarerProfile!.profilePhoto ?? '',
+                otpResponse.user!.seafarerProfile!.firstName!,
+                (otpResponse.user!.seafarerProfile!.lastName ?? '')
+
             );
             
             // If Remember Me is checked, also store in SharedPreferences for persistence

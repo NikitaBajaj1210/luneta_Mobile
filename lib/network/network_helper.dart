@@ -30,6 +30,8 @@ class NetworkHelper{
     String? fullName,
     String? refreshToken,
     bool rememberMe = true, // Default to true for auto-login
+    String? firstName,
+    String? lastName
   }) async {
     try {
       var prefs = await SharedPreferences.getInstance();
@@ -38,6 +40,8 @@ class NetworkHelper{
       await prefs.setString('userid', userId);
       await prefs.setString('email', email);
       await prefs.setString('token', token);
+      await prefs.setString('firstName', firstName!);
+      await prefs.setString('lastName', lastName??'');
       if (profilePicURL != null) {
         await prefs.setString('profilePicURL', profilePicURL);
       }

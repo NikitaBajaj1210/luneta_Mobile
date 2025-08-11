@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luneta/provider/account-provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../const/color.dart';
 import '../../const/font_size.dart';
 import '../../custom-component/back_button_with_title.dart';
@@ -55,9 +56,15 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
                 child: customButton(
                   voidCallback: provider.selectedIndex == null
                       ? null
-                      : () {
+                      : () async {
 
                     // Navigate to Profile Screen (country data is already in global provider)
+
+                 //    var prefs = await SharedPreferences.getInstance();
+                 //    String? firstName= await prefs.getString('firstName');
+                 //   String? lastName= await prefs.getString('lastName');
+                 // Provider.of<ProfileProvider>(context, listen: false).initNameControllerWithValue(firstName!);
+                 // Provider.of<ProfileProvider>(context, listen: false).nickNameController.text=lastName!;
                     Navigator.of(context).pushNamed(profile);
                   },
                   buttonText: "Continue",
