@@ -492,7 +492,7 @@ class EducationProvider with ChangeNotifier {
           country: qualification.country ?? '',
           graduationDate: qualification.graduationDate ?? '',
           document: null, // Document file would need to be handled separately
-          documentPath: qualification.document, // Store the document path from API
+          documentPath: qualification.degreeDocumentPath, // Store the document path from API
         );
         academicQualificationList.add(academicQual);
       }
@@ -507,7 +507,7 @@ class EducationProvider with ChangeNotifier {
           issueDate: certification.issueDate ?? '',
           expiryDate: certification.expiryDate ?? '',
           document: null, // Document file would need to be handled separately
-          documentPath: certification.document, // Store the document path from API
+          documentPath: certification.certificateDocumentPath, // Store the document path from API
         );
         certificationList.add(cert);
       }

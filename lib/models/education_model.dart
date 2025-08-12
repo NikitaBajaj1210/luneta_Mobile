@@ -73,6 +73,7 @@ class AcademicQualificationModel {
   final String? graduationDate;
   final String? degreeDocumentOriginalName;
   final String? document;
+  final String? degreeDocumentPath;
 
   AcademicQualificationModel({
     this.educationalDegree,
@@ -82,6 +83,7 @@ class AcademicQualificationModel {
     this.graduationDate,
     this.degreeDocumentOriginalName,
     this.document,
+    this.degreeDocumentPath,
   });
 
   factory AcademicQualificationModel.fromJson(Map<String, dynamic> json) {
@@ -93,6 +95,7 @@ class AcademicQualificationModel {
       graduationDate: json['graduationDate'],
       degreeDocumentOriginalName: json['degreeDocumentOriginalName'],
       document: json['document'],
+      degreeDocumentPath: json['degreeDocumentPath'],
     );
   }
 }
