@@ -222,7 +222,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setTradingAreaExclusions(String values) {
+  void setTradingAreaExclusions(String? values) {
     tradingAreaExclusions = values;
     notifyListeners();
   }

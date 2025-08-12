@@ -12,6 +12,7 @@ import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/globalComponent.dart';
 import '../../../../network/network_services.dart';
 import '../../../../Utils/helper.dart';
+import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
 class JobConditionsAndPreferencesScreen extends StatefulWidget {
   const JobConditionsAndPreferencesScreen({super.key});
   @override
@@ -89,6 +90,9 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                     // Save the data in provider or update the profile here
                     bool success = await provider.createOrUpdateJobConditionsAPI(context);
                     if (success) {
+                      Provider.of<ProfileBottommenuProvider>(
+                          context,
+                          listen: false).getProfileInfo(context);
                       Navigator.pop(context);
                     }
                   }
@@ -706,6 +710,15 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             );
                           }).toList(),
                           value: provider.tradingAreaExclusions,
+                          onClear: (){
+                            provider.setTradingAreaExclusions(null);
+                          },
+                          validator: (value) {
+                            if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
+                              return '      Please select Trading Area';
+                            }
+                            return null;
+                          },
                           hint: "Trading Area Exclusions",
                           searchHint: "Search for a Trading Area",
                           onChanged: (value) {

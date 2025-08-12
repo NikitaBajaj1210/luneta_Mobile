@@ -131,7 +131,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
               ),
               salary: Salary(
                 lastJobSalary: (jobConditions['lastJobSalary'] ?? 0).toDouble(),
-                lastRankJoined: jobConditions['lastRankJoined'] ?? '',
+                lastRankJoined: jobConditions['rank']['rank_name'] ?? '',
                 lastPromotedDate: jobConditions['lastPromotedDate'] ?? '',
                 currency: jobConditions['currency'] ?? '',
                 justificationDocumentUrl: jobConditions['justificationDocumentPath'] ?? '',
