@@ -1121,7 +1121,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                           provider.setSeamanNeverExpire(value!);
                                         },
                                       ),
-                                      Text('Some never expire'),
+                                      Text('Never expire'),
                                     ],
                                   ),
                                   SizedBox(height: 1.h),

@@ -838,7 +838,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                       provider.setMedicalFitnessNeverExpire(value!);
                                     },
                                   ),
-                                  Text('Some never expire'),
+                                  Text('Never expire'),
                                 ],
                               ),
                               SizedBox(height: 1.h),
@@ -1572,7 +1572,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               provider.setDrugAndAlcoholTestNeverExpire(value ?? false);
                             },
                           ),
-                          Text('Some never expire'),
+                          Text('Never expire'),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -2227,7 +2227,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               provider.setVaccinationCertificateNeverExpire(value!);
                             },
                           ),
-                          Text('Some never expire'),
+                          Text('Never expire'),
                         ],
                       ),
                       SizedBox(height: 1.h),
