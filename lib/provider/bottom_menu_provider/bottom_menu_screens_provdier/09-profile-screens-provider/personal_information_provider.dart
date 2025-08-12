@@ -247,7 +247,18 @@ notifyListeners();
           countryOfBirthController.text = profileData['countryOfBirth'] ?? '';
           maritalStatus = profileData['maritalStatus'] ?? 'Single';
           numberOfChildren = profileData['numberOfChildren'] ?? 0;
-          addressController.text = profileData['homeAddress']==null?'':profileData['homeAddress']['street'] ?? '';
+          if (profileData['homeAddress'] != null) {
+            var homeAddressData = profileData['homeAddress'];
+            if (homeAddressData is String && homeAddressData.isNotEmpty) {
+              var decodedAddress = jsonDecode(homeAddressData);
+              if (decodedAddress is Map) {
+                addressController.text = decodedAddress['street'] ?? '';
+              }
+            } else if (homeAddressData is Map) {
+              addressController.text = homeAddressData['street'] ?? '';
+            }
+          }
+
           nearestAirport = profileData['nearestAirport'] ?? '';
 
           updateProfileImage(profileData['profileURl']);
@@ -258,9 +269,21 @@ notifyListeners();
           }
 
           if (profileData['onlineCommunication'] != null) {
-            for (var item in profileData['onlineCommunication']) {
-              _communicationList.add(PlatformEntry(
-                  platform: item['platform'], numberOrId: item['id']));
+            var onlineCommunicationData = profileData['onlineCommunication'];
+            if (onlineCommunicationData is String &&
+                onlineCommunicationData.isNotEmpty) {
+              var decodedCommunication = jsonDecode(onlineCommunicationData);
+              if (decodedCommunication is List) {
+                for (var item in decodedCommunication) {
+                  _communicationList.add(PlatformEntry(
+                      platform: item['platform'], numberOrId: item['id']));
+                }
+              }
+            } else if (onlineCommunicationData is List) {
+              for (var item in onlineCommunicationData) {
+                _communicationList.add(PlatformEntry(
+                    platform: item['platform'], numberOrId: item['id']));
+              }
             }
           }
         }
