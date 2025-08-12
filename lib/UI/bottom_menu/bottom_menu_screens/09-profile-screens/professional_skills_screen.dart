@@ -1078,7 +1078,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         //     ),
                         //     child: Row(
                         //       children: [
-                        //         Image.asset("assets/images/pdfIcon.png", height: 2.5.h),
+                        //         Image.asset("assets/images/Paper.png", height: 2.5.h),
                         //         SizedBox(width: 2.w),
                         //         Expanded(
                         //           child:
@@ -1239,7 +1239,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
 
                           child: Row(
                             children: [
-                              Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                              Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
                               SizedBox(width: 2.w),
                               Expanded(
                                 child: Column(
@@ -1962,7 +1962,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         //       ),
         //       child: Row(
         //         children: [
-        //           Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+        //           Image.asset("assets/images/Paper.png", height: 3.5.h),
         //           SizedBox(width: 2.w),
         //           Expanded(
         //             child: Column(

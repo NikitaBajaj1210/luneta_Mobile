@@ -1499,7 +1499,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   ),
                                   child: Row(
                                     children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
                                       SizedBox(width: 2.w),
                                       Expanded(
                                         child: Column(
@@ -1564,7 +1564,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   ),
                                   child: Row(
                                     children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
                                       SizedBox(width: 2.w),
                                       Expanded(
                                         child: Text(
@@ -1606,7 +1606,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   ),
                                   child: Row(
                                     children: [
-                                      Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
                                       SizedBox(width: 2.w),
                                       Expanded(
                                         child: Text(

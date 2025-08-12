@@ -176,23 +176,31 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
               child: customButton(
                 voidCallback: () async {
                   if (provider.formKey.currentState!.validate()) {
-                      // NetworkService.loading = 0;
+                    if(provider.medicalFitnessList.length>0){
+                    // NetworkService.loading = 0;
                     // Call the create/update API
-                    bool success = await provider.createOrUpdateMedicalDocumentsAPI(context);
-                    
-                      if (success) {
-                        // WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Provider.of<ProfileBottommenuProvider>(
-                              context,
-                              listen: false).getProfileInfo(context);
-                        // });
-                    Navigator.of(context).pop();
-                        // Show success message
-                        // ShowToast("Success", "Medical documents saved successfully!");
-                      } else {
-                        // Show error message
-                        ShowToast("Error", provider.errorMessage.isNotEmpty ? provider.errorMessage : "Failed to save medical documents");
-                      }
+                    bool success = await provider
+                        .createOrUpdateMedicalDocumentsAPI(context);
+
+                    if (success) {
+                      // WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Provider.of<ProfileBottommenuProvider>(
+                          context,
+                          listen: false).getProfileInfo(context);
+                      // });
+                      Navigator.of(context).pop();
+                      // Show success message
+                      // ShowToast("Success", "Medical documents saved successfully!");
+                    } else {
+                      // Show error message
+                      ShowToast("Error",
+                          provider.errorMessage.isNotEmpty
+                              ? provider.errorMessage
+                              : "Failed to save medical documents");
+                    }
+                  }else{
+                      ShowToast("Error","Please add at least one medical fitness document");
+                    }
                   } else {
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
@@ -925,9 +933,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     ),
                                     child: Row(
                                       children: [
-                                        Image.asset(
-                                            "assets/images/pdfIcon.png",
-                                            height: 3.5.h),
+                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                         SizedBox(width: 2.w),
                                         Expanded(
                                           child: Column(
@@ -1015,9 +1022,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     ),
                                     child: Row(
                                       children: [
-                                        Image.asset(
-                                            "assets/images/pdfIcon.png",
-                                            height: 3.5.h),
+                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                         SizedBox(width: 2.w),
                                         Expanded(
                                           child: Column(
@@ -1657,8 +1663,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             ),
                             child: Row(
                               children: [
-                                Image.asset("assets/images/pdfIcon.png",
-                                    height: 3.5.h),
+                                Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
@@ -1738,8 +1744,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             ),
                             child: Row(
                               children: [
-                                Image.asset("assets/images/pdfIcon.png",
-                                    height: 3.5.h),
+                                Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
@@ -2314,8 +2320,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             ),
                             child: Row(
                               children: [
-                                Image.asset("assets/images/pdfIcon.png",
-                                    height: 3.5.h),
+                                Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
@@ -2399,8 +2405,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             ),
                             child: Row(
                               children: [
-                                Image.asset("assets/images/pdfIcon.png",
-                                    height: 3.5.h),
+                                Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
