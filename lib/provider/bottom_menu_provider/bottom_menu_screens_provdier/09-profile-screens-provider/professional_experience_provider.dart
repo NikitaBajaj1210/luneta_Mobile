@@ -171,6 +171,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     employment_Edit_Index = null;
     reference_IsEdit = false;
     reference_Edit_Index = null;
+    newReference=null;
     
     // Reset error states
     hasError = false;

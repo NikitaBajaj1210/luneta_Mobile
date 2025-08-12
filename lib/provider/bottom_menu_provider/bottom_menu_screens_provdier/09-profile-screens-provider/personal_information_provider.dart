@@ -307,7 +307,7 @@ notifyListeners();
         'nearestAirport': nearestAirport ?? '',
         'maritalStatus': maritalStatus,
         'numberOfChildren': numberOfChildren.toString(),
-        'onlineCommunication': _communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList(),
+        'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
         'userId': NetworkHelper.loggedInUserId,
       });
       print(formatDateForAPI(dobController.text));
