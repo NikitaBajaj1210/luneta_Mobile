@@ -1899,127 +1899,127 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
         ),
         SizedBox(height: 1.h),
         // Document Attachment
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 1.h),
-          child: Text(
-            'Document',
-            style: TextStyle(
-              fontSize: AppFontSize.fontSize16,
-              fontWeight: FontWeight.w500,
-              fontFamily: AppColors.fontFamilyMedium,
-              color: AppColors.Color_424242,
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            await provider.showAttachmentOptions(context, 'vettingDocument');
-          },
-          child: DottedBorder(
-            borderType: BorderType.RRect,
-            radius: Radius.circular(15),
-            dashPattern: [10, 10],
-            color: AppColors.buttonColor,
-            strokeWidth: 1,
-            child: Container(
-              width: 100.w,
-              padding: EdgeInsets.symmetric(vertical: 3.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(1.h),
-                color: AppColors.Color_FAFAFA,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/Upload.png", height: 5.h),
-                  SizedBox(height: 1.h),
-                  Text(
-                    "Browse File",
-                    style: TextStyle(
-                      fontSize: AppFontSize.fontSize14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: AppColors.fontFamilySemiBold,
-                      color: AppColors.Color_9E9E9E,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 10,),
-        if ((provider.vettingInspectionDocument != null && provider.vettingInspectionDocument!.path.isNotEmpty) ||
-            (provider.vettingInspectionDocumentPath != null && provider.vettingInspectionDocumentPath!.isNotEmpty))
-          GestureDetector(
-            onTap: (){
-              OpenFile_View(provider.vettingInspectionDocument==null?provider.vettingInspectionDocumentPath:provider.vettingInspectionDocument!.path,context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-              decoration: BoxDecoration(
-                color: Colors.red.shade100,
-                borderRadius: BorderRadius.circular(1.h),
-              ),
-              child: Row(
-                children: [
-                  Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
-                  SizedBox(width: 2.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          provider.vettingInspectionDocument != null
-                            ? provider.vettingInspectionDocument!.path.split('/').last
-                            : provider.vettingInspectionDocumentPath != null
-                              ? provider.vettingInspectionDocumentPath!.split('/').last
-                              : '',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.Color_212121,
-                            fontFamily: AppColors.fontFamilyBold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (provider.vettingInspectionDocument != null)
-                          FutureBuilder<int>(
-                            future: provider.vettingInspectionDocument!.length(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(
-                                  "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize12,
-                                    color: AppColors.Color_616161,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                  ),
-                                );
-                              }
-                              return SizedBox();
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      provider.removeAttachment('vettingDocument');
-                      // Update the UI
-                      (context as Element).markNeedsBuild();
-                    },
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 24,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        SizedBox(height: 10,)
+        // Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 1.h),
+        //   child: Text(
+        //     'Document',
+        //     style: TextStyle(
+        //       fontSize: AppFontSize.fontSize16,
+        //       fontWeight: FontWeight.w500,
+        //       fontFamily: AppColors.fontFamilyMedium,
+        //       color: AppColors.Color_424242,
+        //     ),
+        //   ),
+        // ),
+        // GestureDetector(
+        //   onTap: () async {
+        //     await provider.showAttachmentOptions(context, 'vettingDocument');
+        //   },
+        //   child: DottedBorder(
+        //     borderType: BorderType.RRect,
+        //     radius: Radius.circular(15),
+        //     dashPattern: [10, 10],
+        //     color: AppColors.buttonColor,
+        //     strokeWidth: 1,
+        //     child: Container(
+        //       width: 100.w,
+        //       padding: EdgeInsets.symmetric(vertical: 3.h),
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(1.h),
+        //         color: AppColors.Color_FAFAFA,
+        //       ),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Image.asset("assets/images/Upload.png", height: 5.h),
+        //           SizedBox(height: 1.h),
+        //           Text(
+        //             "Browse File",
+        //             style: TextStyle(
+        //               fontSize: AppFontSize.fontSize14,
+        //               fontWeight: FontWeight.w500,
+        //               fontFamily: AppColors.fontFamilySemiBold,
+        //               color: AppColors.Color_9E9E9E,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(height: 10,),
+        // if ((provider.vettingInspectionDocument != null && provider.vettingInspectionDocument!.path.isNotEmpty) ||
+        //     (provider.vettingInspectionDocumentPath != null && provider.vettingInspectionDocumentPath!.isNotEmpty))
+        //   GestureDetector(
+        //     onTap: (){
+        //       OpenFile_View(provider.vettingInspectionDocument==null?provider.vettingInspectionDocumentPath:provider.vettingInspectionDocument!.path,context);
+        //     },
+        //     child: Container(
+        //       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+        //       decoration: BoxDecoration(
+        //         color: Colors.red.shade100,
+        //         borderRadius: BorderRadius.circular(1.h),
+        //       ),
+        //       child: Row(
+        //         children: [
+        //           Image.asset("assets/images/pdfIcon.png", height: 3.5.h),
+        //           SizedBox(width: 2.w),
+        //           Expanded(
+        //             child: Column(
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               children: [
+        //                 Text(
+        //                   provider.vettingInspectionDocument != null
+        //                     ? provider.vettingInspectionDocument!.path.split('/').last
+        //                     : provider.vettingInspectionDocumentPath != null
+        //                       ? provider.vettingInspectionDocumentPath!.split('/').last
+        //                       : '',
+        //                   style: TextStyle(
+        //                     fontSize: AppFontSize.fontSize16,
+        //                     fontWeight: FontWeight.w700,
+        //                     color: AppColors.Color_212121,
+        //                     fontFamily: AppColors.fontFamilyBold,
+        //                   ),
+        //                   overflow: TextOverflow.ellipsis,
+        //                 ),
+        //                 if (provider.vettingInspectionDocument != null)
+        //                   FutureBuilder<int>(
+        //                     future: provider.vettingInspectionDocument!.length(),
+        //                     builder: (context, snapshot) {
+        //                       if (snapshot.hasData) {
+        //                         return Text(
+        //                           "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+        //                           style: TextStyle(
+        //                             fontSize: AppFontSize.fontSize12,
+        //                             color: AppColors.Color_616161,
+        //                             fontWeight: FontWeight.w500,
+        //                             fontFamily: AppColors.fontFamilyMedium,
+        //                           ),
+        //                         );
+        //                       }
+        //                       return SizedBox();
+        //                     },
+        //                   ),
+        //               ],
+        //             ),
+        //           ),
+        //           GestureDetector(
+        //             onTap: () async {
+        //               provider.removeAttachment('vettingDocument');
+        //               // Update the UI
+        //               (context as Element).markNeedsBuild();
+        //             },
+        //             child: Icon(
+        //               Icons.close,
+        //               color: Colors.red,
+        //               size: 24,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // SizedBox(height: 10,)
       ],
     );
   }

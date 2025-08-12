@@ -552,7 +552,7 @@ class EducationProvider with ChangeNotifier {
           'educationalInstitution': qual.educationalInstitution,
           'country': qual.country,
           'graduationDate': qual.graduationDate,
-          'document': qual.document?.path.split('/').last ?? (qual.documentPath == '' ? null : qual.documentPath),
+          'degreeDocumentPath': qual.document?.path.split('/').last ?? (qual.documentPath == '' ? null : qual.documentPath),
         }).toList(),
         'certificationsAndTrainings': certificationList.map((cert) => {
           'certificationType': cert.typeOfCertification,
@@ -560,7 +560,7 @@ class EducationProvider with ChangeNotifier {
           'issueDate': cert.issueDate,
           'expiryDate': cert.expiryDate,
           'neverExpire': false, // Default value
-          'document': cert.document?.path.split('/').last ?? (cert.documentPath == '' ? null : cert.documentPath),
+          'certificateDocumentPath': cert.document?.path.split('/').last ?? (cert.documentPath == '' ? null : cert.documentPath),
         }).toList(),
         'languagesSpoken': [
           {
@@ -584,7 +584,7 @@ class EducationProvider with ChangeNotifier {
         // Only add files that are not marked for removal
         if (academicQualificationList[i].document != null && academicQualificationList[i].documentPath != '') {
           dioFileList.add({
-            'fieldName': 'academicQualificationFiles${i}',
+            'fieldName': 'academicQualificationFiles[${i}]',
             'filePath': academicQualificationList[i].document!.path,
             'fileName': academicQualificationList[i].document!.path.split('/').last,
           });
@@ -596,7 +596,7 @@ class EducationProvider with ChangeNotifier {
         // Only add files that are not marked for removal
         if (certificationList[i].document != null && certificationList[i].documentPath != '') {
           dioFileList.add({
-            'fieldName': 'certificationsAndTrainingsFiles${i}',
+            'fieldName': 'certificationsAndTrainingsFiles[${i}]',
             'filePath': certificationList[i].document!.path,
             'fileName': certificationList[i].document!.path.split('/').last,
           });

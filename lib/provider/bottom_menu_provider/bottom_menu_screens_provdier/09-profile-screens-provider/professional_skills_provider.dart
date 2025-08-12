@@ -18,11 +18,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Map<String, dynamic>? professionalSkillsData;
 
   // Vetting Inspection Document
-  File? _vettingInspectionDocument;
-  String? _vettingInspectionDocumentPath;
+  // File? _vettingInspectionDocument;
+  // String? _vettingInspectionDocumentPath;
 
-  File? get vettingInspectionDocument => _vettingInspectionDocument;
-  String? get vettingInspectionDocumentPath => _vettingInspectionDocumentPath;
+  // File? get vettingInspectionDocument => _vettingInspectionDocument;
+  // String? get vettingInspectionDocumentPath => _vettingInspectionDocumentPath;
 
 
   Future<void> setVettingInspectionDocument(File? file, BuildContext? context) async {
@@ -45,15 +45,15 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         return;
       }
     }
-    _vettingInspectionDocument = file;
+    // _vettingInspectionDocument = file;
     notifyListeners();
   }
 
-  Future<void> removeVettingInspectionDocument(BuildContext? context) async {
-    _vettingInspectionDocument = null;
-    _vettingInspectionDocumentPath = null;
-    notifyListeners();
-  }
+  // Future<void> removeVettingInspectionDocument(BuildContext? context) async {
+  //   _vettingInspectionDocument = null;
+  //   _vettingInspectionDocumentPath = null;
+  //   notifyListeners();
+  // }
 
 
   // Computer and Software
@@ -571,10 +571,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].document = null;
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = '';
       }
-    } else if (type == 'vettingDocument') {
-      _vettingInspectionDocument = null;
-      _vettingInspectionDocumentPath = null;
     }
+    // else if (type == 'vettingDocument') {
+    //   _vettingInspectionDocument = null;
+    //   _vettingInspectionDocumentPath = null;
+    // }
   }
 
   // Fetch professional skills data from API
@@ -746,7 +747,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
           vettingDateController.text = vettingItem['date'] ?? '';
           vettingObservationsController.text = vettingItem['observations'] ?? '';
           // Handle vetting inspection document path
-          _vettingInspectionDocumentPath = vettingItem['documentPath']?.isNotEmpty == true ? vettingItem['documentPath'] : null;
+          // _vettingInspectionDocumentPath = vettingItem['documentPath']?.isNotEmpty == true ? vettingItem['documentPath'] : null;
         }
       }
 
@@ -819,8 +820,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     port = null;
     
     // Reset document attachments
-    _vettingInspectionDocument = null;
-    _vettingInspectionDocumentPath = null;
+    // _vettingInspectionDocument = null;
+    // _vettingInspectionDocumentPath = null;
     metalWorkingSkillDocument = null;
     
     // Reset UI visibility states
@@ -872,7 +873,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     observationsController.clear();
     
     // Reset document attachments (but keep existing data)
-    _vettingInspectionDocument = null;
+    // _vettingInspectionDocument = null;
     metalWorkingSkillDocument = null;
     
     // Reset UI visibility states
@@ -962,7 +963,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'port': vettingPort ?? '',
             'date': vettingDateController.text,
             'observations': vettingObservationsController.text,
-            'documentPath': _vettingInspectionDocument?.path ?? _vettingInspectionDocumentPath ?? '',
+            // 'documentPath': _vettingInspectionDocument?.path ?? _vettingInspectionDocumentPath ?? '',
           }
         ],
         'tradingAreaExperience': {
@@ -993,13 +994,13 @@ class ProfessionalSkillsProvider with ChangeNotifier {
       }
 
       // Add vetting inspection document if it exists
-      if (_vettingInspectionDocument != null) {
-        dioFileList.add({
-          'fieldName': 'vettingDocument',
-          'filePath': _vettingInspectionDocument!.path,
-          'fileName': _vettingInspectionDocument!.path.split('/').last,
-        });
-      }
+      // if (_vettingInspectionDocument != null) {
+      //   dioFileList.add({
+      //     'fieldName': 'vettingDocument',
+      //     'filePath': _vettingInspectionDocument!.path,
+      //     'fileName': _vettingInspectionDocument!.path.split('/').last,
+      //   });
+      // }
 
       print("File List: $dioFileList");
 
