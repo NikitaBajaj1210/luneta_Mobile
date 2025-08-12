@@ -302,15 +302,23 @@ notifyListeners();
         'nationality': nationalityController.text,
         'mobilePhone': phoneController.text,
         'directLinePhone': directPhoneController.text,
-        'homeAddress':
-        {"street":addressController.text,"city":"","state":"","postalCode":"","country":""},
+        'homeAddress': jsonEncode({
+          "street": addressController.text,
+          "city": "",
+          "state": "",
+          "postalCode": "",
+          "country": ""
+        }),
         'nearestAirport': nearestAirport ?? '',
         'maritalStatus': maritalStatus,
         'numberOfChildren': numberOfChildren.toString(),
-        'onlineCommunication': jsonEncode(_communicationList.map((e) => {'platform': e.platform, 'id': e.numberOrId}).toList()),
+        'onlineCommunication': _communicationList.isEmpty
+            ? "[]"
+            : jsonEncode(_communicationList
+                .map((e) => {'platform': e.platform, 'id': e.numberOrId})
+                .toList()),
         'userId': NetworkHelper.loggedInUserId,
       });
-      print(formatDateForAPI(dobController.text));
 
       if (profileImage != null) {
         String? mimeType = lookupMimeType(profileImage!.path);
