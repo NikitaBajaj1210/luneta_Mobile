@@ -257,12 +257,30 @@ notifyListeners();
             setDOB(dob);
           }
 
-          if (profileData['onlineCommunication'] != null) {
-            for (var item in profileData['onlineCommunication']) {
-              _communicationList.add(PlatformEntry(
-                  platform: item['platform'], numberOrId: item['id']));
-            }
-          }
+          // if (profileData['onlineCommunication'] != null) {
+          //   for (var item in profileData['onlineCommunication']) {
+          //     _communicationList.add(PlatformEntry(
+          //         platform: item['platform'], numberOrId: item['id']));
+          //   }
+          // }
+
+
+          final onlineCommunicationRaw = profileData['onlineCommunication'];
+
+          final onlineCommunicationList = onlineCommunicationRaw != null
+              ? (onlineCommunicationRaw is String
+              ? jsonDecode(onlineCommunicationRaw)
+              : onlineCommunicationRaw)
+              : [];
+
+          _communicationList.addAll((onlineCommunicationList as List)
+              .map((e) => PlatformEntry(
+            platform: e['platform']?.toString() ?? '',
+            numberOrId: e['id']?.toString() ?? '',
+          ))
+              .toList());
+
+
         }
       } else {
         // Handle error

@@ -47,6 +47,22 @@ class ProfileBottommenuProvider with ChangeNotifier {
           final seafarerProfile = data['seafarerProfile'][0];
           setUserName(seafarerProfile['firstName'] + " " + seafarerProfile['lastName']);
 
+          final onlineCommunicationRaw = seafarerProfile['onlineCommunication'];
+
+          final onlineCommunicationList = onlineCommunicationRaw != null
+              ? (onlineCommunicationRaw is String
+              ? jsonDecode(onlineCommunicationRaw)
+              : onlineCommunicationRaw)
+              : [];
+
+          final formattedOnlineCommunication = (onlineCommunicationList as List)
+              .map((e) => {
+            "platform": e['platform'].toString(),
+            "id": e['id'].toString(),
+            "verified": "true",
+          })
+              .toList();
+
           setContactInfo(
             name: (seafarerProfile['firstName'] ?? '') + " " + (seafarerProfile['lastName'] ?? ''),
             dob: seafarerProfile['dateOfBirth'] ?? '',
@@ -59,15 +75,7 @@ class ProfileBottommenuProvider with ChangeNotifier {
             directLinePhone: seafarerProfile['directLinePhone'] ?? '',
             homeAddress: seafarerProfile['homeAddress']==null?'':seafarerProfile['homeAddress']['street'] ?? '',
             nearestAirport: seafarerProfile['nearestAirport'] ?? '',
-            onlineCommunication: seafarerProfile['onlineCommunication'] != null
-                ? (seafarerProfile['onlineCommunication'] as List)
-                .map((e) => {
-              "platform": e['platform'].toString(),
-              "id": e['id'].toString(),
-              "verified": "true",
-            })
-                .toList()
-                : [],
+            onlineCommunication:formattedOnlineCommunication,
             maritalStatus: seafarerProfile['maritalStatus'] ?? '',
             numberOfChildren: (seafarerProfile['numberOfChildren'] ?? 0).toString(),
             profilePhotoPath: seafarerProfile['profileURl'] ?? '',
