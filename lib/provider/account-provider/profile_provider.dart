@@ -56,7 +56,7 @@ class ProfileProvider with ChangeNotifier {
   String addDate = 'Date of Birth';
   String addDateApi = '';
   String selectedGender = 'Gender';
-  String selectedCountry = 'India';
+  String? selectedCountry = null;
   String selectedCountryCode = 'IN';
   bool isShowDateError = false;
   File? profileImage;
@@ -72,6 +72,11 @@ class ProfileProvider with ChangeNotifier {
   TextEditingController get nickNameController => _nickNameController;
   set nickNameController(TextEditingController controller) {
     _nickNameController = controller;
+    notifyListeners();
+  }
+  void initControllers({String? name, String? nickName}) {
+    _nameController.text = name ?? '';
+    _nickNameController.text = nickName ?? '';
     notifyListeners();
   }
 
@@ -529,7 +534,7 @@ class ProfileProvider with ChangeNotifier {
 
       var formData = FormData.fromMap({
         "userId": NetworkHelper.loggedInUserId,
-        // "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
+        "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
         "firstName": _nameController.text.trim(),
         "lastName": _nickNameController.text.trim(),
         "dateOfBirth": _formatDateForAPI(),

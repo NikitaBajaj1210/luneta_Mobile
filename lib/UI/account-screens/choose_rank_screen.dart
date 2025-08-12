@@ -60,11 +60,13 @@ class _ChooseRankScreenState extends State<ChooseRankScreen> {
 
                     // Navigate to Profile Screen (country data is already in global provider)
 
-                 //    var prefs = await SharedPreferences.getInstance();
-                 //    String? firstName= await prefs.getString('firstName');
-                 //   String? lastName= await prefs.getString('lastName');
-                 // Provider.of<ProfileProvider>(context, listen: false).initNameControllerWithValue(firstName!);
-                 // Provider.of<ProfileProvider>(context, listen: false).nickNameController.text=lastName!;
+                    var prefs = await SharedPreferences.getInstance();
+                    String? firstName= await prefs.getString('firstName');
+                   String? lastName= await prefs.getString('lastName');
+                   print(firstName);
+                   print(lastName);
+                    Provider.of<ProfileProvider>(context, listen: false)
+                        .initControllers(name: firstName, nickName: lastName);
                     Navigator.of(context).pushNamed(profile);
                   },
                   buttonText: "Continue",
