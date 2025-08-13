@@ -256,6 +256,9 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     if (index != null) {
       _references[index].newReferenceDocument = null;
       _references[index].hasExistingReferenceDocument = false;
+      _references[index].experienceDocumentOriginalName=null;
+      _references[index].experienceDocumentPath=null;
+      referenceDocumentController.clear();
     }
     newReference = null;
     notifyListeners();

@@ -160,20 +160,30 @@ class TravelDocumentProvider extends ChangeNotifier {
 
       // If no new files are uploaded but we have existing documents, 
       // we need to include the existing document paths in the data
-      if (passportDocument == null) {
-        data['passportDocumentPath'] = travelDocumentData?.passportDocumentPath ?? '';
+      if (passportDocument == null && travelDocumentData?.passportDocumentPath.isNotEmpty == true) {
+        data['passportDocumentPath'] = travelDocumentData?.passportDocumentPath;
+      }else{
+        data['passportDocumentPath']=null;
       }
       if (seamanDocument == null && travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true) {
         data['seamansBookDocumentPath'] = travelDocumentData!.seamansBookDocumentPath;
+      }else{
+        data['seamansBookDocumentPath'] =null;
       }
       if (seafarerVisaDocument == null && travelDocumentData?.seafarerVisaDocumentPath.isNotEmpty == true) {
         data['seafarerVisaDocumentPath'] = travelDocumentData!.seafarerVisaDocumentPath;
+      }else{
+        data['seafarerVisaDocumentPath'] = null;
       }
       if (visaDocument == null && travelDocumentData?.visaDocumentPath.isNotEmpty == true) {
         data['visaDocumentPath'] = travelDocumentData!.visaDocumentPath;
+      }else{
+        data['visaDocumentPath'] =null;
       }
       if (residencePermitDocument == null && travelDocumentData?.residencePermitDocumentPath.isNotEmpty == true) {
         data['residencePermitDocumentPath'] = travelDocumentData!.residencePermitDocumentPath;
+      }else{
+        data['residencePermitDocumentPath'] = null;
       }
 
 
@@ -304,20 +314,20 @@ class TravelDocumentProvider extends ChangeNotifier {
   }
 
   // Get document original name for API
-  String getDocumentOriginalName(String documentType) {
+  String? getDocumentOriginalName(String documentType) {
     switch (documentType) {
       case 'passport':
-        return travelDocumentData?.passportDocumentOriginalName ?? '';
+        return travelDocumentData?.passportDocumentOriginalName == '' ? null: travelDocumentData?.passportDocumentOriginalName;
       case 'seaman':
-        return travelDocumentData?.seamansBookDocumentOriginalName ?? '';
+        return travelDocumentData?.seamansBookDocumentOriginalName== '' ? null: travelDocumentData?.seamansBookDocumentOriginalName;
       case 'seafarer_visa':
-        return travelDocumentData?.seafarerVisaDocumentOriginalName ?? '';
+        return travelDocumentData?.seafarerVisaDocumentOriginalName== '' ? null:travelDocumentData?.seafarerVisaDocumentOriginalName ;
       case 'visa':
-        return travelDocumentData?.visaDocumentOriginalName ?? '';
+        return travelDocumentData?.visaDocumentOriginalName == '' ? null: travelDocumentData?.visaDocumentOriginalName;
       case 'residence_permit':
-        return travelDocumentData?.residencePermitDocumentOriginalName ?? '';
+        return travelDocumentData?.residencePermitDocumentOriginalName == '' ? null: travelDocumentData?.residencePermitDocumentOriginalName ;
       default:
-        return '';
+        return null;
     }
   }
 

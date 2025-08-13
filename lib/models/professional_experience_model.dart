@@ -136,8 +136,8 @@ class Reference {
   final String? issuingDate;
   final String? vesselOrCompanyName;
   final String? professionalExperienceId;
-  final String? experienceDocumentPath;
-  final String? experienceDocumentOriginalName;
+  String? experienceDocumentPath;
+  String? experienceDocumentOriginalName;
   final String? documentPath;
   File? newReferenceDocument;
   bool hasExistingReferenceDocument;
