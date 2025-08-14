@@ -129,7 +129,6 @@ class TravelDocumentProvider extends ChangeNotifier {
         'passportCountry': passportCountry ?? '',
         'passportIssueDate': passportIssueDateController.text,
         'passportExpDate': passportExpiryDateController.text,
-        'passportDocumentOriginalName': passportDocument?.path.split('/').last ?? getDocumentOriginalName('passport'),
         'seamansBookNo': seamanBookNoController.text,
         'seamansBookIssuingCountry': seamanIssuingCountry ?? '',
         'seamansBookIssuingAuthority': seamanIssuingAuthorityController.text,
@@ -137,23 +136,19 @@ class TravelDocumentProvider extends ChangeNotifier {
         'seamansBookExpDate': seamanExpiryDateController.text,
         'seamansBookNeverExpire': seamanNeverExpire,
         'seamansBookNationality': seamanNationality ?? '',
-        'seamansBookDocumentOriginalName': seamanDocument?.path.split('/').last ?? getDocumentOriginalName('seaman'),
         'validSeafarerVisa': validSeafarerVisa,
         'seafarerVisaIssuingCountry': seafarerVisaIssuingCountry ?? '',
         'seafarerVisaNo': seafarerVisaNoController.text,
         'seafarerVisaIssuingDate': seafarerVisaIssueDateController.text,
         'seafarerVisaExpDate': seafarerVisaExpiryDateController.text,
-        'seafarerVisaDocumentOriginalName': seafarerVisaDocument?.path.split('/').last ?? getDocumentOriginalName('seafarer_visa'),
         'visaIssuingCountry': visaIssuingCountry ?? '',
         'visaNo': visaNoController.text,
         'visaIssuingDate': visaIssueDateController.text,
         'visaExpDate': visaExpiryDateController.text,
-        'visaDocumentOriginalName': visaDocument?.path.split('/').last ?? getDocumentOriginalName('visa'),
         'residencePermitIssuingCountry': residencePermitIssuingCountry ?? '',
         'residencePermitNo': residencePermitNoController.text,
         'residencePermitIssuingDate': residencePermitIssueDateController.text,
         'residencePermitExpDate': residencePermitExpiryDateController.text,
-        'residencePermitDocumentOriginalName': residencePermitDocument?.path.split('/').last ?? getDocumentOriginalName('residence_permit'),
         'userId': NetworkHelper.loggedInUserId,
         // 'id': travelDocumentData?.id, // Use existing ID if updating
       };
@@ -162,28 +157,38 @@ class TravelDocumentProvider extends ChangeNotifier {
       // we need to include the existing document paths in the data
       if (passportDocument == null && travelDocumentData?.passportDocumentPath.isNotEmpty == true) {
         data['passportDocumentPath'] = travelDocumentData?.passportDocumentPath;
-      }else{
+        data['passportDocumentOriginalName']= passportDocument?.path.split('/').last ?? getDocumentOriginalName('passport');
+    }else{
         data['passportDocumentPath']=null;
+        data['passportDocumentOriginalName']= passportDocument?.path.split('/').last ??null;
       }
       if (seamanDocument == null && travelDocumentData?.seamansBookDocumentPath.isNotEmpty == true) {
         data['seamansBookDocumentPath'] = travelDocumentData!.seamansBookDocumentPath;
-      }else{
+        data['seamansBookDocumentOriginalName']= seamanDocument?.path.split('/').last ?? getDocumentOriginalName('seaman');
+    }else{
         data['seamansBookDocumentPath'] =null;
-      }
+        data['seamansBookDocumentOriginalName']= seamanDocument?.path.split('/').last ??null;
+    }
       if (seafarerVisaDocument == null && travelDocumentData?.seafarerVisaDocumentPath.isNotEmpty == true) {
         data['seafarerVisaDocumentPath'] = travelDocumentData!.seafarerVisaDocumentPath;
-      }else{
+        data['seafarerVisaDocumentOriginalName'] = seafarerVisaDocument?.path.split('/').last ?? getDocumentOriginalName('seafarer_visa');
+    }else{
         data['seafarerVisaDocumentPath'] = null;
-      }
+        data['seafarerVisaDocumentOriginalName'] = seafarerVisaDocument?.path.split('/').last ??null;
+    }
       if (visaDocument == null && travelDocumentData?.visaDocumentPath.isNotEmpty == true) {
         data['visaDocumentPath'] = travelDocumentData!.visaDocumentPath;
-      }else{
+        data['visaDocumentOriginalName'] = visaDocument?.path.split('/').last ?? getDocumentOriginalName('visa');
+    }else{
         data['visaDocumentPath'] =null;
-      }
+        data['visaDocumentOriginalName'] = visaDocument?.path.split('/').last ?? null;
+    }
       if (residencePermitDocument == null && travelDocumentData?.residencePermitDocumentPath.isNotEmpty == true) {
         data['residencePermitDocumentPath'] = travelDocumentData!.residencePermitDocumentPath;
-      }else{
+        data['residencePermitDocumentOriginalName']= residencePermitDocument?.path.split('/').last ?? getDocumentOriginalName('residence_permit');
+    }else{
         data['residencePermitDocumentPath'] = null;
+        data['residencePermitDocumentOriginalName']= residencePermitDocument?.path.split('/').last ??null;
       }
 
 

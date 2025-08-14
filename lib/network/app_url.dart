@@ -1,5 +1,6 @@
 
 // Whole App's API URL
+// const baseUrl = 'http://192.168.29.56:3004/api/'; // Base URL
 // const baseUrl = 'https://luneta.microlent.com/api/'; // Base URL
 const baseUrl = 'https://stage-luneta.nanobyte.gr/api/'; // Base URL
 
@@ -36,7 +37,7 @@ const postJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/cre
 const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-or-update';
 const postUpdateCompliance = '${baseUrl}seafarer-profile/security-compliance/create-or-update';
 
-const getAllAgency = '${baseUrl}/master-manning-agency/get-all';
+const getAllAgency = '${baseUrl}master-manning-agency/get-all';
 
 
 //USED  TO API

@@ -1075,7 +1075,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
               'issuingDate': fitness.issueDate ?? '',
               'expDate': fitness.expiryDate ?? '',
               'neverExpiry': fitness.neverExpire ?? false,
-              'documentPath': fitness.document==null?fitness.documentPath:'',
+              'documentPath': fitness.document==null?fitness.documentPath:null,
               'documentOriginalName': fitness.document==null?fitness.documentOriginalName:fitness.document!.path.split('/').last,
             }).toList(),
         'drugAlcoholTest': [
@@ -1090,7 +1090,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
                 ? null
                 : drugAndAlcoholTestExpiryDateController.text,
             'neverExpiry': drugAndAlcoholTestNeverExpire ?? false,
-            'documentPath': drugAndAlcoholTestDocument==null?drugAndAlcoholTestDocumentPath:'',
+            'documentPath': drugAndAlcoholTestDocument==null?drugAndAlcoholTestDocumentPath:null,
             'documentOriginalName': drugAndAlcoholTestDocument==null?drugAndAlcoholTestDocumentOriginalName:drugAndAlcoholTestDocument!.path.split('/').last,
           }
         ],
@@ -1108,7 +1108,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
                     ? null
                     : vaccinationCertificateExpiryDateController.text,
             'neverExpiry': vaccinationCertificateNeverExpire ?? false,
-            'documentPath': vaccinationCertificateDocument==null?vaccinationCertificateDocumentPath:'',
+            'documentPath': vaccinationCertificateDocument==null?vaccinationCertificateDocumentPath:null,
             'documentOriginalName':
             vaccinationCertificateDocument==null?vaccinationCertificateDocumentOriginalName:vaccinationCertificateDocument!.path.split('/').last,
           }
