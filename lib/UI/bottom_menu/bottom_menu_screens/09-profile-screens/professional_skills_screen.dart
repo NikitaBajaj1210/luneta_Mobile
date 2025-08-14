@@ -94,12 +94,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               child: customButton(
                 voidCallback: () async {
                   NetworkService.loading = 0;
+                  setState(() {});
                   bool success = await provider.createOrUpdateProfessionalSkillsAPI(context);
                   if (success) {
                     Provider.of<ProfileBottommenuProvider>(
                         context,
                         listen: false).getProfileInfo(context);
-                    showToast("Professional skills saved successfully");
+                    // showToast("Professional skills saved successfully");
                     Navigator.pop(context);
                   } else {
                     showToast( "Failed to save professional skills");
@@ -1036,8 +1037,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 0.5,),
-                                  if (item.documentPath != null && item.documentPath!.isNotEmpty) Text(
-                                    item.documentPath!.split('/').last,
+                                 Text(
+                                    item.originalName??'',
                                     style: TextStyle(
                                       fontSize: AppFontSize.fontSize14,
                                       fontWeight: FontWeight.w500,

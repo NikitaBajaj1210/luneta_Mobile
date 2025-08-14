@@ -243,7 +243,18 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   }
 
   void removeMetalWorkingSkillDocument() {
-    metalWorkingSkillDocument = null;
+
+    if (metalWorkingSkillDocument != null) {
+      print("Returning new document path: ${metalWorkingSkillDocument!.path}");
+      metalWorkingSkillDocument = null;
+    } else if (metalWorkingSkills_IsEdit &&
+        metalWorkingSkills_Edit_Index != null &&
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath != null &&
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath!.isNotEmpty) {
+      metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath=null;
+      metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].originalName=null;
+    }
+
     notifyListeners();
   }
 
@@ -260,14 +271,18 @@ class ProfessionalSkillsProvider with ChangeNotifier {
                 level: metalWorkingSkillLevel!,
                 certificate: metalWorkingSkillCertificate,
                 document: metalWorkingSkillDocument,
-                documentPath: newDocumentPath);
+                documentPath: newDocumentPath,
+              originalName: metalWorkingSkillDocument==null?metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].originalName:newDocumentPath!.split('/').last
+            );
       } else {
         metalWorkingSkillsList.add(MetalWorkingSkill(
             skillSelection: metalWorkingSkill!,
             level: metalWorkingSkillLevel!,
             certificate: metalWorkingSkillCertificate,
             document: metalWorkingSkillDocument,
-            documentPath: metalWorkingSkillDocument?.path ?? ''));
+            documentPath: metalWorkingSkillDocument?.path ?? '',
+            originalName: metalWorkingSkillDocument==null?metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].originalName:metalWorkingSkillDocument?.path.split('/').last
+        ));
       }
       setMetalWorkingSkillsVisibility(false);
     }
@@ -570,6 +585,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         // We'll set documentPath to empty string to indicate removal
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].document = null;
         metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].documentPath = '';
+        metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].originalName = null;
       }
     }
     // else if (type == 'vettingDocument') {
@@ -695,7 +711,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
               level: item['level'] ?? '',
               certificate: item['certificate'] ?? false,
               document: null,
-              documentPath: item['documentPath'] ?? '',
+              documentPath: item['fullAttachDocumentPath'] ?? '',
+              originalName: item['originalName']
             );
             metalWorkingSkillsList.add(metalWorking);
           }
@@ -940,7 +957,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'level': item.level,
             'certificate': item.certificate,
             'documentPath': item.document?.path ?? item.documentPath ?? '',
-            'originalName':"",
+            'originalName':item.originalName,
           }).toList(),
         },
         'tankCoatingExperience': {
@@ -1052,6 +1069,7 @@ class MetalWorkingSkill {
   final bool certificate;
   late File? document;
   String? documentPath;
+  String? originalName;
 
   MetalWorkingSkill({
     required this.skillSelection,
@@ -1059,6 +1077,7 @@ class MetalWorkingSkill {
     required this.certificate,
     this.document,
     this.documentPath,
+    this.originalName
   });
 }
 
