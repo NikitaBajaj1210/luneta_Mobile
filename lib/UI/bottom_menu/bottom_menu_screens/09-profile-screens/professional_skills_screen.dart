@@ -1238,7 +1238,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           decoration: BoxDecoration(
                             color: Colors.red.shade100,
                             borderRadius: BorderRadius.circular(1.h),
-                            border: Border.all(color: AppColors.buttonColor, width: 1),
+                            // border: Border.all(color: AppColors.buttonColor, width: 1),
                           ),
 
                           child: Row(

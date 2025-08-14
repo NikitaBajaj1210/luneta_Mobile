@@ -940,6 +940,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             'level': item.level,
             'certificate': item.certificate,
             'documentPath': item.document?.path ?? item.documentPath ?? '',
+            'originalName':"",
           }).toList(),
         },
         'tankCoatingExperience': {

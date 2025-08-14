@@ -73,6 +73,7 @@ class EducationProvider with ChangeNotifier {
       graduationDate: qualification.graduationDate,
       document: qualification.document,
       documentPath: qualification.document?.path ?? '',
+      documentOriginalName: qualification.documentOriginalName??''
     );
     academicQualificationList.add(newQualification);
     notifyListeners();
@@ -110,6 +111,9 @@ class EducationProvider with ChangeNotifier {
       graduationDate: qualification.graduationDate,
       document: newDocument,
       documentPath: newDocumentPath,
+      documentOriginalName: qualification.document != null
+          ? qualification.document!.path.split('/').last
+          : qualification.documentOriginalName
     );
     
     academicQualificationList[index] = updatedQual;
@@ -171,6 +175,7 @@ class EducationProvider with ChangeNotifier {
       expiryDate: certification.expiryDate,
       document: certification.document,
       documentPath: certification.document?.path ?? '',
+      documentOriginalName: certification.documentOriginalName
     );
     certificationList.add(newCertification);
     notifyListeners();
@@ -206,6 +211,7 @@ class EducationProvider with ChangeNotifier {
       expiryDate: certification.expiryDate,
       document: newDocument,
       documentPath: newDocumentPath,
+      documentOriginalName: certification.document != null?newDocumentPath!.split('/').last:certification.documentOriginalName,
     );
     
     certificationList[index] = updatedCert;
@@ -348,6 +354,7 @@ class EducationProvider with ChangeNotifier {
         graduationDate: academicQualificationList[index].graduationDate,
         document: null,
         documentPath: null, // Mark as removed
+        documentOriginalName: null
       );
       academicDocumentPath_temp = null;
       academicDocumentOriginalName_temp = null;
@@ -374,6 +381,7 @@ class EducationProvider with ChangeNotifier {
         expiryDate: certificationList[index].expiryDate,
         document: null,
         documentPath: null, // Mark as removed
+        documentOriginalName: null
       );
       certificationDocumentPath_temp = null;
       certificationDocumentOriginalName_temp = null;
@@ -392,6 +400,7 @@ class EducationProvider with ChangeNotifier {
       graduationDate: qualification.graduationDate,
       document: null,
       documentPath: '', // Set to empty string to indicate removal
+      documentOriginalName: null
     );
     academicQualificationList[index] = updatedQual;
     notifyListeners();
@@ -407,6 +416,7 @@ class EducationProvider with ChangeNotifier {
       expiryDate: certification.expiryDate,
       document: null,
       documentPath: '', // Set to empty string to indicate removal
+      documentOriginalName: null
     );
     certificationList[index] = updatedCert;
     notifyListeners();
@@ -493,7 +503,7 @@ class EducationProvider with ChangeNotifier {
           graduationDate: qualification.graduationDate ?? '',
           document: null, // Document file would need to be handled separately
           documentPath: qualification.degreeDocumentPath, // Store the document path from API
-          documentOriginalName: qualification.degreeDocumentOriginalName,
+          documentOriginalName: qualification.degreeDocumentOriginalName
         );
         academicQualificationList.add(academicQual);
       }
@@ -509,7 +519,7 @@ class EducationProvider with ChangeNotifier {
           expiryDate: certification.expiryDate ?? '',
           document: null, // Document file would need to be handled separately
           documentPath: certification.certificateDocumentPath, // Store the document path from API
-          documentOriginalName: certification.certificateDocumentOriginalName,
+          documentOriginalName: certification.certificateDocumentOriginalName
         );
         certificationList.add(cert);
       }
@@ -554,8 +564,8 @@ class EducationProvider with ChangeNotifier {
           'educationalInstitution': qual.educationalInstitution,
           'country': qual.country,
           'graduationDate': qual.graduationDate,
-          'documentPath': qual.document==null?qual.documentPath:null,
-          'degreeDocumentOriginalName': qual.document==null?qual.documentOriginalName:qual.document!.path.split('/').last,
+          'degreeDocumentPath':qual.document == ''? null : qual.documentPath,
+          'degreeDocumentOriginalName':(qual.document == ''|| qual.document==null)?qual.documentOriginalName:qual.document?.path.split('/').last,
         }).toList(),
         'certificationsAndTrainings': certificationList.map((cert) => {
           'certificationType': cert.typeOfCertification,
@@ -563,8 +573,9 @@ class EducationProvider with ChangeNotifier {
           'issueDate': cert.issueDate,
           'expiryDate': cert.expiryDate,
           'neverExpire': false, // Default value
-          'documentPath': cert.document==null?cert.documentPath:null,
-          'certificateDocumentOriginalName': cert.document==null?cert.documentOriginalName:cert.document!.path.split('/').last,
+          'certificateDocumentPath': cert.documentPath == '' ? null : cert.documentPath,
+          'certificateDocumentOriginalName':(cert.document == ''|| cert.document==null)?(cert.documentOriginalName==''?null:null):cert.document?.path.split('/').last,
+
         }).toList(),
         'languagesSpoken': [
           {
@@ -678,7 +689,7 @@ class AcademicQualification {
     required this.graduationDate,
     this.document,
     this.documentPath,
-    this.documentOriginalName,
+    this.documentOriginalName
   });
 }
 
@@ -691,7 +702,6 @@ class Certification {
   final String? documentPath;
   final String? documentOriginalName;
 
-
   Certification({
     required this.typeOfCertification,
     required this.issuingAuthority,
@@ -699,6 +709,6 @@ class Certification {
     required this.expiryDate,
     this.document,
     this.documentPath,
-    this.documentOriginalName,
+    this.documentOriginalName
   });
 }
