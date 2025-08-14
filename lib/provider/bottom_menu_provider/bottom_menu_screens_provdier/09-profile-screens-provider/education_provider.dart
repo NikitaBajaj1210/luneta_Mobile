@@ -493,6 +493,7 @@ class EducationProvider with ChangeNotifier {
           graduationDate: qualification.graduationDate ?? '',
           document: null, // Document file would need to be handled separately
           documentPath: qualification.degreeDocumentPath, // Store the document path from API
+          documentOriginalName: qualification.degreeDocumentOriginalName,
         );
         academicQualificationList.add(academicQual);
       }
@@ -508,6 +509,7 @@ class EducationProvider with ChangeNotifier {
           expiryDate: certification.expiryDate ?? '',
           document: null, // Document file would need to be handled separately
           documentPath: certification.certificateDocumentPath, // Store the document path from API
+          documentOriginalName: certification.certificateDocumentOriginalName,
         );
         certificationList.add(cert);
       }
@@ -552,7 +554,8 @@ class EducationProvider with ChangeNotifier {
           'educationalInstitution': qual.educationalInstitution,
           'country': qual.country,
           'graduationDate': qual.graduationDate,
-          'degreeDocumentPath': qual.document?.path.split('/').last ?? (qual.documentPath == '' ? null : qual.documentPath),
+          'documentPath': qual.document==null?qual.documentPath:null,
+          'degreeDocumentOriginalName': qual.document==null?qual.documentOriginalName:qual.document!.path.split('/').last,
         }).toList(),
         'certificationsAndTrainings': certificationList.map((cert) => {
           'certificationType': cert.typeOfCertification,
@@ -560,7 +563,8 @@ class EducationProvider with ChangeNotifier {
           'issueDate': cert.issueDate,
           'expiryDate': cert.expiryDate,
           'neverExpire': false, // Default value
-          'certificateDocumentPath': cert.document?.path.split('/').last ?? (cert.documentPath == '' ? null : cert.documentPath),
+          'documentPath': cert.document==null?cert.documentPath:null,
+          'certificateDocumentOriginalName': cert.document==null?cert.documentOriginalName:cert.document!.path.split('/').last,
         }).toList(),
         'languagesSpoken': [
           {
@@ -664,6 +668,7 @@ class AcademicQualification {
   final String graduationDate;
   final File? document;
   final String? documentPath;
+  final String? documentOriginalName;
 
   AcademicQualification({
     required this.educationalDegree,
@@ -673,6 +678,7 @@ class AcademicQualification {
     required this.graduationDate,
     this.document,
     this.documentPath,
+    this.documentOriginalName,
   });
 }
 
@@ -683,6 +689,8 @@ class Certification {
   final String expiryDate;
   final File? document;
   final String? documentPath;
+  final String? documentOriginalName;
+
 
   Certification({
     required this.typeOfCertification,
@@ -691,5 +699,6 @@ class Certification {
     required this.expiryDate,
     this.document,
     this.documentPath,
+    this.documentOriginalName,
   });
 }
