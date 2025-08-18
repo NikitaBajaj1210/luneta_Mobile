@@ -224,8 +224,12 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               dialogHeight: 30.h,
                               autovalidateMode: provider.autovalidateMode,
                               validator: (value) {
-                                // Make positions optional for now
-                                return null;
+                                print("positions validator ===> ${value}");
+                                if(value!.length>0) {
+                                  return null;
+                                }else{
+                                  return 'Please select at least a position';
+                                }
                               },
                               initialValue: provider.positionsHeld,
                               items: predefinedPositionList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
@@ -277,9 +281,12 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 dialogHeight: 30.h,
                                 searchHint: 'Search Vessel Type',
                                 autovalidateMode: provider.autovalidateMode,
-                                validator: (value){
-                                  // Make vessel types optional for now
-                                  return null;
+                                validator: (value) {
+                                  if(value!.length>0) {
+                                    return null;
+                                  }else{
+                                    return 'Please select at least a Vessel Type';
+                                  }
                                 },
                                 initialValue: provider.vesselTypeExperience,
                                 items: vesselTypeList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
