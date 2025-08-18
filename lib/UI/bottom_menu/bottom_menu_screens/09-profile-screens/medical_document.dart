@@ -199,7 +199,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               : "Failed to save medical documents");
                     }
                   }else{
-                      ShowToast("Error","Please add at least one medical fitness document");
+                      ShowToast("Error","Please add at least one medical fitness detail");
                     }
                   } else {
                     setState(() {

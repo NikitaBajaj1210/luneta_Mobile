@@ -42,8 +42,36 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
     });
   }
 
+  bool validateAttachment(TravelDocumentProvider provider){
+    if(provider.passportDocument == null &&
+        !provider.hasExistingPassportDocument){
+      return false;
+    }else if(provider.seamanDocument == null &&
+        !provider.hasExistingSeamanDocument){
+      return false;
+    }
+    else if(provider.seafarerVisaDocument ==
+        null &&
+        !provider
+            .hasExistingSeafarerVisaDocument ){
+      return false;
+    }
+    else if(provider.visaDocument == null &&
+        !provider.hasExistingVisaDocument){
+      return false;
+    }
+    else if(provider.residencePermitDocument ==
+        null &&
+        !provider
+            .hasExistingResidencePermitDocument ){
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _handleSaveButton(TravelDocumentProvider provider) async {
-    if (provider.formKey.currentState!.validate()) {
+      provider.autovalidateMode = AutovalidateMode.always;
+    if (provider.formKey.currentState!.validate() && validateAttachment(provider)) {
       // Show loading indicator
       showDialog(
         context: context,
@@ -89,11 +117,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
       //     ),
       //   );
       // }
-    } else {
-      setState(() {
-        provider.autovalidateMode = AutovalidateMode.always;
-      });
     }
+    setState(() {});
   }
 
   @override
@@ -411,7 +436,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       autovalidateMode:
                                           provider.autovalidateMode,
                                       validator: (value) {
-                                        if ((value == null) &&
+                                        
+                                        print(value);
+                                        print(provider.autovalidateMode);
+                                        if ((value == null || value=='') &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
                                           return '      Please select Country';

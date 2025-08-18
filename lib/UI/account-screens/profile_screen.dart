@@ -382,7 +382,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             validator: (value) => profileProvider.validateFieldIfFocused('date', value ?? '', notify: false),
                             autovalidateMode: profileProvider.autoValidateMode,
-                            borderColor: AppColors.buttonColor,
+                            borderColor: AppColors.transparent,
                             textColor: Colors.black,
                           ),
                           if (profileProvider.dateError != null)
@@ -445,13 +445,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: profileProvider.emailFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
-                            borderColor: AppColors.buttonColor,
+                            borderColor: AppColors.transparent,
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: profileProvider.emailFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA,
+                            fillColor:AppColors.Color_FAFAFA,
                             onFieldSubmitted: null, // Disable submission for read-only field
                             onChange: null, // Disable change handling for read-only field
                             autovalidateMode: profileProvider.autoValidateMode,
@@ -459,11 +457,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               "assets/images/emailIcon.png",
                               width: 3.h,
                               height: 3.h,
-                              color: profileProvider.getFieldIconColor(
-                                profileProvider.emailFocusNode,
-                                'email',
-                                hasValue: profileProvider.emailController.text.isNotEmpty,
-                              ),
+                              color:AppColors.Color_9E9E9E
                             ),
                           ),
                           if (profileProvider.emailError != null)
@@ -594,7 +588,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(2.h),
                                 border: Border.all(
                                   width: 1,
-                                  color: AppColors.buttonColor,
+                                  color: AppColors.transparent,
                                 ),
                               ),
                               child: DropdownButtonFormField<String>(

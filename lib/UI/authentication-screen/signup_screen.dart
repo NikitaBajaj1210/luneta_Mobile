@@ -20,6 +20,19 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<SignUpProvider>(context, listen: false);
+
+      // Reset form before fetching data
+      provider.resetForm();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SignUpProvider>(
@@ -74,6 +87,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintText: 'First Name',
                           textInputType: TextInputType.name,
                           obscureText: false,
+                          prefixIcon: Icon(Icons.person,
+                            color: signUpProvider.getFieldIconColor(
+                                signUpProvider.firstNameFocusNode,
+                                signUpProvider.firstNameController),),
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize14,
                           voidCallback: validateFirstName,
@@ -99,6 +116,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(height: 2.h),
                         customTextField(
                           context: context,
+                          prefixIcon: Icon(Icons.person,
+                            color: signUpProvider.getFieldIconColor(
+                                signUpProvider.lastNameFocusNode,
+                                signUpProvider.lastNameController),),
                           focusNode: signUpProvider.lastNameFocusNode,
                           controller: signUpProvider.lastNameController,
                           hintText: 'Last Name',
@@ -213,14 +234,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(height: 2.h),
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 4.w),
+                          padding: EdgeInsets.symmetric(horizontal: 4.w,vertical: 1.h),
                           decoration: BoxDecoration(
                             color: AppColors.Color_FAFAFA,
                             borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.buttonColor,
-                              width: 1,
-                            ),
+                            // border: Border.all(
+                            //   color: AppColors.buttonColor,
+                            //   width: 1,
+                            // ),
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(

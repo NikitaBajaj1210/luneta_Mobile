@@ -100,25 +100,31 @@ class _EducationScreenState extends State<EducationScreen> {
               child: customButton(
                   voidCallback: () async {
                   if (provider.languagesSpokenFormKey.currentState!.validate()) {
-                      NetworkService.loading = 0;
-                      setState(() {}); // Trigger UI update to show loader
-                      
-                      // Call the API to save education data
-                      bool success = await provider.createOrUpdateEducationAPI(context);
-                      
-                      if (success) {
-                        // Reset loading state before calling getProfileInfo
-                        // NetworkService.loading = 2;
-                        
-                          Provider.of<ProfileBottommenuProvider>(
-                              context,
-                              listen: false).getProfileInfo(context);
-                        Navigator.pop(context);
-                      } else {
-                        // Reset loading state on failure
-                        NetworkService.loading = 2;
-                        setState(() {}); // Trigger UI update
-                      }
+                    if(provider.academicQualificationList.length>0){
+                    NetworkService.loading = 0;
+                    setState(() {}); // Trigger UI update to show loader
+
+                    // Call the API to save education data
+                    bool success = await provider.createOrUpdateEducationAPI(
+                        context);
+
+                    if (success) {
+                      // Reset loading state before calling getProfileInfo
+                      // NetworkService.loading = 2;
+
+                      Provider.of<ProfileBottommenuProvider>(
+                          context,
+                          listen: false).getProfileInfo(context);
+                      Navigator.pop(context);
+                    } else {
+                      // Reset loading state on failure
+                      NetworkService.loading = 2;
+                      setState(() {}); // Trigger UI update
+                    }
+                  }else{
+                      ShowToast("Error",
+                          "Please add at least one Academic Qualification");
+                    }
                   } else {
                     setState(() {
                       provider.autovalidateModeLanguages = AutovalidateMode.always;
@@ -173,9 +179,16 @@ class _EducationScreenState extends State<EducationScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                provider.setAcademicQualificationVisibility(true);
+                                provider.setAcademicQualificationVisibility(!provider.showAddSection_academicQualification);
                                 provider.academicQualification_Edit_Index = null;
                                 provider.academicQualification_IsEdit = false;
+                                provider.educationalDegree = null;
+                                provider.fieldOfStudyController.clear();
+                                provider.educationalInstitutionController.clear();
+                                provider.country = null;
+                                provider.graduationDateController.clear();
+                                provider.academicDocument = null;
+                                provider.autovalidateModeAcademic = AutovalidateMode.disabled;
                               },
                               child: Container(
                                 padding: EdgeInsets.all(2.5.w),
@@ -465,7 +478,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 obscureText: false,
                                 autovalidateMode: provider.autovalidateModeAcademic,
                                 voidCallback: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null || value.trim().isEmpty) {
                                     return 'Please enter Field of Study';
                                   }
                                   return null;
@@ -501,7 +514,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 obscureText: false,
                                 autovalidateMode: provider.autovalidateModeAcademic,
                                 voidCallback: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null || value.trim().isEmpty) {
                                     return 'Please enter Educational Institution';
                                   }
                                   return null;
@@ -899,9 +912,16 @@ class _EducationScreenState extends State<EducationScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                provider.setCertificationVisibility(true);
+                                provider.setCertificationVisibility(!provider.showAddSection_certification);
                                 provider.certification_Edit_Index = null;
                                 provider.certification_IsEdit = false;
+
+                                provider.typeOfCertification = null;
+                                provider.issuingAuthorityController.clear();
+                                provider.issueDateController.clear();
+                                provider.expiryDateController.clear();
+                                provider.certificationDocument = null;
+                                provider.autovalidateModeCertification = AutovalidateMode.disabled;
                               },
                               child: Container(
                                 padding: EdgeInsets.all(2.5.w),
@@ -1127,9 +1147,19 @@ class _EducationScreenState extends State<EducationScreen> {
                                   value: provider.typeOfCertification,
                                   hint: "Select Type",
                                   searchHint: "Search for a type",
+                                  onClear: (){
+                                    provider.setTypeOfCertification('');
+                                  },
+                                  validator: (value) {
+                                    if ((value == null || value=='') && provider.autovalidateModeCertification== AutovalidateMode.always) {
+                                      return 'Please select certification type';
+                                    }
+                                    return null;
+                                  },
                                   onChanged: (value) {
                                     provider.setTypeOfCertification(value as String);
                                   },
+                                  autovalidateMode: provider.autovalidateModeCertification,
                                   isExpanded: true,
                                   underline: SizedBox(),
                                   displayItem: (item, selected) {
@@ -1177,8 +1207,13 @@ class _EducationScreenState extends State<EducationScreen> {
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: AppColors.Color_FAFAFA,
                                 onFieldSubmitted: (String) {},
-                                voidCallback: (value) {},
-                              ),
+                                autovalidateMode: provider.autovalidateModeCertification,
+                                voidCallback: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Please enter issuing authority';
+                                  }
+                                  return null;
+                                },                              ),
                               SizedBox(height: 1.h),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1220,8 +1255,13 @@ class _EducationScreenState extends State<EducationScreen> {
                                     cursorColor: AppColors.Color_212121,
                                     fillColor: AppColors.Color_FAFAFA,
                                     onFieldSubmitted: (String) {},
-                                    voidCallback: (value) {},
-                                  ),
+                                    autovalidateMode: provider.autovalidateModeCertification,
+                                    voidCallback: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please select issue date';
+                                      }
+                                      return null;
+                                    },                                  ),
                                 ),
                               ),
                               SizedBox(height: 1.h),
@@ -1265,7 +1305,13 @@ class _EducationScreenState extends State<EducationScreen> {
                                     cursorColor: AppColors.Color_212121,
                                     fillColor: AppColors.Color_FAFAFA,
                                     onFieldSubmitted: (String) {},
-                                    voidCallback: (value) {},
+                                    autovalidateMode: provider.autovalidateModeCertification,
+                                    voidCallback: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please select expiry date';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                               ),
@@ -1318,6 +1364,17 @@ class _EducationScreenState extends State<EducationScreen> {
                                   ),
                                 ),
                               ),
+                              if (provider.certificationDocument == null && provider.autovalidateModeCertification == AutovalidateMode.always)
+                                Padding(
+                                  padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                  child: Text(
+                                    "Please select a document",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: AppFontSize.fontSize12,
+                                    ),
+                                  ),
+                                ),
                                 SizedBox(height: 3.h),
                               if (provider.certificationDocument != null)
                                 GestureDetector(
@@ -1469,6 +1526,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                   child: customButton(
                                     voidCallback: () {
+                                      provider.autovalidateModeCertification = AutovalidateMode.always;
                                       if (provider.certificationFormKey.currentState!.validate()) {
                                         Certification certification = Certification(
                                           typeOfCertification: provider.typeOfCertification!,
@@ -1489,11 +1547,10 @@ class _EducationScreenState extends State<EducationScreen> {
                                         provider.expiryDateController.clear();
                                         provider.certificationDocument = null;
                                         provider.autovalidateModeCertification = AutovalidateMode.disabled;
-                                      } else {
-                                        setState(() {
-                                          provider.autovalidateModeCertification = AutovalidateMode.always;
-                                        });
                                       }
+                                        setState(() {
+                                        });
+
                                     },
                                     buttonText: provider.certification_IsEdit ? "Update" : "Add",
                                     width: 30.w,
