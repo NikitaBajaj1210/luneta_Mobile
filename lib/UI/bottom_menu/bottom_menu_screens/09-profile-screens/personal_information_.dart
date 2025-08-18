@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -184,9 +185,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       textInputType: TextInputType.name,
                       obscureText: false,
                       voidCallback: (value) {
-                        if (value == null || value.toString().trim().isEmpty) {
-                          return 'Please enter Last Name';
-                        }
+                        // if (value == null || value.toString().trim().isEmpty) {
+                        //   return 'Please enter Last Name';
+                        // }
                         return null;
                       },
                       fontSize: AppFontSize.fontSize16,
@@ -604,6 +605,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
+                      inputFormatter: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\+?[0-9-]*$')),
+                      ],
                       backgroundColor: provider.phoneFocusNode.hasFocus
                           ? AppColors.activeFieldBgColor
                           : AppColors.Color_FAFAFA,
@@ -639,9 +643,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       obscureText: false,
                       maxLength: 15,
                       voidCallback: (value){return;},
-                      
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
+                      inputFormatter: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\+?[0-9-]*$')),
+                      ],
                       backgroundColor: provider.directPhoneFocusNode.hasFocus
                           ? AppColors.activeFieldBgColor
                           : AppColors.Color_FAFAFA,

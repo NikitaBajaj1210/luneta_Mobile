@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -52,8 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     if (context.mounted) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
-      provider.nameFocusNode.dispose();
-      provider.nickNameFocusNode.dispose();
+      provider.firstNameFocusNode.dispose();
+      provider.lastNameFocusNode.dispose();
       provider.emailFocusNode.dispose();
       provider.phoneFocusNode.dispose();
       provider.dateFocusNode.dispose();
@@ -67,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, child) {
-        bool isFormValid = profileProvider.nameController.text.isNotEmpty &&
+        bool isFormValid = profileProvider.firstNameController.text.isNotEmpty &&
             // profileProvider.emailController.text.isNotEmpty && // Skip email validation since it's disabled
             profileProvider.phoneController.text.isNotEmpty &&
             profileProvider.addDate != 'Date of Birth' &&
@@ -101,7 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     setState(() {});
                   });
                 }
-                    : null,
+                    : (){
+                  profileProvider.autoValidateMode=AutovalidateMode.always;
+                },
                 buttonText: "Continue",
                 width: 90.w,
                 height: 4.h,
@@ -171,8 +174,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           customTextField(
                             context: context,
-                            focusNode: profileProvider.nameFocusNode,
-                            controller: profileProvider.nameController,
+                            focusNode: profileProvider.firstNameFocusNode,
+                            controller: profileProvider.firstNameController,
                             hintText: 'First Name',
                             textInputType: TextInputType.name,
                             obscureText: false,
@@ -184,21 +187,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             fontSize: AppFontSize.fontSize16,
                             inputFontSize: AppFontSize.fontSize16,
-                            backgroundColor: profileProvider.nameFocusNode.hasFocus
+                            backgroundColor: profileProvider.firstNameFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
                             borderColor: AppColors.buttonColor,
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: profileProvider.nameFocusNode.hasFocus
+                            fillColor: profileProvider.firstNameFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
                             onFieldSubmitted: (value) {
                               profileProvider.handleFieldSubmission('name', value);
                               // Use a more stable approach to focus next field
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                FocusScope.of(context).requestFocus(profileProvider.nickNameFocusNode);
+                                FocusScope.of(context).requestFocus(profileProvider.lastNameFocusNode);
                               });
                             },
                             onChange: (value) {
@@ -208,13 +211,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             autovalidateMode: profileProvider.autoValidateMode,
                           ),
-                          if (profileProvider.nameError != null)
+                          if (profileProvider.firstNameError != null)
                             Padding(
                               padding: EdgeInsets.only(top: 1.h, left: 4.w),
                               child: SizedBox(
                                 width: 100.w,
                                 child: Text(
-                                  profileProvider.nameError!,
+                                  profileProvider.firstNameError!,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: AppColors.errorRedColor,
@@ -237,8 +240,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           customTextField(
                             context: context,
-                            focusNode: profileProvider.nickNameFocusNode,
-                            controller: profileProvider.nickNameController,
+                            focusNode: profileProvider.lastNameFocusNode,
+                            controller: profileProvider.lastNameController,
                             hintText: 'Last Name',
                             textInputType: TextInputType.name,
                             obscureText: false,
@@ -250,14 +253,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             fontSize: AppFontSize.fontSize16,
                             inputFontSize: AppFontSize.fontSize16,
-                            backgroundColor: profileProvider.nickNameFocusNode.hasFocus
+                            backgroundColor: profileProvider.lastNameFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
                             borderColor: AppColors.buttonColor,
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: profileProvider.nickNameFocusNode.hasFocus
+                            fillColor: profileProvider.lastNameFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
                             onFieldSubmitted: (value) {
@@ -336,18 +339,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               );
 
                               if (selectedDate != null) {
-                                print("Selected date: $selectedDate");
                                 // Format date for age validation (MM/DD/YYYY)
                                 String dateForValidation = formatToMMDDYYYY(selectedDate);
-                                print("Age validation: ${profileProvider.validateAgeRequirement(dateForValidation)}");
-
                                 // Format date in MM/DD/YYYY format
                                 String formattedDate = formatToMMDDYYYY(selectedDate);
                                 String formattedDateApi = formatToApiDate(selectedDate);
-
-                                print("Formatted date for UI (MM/DD/YYYY): $formattedDate");
-                                print("Formatted date for API: $formattedDateApi");
-
                                 profileProvider.addDate = formattedDate;
                                 profileProvider.addDateApi = formattedDateApi;
                                 profileProvider.markFieldAsSubmitted('date');
@@ -538,6 +534,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             autovalidateMode: profileProvider.autoValidateMode,
                             fontSize: AppFontSize.fontSize16,
+                            inputFormatter: [
+                              FilteringTextInputFormatter.allow(RegExp(r'^\+?[0-9-]*$')),
+                            ],
                             inputFontSize: AppFontSize.fontSize16,
                             backgroundColor: profileProvider.phoneFocusNode.hasFocus
                                 ? AppColors.activeFieldBgColor

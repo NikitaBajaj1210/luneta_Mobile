@@ -309,8 +309,8 @@ notifyListeners();
       };
 
       var formData = FormData.fromMap({
-        'firstName': firstNameController.text,
-        'lastName': lastNameController.text,
+        'firstName': firstNameController.text.toString().trim(),
+        'lastName': lastNameController.text.toString().trim(),
         'dateOfBirth':formatDateForAPI(dobController.text),
         'countryOfBirth': countryOfBirthController.text,
         'contactEmail':emailController.text,
@@ -318,8 +318,8 @@ notifyListeners();
         'sex': sex,
         'currentCountry':'',
         'nationality': nationalityController.text,
-        'mobilePhone': phoneController.text,
-        'directLinePhone': directPhoneController.text,
+        'mobilePhone': phoneController.text.toString().trim(),
+        'directLinePhone': directPhoneController.text.toString().trim(),
         'homeAddress':
         {"street":addressController.text,"city":"","state":"","postalCode":"","country":""},
         'nearestAirport': nearestAirport ?? '',

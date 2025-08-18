@@ -33,20 +33,20 @@ class ProfileProvider with ChangeNotifier {
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
   bool hasSubmitted = false;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _nickNameController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-  FocusNode nameFocusNode = FocusNode();
-  FocusNode nickNameFocusNode = FocusNode();
+  FocusNode firstNameFocusNode = FocusNode();
+  FocusNode lastNameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode dateFocusNode = FocusNode();
   FocusNode genderFocusNode = FocusNode();
   FocusNode rankFocusNode = FocusNode();
 
-  String? nameError;
-  String? nickNameError;
+  String? firstNameError;
+  String? lastNameError;
   String? emailError;
   String? phoneError;
   String? dateError;
@@ -63,20 +63,20 @@ class ProfileProvider with ChangeNotifier {
   List<Data> _ranks = [];
 
   // Getters and Setters for controllers
-  TextEditingController get nameController => _nameController;
-  set nameController(TextEditingController controller) {
-    _nameController = controller;
+  TextEditingController get firstNameController => _firstNameController;
+  set firstNameController(TextEditingController controller) {
+    _firstNameController = controller;
     notifyListeners();
   }
 
-  TextEditingController get nickNameController => _nickNameController;
-  set nickNameController(TextEditingController controller) {
-    _nickNameController = controller;
+  TextEditingController get lastNameController => _lastNameController;
+  set lastNameController(TextEditingController controller) {
+    _lastNameController = controller;
     notifyListeners();
   }
   void initControllers({String? name, String? nickName}) {
-    _nameController.text = name ?? '';
-    _nickNameController.text = nickName ?? '';
+    _firstNameController.text = name ?? '';
+    _lastNameController.text = nickName ?? '';
     notifyListeners();
   }
 
@@ -148,9 +148,9 @@ class ProfileProvider with ChangeNotifier {
       case 'name':
         error = validateName(value.trim());
         break;
-      case 'nickname':
-        error = validateName(value.trim());
-        break;
+      // case 'nickname':
+      //   error = validateName(value.trim());
+      //   break;
       case 'email':
         error = validateEmail(value.trim());
         break;
@@ -229,7 +229,7 @@ class ProfileProvider with ChangeNotifier {
     switch (fieldName) {
       case 'name':
         error = validateName(value.trim());
-        nameError = error;
+        firstNameError = error;
         break;
       // case 'nickname':
       //   error = validateName(value.trim());
@@ -285,8 +285,8 @@ class ProfileProvider with ChangeNotifier {
   void validateAllFields(BuildContext context) {
     hasSubmitted = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      validateFieldIfFocused('name', _nameController.text);
-      validateFieldIfFocused('nickname', _nickNameController.text);
+      validateFieldIfFocused('name', _firstNameController.text);
+      validateFieldIfFocused('nickname', _lastNameController.text);
       validateFieldIfFocused('phone', _phoneController.text);
       validateFieldIfFocused('date', addDate);
       validateGender(selectedGender);
@@ -295,7 +295,7 @@ class ProfileProvider with ChangeNotifier {
   }
 
   bool validateFields() {
-    return validateFieldSilently('name', _nameController.text) == null &&
+    return validateFieldSilently('name', _firstNameController.text) == null &&
         // validateFieldSilently('nickname', _nickNameController.text) == null &&
         validateFieldSilently('phone', _phoneController.text) == null &&
         validateFieldSilently('date', addDate) == null &&
@@ -330,8 +330,8 @@ class ProfileProvider with ChangeNotifier {
   }
 
   void unfocusAllFields() {
-    nameFocusNode.unfocus();
-    nickNameFocusNode.unfocus();
+    firstNameFocusNode.unfocus();
+    lastNameFocusNode.unfocus();
     emailFocusNode.unfocus();
     phoneFocusNode.unfocus();
     dateFocusNode.unfocus();
@@ -363,7 +363,7 @@ class ProfileProvider with ChangeNotifier {
   void safeValidateAllFields(BuildContext context) {
     hasSubmitted = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      validateFieldIfFocused('name', _nameController.text);
+      validateFieldIfFocused('name', _firstNameController.text);
       // validateFieldIfFocused('nickname', _nickNameController.text);
       validateFieldIfFocused('email', _emailController.text);
       validateFieldIfFocused('phone', _phoneController.text);
@@ -396,16 +396,16 @@ class ProfileProvider with ChangeNotifier {
   }
 
   void resetForm() {
-    _nameController.clear();
-    _nickNameController.clear();
+    _firstNameController.clear();
+    _lastNameController.clear();
     _emailController.clear();
     _phoneController.clear();
     addDate = 'Date of Birth';
     addDateApi = '';
     selectedGender = 'Gender';
     selectedCountry = 'India';
-    nameError = null;
-    nickNameError = null;
+    firstNameError = null;
+    lastNameError = null;
     emailError = null;
     phoneError = null;
     dateError = null;
@@ -535,8 +535,8 @@ class ProfileProvider with ChangeNotifier {
       var formData = FormData.fromMap({
         "userId": NetworkHelper.loggedInUserId,
         "currentCountry": ChooseCountryProvider.globalSelectedCountry ?? "India",
-        "firstName": _nameController.text.trim(),
-        "lastName": _nickNameController.text.trim(),
+        "firstName": _firstNameController.text.trim(),
+        "lastName": _lastNameController.text.trim(),
         "dateOfBirth": _formatDateForAPI(),
         "contactEmail": _emailController.text.trim(),
         "rankId": ChooseRankProvider.globalSelectedRankId ?? '',
@@ -587,8 +587,8 @@ class ProfileProvider with ChangeNotifier {
           });
 
           String name = [
-            _nameController.text.trim(),
-            _nickNameController.text.trim()
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim()
           ].where((part) => part.isNotEmpty).join(' ');
           String profilePhotoPath=response.data['profileURl']??'';
 
@@ -642,12 +642,12 @@ class ProfileProvider with ChangeNotifier {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _nickNameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    nameFocusNode.dispose();
-    nickNameFocusNode.dispose();
+    firstNameFocusNode.dispose();
+    lastNameFocusNode.dispose();
     emailFocusNode.dispose();
     phoneFocusNode.dispose();
     dateFocusNode.dispose();
