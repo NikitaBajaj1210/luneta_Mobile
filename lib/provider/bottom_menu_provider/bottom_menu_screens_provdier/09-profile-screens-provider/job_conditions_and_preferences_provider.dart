@@ -427,6 +427,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     currency = null;
     await removeJustificationDocument(null);
     justificationDocumentPath = null;
+    autovalidateMode=AutovalidateMode.disabled;
     
     print("All form fields have been reset to initial state");
   }
@@ -522,10 +523,10 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     preferredVesselTypes = (data['preferredVesselType'] as List?)?.map((e) => e.toString()).toList() ?? [];
     manningAgency = data['manningAgency'] as String?;
     availableFrom = data['availableFrom'] != null ? DateTime.tryParse(data['availableFrom'] as String) : null;
-    minOnBoardDurationController.text = (data['minOnBoardDuration'] as num?)?.toString() ?? '';
-    maxOnBoardDurationController.text = (data['maxOnBoardDuration'] as num?)?.toString() ?? '';
-    minAtHomeDurationController.text = (data['minAtHomeDuration'] as num?)?.toString() ?? '';
-    maxAtHomeDurationController.text = (data['maxAtHomeDuration'] as num?)?.toString() ?? '';
+    minOnBoardDurationController.text = data['minOnBoardDuration'];
+    maxOnBoardDurationController.text = data['maxOnBoardDuration'];
+    minAtHomeDurationController.text = data['minAtHomeDuration'];
+    maxAtHomeDurationController.text = data['maxAtHomeDuration'];
 
     String? rotationPatternValue = data['preferredRotationPattern'] as String?;
     preferredRotationPattern = rotationPatternValue != null && rotationPatterns.contains(rotationPatternValue)
