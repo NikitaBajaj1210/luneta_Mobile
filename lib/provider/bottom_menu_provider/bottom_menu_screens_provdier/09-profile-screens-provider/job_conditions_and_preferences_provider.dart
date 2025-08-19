@@ -406,10 +406,13 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   }
 
   // Method to reset all form fields to their initial state
-  Future<void> _resetAllFields() async {
+  void _resetAllFields() {
+    isLoading = false;
+    hasError = false;
+    errorMessage = '';
     currentRank = null;
     alternateRank = null;
-    preferredVesselTypes.clear();
+    preferredVesselTypes = [];
     preferredContractType = null;
     preferredPosition = null;
     manningAgency = null;
@@ -420,14 +423,16 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     minAtHomeDurationController.clear();
     maxAtHomeDurationController.clear();
     preferredRotationPattern = null;
-    tradingAreaExclusions=null;
+    tradingAreaExclusions = null;
     lastJobSalaryController.clear();
     _lastRankJoined = null;
     lastPromotedDate = null;
     currency = null;
-    await removeJustificationDocument(null);
+    justificationDocument = null;
     justificationDocumentPath = null;
-    autovalidateMode=AutovalidateMode.disabled;
+    autovalidateMode = AutovalidateMode.disabled;
+    _ranks = [];
+    _agencyData = [];
     
     print("All form fields have been reset to initial state");
   }
@@ -438,7 +443,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     errorMessage = '';
     
     // Reset all fields before fetching new data
-    await _resetAllFields();
+    _resetAllFields();
     notifyListeners();
 
     try {
