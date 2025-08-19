@@ -488,6 +488,12 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
                     child: GestureDetector(
                       onTap: () {
+                        provider.showAddCargoDialog(
+                          context,
+                          "Add Bulk Cargo",
+                          "https://stage-luneta.nanobyte.gr/api/master-cargo-experience/bulk-cargo-create-or-update",
+                          () => provider.getBulkCargo(context),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(1.w),
@@ -555,6 +561,12 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
                     child: GestureDetector(
                       onTap: () {
+                        provider.showAddCargoDialog(
+                          context,
+                          "Add Tanker Cargo",
+                          "https://stage-luneta.nanobyte.gr/api/master-tanker-cargo/bulk-tanker-cargo-create-or-update",
+                          () => provider.getTankerCargo(context),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(1.w),
@@ -622,6 +634,12 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
                     child: GestureDetector(
                       onTap: () {
+                        provider.showAddCargoDialog(
+                          context,
+                          "Add General Cargo",
+                          "https://stage-luneta.nanobyte.gr/api/master-general-cargo/bulk-general-cargo-create-or-update",
+                          () => provider.getGeneralCargo(context),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(1.w),
@@ -689,6 +707,12 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
                     child: GestureDetector(
                       onTap: () {
+                        provider.showAddCargoDialog(
+                          context,
+                          "Add Wood Product",
+                          "https://stage-luneta.nanobyte.gr/api/master-wood-products/bulk-wood-product-create-or-update",
+                          () => provider.getWoodProducts(context),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(1.w),
@@ -737,17 +761,52 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.h),
-                child: Text(
-                  'Stowage and Lashing Experience',
-                  style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: AppColors.fontFamilyMedium,
-                    color: AppColors.Color_424242,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    child: Text(
+                      'Stowage and Lashing Experience',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: AppColors.fontFamilyMedium,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                    child: GestureDetector(
+                      onTap: () {
+                        provider.showAddCargoDialog(
+                          context,
+                          "Add Lashing Experience",
+                          "https://stage-luneta.nanobyte.gr/api/master-lashing-experience/create-or-update",
+                          () => provider.getLashingExperience(context),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(1.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
               Container(
                 decoration: BoxDecoration(

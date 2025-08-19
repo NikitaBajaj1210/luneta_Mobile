@@ -231,6 +231,64 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     await getLashingExperience(context);
   }
 
+  Future<bool> createOrUpdateCargo(
+      String endpoint, String name, BuildContext context) async {
+    try {
+      final response = await NetworkService().postResponse(
+        endpoint,
+        {'name': name},
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['statusCode'] == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("Exception in createOrUpdateCargo $e");
+      return false;
+    }
+  }
+
+  void showAddCargoDialog(BuildContext context, String title, String endpoint,
+      Function onSave) {
+    final nameController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: TextField(
+            controller: nameController,
+            decoration: InputDecoration(hintText: "Enter name"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (nameController.text.isNotEmpty) {
+                  bool success = await createOrUpdateCargo(
+                      endpoint, nameController.text, context);
+                  if (success) {
+                    onSave();
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Cargo Gear Experience
   bool cargoGearExperience = false;
   List<CargoGearExperience> cargoGearExperienceList = [];
