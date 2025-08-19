@@ -10,6 +10,7 @@ import '../../../../const/font_size.dart';
 import '../../../../custom-component/customTextField.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../custom-component/globalComponent.dart';
+import '../../../../network/app_url.dart';
 import '../../../../network/network_services.dart';
 import '../../../../Utils/helper.dart';
 import '../../../../provider/bottom_menu_provider/bottom_menu_screens_provdier/profile_bottommenu_provider.dart';
@@ -491,7 +492,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         provider.showAddCargoDialog(
                           context,
                           "Add Bulk Cargo",
-                          "https://stage-luneta.nanobyte.gr/api/master-cargo-experience/bulk-cargo-create-or-update",
+                          postMasterCargoExperience,
                           () => provider.getBulkCargo(context),
                         );
                       },
@@ -564,7 +565,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         provider.showAddCargoDialog(
                           context,
                           "Add Tanker Cargo",
-                          "https://stage-luneta.nanobyte.gr/api/master-tanker-cargo/bulk-tanker-cargo-create-or-update",
+                          postMasterTankerCargo,
                           () => provider.getTankerCargo(context),
                         );
                       },
@@ -637,7 +638,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         provider.showAddCargoDialog(
                           context,
                           "Add General Cargo",
-                          "https://stage-luneta.nanobyte.gr/api/master-general-cargo/bulk-general-cargo-create-or-update",
+                          postMasterGeneralCargo,
                           () => provider.getGeneralCargo(context),
                         );
                       },
@@ -710,7 +711,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         provider.showAddCargoDialog(
                           context,
                           "Add Wood Product",
-                          "https://stage-luneta.nanobyte.gr/api/master-wood-products/bulk-wood-product-create-or-update",
+                          postMasterWoodProduct,
                           () => provider.getWoodProducts(context),
                         );
                       },
@@ -777,35 +778,6 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
-                    child: GestureDetector(
-                      onTap: () {
-                        provider.showAddCargoDialog(
-                          context,
-                          "Add Lashing Experience",
-                          "https://stage-luneta.nanobyte.gr/api/master-lashing-experience/create-or-update",
-                          () => provider.getLashingExperience(context),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(1.w),
-                        decoration: BoxDecoration(
-                          color: AppColors.buttonColor,
-                          borderRadius: BorderRadius.circular(150),
-                          border: Border.all(
-                            color: AppColors.transparent,
-                            width: 1,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          size: 2.5.h,
-                          color: AppColors.buttonTextWhiteColor,
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
               Container(

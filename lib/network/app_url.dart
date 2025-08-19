@@ -31,6 +31,16 @@ const getProfessionalSkillsByUserId = '${baseUrl}seafarer-profile/professional-s
 const createOrUpdateProfessionalSkills = '${baseUrl}seafarer-profile/professional-skills/create-or-update/';
 const getJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/';
 const postJobConditionsByUserId = '${baseUrl}seafarer-profile/job-conditions/create-or-update';
+const getMasterCargoExperience = '${baseUrl}master-cargo-experience';
+const postMasterCargoExperience = '${baseUrl}master-cargo-experience/bulk-cargo-create-or-update';
+const getMasterTankerCargo = '${baseUrl}master-tanker-cargo/get-all';
+const postMasterTankerCargo = '${baseUrl}master-tanker-cargo/bulk-tanker-cargo-create-or-update';
+const getMasterGeneralCargo = '${baseUrl}master-general-cargo/get-all';
+const postMasterGeneralCargo = '${baseUrl}master-general-cargo/bulk-general-cargo-create-or-update';
+const getMasterWoodProduct = '${baseUrl}master-wood-products/get-all';
+const postMasterWoodProduct = '${baseUrl}master-wood-products/bulk-wood-product-create-or-update';
+const getMasterLashingExperience = '${baseUrl}master-lashing-experience/get-all';
+
 
 
 //post

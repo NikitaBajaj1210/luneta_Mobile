@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:luneta/models/professional_skills_model.dart';
+import '../../../../const/color.dart';
+import '../../../../const/font_size.dart';
+import '../../../../custom-component/customTextField.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
@@ -136,7 +139,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> getBulkCargo(context) async {
     try {
       final response = await NetworkService().getResponse(
-        'https://stage-luneta.nanobyte.gr/api/master-cargo-experience',
+        getMasterCargoExperience,
         false,
         context,
         () {},
@@ -154,7 +157,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> getTankerCargo(context) async {
     try {
       final response = await NetworkService().getResponse(
-        'https://stage-luneta.nanobyte.gr/api/master-tanker-cargo/get-all',
+        getMasterTankerCargo,
         false,
         context,
         () {},
@@ -172,7 +175,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> getGeneralCargo(context) async {
     try {
       final response = await NetworkService().getResponse(
-        'https://stage-luneta.nanobyte.gr/api/master-general-cargo/get-all',
+        getMasterGeneralCargo,
         false,
         context,
         () {},
@@ -190,7 +193,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> getWoodProducts(context) async {
     try {
       final response = await NetworkService().getResponse(
-        'https://stage-luneta.nanobyte.gr/api/master-wood-products/get-all',
+        getMasterWoodProduct,
         false,
         context,
         () {},
@@ -208,7 +211,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   Future<void> getLashingExperience(context) async {
     try {
       final response = await NetworkService().getResponse(
-        'https://stage-luneta.nanobyte.gr/api/master-lashing-experience/get-all',
+        getMasterLashingExperience,
         false,
         context,
         () {},
@@ -236,8 +239,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     try {
       final response = await NetworkService().postResponse(
         endpoint,
-        {'name': name},
-        false,
+        jsonEncode({'name': name}),
+        true,
         context,
         () {},
       );
@@ -259,29 +262,52 @@ class ProfessionalSkillsProvider with ChangeNotifier {
       builder: (context) {
         return AlertDialog(
           title: Text(title),
-          content: TextField(
+          content: customTextField(
+            context: context,
             controller: nameController,
-            decoration: InputDecoration(hintText: "Enter name"),
+            hintText: 'Enter Name',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel"),
+              child:  Text("Cancel",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
             ),
             TextButton(
               onPressed: () async {
-                if (nameController.text.isNotEmpty) {
+                if (nameController.text.toString().trim().isNotEmpty) {
                   bool success = await createOrUpdateCargo(
-                      endpoint, nameController.text, context);
+                      endpoint, nameController.text.toString().trim(), context);
                   if (success) {
                     onSave();
                     Navigator.pop(context);
                   }
                 }
               },
-              child: Text("Save"),
+              child: Text("Add",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
             ),
           ],
         );
