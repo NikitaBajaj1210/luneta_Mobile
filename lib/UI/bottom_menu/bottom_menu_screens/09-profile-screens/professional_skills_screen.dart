@@ -467,17 +467,46 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.h),
-                child: Text(
-                  'Bulk Cargo',
-                  style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: AppColors.fontFamilyMedium,
-                    color: AppColors.Color_424242,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    child: Text(
+                      'Bulk Cargo',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: AppColors.fontFamilyMedium,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(1.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
               Container(
                 decoration: BoxDecoration(
@@ -505,17 +534,46 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.h),
-                child: Text(
-                  'Tanker Cargo',
-                  style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: AppColors.fontFamilyMedium,
-                    color: AppColors.Color_424242,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    child: Text(
+                      'Tanker Cargo',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: AppColors.fontFamilyMedium,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(1.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
               Container(
                 decoration: BoxDecoration(
@@ -543,17 +601,46 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.h),
-                child: Text(
-                  'General Cargo',
-                  style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: AppColors.fontFamilyMedium,
-                    color: AppColors.Color_424242,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    child: Text(
+                      'General Cargo',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: AppColors.fontFamilyMedium,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(1.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
               Container(
                 decoration: BoxDecoration(
@@ -581,18 +668,48 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.h),
-                child: Text(
-                  'Wood Products',
-                  style: TextStyle(
-                    fontSize: AppFontSize.fontSize16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: AppColors.fontFamilyMedium,
-                    color: AppColors.Color_424242,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    child: Text(
+                      'Wood Products',
+                      style: TextStyle(
+                        fontSize: AppFontSize.fontSize16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: AppColors.fontFamilyMedium,
+                        color: AppColors.Color_424242,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(1.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.buttonColor,
+                          borderRadius: BorderRadius.circular(150),
+                          border: Border.all(
+                            color: AppColors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 2.5.h,
+                          color: AppColors.buttonTextWhiteColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
+
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.Color_FAFAFA,
