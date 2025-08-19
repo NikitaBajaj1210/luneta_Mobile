@@ -227,16 +227,19 @@ class NetworkService {
           if (context.mounted) {
             ShowToast("Error", errorMessage);
           }
-          var loginProvider = Provider.of<LoginProvider>(context, listen: false);
-          await loginProvider.clearStoredLoginData();
+       if(urlPath!=loginUrl){
+            var loginProvider = Provider.of<LoginProvider>(
+                context, listen: false);
+            await loginProvider.clearStoredLoginData();
 
-          print("Logout - Cleared stored login data");
+            print("Logout - Cleared stored login data");
 
-          // Navigate to login screen
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            login,
-                (route) => false, // Remove all previous routes
-          );
+            // Navigate to login screen
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              login,
+                  (route) => false, // Remove all previous routes
+            );
+          }
           return res;
         }else{
           if (context.mounted) {

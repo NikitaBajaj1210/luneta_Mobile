@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : (){
                   profileProvider.autoValidateMode=AutovalidateMode.always;
                 },
-                buttonText: "Continue",
+                buttonText: "Save",
                 width: 90.w,
                 height: 4.h,
                 color: isFormValid ? AppColors.buttonColor : AppColors.Color_BDBDBD,
