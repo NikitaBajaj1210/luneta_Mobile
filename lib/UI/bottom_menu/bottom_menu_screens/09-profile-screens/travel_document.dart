@@ -96,7 +96,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
         // });
         // Hide loading indicator
         // Reset form before API call
-        provider.resetForm();
+        provider.resetAllFields();
         Navigator.of(context).pop();
       }
       // if (success) {
