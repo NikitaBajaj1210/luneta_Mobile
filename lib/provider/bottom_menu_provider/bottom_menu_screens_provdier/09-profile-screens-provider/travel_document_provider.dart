@@ -36,27 +36,58 @@ class TravelDocumentProvider extends ChangeNotifier {
   // }
 
   // Reset all form data
-  void resetForm() {
-    // Reset error states
+  void resetAllFields() {
+    isLoading = false;
     hasError = false;
     errorMessage = '';
-    
-    // Reset validation mode
     autovalidateMode = AutovalidateMode.disabled;
-    
-    // Reset document tracking
+
+    travelDocumentData = null;
+
     hasExistingPassportDocument = false;
     hasExistingSeamanDocument = false;
     hasExistingSeafarerVisaDocument = false;
     hasExistingVisaDocument = false;
     hasExistingResidencePermitDocument = false;
+
     passportDocument = null;
     seamanDocument = null;
     seafarerVisaDocument = null;
     visaDocument = null;
     residencePermitDocument = null;
-    // Clear data
-    travelDocumentData = null;
+
+    seafarerRegistrationNoController.clear();
+    passportNoController.clear();
+    passportIssueDateController.clear();
+    passportExpiryDateController.clear();
+    passportDocumentController.clear();
+    seamanBookNoController.clear();
+    seamanIssuingAuthorityController.clear();
+    seamanIssueDateController.clear();
+    seamanExpiryDateController.clear();
+    seamanDocumentController.clear();
+    seafarerVisaNoController.clear();
+    seafarerVisaIssueDateController.clear();
+    seafarerVisaExpiryDateController.clear();
+    seafarerVisaDocumentController.clear();
+    visaNoController.clear();
+    visaIssueDateController.clear();
+    visaExpiryDateController.clear();
+    visaDocumentController.clear();
+    residencePermitNoController.clear();
+    residencePermitIssueDateController.clear();
+    residencePermitExpiryDateController.clear();
+    residencePermitDocumentController.clear();
+
+    seamanNeverExpire = false;
+    validSeafarerVisa = false;
+
+    passportCountry = null;
+    seamanIssuingCountry = null;
+    seamanNationality = null;
+    seafarerVisaIssuingCountry = null;
+    visaIssuingCountry = null;
+    _residencePermitIssuingCountry = null;
     
     notifyListeners();
   }

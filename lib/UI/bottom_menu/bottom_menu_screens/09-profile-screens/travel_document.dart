@@ -31,7 +31,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
           Provider.of<TravelDocumentProvider>(context, listen: false);
 
       // Reset form before fetching data
-      provider.resetForm();
+      provider.resetAllFields();
 
       // Get userId from NetworkHelper or use the hardcoded one for testing
       String userId = NetworkHelper.loggedInUserId.isNotEmpty
