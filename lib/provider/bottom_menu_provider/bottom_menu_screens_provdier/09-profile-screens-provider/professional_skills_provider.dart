@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:luneta/models/professional_skills_model.dart';
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
 import '../../../../network/network_services.dart';
@@ -121,15 +122,113 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   List<String> woodProducts = [];
   List<String> stowageAndLashingExperience = [];
 
-  List<String> bulkCargoList = ["Grain", "Sugar", "Coal"];
-  List<String> tankerCargoList = ["LNG", "LPG", "Gasoline"];
-  List<String> generalCargoList = ["Steel", "Granite blocks"];
-  List<String> woodProductsList = ["Timber", "Paper rolls"];
-  List<String> stowageAndLashingExperienceList = ["General", "Steel"];
+  List<CargoData> bulkCargoList_data = [];
+  List<CargoData> tankerCargoList_data = [];
+  List<CargoData> generalCargoList_data = [];
+  List<CargoData> woodProductsList_data = [];
+  List<CargoData> stowageAndLashingExperienceList_data = [];
 
   void setCargoExperience(bool value) {
     cargoExperience = value;
     notifyListeners();
+  }
+
+  Future<void> getBulkCargo(context) async {
+    try {
+      final response = await NetworkService().getResponse(
+        'https://stage-luneta.nanobyte.gr/api/master-cargo-experience',
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['data'] != null) {
+        CargoResponse parsedResponse = CargoResponse.fromJson(response);
+        bulkCargoList_data = parsedResponse.data ?? [];
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Exception in getBulkCargo $e");
+    }
+  }
+
+  Future<void> getTankerCargo(context) async {
+    try {
+      final response = await NetworkService().getResponse(
+        'https://stage-luneta.nanobyte.gr/api/master-tanker-cargo/get-all',
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['data'] != null) {
+        CargoResponse parsedResponse = CargoResponse.fromJson(response);
+        tankerCargoList_data = parsedResponse.data ?? [];
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Exception in getTankerCargo $e");
+    }
+  }
+
+  Future<void> getGeneralCargo(context) async {
+    try {
+      final response = await NetworkService().getResponse(
+        'https://stage-luneta.nanobyte.gr/api/master-general-cargo/get-all',
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['data'] != null) {
+        CargoResponse parsedResponse = CargoResponse.fromJson(response);
+        generalCargoList_data = parsedResponse.data ?? [];
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Exception in getGeneralCargo $e");
+    }
+  }
+
+  Future<void> getWoodProducts(context) async {
+    try {
+      final response = await NetworkService().getResponse(
+        'https://stage-luneta.nanobyte.gr/api/master-wood-products/get-all',
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['data'] != null) {
+        CargoResponse parsedResponse = CargoResponse.fromJson(response);
+        woodProductsList_data = parsedResponse.data ?? [];
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Exception in getWoodProducts $e");
+    }
+  }
+
+  Future<void> getLashingExperience(context) async {
+    try {
+      final response = await NetworkService().getResponse(
+        'https://stage-luneta.nanobyte.gr/api/master-lashing-experience/get-all',
+        false,
+        context,
+        () {},
+      );
+      if (response != null && response['data'] != null) {
+        CargoResponse parsedResponse = CargoResponse.fromJson(response);
+        stowageAndLashingExperienceList_data = parsedResponse.data ?? [];
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Exception in getLashingExperience $e");
+    }
+  }
+
+  Future<void> fetchDropdownData(BuildContext context) async {
+    await getBulkCargo(context);
+    await getTankerCargo(context);
+    await getGeneralCargo(context);
+    await getWoodProducts(context);
+    await getLashingExperience(context);
   }
 
   // Cargo Gear Experience

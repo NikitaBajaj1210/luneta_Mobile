@@ -32,6 +32,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
       provider.clearFormInputs();
       // Then fetch the data
       provider.fetchProfessionalSkillsData(context);
+      provider.fetchDropdownData(context);
     });
   }
 
@@ -514,8 +515,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: MultiSelectDialogField(
-                  items: provider.bulkCargoList
-                      .map((e) => MultiSelectItem(e, e))
+                  items: provider.bulkCargoList_data
+                      .map((e) => MultiSelectItem(e.name, e.name ?? ''))
                       .toList(),
                   title: Text("Bulk Cargo"),
                   selectedColor: AppColors.buttonColor,
@@ -581,8 +582,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: MultiSelectDialogField(
-                  items: provider.tankerCargoList
-                      .map((e) => MultiSelectItem(e, e))
+                  items: provider.tankerCargoList_data
+                      .map((e) => MultiSelectItem(e.name, e.name ?? ''))
                       .toList(),
                   title: Text("Tanker Cargo"),
                   selectedColor: AppColors.buttonColor,
@@ -648,8 +649,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: MultiSelectDialogField(
-                  items: provider.generalCargoList
-                      .map((e) => MultiSelectItem(e, e))
+                  items: provider.generalCargoList_data
+                      .map((e) => MultiSelectItem(e.name, e.name ?? ''))
                       .toList(),
                   title: Text("General Cargo"),
                   selectedColor: AppColors.buttonColor,
@@ -716,8 +717,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: MultiSelectDialogField(
-                  items: provider.woodProductsList
-                      .map((e) => MultiSelectItem(e, e))
+                  items: provider.woodProductsList_data
+                      .map((e) => MultiSelectItem(e.name, e.name ?? ''))
                       .toList(),
                   title: Text("Wood Products"),
                   selectedColor: AppColors.buttonColor,
@@ -754,8 +755,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: MultiSelectDialogField(
-                  items: provider.stowageAndLashingExperienceList
-                      .map((e) => MultiSelectItem(e, e))
+                  items: provider.stowageAndLashingExperienceList_data
+                      .map((e) => MultiSelectItem(e.name, e.name ?? ''))
                       .toList(),
                   title: Expanded(child: Text("Stowage and Lashing Experience",overflow: TextOverflow.ellipsis,)),
                   selectedColor: AppColors.buttonColor,
