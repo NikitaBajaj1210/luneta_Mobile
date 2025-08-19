@@ -652,7 +652,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
     try {
       final response = await NetworkService().postResponse(
         bulkManningAgencyCreateOrUpdate,
-        {'name': agencyName},
+        jsonEncode({'name': agencyName}),
         true,
         context,
         () {},

@@ -34,22 +34,45 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add Manning Agency'),
-          content: TextField(
+          content: customTextField(
+            context: context,
             controller: agencyNameController,
-            decoration: InputDecoration(hintText: "Enter agency name"),
+            hintText: 'Enter agency name',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child:  Text("Cancel",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: Text("Add",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () async {
-                if (agencyNameController.text.isNotEmpty) {
-                  bool success = await provider.addManningAgency(context, agencyNameController.text);
+                if (agencyNameController.text.toString().trim().isNotEmpty) {
+                  bool success = await provider.addManningAgency(context, agencyNameController.text.toString().trim());
                   if (success) {
                     Navigator.of(context).pop();
                   }
@@ -373,18 +396,50 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       SizedBox(height: 1.h),
 
                       // Manning Agency
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Text(
-                          'Manning Agency',
-                          style: TextStyle(
-                            fontSize: AppFontSize.fontSize16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppColors.fontFamilyMedium,
-                            color: AppColors.Color_424242,
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1.h),
+                            child: Text(
+                              'Manning Agency',
+                              style: TextStyle(
+                                fontSize: AppFontSize.fontSize16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppColors.fontFamilyMedium,
+                                color: AppColors.Color_424242,
+                              ),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                            child: GestureDetector(
+                              onTap: () {
+                                _showAddAgencyDialog(provider);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(1.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.buttonColor,
+                                  borderRadius: BorderRadius.circular(150),
+                                  border: Border.all(
+                                    color: AppColors.transparent,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 2.5.h,
+                                  color: AppColors.buttonTextWhiteColor,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
+
                       Row(
                         children: [
                           Expanded(
@@ -427,13 +482,6 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                                 },
                               ),
                             ),
-                          ),
-                          SizedBox(width: 2.w),
-                          IconButton(
-                            icon: Icon(Icons.add_circle_outline, color: AppColors.buttonColor),
-                            onPressed: () {
-                              _showAddAgencyDialog(provider);
-                            },
                           ),
                         ],
                       ),
