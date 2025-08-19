@@ -26,6 +26,41 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
       Provider.of<JobConditionsAndPreferencesProvider>(context, listen: false).fetchJobConditionsData(context);
     });
   }
+
+  void _showAddAgencyDialog(JobConditionsAndPreferencesProvider provider) {
+    final TextEditingController agencyNameController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Manning Agency'),
+          content: TextField(
+            controller: agencyNameController,
+            decoration: InputDecoration(hintText: "Enter agency name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () async {
+                if (agencyNameController.text.isNotEmpty) {
+                  bool success = await provider.addManningAgency(context, agencyNameController.text);
+                  if (success) {
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<JobConditionsAndPreferencesProvider>(
@@ -350,44 +385,57 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.Color_FAFAFA,
-                          borderRadius: BorderRadius.circular(2.h),
-                        ),
-                        child: SearchChoices.single(
-                          items: provider.agencyData.map((agency) {
-                            return DropdownMenuItem(
-                              child: Text(agency.name!),
-                              value: agency,
-                            );
-                          }).toList(),
-                          value: provider.agencyData.isNotEmpty && provider.manningAgency != null
-                              ? provider.agencyData.firstWhere(
-                                  (agency) => agency.name == provider.manningAgency,
-                                  orElse: () => provider.agencyData.first,
-                                )
-                              : null,
-                          hint: "Select Manning Agency",
-                          searchHint: "Search for an agency",
-                          onChanged: (value) {
-                            if (value != null) {
-                              provider.setManningAgency(value.name ?? '');
-                            }
-                          },
-                          isExpanded: true,
-                          underline: SizedBox(),
-                          onClear: (){
-                            provider.setManningAgency('');
-                          },
-                          autovalidateMode: provider.autovalidateMode,
-                          validator: (value) {
-                            if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
-                              return 'Please select a manning agency';
-                            }
-                            return null;
-                          },
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                              ),
+                              child: SearchChoices.single(
+                                items: provider.agencyData.map((agency) {
+                                  return DropdownMenuItem(
+                                    child: Text(agency.name!),
+                                    value: agency,
+                                  );
+                                }).toList(),
+                                value: provider.agencyData.isNotEmpty && provider.manningAgency != null
+                                    ? provider.agencyData.firstWhere(
+                                        (agency) => agency.name == provider.manningAgency,
+                                        orElse: () => provider.agencyData.first,
+                                      )
+                                    : null,
+                                hint: "Select Manning Agency",
+                                searchHint: "Search for an agency",
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    provider.setManningAgency(value.name ?? '');
+                                  }
+                                },
+                                isExpanded: true,
+                                underline: SizedBox(),
+                                onClear: (){
+                                  provider.setManningAgency('');
+                                },
+                                autovalidateMode: provider.autovalidateMode,
+                                validator: (value) {
+                                  if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
+                                    return 'Please select a manning agency';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 2.w),
+                          IconButton(
+                            icon: Icon(Icons.add_circle_outline, color: AppColors.buttonColor),
+                            onPressed: () {
+                              _showAddAgencyDialog(provider);
+                            },
+                          ),
+                        ],
                       ),
                       SizedBox(height: 1.h),
 

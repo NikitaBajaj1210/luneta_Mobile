@@ -48,6 +48,7 @@ const postUpdatePersonalInfo = '${baseUrl}seafarer-profile/personal-info-create-
 const postUpdateCompliance = '${baseUrl}seafarer-profile/security-compliance/create-or-update';
 
 const getAllAgency = '${baseUrl}master-manning-agency/get-all';
+const bulkManningAgencyCreateOrUpdate = '${baseUrl}master-manning-agency/bulk-manning-agency-create-or-update';
 
 
 //USED  TO API

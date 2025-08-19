@@ -647,4 +647,30 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> addManningAgency(BuildContext context, String agencyName) async {
+    try {
+      final response = await NetworkService().postResponse(
+        bulkManningAgencyCreateOrUpdate,
+        {'name': agencyName},
+        true,
+        context,
+        () {},
+      );
+
+      if (response != null && response['statusCode'] == 200) {
+        ShowToast("Success", "Agency added successfully");
+        await fetchAgencyData(context);
+        return true;
+      } else {
+        String errorMessage = response?['message'] ?? 'Failed to add agency';
+        ShowToast("Error", errorMessage);
+        return false;
+      }
+    } catch (e) {
+      print("Add Agency Exception: $e");
+      ShowToast("Error", "Something went wrong while adding the agency");
+      return false;
+    }
+  }
 }
