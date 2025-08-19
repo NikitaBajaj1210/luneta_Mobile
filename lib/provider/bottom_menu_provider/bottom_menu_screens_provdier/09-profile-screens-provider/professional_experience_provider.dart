@@ -676,7 +676,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   Future<void> addPositionHeld(String name, BuildContext context) async {
     try {
-      final response = await NetworkService().postResponse(createOrUpdatePositionsHeld, {'name': name}, context);
+      final response = await NetworkService().postResponse(createOrUpdatePositionsHeld, jsonEncode({'name': name}), false, context, () {});
       if (response['statusCode'] == 201 || response['statusCode'] == 200) {
         fetchPositionsHeld(context);
       }
@@ -699,7 +699,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   Future<void> addEmploymentHistoryPosition(String name, BuildContext context) async {
     try {
-      final response = await NetworkService().postResponse(createOrUpdateEmploymentHistoryPosition, {'name': name}, context);
+      final response = await NetworkService().postResponse(createOrUpdateEmploymentHistoryPosition, jsonEncode({'name': name}), false, context, () {});
       if (response['statusCode'] == 201 || response['statusCode'] == 200) {
         fetchEmploymentHistoryPositions(context);
       }
