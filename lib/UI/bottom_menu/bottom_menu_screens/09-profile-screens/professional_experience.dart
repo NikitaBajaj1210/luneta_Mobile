@@ -24,6 +24,73 @@ class ProfessionalExperienceScreen extends StatefulWidget {
 }
 
 class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScreen> {
+
+  void _showAddPositionHeldDialog(ProfessionalExperienceProvider provider) {
+    final TextEditingController _controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Position'),
+          content: TextField(
+            controller: _controller,
+            decoration: InputDecoration(hintText: "Enter position name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('SAVE'),
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  provider.addPositionHeld(_controller.text, context);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddEmploymentHistoryPositionDialog(ProfessionalExperienceProvider provider) {
+    final TextEditingController _controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Position'),
+          content: TextField(
+            controller: _controller,
+            decoration: InputDecoration(hintText: "Enter position name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('SAVE'),
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  provider.addEmploymentHistoryPosition(_controller.text, context);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -192,18 +259,49 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                         SizedBox(height: 2.h),
 
                         // Positions Held (Multiselect Dropdown)
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Positions Held',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Positions Held',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showAddPositionHeldDialog(provider);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(1.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.buttonColor,
+                                    borderRadius: BorderRadius.circular(150),
+                                    border: Border.all(
+                                      color: AppColors.transparent,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 2.5.h,
+                                    color: AppColors.buttonTextWhiteColor,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
+
 
                         Container(
                           width: 90.w,
@@ -232,7 +330,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 }
                               },
                               initialValue: provider.positionsHeld,
-                              items: predefinedPositionList.map((e) => MultiSelectItem(e["key"], e["value"]!)).toList(),
+                              items: provider.positionsHeldList.map((e) => MultiSelectItem(e["id"], e["name"]!)).toList(),
                               title: Text("Positions"),
                               selectedColor: AppColors.buttonColor,
                               decoration: BoxDecoration(
@@ -675,20 +773,48 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
                             ),
 
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Position',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Position',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _showAddEmploymentHistoryPositionDialog(provider);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(1.w),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.buttonColor,
+                                        borderRadius: BorderRadius.circular(150),
+                                        border: Border.all(
+                                          color: AppColors.transparent,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 2.5.h,
+                                        color: AppColors.buttonTextWhiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-
-
                             Container(
                               width: 90.w,
                               padding: EdgeInsets.symmetric(horizontal: 0.1.w),
@@ -709,10 +835,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   onChanged: (newValue) {
                                     provider.setEmpHisPositionsHeld(newValue!);
                                   },
-                                  items: predefinedPositionList.map((value) {
+                                  items: provider.employmentHistoryPositionList.map((value) {
                                     return DropdownMenuItem<dynamic>(
-                                      value: value['value'],
-                                      child: Text(value['value']!),
+                                      value: value['id'],
+                                      child: Text(value['name']!),
                                     );
                                   }).toList(),
                                   underline: SizedBox(),

@@ -50,6 +50,11 @@ const postUpdateCompliance = '${baseUrl}seafarer-profile/security-compliance/cre
 const getAllAgency = '${baseUrl}master-manning-agency/get-all';
 const bulkManningAgencyCreateOrUpdate = '${baseUrl}master-manning-agency/bulk-manning-agency-create-or-update';
 
+const getAllPositionsHeld = '${baseUrl}master-professional-experience-position/get-all';
+const createOrUpdatePositionsHeld = '${baseUrl}master-professional-experience-position/create-or-update';
+const getAllEmploymentHistoryPosition = '${baseUrl}master-employment-history-position/get-all';
+const createOrUpdateEmploymentHistoryPosition = '${baseUrl}master-employment-history-position/create-or-update';
+
 
 //USED  TO API
 // /api/master-general-cargo/bulk-general-cargo-create-or-update

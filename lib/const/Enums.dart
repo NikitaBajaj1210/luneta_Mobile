@@ -62,12 +62,6 @@ final List<Map<String, String>> platformList = [
   {'key': 'OTHER', 'value': 'Other'},
 ];
 
-final List<Map<String, String>> predefinedPositionList = [
-  {'key': 'CAPTAIN', 'value': 'Captain'},
-  {'key': 'CHIEF_ENGINEER', 'value': 'Chief Engineer'},
-  {'key': 'SECOND_OFFICER', 'value': 'Second Officer'},
-  {'key': 'OTHER', 'value': 'Other'},
-];
 
 final List<String> issuedByList = [
   'Company',

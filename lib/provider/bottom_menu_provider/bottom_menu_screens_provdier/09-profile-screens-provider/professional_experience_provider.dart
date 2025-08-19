@@ -64,6 +64,9 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   List<String> get vesselTypeExperience => _vesselTypeExperience;
 
+  List<Map<String, dynamic>> positionsHeldList = [];
+  List<Map<String, dynamic>> employmentHistoryPositionList = [];
+
   bool _showAddSection_employmentHistory = false;
 
   bool get showAddSection_employmentHistory =>
@@ -323,6 +326,8 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   // API call to fetch professional experience data
   Future<void> fetchProfessionalExperience(String userId,
       BuildContext context) async {
+    fetchPositionsHeld(context);
+    fetchEmploymentHistoryPositions(context);
     if (userId.isEmpty) {
       userId = NetworkHelper.loggedInUserId;
       print("LOGIN USER ID ${NetworkHelper.loggedInUserId}");
@@ -654,6 +659,52 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> fetchPositionsHeld(BuildContext context) async {
+    try {
+      final response = await NetworkService().getResponse(getAllPositionsHeld, false, context, () {});
+      if (response['statusCode'] == 200) {
+        positionsHeldList = List<Map<String, dynamic>>.from(response['data']);
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addPositionHeld(String name, BuildContext context) async {
+    try {
+      final response = await NetworkService().postResponse(createOrUpdatePositionsHeld, {'name': name}, context);
+      if (response['statusCode'] == 201 || response['statusCode'] == 200) {
+        fetchPositionsHeld(context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchEmploymentHistoryPositions(BuildContext context) async {
+    try {
+      final response = await NetworkService().getResponse(getAllEmploymentHistoryPosition, false, context, () {});
+      if (response['statusCode'] == 200) {
+        employmentHistoryPositionList = List<Map<String, dynamic>>.from(response['data']);
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addEmploymentHistoryPosition(String name, BuildContext context) async {
+    try {
+      final response = await NetworkService().postResponse(createOrUpdateEmploymentHistoryPosition, {'name': name}, context);
+      if (response['statusCode'] == 201 || response['statusCode'] == 200) {
+        fetchEmploymentHistoryPositions(context);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
