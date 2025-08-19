@@ -32,22 +32,45 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add Position'),
-          content: TextField(
+          content:  customTextField(
+            context: context,
             controller: _controller,
-            decoration: InputDecoration(hintText: "Enter position name"),
+            hintText: 'Enter position name',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('CANCEL'),
+              child: Text("Cancel",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('SAVE'),
+              child: Text("Add",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  provider.addPositionHeld(_controller.text, context);
+                if (_controller.text.toString().trim().isNotEmpty) {
+                  provider.addPositionHeld(_controller.text.toString().trim(), context);
                   Navigator.of(context).pop();
                 }
               },
@@ -65,22 +88,45 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add Position'),
-          content: TextField(
+          content: customTextField(
+            context: context,
             controller: _controller,
-            decoration: InputDecoration(hintText: "Enter position name"),
+            hintText: 'Enter position name',
+            textInputType: TextInputType.text,
+            obscureText: false,
+            voidCallback: (value) {},
+            fontSize: AppFontSize.fontSize16,
+            inputFontSize: AppFontSize.fontSize16,
+            backgroundColor: AppColors.Color_FAFAFA,
+            borderColor: AppColors.buttonColor,
+            textColor: Colors.black,
+            labelColor: AppColors.Color_9E9E9E,
+            cursorColor: AppColors.Color_212121,
+            fillColor: AppColors.Color_FAFAFA,
+            onFieldSubmitted: (String) {},
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('CANCEL'),
+              child: Text("Cancel",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('SAVE'),
+              child: Text("Add",style:TextStyle(
+                fontSize: AppFontSize.fontSize18,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppColors.fontFamilyMedium,
+                color: AppColors.buttonColor,
+              ),),
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  provider.addEmploymentHistoryPosition(_controller.text, context);
+                if (_controller.text.trim().isNotEmpty) {
+                  provider.addEmploymentHistoryPosition(_controller.text.trim(), context);
                   Navigator.of(context).pop();
                 }
               },
@@ -330,7 +376,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 }
                               },
                               initialValue: provider.positionsHeld,
-                              items: provider.positionsHeldList.map((e) => MultiSelectItem(e["id"], e["name"]!)).toList(),
+                              items: provider.positionsHeldList.map((e) => MultiSelectItem(e["name"], e["name"]!)).toList(),
                               title: Text("Positions"),
                               selectedColor: AppColors.buttonColor,
                               decoration: BoxDecoration(
@@ -837,7 +883,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   },
                                   items: provider.employmentHistoryPositionList.map((value) {
                                     return DropdownMenuItem<dynamic>(
-                                      value: value['id'],
+                                      value: value['name'],
                                       child: Text(value['name']!),
                                     );
                                   }).toList(),
