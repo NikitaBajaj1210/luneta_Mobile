@@ -5,6 +5,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/professional_experience_provider.dart';
+import '../../../../Utils/helper.dart';
 import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
@@ -659,15 +660,25 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               padding: EdgeInsets.only(right: 10.0,top:10),
                               child: GestureDetector(
                                 onTap: (){
+                                  if(provider.employment_IsEdit) {
+                                    provider.setEmploymentHistoryVisibility(true);
+                                    provider.showAddSection_employmentHistory = true;
+                                  }else if (provider.showAddSection_employmentHistory){
+                                    provider.setEmploymentHistoryVisibility(false);
+                                    provider.showAddSection_employmentHistory = false;
+                                  }else{
+                                    provider.setEmploymentHistoryVisibility(true);
+                                    provider.showAddSection_employmentHistory = true;
+                                  }
                                   // Clear form data
                                   provider.companyController.clear();
                                   provider.startDate.clear();
                                   provider.endDate.clear();
                                   provider.responsibilitiesController.clear();
                                   provider.setEmpHisPositionsHeld(null);
-                                  provider.showAddSection_employmentHistory = !provider.showAddSection_employmentHistory;
+                                  // provider.showAddSection_employmentHistory = !provider.showAddSection_employmentHistory;
 
-                                  provider.setEmploymentHistoryVisibility(provider.showAddSection_employmentHistory);
+                                  // provider.setEmploymentHistoryVisibility(provider.showAddSection_employmentHistory);
                                   provider.employment_Edit_Index=null;
                                   provider.employment_IsEdit=false;
                                 },
@@ -775,7 +786,11 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                     SizedBox(width: 2.w),
                                                     GestureDetector(
                                                       onTap:(){
-                                                        provider.removeEmploymentHistory(index);
+                            if(provider.employment_IsEdit){
+                            showToast("Updating or cancel the current record before continuing.");
+                            }else {
+                              provider.removeEmploymentHistory(index);
+                            }
                                                       },
                                                       child: Image.asset(
                                                         "assets/images/Delete.png",
@@ -885,50 +900,45 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
 
 
                         // Button to Add/Edit Employment History
-                        provider.showAddSection_employmentHistory ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Company Name',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
+                        provider.showAddSection_employmentHistory ? Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                                blurRadius: 0,   // how soft the shadow is
+                                spreadRadius: 0, // how wide it spreads
+                                // offset: const Offset(4, 4), // X, Y position of shadow
                               ),
+                            ],
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.buttonColor, // Set the border color here
+                              width: 1, // You can adjust the width of the border
                             ),
-                            customTextField(
-                              context: context,
-                              controller: provider.companyController,
-                              focusNode: provider.companyFocusNode,
-                              hintText: 'Enter Company Name',
-                              textInputType: TextInputType.text,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: AppColors.Color_FAFAFA,
-                              activeFillColor: AppColors.activeFieldBgColor,
-                              onFieldSubmitted: (String ) {  },
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 1.h),
                                   child: Text(
-                                    'Position',
+                                    provider.employment_IsEdit?'Edit Employment History':'Add Employment History',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize19,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Company Name',
                                     style: TextStyle(
                                       fontSize: AppFontSize.fontSize16,
                                       fontWeight: FontWeight.w500,
@@ -937,305 +947,375 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _showAddEmploymentHistoryPositionDialog(provider);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(1.w),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.buttonColor,
-                                        borderRadius: BorderRadius.circular(150),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
+                                customTextField(
+                                  context: context,
+                                  controller: provider.companyController,
+                                  focusNode: provider.companyFocusNode,
+                                  hintText: 'Enter Company Name',
+                                  textInputType: TextInputType.text,
+                                  obscureText: false,
+                                  voidCallback: (value) {},
+                                  fontSize: AppFontSize.fontSize16,
+                                  inputFontSize: AppFontSize.fontSize16,
+                                  backgroundColor: AppColors.Color_FAFAFA,
+                                  borderColor: AppColors.buttonColor,
+                                  textColor: Colors.black,
+                                  labelColor: AppColors.Color_9E9E9E,
+                                  cursorColor: AppColors.Color_212121,
+                                  fillColor: AppColors.Color_FAFAFA,
+                                  activeFillColor: AppColors.activeFieldBgColor,
+                                  onFieldSubmitted: (String ) {  },
+                                ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                                      child: Text(
+                                        'Position',
+                                        style: TextStyle(
+                                          fontSize: AppFontSize.fontSize16,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: AppColors.fontFamilyMedium,
+                                          color: AppColors.Color_424242,
                                         ),
                                       ),
-                                      child: Icon(
-                                        Icons.add,
-                                        size: 2.5.h,
-                                        color: AppColors.buttonTextWhiteColor,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 10.0, top: 10,bottom: 7),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showAddEmploymentHistoryPositionDialog(provider);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(1.w),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.buttonColor,
+                                            borderRadius: BorderRadius.circular(150),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 2.5.h,
+                                            color: AppColors.buttonTextWhiteColor,
+                                          ),
+                                        ),
                                       ),
+                                    )
+                                  ],
+                                ),
+                                Container(
+                                  width: 90.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.Color_FAFAFA,
+                                    borderRadius: BorderRadius.circular(2.h),
+                                    border: Border.all(
+                                      color: AppColors.transparent,
+                                      width: 1,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            Container(
-                              width: 90.w,
-                              padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.Color_FAFAFA,
-                                borderRadius: BorderRadius.circular(2.h),
-                                border: Border.all(
-                                  color: AppColors.transparent,
-                                  width: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: DropdownButton<dynamic>(
+                                      value: provider.empHisPositionsHeld,
+                                      isExpanded: true,
+                                      hint: Text("Search Position"),
+                                      onChanged: (newValue) {
+                                        provider.setEmpHisPositionsHeld(newValue!);
+                                      },
+                                      items: provider.employmentHistoryPositionList.map((value) {
+                                        return DropdownMenuItem<dynamic>(
+                                          value: value['name'],
+                                          child: Text(value['name']!),
+                                        );
+                                      }).toList(),
+                                      underline: SizedBox(),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: DropdownButton<dynamic>(
-                                  value: provider.empHisPositionsHeld,
-                                  isExpanded: true,
-                                  hint: Text("Search Position"),
-                                  onChanged: (newValue) {
-                                    provider.setEmpHisPositionsHeld(newValue!);
-                                  },
-                                  items: provider.employmentHistoryPositionList.map((value) {
-                                    return DropdownMenuItem<dynamic>(
-                                      value: value['name'],
-                                      child: Text(value['name']!),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Start Date',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    final DateTime? picked = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                      lastDate: DateTime.now(),
                                     );
-                                  }).toList(),
-                                  underline: SizedBox(),
-                                ),
-                              ),
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Start Date',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                final DateTime? picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                                  lastDate: DateTime.now(),
-                                );
-                                if (picked != null) {
-                                  // Check if this start date would be valid with existing end date
-                                  String tempStartDate = "${picked.toLocal()}".split(' ')[0];
-                                  String? dateError = provider.validateDateRange(
-                                    tempStartDate,
-                                    provider.endDate.text
-                                  );
-
-                                  if (dateError != null) {
-                                    ShowToast("Error", dateError);
-                                    // Don't set the invalid date
-                                  } else {
-                                    provider.setStartDate(picked);
-                                  }
-                                }
-                              },
-                              child: AbsorbPointer(
-                                child: customTextField(
-                                  context: context,
-                                  controller: provider.startDate,
-                                  focusNode: provider.startDateFocusNode,
-                                  hintText: 'Select Start Date',
-                                  textInputType: TextInputType.datetime,
-                                  obscureText: false,
-                                  voidCallback: (value) {},
-                                  fontSize: AppFontSize.fontSize16,
-                                  inputFontSize: AppFontSize.fontSize16,
-                                  backgroundColor: AppColors.Color_FAFAFA,
-                                  // borderColor: AppColors.buttonColor,
-                                  textColor: Colors.black,
-                                  labelColor: AppColors.Color_9E9E9E,
-                                  cursorColor: AppColors.Color_212121,
-                                  fillColor: AppColors.Color_FAFAFA,
-                                  activeFillColor: AppColors.activeFieldBgColor,
-                                  borderColor: AppColors.buttonColor,
-                                  onFieldSubmitted: (String ) {  },
-                                ),
-                              ),
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'End Date',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                if(provider.startDate.text.isNotEmpty)
-                                  {
-                                final String startDateString = provider.startDate.text;
-                                DateTime firstDate = DateTime(DateTime.now().year-100); // default fallback
-
-                                if (startDateString.isNotEmpty) {
-                                  try {
-                                    firstDate = DateTime.parse(startDateString);
-                                  } catch (e) {
-                                    // handle invalid date format if necessary
-                                    print('Invalid date format: $e');
-                                  }
-                                }
-
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                final DateTime? picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: firstDate,
-                                  lastDate: DateTime(DateTime.now().year + 100),
-                                );
-                                  if (picked != null) {
-                                    // Check if this end date would be valid with existing start date
-                                    String tempEndDate = "${picked.toLocal()}"
-                                        .split(' ')[0];
-                                    String? dateError = provider
-                                        .validateDateRange(
-                                        provider.startDate.text,
-                                        tempEndDate
-                                    );
-
-                                    if (dateError != null) {
-                                      ShowToast("Error", dateError);
-                                      // Don't set the invalid date
-                                    } else {
-                                      provider.setEndDate(picked);
-                                    }
-                                  }
-                                }else{
-                                  ShowToast("Error", "please select Start Date First");
-                                }
-                              },
-                              child: AbsorbPointer(
-                                child: customTextField(
-                                  context: context,
-                                  controller: provider.endDate,
-                                  focusNode: provider.endDateFocusNode,
-                                  hintText: 'Select End Date',
-                                  textInputType: TextInputType.datetime,
-                                  obscureText: false,
-                                  voidCallback: (value) {},
-                                  fontSize: AppFontSize.fontSize16,
-                                  inputFontSize: AppFontSize.fontSize16,
-                                  backgroundColor: AppColors.Color_FAFAFA,
-                                  // borderColor: AppColors.buttonColor,
-                                  textColor: Colors.black,
-                                  labelColor: AppColors.Color_9E9E9E,
-                                  cursorColor: AppColors.Color_212121,
-                                  fillColor: AppColors.Color_FAFAFA,
-                                  activeFillColor: AppColors.activeFieldBgColor,
-                                  borderColor: AppColors.buttonColor,
-                                  onFieldSubmitted: (String ) {  },
-                                ),
-                              ),
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Responsibilities',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
-                              ),
-                            ),
-                            customTextField(
-                              context: context,
-                              controller: provider.responsibilitiesController,
-                              focusNode: provider.responsibilitiesFocusNode,
-                              hintText: 'Enter Responsibilities',
-                              textInputType: TextInputType.text,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: AppColors.Color_FAFAFA,
-                              activeFillColor: AppColors.activeFieldBgColor,
-                              onFieldSubmitted: (String ) {  },
-                            ),
-
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                child: customButton(
-                                  voidCallback: () async {
-                                    print("click => ${provider.empHisPositionsHeld}");
-                                    // Validate fields and add employment history
-                                    if (provider.companyController.text.isNotEmpty &&
-                                        provider.startDate.text.isNotEmpty &&
-                                        provider.endDate.text.isNotEmpty &&
-                                        provider.responsibilitiesController.text.isNotEmpty) {
-
-                                      // Validate date range
+                                    if (picked != null) {
+                                      // Check if this start date would be valid with existing end date
+                                      String tempStartDate = "${picked.toLocal()}".split(' ')[0];
                                       String? dateError = provider.validateDateRange(
-                                        provider.startDate.text,
+                                        tempStartDate,
                                         provider.endDate.text
                                       );
+
                                       if (dateError != null) {
                                         ShowToast("Error", dateError);
-                                        return;
-                                      }
-                                      if (!provider.employment_IsEdit) {
-                                        await provider.addEmploymentHistory(ProfessionalEmploymentHistory(
-                                          companyName: provider.companyController.text,
-                                          position: provider.empHisPositionsHeld,
-                                          startDate: provider.startDate.text,
-                                          endDate: provider.endDate.text,
-                                          responsibilities: provider.responsibilitiesController.text,
-                                        ));
+                                        // Don't set the invalid date
                                       } else {
-                                        await provider.updateEmploymentHistory(provider.employment_Edit_Index!, ProfessionalEmploymentHistory(
-                                          companyName: provider.companyController.text,
-                                          position: provider.empHisPositionsHeld,
-                                          startDate: provider.startDate.text,
-                                          endDate: provider.endDate.text,
-                                          responsibilities: provider.responsibilitiesController.text,
-                                        ));
+                                        provider.setStartDate(picked);
                                       }
-                                      provider.companyController.clear();
-                                      provider.startDate.clear();
-                                      provider.endDate.clear();
-                                      provider.responsibilitiesController.clear();
-                                      // provider.empHisPositionsHeld.clear();
-                                      provider.employment_IsEdit=false;
-                                      provider.employment_Edit_Index=null;
-                                      provider.setEmploymentHistoryVisibility(false);
-                                    } else {
-                                      ShowToast("Error", "Please fill in all required fields");
                                     }
                                   },
-                                  buttonText: provider.employment_IsEdit ? "Update" : "Add",
-                                  width: 30.w,
-                                  height: 10.w,
-                                  color: AppColors.buttonColor,
-                                  buttonTextColor: AppColors.buttonTextWhiteColor,
-                                  shadowColor: AppColors.buttonBorderColor,
-                                  fontSize: AppFontSize.fontSize18,
-                                  showShadow: true,
+                                  child: AbsorbPointer(
+                                    child: customTextField(
+                                      context: context,
+                                      controller: provider.startDate,
+                                      focusNode: provider.startDateFocusNode,
+                                      hintText: 'Select Start Date',
+                                      textInputType: TextInputType.datetime,
+                                      obscureText: false,
+                                      voidCallback: (value) {},
+                                      fontSize: AppFontSize.fontSize16,
+                                      inputFontSize: AppFontSize.fontSize16,
+                                      backgroundColor: AppColors.Color_FAFAFA,
+                                      // borderColor: AppColors.buttonColor,
+                                      textColor: Colors.black,
+                                      labelColor: AppColors.Color_9E9E9E,
+                                      cursorColor: AppColors.Color_212121,
+                                      fillColor: AppColors.Color_FAFAFA,
+                                      activeFillColor: AppColors.activeFieldBgColor,
+                                      borderColor: AppColors.buttonColor,
+                                      onFieldSubmitted: (String ) {  },
+                                    ),
+                                  ),
                                 ),
-                              ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'End Date',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    if(provider.startDate.text.isNotEmpty)
+                                      {
+                                    final String startDateString = provider.startDate.text;
+                                    DateTime firstDate = DateTime(DateTime.now().year-100); // default fallback
+
+                                    if (startDateString.isNotEmpty) {
+                                      try {
+                                        firstDate = DateTime.parse(startDateString);
+                                      } catch (e) {
+                                        // handle invalid date format if necessary
+                                        print('Invalid date format: $e');
+                                      }
+                                    }
+
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    final DateTime? picked = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: firstDate,
+                                      lastDate: DateTime(DateTime.now().year + 100),
+                                    );
+                                      if (picked != null) {
+                                        // Check if this end date would be valid with existing start date
+                                        String tempEndDate = "${picked.toLocal()}"
+                                            .split(' ')[0];
+                                        String? dateError = provider
+                                            .validateDateRange(
+                                            provider.startDate.text,
+                                            tempEndDate
+                                        );
+
+                                        if (dateError != null) {
+                                          ShowToast("Error", dateError);
+                                          // Don't set the invalid date
+                                        } else {
+                                          provider.setEndDate(picked);
+                                        }
+                                      }
+                                    }else{
+                                      ShowToast("Error", "please select Start Date First");
+                                    }
+                                  },
+                                  child: AbsorbPointer(
+                                    child: customTextField(
+                                      context: context,
+                                      controller: provider.endDate,
+                                      focusNode: provider.endDateFocusNode,
+                                      hintText: 'Select End Date',
+                                      textInputType: TextInputType.datetime,
+                                      obscureText: false,
+                                      voidCallback: (value) {},
+                                      fontSize: AppFontSize.fontSize16,
+                                      inputFontSize: AppFontSize.fontSize16,
+                                      backgroundColor: AppColors.Color_FAFAFA,
+                                      // borderColor: AppColors.buttonColor,
+                                      textColor: Colors.black,
+                                      labelColor: AppColors.Color_9E9E9E,
+                                      cursorColor: AppColors.Color_212121,
+                                      fillColor: AppColors.Color_FAFAFA,
+                                      activeFillColor: AppColors.activeFieldBgColor,
+                                      borderColor: AppColors.buttonColor,
+                                      onFieldSubmitted: (String ) {  },
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Responsibilities',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                customTextField(
+                                  context: context,
+                                  controller: provider.responsibilitiesController,
+                                  focusNode: provider.responsibilitiesFocusNode,
+                                  hintText: 'Enter Responsibilities',
+                                  textInputType: TextInputType.text,
+                                  obscureText: false,
+                                  voidCallback: (value) {},
+                                  fontSize: AppFontSize.fontSize16,
+                                  inputFontSize: AppFontSize.fontSize16,
+                                  backgroundColor: AppColors.Color_FAFAFA,
+                                  borderColor: AppColors.buttonColor,
+                                  textColor: Colors.black,
+                                  labelColor: AppColors.Color_9E9E9E,
+                                  cursorColor: AppColors.Color_212121,
+                                  fillColor: AppColors.Color_FAFAFA,
+                                  activeFillColor: AppColors.activeFieldBgColor,
+                                  onFieldSubmitted: (String ) {  },
+                                ),
+
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      // height: 9.h,
+                                      // width: 30.w,
+                                      padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                      child: customButton(
+                                        voidCallback: () {
+                                          // Clear form data
+                                          provider.companyController.clear();
+                                          provider.startDate.clear();
+                                          provider.endDate.clear();
+                                          provider.responsibilitiesController.clear();
+                                          provider.setEmpHisPositionsHeld(null);
+                                          provider.showAddSection_employmentHistory = false;
+
+                                          provider.setEmploymentHistoryVisibility(false);
+                                          provider.employment_Edit_Index=null;
+                                          provider.employment_IsEdit=false;
+                                        },
+                                        buttonText: "Cancel",
+                                        width: 30.w,
+                                        height: 10.w,
+                                        color: AppColors.Color_BDBDBD,
+                                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                                        shadowColor: AppColors.buttonBorderColor,
+                                        fontSize: AppFontSize.fontSize18,
+                                        showShadow: true,
+                                      ),
+                                    ),
+                                     Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                        child: customButton(
+                                          voidCallback: () async {
+                                            print("click => ${provider.empHisPositionsHeld}");
+                                            // Validate fields and add employment history
+                                            if (provider.companyController.text.isNotEmpty &&
+                                                provider.startDate.text.isNotEmpty &&
+                                                provider.endDate.text.isNotEmpty &&
+                                                provider.responsibilitiesController.text.isNotEmpty) {
+
+                                              // Validate date range
+                                              String? dateError = provider.validateDateRange(
+                                                provider.startDate.text,
+                                                provider.endDate.text
+                                              );
+                                              if (dateError != null) {
+                                                ShowToast("Error", dateError);
+                                                return;
+                                              }
+                                              if (!provider.employment_IsEdit) {
+                                                await provider.addEmploymentHistory(ProfessionalEmploymentHistory(
+                                                  companyName: provider.companyController.text,
+                                                  position: provider.empHisPositionsHeld,
+                                                  startDate: provider.startDate.text,
+                                                  endDate: provider.endDate.text,
+                                                  responsibilities: provider.responsibilitiesController.text,
+                                                ));
+                                              } else {
+                                                await provider.updateEmploymentHistory(provider.employment_Edit_Index!, ProfessionalEmploymentHistory(
+                                                  companyName: provider.companyController.text,
+                                                  position: provider.empHisPositionsHeld,
+                                                  startDate: provider.startDate.text,
+                                                  endDate: provider.endDate.text,
+                                                  responsibilities: provider.responsibilitiesController.text,
+                                                ));
+                                              }
+                                              provider.companyController.clear();
+                                              provider.startDate.clear();
+                                              provider.endDate.clear();
+                                              provider.responsibilitiesController.clear();
+                                              // provider.empHisPositionsHeld.clear();
+                                              provider.employment_IsEdit=false;
+                                              provider.employment_Edit_Index=null;
+                                              provider.setEmploymentHistoryVisibility(false);
+                                            } else {
+                                              ShowToast("Error", "Please fill in all required fields");
+                                            }
+                                          },
+                                          buttonText: provider.employment_IsEdit ? "Update" : "Add",
+                                          width: 30.w,
+                                          height: 10.w,
+                                          color: AppColors.buttonColor,
+                                          buttonTextColor: AppColors.buttonTextWhiteColor,
+                                          shadowColor: AppColors.buttonBorderColor,
+                                          fontSize: AppFontSize.fontSize18,
+                                          showShadow: true,
+                                        ),
+                                      ),
+                                   ],
+                                 ),
+                              ],
                             ),
-                          ],
+                          ),
                         ) : Container(),
 
                         // Show existing employment history from API
@@ -1338,14 +1418,24 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               padding: EdgeInsets.only(right: 10.0,top:10),
                               child: GestureDetector(
                                 onTap: (){
+                                  if(provider.reference_IsEdit) {
+                                    provider.setReferenceVisibility(true);
+                                    provider.showAddSection_reference = true;
+                                  }else if (provider.showAddSection_reference){
+                                    provider.setReferenceVisibility(false);
+                                    provider.showAddSection_reference = false;
+                                  }else{
+                                    provider.setReferenceVisibility(true);
+                                    provider.showAddSection_reference = true;
+                                  }
                                   // Clear form data
                                   provider.referenceVesselController.clear();
                                   provider.referenceIssuedDate.clear();
                                   provider.referenceDocumentController.clear();
                                   provider.referenceIssuedBy = null;
 
-                                  provider.showAddSection_reference = !provider.showAddSection_reference;
-                                  provider.setReferenceVisibility( provider.showAddSection_reference);
+                                  // provider.showAddSection_reference = !provider.showAddSection_reference;
+                                  // provider.setReferenceVisibility( provider.showAddSection_reference);
                                   provider.reference_Edit_Index=null;
                                   provider.reference_IsEdit=false;
                                 },
@@ -1557,7 +1647,11 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   SizedBox(width: 2.w),
                                   GestureDetector(
                                     onTap:(){
-                                      provider.removeReference(index);
+                                      if(provider.reference_IsEdit){
+                                        showToast("Updating or cancel the current record before continuing.");
+                                      }else {
+                                        provider.removeReference(index);
+                                      }
                                     },
                                     child: Image.asset(
                                       "assets/images/Delete.png",
@@ -1569,121 +1663,59 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             );
                           },
                         ),
-                        provider.showAddSection_reference ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Vessel/Company Name',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
+                        provider.showAddSection_reference ? Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                                blurRadius: 0,   // how soft the shadow is
+                                spreadRadius: 0, // how wide it spreads
+                                // offset: const Offset(4, 4), // X, Y position of shadow
                               ),
+                            ],
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.buttonColor, // Set the border color here
+                              width: 1, // You can adjust the width of the border
                             ),
-                            customTextField(
-                              context: context,
-                              controller: provider.referenceVesselController,
-                              focusNode: provider.referenceVesselFocusNode,
-                              hintText: 'Enter Vessel/Company Name',
-                              textInputType: TextInputType.text,
-                              obscureText: false,
-                              voidCallback: (value) {},
-                              fontSize: AppFontSize.fontSize16,
-                              inputFontSize: AppFontSize.fontSize16,
-                              backgroundColor: AppColors.Color_FAFAFA,
-                              borderColor: AppColors.buttonColor,
-                              textColor: Colors.black,
-                              labelColor: AppColors.Color_9E9E9E,
-                              cursorColor: AppColors.Color_212121,
-                              fillColor: AppColors.Color_FAFAFA,
-                              activeFillColor: AppColors.activeFieldBgColor,
-                              onFieldSubmitted: (String ) {  },
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Issued By',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    provider.employment_IsEdit?'Edit Reference':'Add Reference',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize19,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-
-                            Container(
-                              width: 90.w,
-                              padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.Color_FAFAFA,
-                                borderRadius: BorderRadius.circular(2.h),
-                                border: Border.all(
-                                  color: AppColors.transparent,
-                                  width: 1,
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Vessel/Company Name',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: DropdownButton<String>(
-                                  value: provider.referenceIssuedBy,
-                                  isExpanded: true,
-                                  hint: Text("Select Issued By"),
-                                  onChanged: (newValue) {
-                                    provider.setReferenceIssuedBy(newValue!);
-                                  },
-                                  items: issuedByList.map((value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  underline: SizedBox(),
-                                ),
-                              ),
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Issued Date',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                // Clear focus from all fields before opening date picker
-                                FocusScope.of(context).unfocus();
-                                final DateTime? picked = await showDatePicker(
+                                customTextField(
                                   context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                                  lastDate: DateTime.now(),
-                                );
-                                if (picked != null) {
-                                  provider.setReferenceIssuingDate(picked);
-                                }
-                              },
-                              child: AbsorbPointer(
-                                child: customTextField(
-                                  context: context,
-                                  controller: provider.referenceIssuedDate,
-                                  focusNode: provider.referenceIssuedDateFocusNode,
-                                  hintText: 'Select Issued Date',
-                                  textInputType: TextInputType.datetime,
+                                  controller: provider.referenceVesselController,
+                                  focusNode: provider.referenceVesselFocusNode,
+                                  hintText: 'Enter Vessel/Company Name',
+                                  textInputType: TextInputType.text,
                                   obscureText: false,
                                   voidCallback: (value) {},
                                   fontSize: AppFontSize.fontSize16,
@@ -1697,113 +1729,267 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   activeFillColor: AppColors.activeFieldBgColor,
                                   onFieldSubmitted: (String ) {  },
                                 ),
-                              ),
-                            ),
 
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(
-                                'Document',
-                                style: TextStyle(
-                                  fontSize: AppFontSize.fontSize16,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: AppColors.fontFamilyMedium,
-                                  color: AppColors.Color_424242,
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Issued By',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                await provider.showAttachmentOptions(context);
-                              },
-                              child: DottedBorder(
-                                borderType: BorderType.RRect,
-                                radius: Radius.circular(15),
-                                dashPattern: [10, 10],
-                                color: AppColors.buttonColor,
-                                strokeWidth: 1,
-                                child: Container(
-                                  width: 100.w,
-                                  padding: EdgeInsets.symmetric(vertical: 3.h),
+
+                                Container(
+                                  width: 90.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 0.1.w),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(1.h),
                                     color: AppColors.Color_FAFAFA,
+                                    borderRadius: BorderRadius.circular(2.h),
+                                    border: Border.all(
+                                      color: AppColors.transparent,
+                                      width: 1,
+                                    ),
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset("assets/images/Upload.png", height: 5.h),
-                                      SizedBox(height: 1.h),
-                                      Text(
-                                        "Browse File",
-                                        style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: AppColors.fontFamilySemiBold,
-                                            color: AppColors.Color_9E9E9E),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: DropdownButton<String>(
+                                      value: provider.referenceIssuedBy,
+                                      isExpanded: true,
+                                      hint: Text("Select Issued By"),
+                                      onChanged: (newValue) {
+                                        provider.setReferenceIssuedBy(newValue!);
+                                      },
+                                      items: issuedByList.map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      underline: SizedBox(),
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Issued Date',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    // Clear focus from all fields before opening date picker
+                                    FocusScope.of(context).unfocus();
+                                    final DateTime? picked = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                      lastDate: DateTime.now(),
+                                    );
+                                    if (picked != null) {
+                                      provider.setReferenceIssuingDate(picked);
+                                    }
+                                  },
+                                  child: AbsorbPointer(
+                                    child: customTextField(
+                                      context: context,
+                                      controller: provider.referenceIssuedDate,
+                                      focusNode: provider.referenceIssuedDateFocusNode,
+                                      hintText: 'Select Issued Date',
+                                      textInputType: TextInputType.datetime,
+                                      obscureText: false,
+                                      voidCallback: (value) {},
+                                      fontSize: AppFontSize.fontSize16,
+                                      inputFontSize: AppFontSize.fontSize16,
+                                      backgroundColor: AppColors.Color_FAFAFA,
+                                      borderColor: AppColors.buttonColor,
+                                      textColor: Colors.black,
+                                      labelColor: AppColors.Color_9E9E9E,
+                                      cursorColor: AppColors.Color_212121,
+                                      fillColor: AppColors.Color_FAFAFA,
+                                      activeFillColor: AppColors.activeFieldBgColor,
+                                      onFieldSubmitted: (String ) {  },
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    'Document',
+                                    style: TextStyle(
+                                      fontSize: AppFontSize.fontSize16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: AppColors.fontFamilyMedium,
+                                      color: AppColors.Color_424242,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await provider.showAttachmentOptions(context);
+                                  },
+                                  child: DottedBorder(
+                                    borderType: BorderType.RRect,
+                                    radius: Radius.circular(15),
+                                    dashPattern: [10, 10],
+                                    color: AppColors.buttonColor,
+                                    strokeWidth: 1,
+                                    child: Container(
+                                      width: 100.w,
+                                      padding: EdgeInsets.symmetric(vertical: 3.h),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(1.h),
+                                        color: AppColors.Color_FAFAFA,
                                       ),
-                                    ],
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset("assets/images/Upload.png", height: 5.h),
+                                          SizedBox(height: 1.h),
+                                          Text(
+                                            "Browse File",
+                                            style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: AppColors.fontFamilySemiBold,
+                                                color: AppColors.Color_9E9E9E),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            if (provider.newReference == null &&
-                                !(provider.reference_IsEdit &&
-                                    provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
-                                provider.autovalidateMode ==
-                                    AutovalidateMode.always)
-                              Padding(
-                                padding:
-                                EdgeInsets.only(top: 1.h, left: 4.w),
-                                child: Text(
-                                  "please select Reference",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: AppFontSize.fontSize12,
+                                if (provider.newReference == null &&
+                                    !(provider.reference_IsEdit &&
+                                        provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
+                                    provider.autovalidateMode ==
+                                        AutovalidateMode.always)
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.only(top: 1.h, left: 4.w),
+                                    child: Text(
+                                      "please select Reference",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: AppFontSize.fontSize12,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            if (provider.newReference == null &&
-                                !(provider.reference_IsEdit &&
-                                    provider.reference_Edit_Index != null &&
-                                    provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
-                                provider.autovalidateMode ==
-                                    AutovalidateMode.always)
-                              Padding(
-                                padding:
-                                EdgeInsets.only(top: 1.h, left: 4.w),
-                                child: Text(
-                                  "please select Reference",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: AppFontSize.fontSize12,
+                                if (provider.newReference == null &&
+                                    !(provider.reference_IsEdit &&
+                                        provider.reference_Edit_Index != null &&
+                                        provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument) &&
+                                    provider.autovalidateMode ==
+                                        AutovalidateMode.always)
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.only(top: 1.h, left: 4.w),
+                                    child: Text(
+                                      "please select Reference",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: AppFontSize.fontSize12,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            SizedBox(height: 3.h),
-                            if (provider.newReference != null)
-                              GestureDetector(
-                                onTap: (){
-                                  OpenFile_View(provider.newReference!.path,context);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
+                                SizedBox(height: 3.h),
+                                if (provider.newReference != null)
+                                  GestureDetector(
+                                    onTap: (){
+                                      OpenFile_View(provider.newReference!.path,context);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w, vertical: 2.h),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.shade100,
+                                        borderRadius: BorderRadius.circular(1.h),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+                                          SizedBox(width: 2.w),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  provider.newReference!.path.split('/').last,
+                                                  style: TextStyle(
+                                                      fontSize: AppFontSize.fontSize16,
+                                                      fontWeight: FontWeight.w700,
+                                                      color: AppColors.Color_212121,
+                                                      fontFamily:
+                                                      AppColors.fontFamilyBold),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                FutureBuilder<int>(
+                                                  future: provider.newReference!.length(),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      return Text(
+                                                        "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                        style: TextStyle(
+                                                            fontSize: AppFontSize.fontSize12,
+                                                            color: AppColors.Color_616161,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily:
+                                                            AppColors.fontFamilyMedium),
+                                                      );
+                                                    }
+                                                    return SizedBox();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              provider.removeAttachment();
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                              size: 24,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              provider.newReference!.path.split('/').last,
+                                if (provider.reference_IsEdit && provider.reference_Edit_Index != null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
+                                  GestureDetector(
+                                    onTap: (){
+                                      OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w, vertical: 2.h),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.shade100,
+                                        borderRadius: BorderRadius.circular(1.h),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+                                          SizedBox(width: 2.w),
+                                          Expanded(
+                                            child: Text(
+                                              provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
                                               style: TextStyle(
                                                   fontSize: AppFontSize.fontSize16,
                                                   fontWeight: FontWeight.w700,
@@ -1812,172 +1998,143 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                                   AppColors.fontFamilyBold),
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                            FutureBuilder<int>(
-                                              future: provider.newReference!.length(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                    style: TextStyle(
-                                                        fontSize: AppFontSize.fontSize12,
-                                                        color: AppColors.Color_616161,
-                                                        fontWeight: FontWeight.w500,
-                                                        fontFamily:
-                                                        AppColors.fontFamilyMedium),
-                                                  );
-                                                }
-                                                return SizedBox();
-                                              },
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              provider.removeAttachment(index: provider.reference_Edit_Index!);
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                              size: 24,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment();
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            if (provider.reference_IsEdit && provider.reference_Edit_Index != null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
-                              GestureDetector(
-                                onTap: (){
-                                  OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Text(
-                                          provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
-                                          style: TextStyle(
-                                              fontSize: AppFontSize.fontSize16,
-                                              fontWeight: FontWeight.w700,
-                                              color: AppColors.Color_212121,
-                                              fontFamily:
-                                              AppColors.fontFamilyBold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                if (provider.reference_IsEdit && provider.reference_Edit_Index == null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
+                                  GestureDetector(
+                                    onTap: (){
+                                      OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w, vertical: 2.h),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.shade100,
+                                        borderRadius: BorderRadius.circular(1.h),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment(index: provider.reference_Edit_Index!);
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+                                          SizedBox(width: 2.w),
+                                          Expanded(
+                                            child: Text(
+                                              provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
+                                              style: TextStyle(
+                                                  fontSize: AppFontSize.fontSize16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.Color_212121,
+                                                  fontFamily:
+                                                  AppColors.fontFamilyBold),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              provider.removeAttachment(index: provider.reference_Edit_Index!);
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                              size: 24,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            if (provider.reference_IsEdit && provider.reference_Edit_Index == null && provider.references[provider.reference_Edit_Index!].hasExistingReferenceDocument && provider.newReference == null)
-                              GestureDetector(
-                                onTap: (){
-                                  OpenFile_View(provider.references[provider.reference_Edit_Index!].experienceDocumentPath,context);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 2.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(1.h),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-                                      SizedBox(width: 2.w),
-                                      Expanded(
-                                        child: Text(
-                                          provider.references[provider.reference_Edit_Index!].experienceDocumentOriginalName ?? 'Existing Document',
-                                          style: TextStyle(
-                                              fontSize: AppFontSize.fontSize16,
-                                              fontWeight: FontWeight.w700,
-                                              color: AppColors.Color_212121,
-                                              fontFamily:
-                                              AppColors.fontFamilyBold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          provider.removeAttachment(index: provider.reference_Edit_Index!);
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
 
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                child: customButton(
-                                  voidCallback: () async {
-                                    if (provider.referenceVesselController.text.isNotEmpty &&
-                                        provider.referenceIssuedBy != null &&
-                                        provider.referenceIssuedDate.text.isNotEmpty) {
-                                      if (!provider.reference_IsEdit) {
-                                        await provider.addReference(Reference(
-                                          vesselOrCompanyName: provider.referenceVesselController.text,
-                                          issuedBy: provider.referenceIssuedBy!,
-                                          issuingDate: provider.referenceIssuedDate.text,
-                                          experienceDocumentOriginalName: provider.referenceDocumentController.text.isNotEmpty ? provider.referenceDocumentController.text : null,
-                                        ));
-                                      } else {
-                                        await provider.updateReference(provider.reference_Edit_Index!, Reference(
-                                          vesselOrCompanyName: provider.referenceVesselController.text,
-                                          issuedBy: provider.referenceIssuedBy!,
-                                          issuingDate: provider.referenceIssuedDate.text,
-                                          experienceDocumentOriginalName: provider.referenceDocumentController.text.isNotEmpty ? provider.referenceDocumentController.text : null,
-                                        ));
-                                      }
-                                      provider.referenceVesselController.clear();
-                                      provider.referenceIssuedBy = null;
-                                      provider.referenceIssuedDate.clear();
-                                      provider.referenceDocumentController.clear();
-                                      provider.reference_IsEdit=false;
-                                      provider.reference_Edit_Index=null;
-                                      provider.setReferenceVisibility(false);
-                                    } else {
-                                      ShowToast("Error", "Please fill in all required fields");
-                                    }
-                                  },
-                                  buttonText: provider.reference_IsEdit ? "Update" : "Add",
-                                  width: 30.w,
-                                  height: 10.w,
-                                  color: AppColors.buttonColor,
-                                  buttonTextColor: AppColors.buttonTextWhiteColor,
-                                  shadowColor: AppColors.buttonBorderColor,
-                                  fontSize: AppFontSize.fontSize18,
-                                  showShadow: true,
-                                ),
-                              ),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      // height: 9.h,
+                                      // width: 30.w,
+                                      padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                      child: customButton(
+                                        voidCallback: () {
+                                          // Clear form data
+                                          provider.referenceVesselController.clear();
+                                          provider.referenceIssuedBy = null;
+                                          provider.referenceIssuedDate.clear();
+                                          provider.referenceDocumentController.clear();
+                                          provider.reference_IsEdit=false;
+                                          provider.reference_Edit_Index=null;
+                                          provider.setReferenceVisibility(false);
+                                        },
+                                        buttonText: "Cancel",
+                                        width: 30.w,
+                                        height: 10.w,
+                                        color: AppColors.Color_BDBDBD,
+                                        buttonTextColor: AppColors.buttonTextWhiteColor,
+                                        shadowColor: AppColors.buttonBorderColor,
+                                        fontSize: AppFontSize.fontSize18,
+                                        showShadow: true,
+                                      ),
+                                    ),
+                                   Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                        child: customButton(
+                                          voidCallback: () async {
+                                            if (provider.referenceVesselController.text.isNotEmpty &&
+                                                provider.referenceIssuedBy != null &&
+                                                provider.referenceIssuedDate.text.isNotEmpty) {
+                                              if (!provider.reference_IsEdit) {
+                                                await provider.addReference(Reference(
+                                                  vesselOrCompanyName: provider.referenceVesselController.text,
+                                                  issuedBy: provider.referenceIssuedBy!,
+                                                  issuingDate: provider.referenceIssuedDate.text,
+                                                  experienceDocumentOriginalName: provider.referenceDocumentController.text.isNotEmpty ? provider.referenceDocumentController.text : null,
+                                                ));
+                                              } else {
+                                                await provider.updateReference(provider.reference_Edit_Index!, Reference(
+                                                  vesselOrCompanyName: provider.referenceVesselController.text,
+                                                  issuedBy: provider.referenceIssuedBy!,
+                                                  issuingDate: provider.referenceIssuedDate.text,
+                                                  experienceDocumentOriginalName: provider.referenceDocumentController.text.isNotEmpty ? provider.referenceDocumentController.text : null,
+                                                ));
+                                              }
+                                              provider.referenceVesselController.clear();
+                                              provider.referenceIssuedBy = null;
+                                              provider.referenceIssuedDate.clear();
+                                              provider.referenceDocumentController.clear();
+                                              provider.reference_IsEdit=false;
+                                              provider.reference_Edit_Index=null;
+                                              provider.setReferenceVisibility(false);
+                                            } else {
+                                              ShowToast("Error", "Please fill in all required fields");
+                                            }
+                                          },
+                                          buttonText: provider.reference_IsEdit ? "Update" : "Add",
+                                          width: 30.w,
+                                          height: 10.w,
+                                          color: AppColors.buttonColor,
+                                          buttonTextColor: AppColors.buttonTextWhiteColor,
+                                          shadowColor: AppColors.buttonBorderColor,
+                                          fontSize: AppFontSize.fontSize18,
+                                          showShadow: true,
+                                        ),
+                                      ),
+                                 ],
+                               ),
+
+                              ],
                             ),
-                          ],
+                          ),
                         ) : Container(),
                       ],
                     ),

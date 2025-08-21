@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:luneta/Utils/helper.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
@@ -779,11 +780,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             padding: EdgeInsets.only(right: 10.0),
                             child: GestureDetector(
                               onTap: (){
-                                provider.setcommunicationVisibility(!provider.showAddSection_communication);
-                                provider.platform=null;
-                                provider.NumberOrIDController.clear();
-                                provider.communication_Edit_Index=null;
-                                provider.communication_IsEdit=false;
+                                if(provider.communication_IsEdit) {
+          provider.setcommunicationVisibility(true);
+        }else if (provider.showAddSection_communication){
+          provider.setcommunicationVisibility(false);
+        }else{
+                                  provider.setcommunicationVisibility(true);
+                                }
+        provider.platform = null;
+        provider.NumberOrIDController.clear();
+        provider.communication_Edit_Index = null;
+        provider.communication_IsEdit = false;
                               },
                               child: Container(
                                 padding: EdgeInsets.all(2.5.w),
@@ -820,133 +827,192 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                               onlineCommunicationLabelView("assets/images/emailIcon.png",provider.communicationList[index].numberOrId,provider,index,label: provider.communicationList[index].platform)
                             ],);
                         }),
-                    provider.showAddSection_communication?Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Platform',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
+                    provider.showAddSection_communication?Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                            blurRadius: 0,   // how soft the shadow is
+                            spreadRadius: 0, // how wide it spreads
+                            // offset: const Offset(4, 4), // X, Y position of shadow
                           ),
+                        ],
+                        borderRadius: BorderRadius.circular(2.h),
+                        border: Border.all(
+                          color: AppColors.buttonColor, // Set the border color here
+                          width: 1, // You can adjust the width of the border
                         ),
-                        Container(
-                          width: 90.w,
-                          padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.Color_FAFAFA,
-                            borderRadius: BorderRadius.circular(2.h),
-                            border: Border.all(
-                              color: AppColors.transparent, // Set the border color here
-                              width: 1, // You can adjust the width of the border
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                provider.communication_IsEdit?'Edit Online Communication':'Add  Online Communication',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize19,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: DropdownButton<dynamic>(
-                              value: provider.platform,
-                              isExpanded: true,
-                              underline: SizedBox(),
-                              hint: Text('Select Platform'),
-                              onChanged: (dynamic newValue) {
-                                setState(() {
-                                  provider.platform = newValue!;
-                                });
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Platform',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 90.w,
+                              padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.Color_FAFAFA,
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                  color: AppColors.transparent, // Set the border color here
+                                  width: 1, // You can adjust the width of the border
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: DropdownButton<dynamic>(
+                                  value: provider.platform,
+                                  isExpanded: true,
+                                  underline: SizedBox(),
+                                  hint: Text('Select Platform'),
+                                  onChanged: (dynamic newValue) {
+                                    setState(() {
+                                      provider.platform = newValue!;
+                                    });
+                                  },
+                                  items: platformList.map((value) {
+                                    return DropdownMenuItem<dynamic>(
+                                        value: value["value"],
+                                        child: Text(
+                                          // value.Type!,
+                                          value["value"].toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ));
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Text(
+                                'Number or ID',
+                                style: TextStyle(
+                                  fontSize: AppFontSize.fontSize16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppColors.fontFamilyMedium,
+                                  color: AppColors.Color_424242,
+                                ),
+                              ),
+                            ),
+
+                            customTextField(
+                              context: context,
+                              controller: provider.NumberOrIDController,
+                              focusNode: provider.NumberOrIdFocusNode,
+                              hintText: 'Number or ID',
+                              textInputType: TextInputType.text,
+                              obscureText: false,
+                              voidCallback: (value){ return;},
+                              fontSize: AppFontSize.fontSize16,
+                              inputFontSize: AppFontSize.fontSize16,
+                              backgroundColor: AppColors.Color_FAFAFA,
+                              borderColor: AppColors.buttonColor,
+                              textColor: Colors.black,
+                              labelColor: AppColors.Color_9E9E9E,
+                              cursorColor: AppColors.Color_212121,
+                              fillColor: AppColors.Color_FAFAFA,
+                              activeFillColor: AppColors.activeFieldBgColor,
+                              onFieldSubmitted: (value) {
                               },
-                              items: platformList.map((value) {
-                                return DropdownMenuItem<dynamic>(
-                                    value: value["value"],
-                                    child: Text(
-                                      // value.Type!,
-                                      value["value"].toString(),
-                                      overflow: TextOverflow.ellipsis,
-                                    ));
-                              }).toList(),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: Text(
-                            'Number or ID',
-                            style: TextStyle(
-                              fontSize: AppFontSize.fontSize16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppColors.fontFamilyMedium,
-                              color: AppColors.Color_424242,
-                            ),
-                          ),
-                        ),
 
-                        customTextField(
-                          context: context,
-                          controller: provider.NumberOrIDController,
-                          focusNode: provider.NumberOrIdFocusNode,
-                          hintText: 'Number or ID',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          voidCallback: (value){ return;},
-                          fontSize: AppFontSize.fontSize16,
-                          inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: AppColors.Color_FAFAFA,
-                          borderColor: AppColors.buttonColor,
-                          textColor: Colors.black,
-                          labelColor: AppColors.Color_9E9E9E,
-                          cursorColor: AppColors.Color_212121,
-                          fillColor: AppColors.Color_FAFAFA,
-                          activeFillColor: AppColors.activeFieldBgColor,
-                          onFieldSubmitted: (value) {
-                          },
-                        ),
-
-                        Align(alignment: Alignment.centerRight,
-                          child: Container(
-                            // height: 9.h,
-                            // width: 30.w,
-                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                            child: customButton(
-                              voidCallback: () {
-                                // Validate fields
-                                if (provider.NumberOrIDController.text.isNotEmpty &&
-                                    provider.platform != null) {
-                                  if(!provider.communication_IsEdit){
-                                    provider.addCommunicationChannel(PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
-                                  }else{
-                                    provider.updateCommunicationChannel(provider.communication_Edit_Index!, PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
-                                  }
-                                  provider.platform=null;
-                                  provider.NumberOrIDController.clear();
-                                  provider.communication_Edit_Index=null;
-                                  provider.communication_IsEdit=false;
-                                  provider.setcommunicationVisibility(!provider.showAddSection_communication);
-                                }
-                                else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Please fill platform and number or Id'),
-                                      duration: Duration(seconds: 2),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    // height: 9.h,
+                                    // width: 30.w,
+                                    padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                    child: customButton(
+                                      voidCallback: () {
+                                          provider.platform=null;
+                                          provider.NumberOrIDController.clear();
+                                          provider.communication_Edit_Index=null;
+                                          provider.communication_IsEdit=false;
+                                          provider.setcommunicationVisibility(false);
+                                      },
+                                      buttonText: "Cancel",
+                                      width: 30.w,
+                                      height: 10.w,
+                                      color: AppColors.Color_BDBDBD,
+                                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                                      shadowColor: AppColors.buttonBorderColor,
+                                      fontSize: AppFontSize.fontSize18,
+                                      showShadow: true,
                                     ),
-                                  );
-                                }
-                              },
-                              buttonText: provider.communication_IsEdit?"Update":"Add",
-                              width: 30.w,
-                              height: 10.w,
-                              color: AppColors.buttonColor,
-                              buttonTextColor: AppColors.buttonTextWhiteColor,
-                              shadowColor: AppColors.buttonBorderColor,
-                              fontSize: AppFontSize.fontSize18,
-                              showShadow: true,
-                            ),
-                          ),
+                                  ),
+                                  Container(
+                                    // height: 9.h,
+                                    // width: 30.w,
+                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                    child: customButton(
+                                      voidCallback: () {
+                                        // Validate fields
+                                        if (provider.NumberOrIDController.text.isNotEmpty &&
+                                            provider.platform != null) {
+                                          if(!provider.communication_IsEdit){
+                                            provider.addCommunicationChannel(PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
+                                          }else{
+                                            provider.updateCommunicationChannel(provider.communication_Edit_Index!, PlatformEntry(platform: provider.platform!, numberOrId: provider.NumberOrIDController.text));
+                                          }
+                                          provider.platform=null;
+                                          provider.NumberOrIDController.clear();
+                                          provider.communication_Edit_Index=null;
+                                          provider.communication_IsEdit=false;
+                                          provider.setcommunicationVisibility(!provider.showAddSection_communication);
+                                        }
+                                        else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Please fill platform and number or Id'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      buttonText: provider.communication_IsEdit?"Update":"Add",
+                                      width: 30.w,
+                                      height: 10.w,
+                                      color: AppColors.buttonColor,
+                                      buttonTextColor: AppColors.buttonTextWhiteColor,
+                                      shadowColor: AppColors.buttonBorderColor,
+                                      fontSize: AppFontSize.fontSize18,
+                                      showShadow: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
                         ),
-                      ],
+                      ),
                     ):Container(),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1099,7 +1165,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             padding: EdgeInsets.only(left: 12.0),
             child: GestureDetector(
               onTap: (){
-                provider.removeCommunicationChannel(index);
+                if(provider.communication_IsEdit){
+                  showToast("Updating or cancel the current record before continuing.");
+                }else {
+                  provider.removeCommunicationChannel(index);
+                }
               },
               child: Image.asset(
                 "assets/images/Delete.png",
