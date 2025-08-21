@@ -62,7 +62,12 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   // Computer and Software
   List<ComputerAndSoftware> computerAndSoftwareList = [];
-  bool showAddSection_computerAndSoftware = false;
+  bool _showAddSection_computerAndSoftware = false;
+   bool get showAddSection_computerAndSoftware => _showAddSection_computerAndSoftware;
+
+  set showAddSection_computerAndSoftware(bool value) {
+    _showAddSection_computerAndSoftware = value;
+  }
   int? computerAndSoftware_Edit_Index;
   bool computerAndSoftware_IsEdit = false;
   String? software;
@@ -318,12 +323,23 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   // Cargo Gear Experience
   bool cargoGearExperience = false;
   List<CargoGearExperience> cargoGearExperienceList = [];
-  bool showAddSection_cargoGearExperience = false;
+  bool _showAddSection_cargoGearExperience = false;
+
+  bool get showAddSection_cargoGearExperience => _showAddSection_cargoGearExperience;
+
+  set showAddSection_cargoGearExperience(bool value) {
+    _showAddSection_cargoGearExperience = value;
+  }
   int? cargoGearExperience_Edit_Index;
   bool cargoGearExperience_IsEdit = false;
   String? cargoGearType;
   final cargoGearMakerController = TextEditingController();
   final cargoGearSWLController = TextEditingController();
+  
+  // FocusNodes for Cargo Gear Experience
+  final cargoGearMakerFocusNode = FocusNode();
+  final cargoGearSWLFocusNode = FocusNode();
+  
   List<String> cargoGearTypes = ["Cranes", "Grabs"];
 
   void setCargoGearExperience(bool value) {
@@ -385,7 +401,13 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   // Metal Working Skills
   bool metalWorkingSkills = false;
   List<MetalWorkingSkill> metalWorkingSkillsList = [];
-  bool showAddSection_metalWorkingSkills = false;
+  bool _showAddSection_metalWorkingSkills = false;
+
+  bool get showAddSection_metalWorkingSkills => _showAddSection_metalWorkingSkills;
+
+  set showAddSection_metalWorkingSkills(bool value) {
+    _showAddSection_metalWorkingSkills = value;
+  }
   int? metalWorkingSkills_Edit_Index;
   bool metalWorkingSkills_IsEdit = false;
   String? metalWorkingSkill;
@@ -534,7 +556,13 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   // Tank Coating Experience
   bool tankCoatingExperience = false;
   List<TankCoatingExperience> tankCoatingExperienceList = [];
-  bool showAddSection_tankCoatingExperience = false;
+  bool _showAddSection_tankCoatingExperience = false;
+
+  bool get showAddSection_tankCoatingExperience => _showAddSection_tankCoatingExperience;
+
+  set showAddSection_tankCoatingExperience(bool value) {
+    _showAddSection_tankCoatingExperience = value;
+  }
   int? tankCoatingExperience_Edit_Index;
   bool tankCoatingExperience_IsEdit = false;
   String? tankCoatingType;
@@ -588,13 +616,24 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   // Port State Control Experience
   bool portStateControlExperience = false;
   List<PortStateControlExperience> portStateControlExperienceList = [];
-  bool showAddSection_portStateControlExperience = false;
+  bool _showAddSection_portStateControlExperience = false;
+
+  bool get showAddSection_portStateControlExperience => _showAddSection_portStateControlExperience;
+
+  set showAddSection_portStateControlExperience(bool value) {
+    _showAddSection_portStateControlExperience = value;
+  }
   int? portStateControlExperience_Edit_Index;
   bool portStateControlExperience_IsEdit = false;
   String? regionalAgreement;
   String? port;
   final dateController = TextEditingController();
   final observationsController = TextEditingController();
+  
+  // FocusNodes for Port State Control Experience
+  final dateFocusNode = FocusNode();
+  final observationsFocusNode = FocusNode();
+  
   List<String> regionalAgreements = ["AMSA", "China Federation"];
   List<String> ports = ["DOCKED", "AT_SEA", "ANCHORAGE","IN_TRANSIT","IN_PORT","LOADING","UNLOADING","MAINTENANCE"];
 
@@ -674,6 +713,12 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   String? vettingPort;
   final vettingDateController = TextEditingController();
   final vettingObservationsController = TextEditingController();
+  
+  // FocusNodes for Vetting Inspection Experience
+  final inspectionByFocusNode = FocusNode();
+  final vettingDateFocusNode = FocusNode();
+  final vettingObservationsFocusNode = FocusNode();
+  
   List<String> vettingPorts = ["New York", "Los Angeles", "Shanghai"];
 
   void setVettingPort(String value) {
@@ -1227,6 +1272,29 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     //   print("Professional Skills Save Exception: $e");
     //   return false;
     // }
+  }
+  
+  @override
+  void dispose() {
+    // Dispose all FocusNodes
+    cargoGearMakerFocusNode.dispose();
+    cargoGearSWLFocusNode.dispose();
+    dateFocusNode.dispose();
+    observationsFocusNode.dispose();
+    inspectionByFocusNode.dispose();
+    vettingDateFocusNode.dispose();
+    vettingObservationsFocusNode.dispose();
+    
+    // Dispose all TextEditingControllers
+    cargoGearMakerController.dispose();
+    cargoGearSWLController.dispose();
+    dateController.dispose();
+    observationsController.dispose();
+    inspectionByController.dispose();
+    vettingDateController.dispose();
+    vettingObservationsController.dispose();
+    
+    super.dispose();
   }
 }
 

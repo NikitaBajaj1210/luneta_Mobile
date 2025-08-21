@@ -56,13 +56,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   setState(() {
                     // Validate Country of Birth
                     if (provider.countryOfBirthController.text.isEmpty) {
-                      countryOfBirthError = 'Please select Country of Birth';
+                      countryOfBirthError = 'please select Country of Birth';
                     } else {
                       countryOfBirthError = null;
                     }
                     // Validate Nationality
                     if (provider.nationalityController.text.isEmpty) {
-                      nationalityError = 'Please select Nationality';
+                      nationalityError = 'please select Nationality';
                     } else {
                       nationalityError = null;
                     }
@@ -141,6 +141,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     customTextField(
                       context: context,
                       controller: provider.firstNameController,
+                      focusNode: provider.firstNameFocusNode,
                       hintText: 'First Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
@@ -181,6 +182,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     customTextField(
                       context: context,
                       controller: provider.lastNameController,
+                      focusNode: provider.lastNameFocusNode,
                       hintText: 'Last Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
@@ -240,6 +242,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         child: customTextField(
                           context: context,
                           controller: provider.dobController,
+                          focusNode: provider.dobFocusNode,
                           hintText: 'Date of Birth',
                           textInputType: TextInputType.datetime,
                           obscureText: false,
@@ -428,7 +431,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           ),
                           validator: (value) {
                             if (value == null) {
-                              return 'Please select a gender';
+                              return 'please select a gender';
                             }
                             return null;
                           },
@@ -544,6 +547,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     customTextField(
                       context: context,
                       controller: provider.emailController,
+                      focusNode: provider.emailFocusNode,
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
@@ -590,6 +594,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       context: context,
                       maxLength: 15,
                       controller: provider.phoneController,
+                      focusNode: provider.phoneFocusNode,
                       hintText: 'Phone Number',
                       textInputType: TextInputType.phone,
                       obscureText: false,
@@ -638,6 +643,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     customTextField(
                       context: context,
                       controller: provider.directPhoneController,
+                      focusNode: provider.directPhoneFocusNode,
                       hintText: 'Direct LinePhone',
                       textInputType: TextInputType.phone,
                       obscureText: false,
@@ -678,6 +684,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     customTextField(
                       context: context,
                       controller: provider.addressController,
+                      focusNode: provider.addressFocusNode,
                       hintText: 'Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
@@ -880,6 +887,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         customTextField(
                           context: context,
                           controller: provider.NumberOrIDController,
+                          focusNode: provider.NumberOrIdFocusNode,
                           hintText: 'Number or ID',
                           textInputType: TextInputType.text,
                           obscureText: false,

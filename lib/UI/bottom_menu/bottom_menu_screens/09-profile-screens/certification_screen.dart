@@ -188,7 +188,7 @@ class _CertificationScreenState extends State<CertificationScreen> {
                                 if (provider.issueDate == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Please select Issue Date first'),
+                                      content: Text('please select Issue Date first'),
                                       duration: Duration(seconds: 2),
                                     ),
                                   );

@@ -31,7 +31,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
+      
+      // Reset validation mode and clear any previous validation errors
       provider.autoValidateMode = AutovalidateMode.disabled;
+      provider.clearValidationErrors();
+      
+      // Clear specific fields: Date of birth, Phone number, and Gender
+      provider.addDate = 'Date of Birth';
+      provider.addDateApi = '';
+      provider.phoneController.clear();
+      provider.selectedGender = 'Gender';
       
       // Set the country in the provider if global data exists
       if (ChooseCountryProvider.globalSelectedCountry != null && 
@@ -41,6 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ChooseCountryProvider.globalSelectedCountryCode!
         );
       }
+      
+      // Notify listeners to update UI after clearing fields
+      provider.notifyListeners();
     });
   }
 
@@ -68,11 +80,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, child) {
+        // Check if form is valid (all required fields filled AND no validation errors)
         bool isFormValid = profileProvider.firstNameController.text.isNotEmpty &&
-            // profileProvider.emailController.text.isNotEmpty && // Skip email validation since it's disabled
             profileProvider.phoneController.text.isNotEmpty &&
             profileProvider.addDate != 'Date of Birth' &&
-            profileProvider.selectedGender != 'Gender';
+            profileProvider.selectedGender != 'Gender' &&
+            // Check for validation errors
+            profileProvider.firstNameError == null &&
+            profileProvider.phoneError == null &&
+            profileProvider.dateError == null &&
+            profileProvider.genderError == null;
 
         return SafeArea(
           child: Scaffold(
@@ -103,7 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   });
                 }
                     : (){
-                  profileProvider.autoValidateMode=AutovalidateMode.always;
+                  // Enable real-time validation and validate all fields
+                  profileProvider.autoValidateMode = AutovalidateMode.always;
+                  profileProvider.safeValidateAllFields(context);
+                  setState(() {});
                 },
                 buttonText: "Save",
                 width: 90.w,
@@ -205,9 +225,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             },
                             onChange: (value) {
-                              // Remove the problematic validation on change
-                              // Only update UI state without validation
+                              // Validate on change if auto-validate is enabled
                               profileProvider.handleTextChange('name', value);
+                              if (profileProvider.autoValidateMode == AutovalidateMode.always) {
+                                profileProvider.validateFieldIfFocused('name', value);
+                              }
                             },
                             autovalidateMode: profileProvider.autoValidateMode,
                           ),
@@ -363,7 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 if (selectedDate.isAfter(maxDate)) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('You must be at least 18 years old to register.'),
+                                      content: Text('you must be at least 18 years old to register'),
                                       backgroundColor: AppColors.errorRedColor,
                                     ),
                                   );
@@ -515,14 +537,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           customTextField(
                             context: context,
+                            focusNode: profileProvider.phoneFocusNode,
                             controller: profileProvider.phoneController,
                             hintText: 'Phone Number',
                             textInputType: TextInputType.phone,
                             maxLength: 15,
                             obscureText: false,
                             voidCallback: (value) {
-                              if ((value == null || value.isEmpty || value.toString().trim().length<10) && profileProvider.autoValidateMode == AutovalidateMode.always) {
-                                return '      Please enter Phone Number';
+                              // Use proper validation function
+                              if (profileProvider.hasSubmitted || profileProvider.autoValidateMode == AutovalidateMode.always) {
+                                return profileProvider.validateFieldIfFocused('phone', value ?? '', notify: false);
                               }
                               return null;
                             },
@@ -543,6 +567,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? AppColors.activeFieldBgColor
                                 : AppColors.Color_FAFAFA,
                             onFieldSubmitted: (value) {
+                              profileProvider.handleFieldSubmission('phone', value);
+                              profileProvider.safeValidatePhone();
+                            },
+                            onChange: (value) {
+                              // Real-time validation for phone field
+                              profileProvider.handleTextChange('phone', value);
+                              if (profileProvider.autoValidateMode == AutovalidateMode.always) {
+                                profileProvider.validateFieldIfFocused('phone', value);
+                              }
                             },
                           ),
 

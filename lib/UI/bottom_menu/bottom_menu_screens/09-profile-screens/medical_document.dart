@@ -264,9 +264,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 provider.medicalFitnessNeverExpire = false;
                                 provider.medicalFitnessDocument = null;
 
+                              provider.showAddSection_medicalFitness = !provider.showAddSection_medicalFitness;
 
-
-                                provider.setMedicalFitnessVisibility(true);
+                                provider.setMedicalFitnessVisibility(provider.showAddSection_medicalFitness);
                                 provider.medicalFitness_Edit_Index = null;
                                 provider.medicalFitness_IsEdit = false;
                               },
@@ -544,7 +544,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   autovalidateMode: provider.autovalidateModeMedical,
                                   validator: (value) {
                                     if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                      return '      Please select Document Type';
+                                      return '      please select Document Type';
                                     }
                                     return null;
                                   },
@@ -640,7 +640,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   autovalidateMode: provider.autovalidateModeMedical,
                                   validator: (value) {
                                     if ((value == null) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                      return '      Please select Country';
+                                      return '      please select Country';
                                     }
                                     return null;
                                   },
@@ -741,7 +741,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please select Issue Date';
+                                        return 'please select Issue Date';
                                       }
                                       return null;
                                     },
@@ -808,7 +808,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   }
                                   } else {
                                     ShowToast("Error",
-                                        "Please select Issue Date First");
+                                        "please select Issue Date First");
                                   }
                                 },
                                 child: AbsorbPointer(
@@ -821,7 +821,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
                                       if ((value == null || value.isEmpty) && !provider.medicalFitnessNeverExpire) {
-                                        return 'Please select Expiry Date';
+                                        return 'please select Expiry Date';
                                       }
                                       return null;
                                     },
@@ -907,7 +907,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   padding:
                                       EdgeInsets.only(top: 1.h, left: 4.w),
                                   child: Text(
-                                    "Please select Medical Fitness Document",
+                                    "please select Medical Fitness Document",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: AppFontSize.fontSize12,
@@ -1271,7 +1271,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
                             if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      Please select Document Type';
+                              return '      please select Document Type';
                             }
                             return null;
                           },
@@ -1368,7 +1368,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
                             if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      Please select Country';
+                              return '      please select Country';
                             }
                             return null;
                           },
@@ -1470,7 +1470,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             autovalidateMode: provider.autovalidateMode,
                             voidCallback: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select Issue Date';
+                                return 'please select Issue Date';
                               }
                               return null;
                             },
@@ -1539,7 +1539,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           }
                           } else {
                             ShowToast("Error",
-                                "Please select Issue Date First");
+                                "please select Issue Date First");
                           }
                         },
                         child: AbsorbPointer(
@@ -1551,8 +1551,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             obscureText: false,
                             autovalidateMode: provider.autovalidateMode,
                             voidCallback: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please select Expiry Date';
+                              if ((value == null || value.isEmpty) && !(provider.drugAndAlcoholTestNeverExpire ?? false)) {
+                                return 'please select Expiry Date';
                               }
                               return null;
                             },
@@ -1637,7 +1637,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           padding:
                               EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text(
-                            "Please select Drug & Alcohol Test Document",
+                            "please select Drug & Alcohol Test Document",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: AppFontSize.fontSize12,
@@ -1926,7 +1926,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
                             if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      Please select Document Type';
+                              return '      please select Document Type';
                             }
                             return null;
                           },
@@ -2023,7 +2023,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value){
                             if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      Please select Country';
+                              return '      please select Country';
                             }
                             return null;
                           },
@@ -2125,7 +2125,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             autovalidateMode: provider.autovalidateMode,
                             voidCallback: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select Issue Date';
+                                return 'please select Issue Date';
                               }
                               return null;
                             },
@@ -2194,7 +2194,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           }
         } else {
           ShowToast("Error",
-              "Please select Issue Date First");
+              "please select Issue Date First");
         }
                         },
                         child: AbsorbPointer(
@@ -2207,7 +2207,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             autovalidateMode: provider.autovalidateMode,
                             voidCallback: (value) {
                               if ((value == null || value.isEmpty) && provider.vaccinationCertificateNeverExpire == false) {
-                                return 'Please select Expiry Date';
+                                return 'please select Expiry Date';
                               }
                               return null;
                             },
@@ -2293,7 +2293,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           padding:
                               EdgeInsets.only(top: 1.h, left: 4.w),
                           child: Text(
-                            "Please select Vaccination Certificate Document",
+                            "please select Vaccination Certificate Document",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: AppFontSize.fontSize12,

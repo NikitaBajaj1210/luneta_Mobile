@@ -360,12 +360,12 @@ class ProfileBottommenuProvider with ChangeNotifier {
         }
         // if(context.mounted)stopLoading(context);
       } else {
-        ShowToast("Error", response['message'] ?? "Failed to fetch profile data");
+        ShowToast("Error", response['message'] ?? "failed to fetch profile data");
         if(context.mounted)stopLoading(context);
       }
     } catch (e) {
       print("Error in getProfileData: $e");
-      ShowToast("Error", "An error occurred while fetching profile data.");
+      ShowToast("Error", "an error occurred while fetching profile data.");
       if(context.mounted)stopLoading(context);
     } finally {
       if(context.mounted)stopLoading(context);
@@ -404,12 +404,12 @@ class ProfileBottommenuProvider with ChangeNotifier {
 
       } else {
         // Handle error response
-        String errorMessage = response['message'] ?? "Something went wrong";
+        String errorMessage = response['message'] ?? "something went wrong";
         ShowToast("Error", errorMessage);
       }
     } catch (e) {
       print("compliance update error: $e");
-      ShowToast("Error", "Something went wrong. Please try again.");
+      ShowToast("Error", "something went wrong. Please try again.");
     }
   }
 

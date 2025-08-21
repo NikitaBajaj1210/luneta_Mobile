@@ -285,11 +285,11 @@ notifyListeners();
       } else {
         // Handle error
         ShowToast(
-            "Error", response['message'] ?? "Failed to fetch profile data");
+            "Error", response['message'] ?? "failed to fetch profile data");
       }
     } catch (e) {
       print("Error in getPersonalInfo: $e");
-      ShowToast("Error", "An error occurred while fetching profile data.");
+      ShowToast("Error", "an error occurred while fetching profile data.");
     } finally {
       notifyListeners();
     }
@@ -335,7 +335,7 @@ notifyListeners();
         if (mimeType == null || !mimeType.startsWith('image/')) {
           if (context.mounted) {
             stopLoading(context);
-            ShowToast("Error", "Invalid file type. Please select an image file.");
+            ShowToast("Error", "invalid file type. Please select an image file.");
           }
           return;
         }
@@ -373,7 +373,7 @@ notifyListeners();
         }
       } else {
         if (context.mounted) {
-          ShowToast("Error", response.data['message'] ?? "Something went wrong");
+          ShowToast("Error", response.data['message'] ?? "something went wrong");
           if (context.mounted) stopLoading(context);
         }
       }
@@ -383,22 +383,22 @@ notifyListeners();
         if (context.mounted) stopLoading(context);
 
         if (e.response?.statusCode == 401) {
-          ShowToast("Error", "Session expired. Please log in again.");
+          ShowToast("Error", "session expired. Please log in again.");
           var loginProvider = Provider.of<LoginProvider>(context, listen: false);
           await loginProvider.clearStoredLoginData();
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
-          ShowToast("Error", e.response?.data['message'] ?? "Bad request");
+          ShowToast("Error", e.response?.data['message'] ?? "bad request");
         } else {
-          ShowToast("Error", "Something went wrong");
+          ShowToast("Error", "something went wrong");
         }
       }
     } catch (e) {
       print("Seafarer personal info Update Error: $e");
       if (context.mounted) {
         if (context.mounted) stopLoading(context);
-        ShowToast("Error", "Something went wrong");
+        ShowToast("Error", "something went wrong");
       }
     }
     notifyListeners();

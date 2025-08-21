@@ -223,7 +223,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
                             if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
-                              return 'Please select a rank';
+                              return 'please select a rank';
                             }
                             return null;
                           },
@@ -313,7 +313,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please select at least one vessel type';
+                              return 'please select at least one vessel type';
                             }
                             return null;
                           },
@@ -476,7 +476,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                                 autovalidateMode: provider.autovalidateMode,
                                 validator: (value) {
                                   if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
-                                    return 'Please select a manning agency';
+                                    return 'please select a manning agency';
                                   }
                                   return null;
                                 },
@@ -540,7 +540,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
                             if (value == null && provider.autovalidateMode== AutovalidateMode.always) {
-                              return 'Please select a status';
+                              return 'please select a status';
                             }
                             return null;
                           },
@@ -585,7 +585,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             obscureText: false,
                             voidCallback: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select a date';
+                                return 'please select a date';
                               }
                               return null;
                             },
@@ -811,7 +811,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           },
                           validator: (value) {
                             if ((value == null || value.isEmpty) && provider.autovalidateMode == AutovalidateMode.always) {
-                              return '      Please select Trading Area';
+                              return '      please select Trading Area';
                             }
                             return null;
                           },
@@ -953,7 +953,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
 
                           validator: (value) {
                             if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
-                              return 'Please select a rank';
+                              return 'please select a rank';
                             }
                             return null;
                           },
@@ -1050,7 +1050,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                           autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
                             if (value == null && provider.autovalidateMode == AutovalidateMode.always) {
-                              return 'Please select a currency';
+                              return 'please select a currency';
                             }
                             return null;
                           },

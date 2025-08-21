@@ -643,7 +643,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
       }
     } catch (e) {
       print("Job Conditions Save Exception: $e");
-      ShowToast("Error", "Something went wrong while saving job conditions");
+      ShowToast("Error", "something went wrong while saving job conditions");
       return false;
     }
   }
@@ -659,7 +659,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
       );
 
       if (response != null && response['statusCode'] == 200) {
-        ShowToast("Success", "Agency added successfully");
+        ShowToast("Success", "agency added successfully");
         await fetchAgencyData(context);
         return true;
       } else {
@@ -669,7 +669,7 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
       }
     } catch (e) {
       print("Add Agency Exception: $e");
-      ShowToast("Error", "Something went wrong while adding the agency");
+      ShowToast("Error", "something went wrong while adding the agency");
       return false;
     }
   }

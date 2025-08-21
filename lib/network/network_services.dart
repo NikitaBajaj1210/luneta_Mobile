@@ -201,21 +201,21 @@ class NetworkService {
           loading = 2;
           if (showLoading && context.mounted) stopLoading(context);
           // if (context.mounted) {
-            // ShowToast("Error", res['message'] ?? "An error occurred");
+            // ShowToast("Error", res['message'] ?? "an error occurred");
           // }
           return res;
         }else if (res['statusCode'] != null && res['statusCode'] == 400) {
           loading = 2;
           if (showLoading && context.mounted) stopLoading(context);
           if (context.mounted) {
-            // ShowToast("Error", res['message'] ?? "An error occurred");
+            // ShowToast("Error", res['message'] ?? "an error occurred");
           }
           return res;
         } else if (res['statusCode'] != null && res['statusCode'] == 404) {
           loading = 2;
           if (showLoading && context.mounted) stopLoading(context);
           if (context.mounted) {
-            ShowToast("Error", res['message'] ?? "An error occurred");
+            ShowToast("Error", res['message'] ?? "an error occurred");
           }
           return res;
         } else if (res['statusCode'] != null && res['statusCode'] == 401) {
@@ -243,7 +243,7 @@ class NetworkService {
           return res;
         }else{
           if (context.mounted) {
-            ShowToast("Error", res['message'] ?? "An error occurred");
+            ShowToast("Error", res['message'] ?? "an error occurred");
           }
         }
         // Success case
@@ -266,7 +266,7 @@ class NetworkService {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
         if (context.mounted) {
-          ShowToast("Error", res['message'] ?? "Server error");
+          ShowToast("Error", res['message'] ?? "server error");
         }
         notify();
         return {};
@@ -274,7 +274,7 @@ class NetworkService {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
         if (context.mounted) {
-          ShowToast("Error", "Record already exists");
+          ShowToast("Error", "record already exists");
         }
         notify();
         return {};
@@ -282,7 +282,7 @@ class NetworkService {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
         if (context.mounted) {
-          ShowToast("Error", "Something went wrong");
+          ShowToast("Error", "something went wrong");
         }
         notify();
         return {};
@@ -300,7 +300,7 @@ class NetworkService {
       if (showLoading && context.mounted) stopLoading(context);
       print("Error in postResponse: $e");
       if (context.mounted) {
-        ShowToast("Error", "Something went wrong: $e");
+        ShowToast("Error", "something went wrong: $e");
       }
       notify();
       return {};
@@ -725,7 +725,7 @@ class NetworkService {
       } else {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error",'Something went wrong, Please try again');
+        ShowToast("Error",'something went wrong, Please try again');
         notify();
       }
     } on SocketException {
@@ -736,7 +736,7 @@ class NetworkService {
     } catch (e) {
       loading = 1;
       if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error",'Something went wrong, Please try again');
+      ShowToast("Error",'something went wrong, Please try again');
       notify();
     }
 
@@ -982,21 +982,21 @@ class NetworkService {
       } else if (response.statusCode == 400 || response.statusCode == 404) {
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Bad request");
+        ShowToast("Error", res['message'] ?? "bad request");
         return res;
       } else if (response.statusCode == 401) {
         loading = 2;
         var loginProvider = Provider.of<LoginProvider>(context, listen: false);
         await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Session expired");
+        ShowToast("Error", res['message'] ?? "session expired");
         NetworkHelper().removeToken(context);
         Navigator.of(context).pushReplacementNamed(login);
         return res;
       } else {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Something went wrong");
+        ShowToast("Error", res['message'] ?? "something went wrong");
         return res;
       }
     } on SocketException {
@@ -1007,7 +1007,7 @@ class NetworkService {
     } catch (e) {
       loading = 1;
       if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error", "Something went wrong: $e");
+      ShowToast("Error", "something went wrong: $e");
       return {};
     }
   }
@@ -1056,31 +1056,31 @@ class NetworkService {
       } else if (response.statusCode == 400 || response.statusCode == 404) {
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Bad request");
+        ShowToast("Error", res['message'] ?? "bad request");
         return res;
       } else if (response.statusCode == 401) {
         loading = 2;
         var loginProvider = Provider.of<LoginProvider>(context, listen: false);
         await loginProvider.clearStoredLoginData();
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Session expired");
+        ShowToast("Error", res['message'] ?? "session expired");
         NetworkHelper().removeToken(context);
         Navigator.of(context).pushReplacementNamed(login);
         return res;
       } else if (response.statusCode == 403) {
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Access forbidden");
+        ShowToast("Error", res['message'] ?? "access forbidden");
         return res;
       } else if (response.statusCode == 500) {
         loading = 2;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Internal server error");
+        ShowToast("Error", res['message'] ?? "internal server error");
         return res;
       } else {
         loading = 1;
         if (showLoading && context.mounted) stopLoading(context);
-        ShowToast("Error", res['message'] ?? "Something went wrong");
+        ShowToast("Error", res['message'] ?? "something went wrong");
         return res;
       }
     } on SocketException {
@@ -1091,7 +1091,7 @@ class NetworkService {
     } catch (e) {
       loading = 1;
       if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error", "Something went wrong: $e");
+      ShowToast("Error", "something went wrong: $e");
       return {};
     }
   }

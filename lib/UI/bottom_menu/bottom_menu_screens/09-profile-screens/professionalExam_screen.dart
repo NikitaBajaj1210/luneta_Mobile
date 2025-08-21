@@ -45,7 +45,7 @@ class ProfessionalExamScreen extends StatelessWidget {
                 }
                 if (provider.dateTaken == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please select date')),
+                    SnackBar(content: Text('please select date')),
                   );
                   return;
                 }

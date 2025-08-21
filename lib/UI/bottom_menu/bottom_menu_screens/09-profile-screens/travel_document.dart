@@ -50,10 +50,10 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
         !provider.hasExistingSeamanDocument){
       return false;
     }
-    else if(provider.seafarerVisaDocument ==
-        null &&
-        !provider
-            .hasExistingSeafarerVisaDocument ){
+    // Only validate seafarer visa document if user selected "Yes" for valid seafarer's visa
+    else if(provider.validSeafarerVisa && 
+        provider.seafarerVisaDocument == null &&
+        !provider.hasExistingSeafarerVisaDocument){
       return false;
     }
     else if(provider.visaDocument == null &&
@@ -322,8 +322,9 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     context: context,
                                     controller: provider
                                         .seafarerRegistrationNoController,
+                                    focusNode: provider.seafarerRegistrationNoFocusNode,
                                     hintText:
-                                        'Enter Seafarer’s Registration No.',
+                                        "Enter Seafarer's Registration No.",
                                     textInputType: TextInputType.text,
                                     obscureText: false,
                                     autovalidateMode: provider.autovalidateMode,
@@ -379,6 +380,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   customTextField(
                                     context: context,
                                     controller: provider.passportNoController,
+                                    focusNode: provider.passportNoFocusNode,
                                     hintText: 'Enter Passport No.',
                                     textInputType: TextInputType.text,
                                     obscureText: false,
@@ -442,7 +444,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         if ((value == null || value=='') &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
-                                          return '      Please select Country';
+                                          return '      please select Country';
                                         }
                                         return null;
                                       },
@@ -489,6 +491,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       final DateTime? picked =
                                           await showDatePicker(
                                         context: context,
@@ -507,6 +511,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller: provider
                                             .passportIssueDateController,
+                                        focusNode: provider.passportIssueDateFocusNode,
                                         hintText: 'Select Issue Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -514,7 +519,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Issue Date';
+                                            return 'please select Issue Date';
                                           }
                                           return null;
                                         },
@@ -550,6 +555,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       if (provider.passportIssueDateController
                                           .text.isNotEmpty) {
                                         final String startDateString = provider
@@ -582,7 +589,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         }
                                       } else {
                                         ShowToast("Error",
-                                            "Please select Issue Date First");
+                                            "please select Issue Date First");
                                       }
                                     },
                                     child: AbsorbPointer(
@@ -590,6 +597,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller: provider
                                             .passportExpiryDateController,
+                                        focusNode: provider.passportExpiryDateFocusNode,
                                         hintText: 'Select Expiry Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -597,7 +605,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Expiry Date';
+                                            return 'please select Expiry Date';
                                           }
                                           return null;
                                         },
@@ -683,7 +691,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       padding:
                                           EdgeInsets.only(top: 1.h, left: 4.w),
                                       child: Text(
-                                        "Please select Passport",
+                                        "please select Passport",
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontSize: AppFontSize.fontSize12,
@@ -861,7 +869,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   customTextField(
                                     context: context,
                                     controller: provider.seamanBookNoController,
-                                    hintText: 'Enter Seaman’s Book No.',
+                                    focusNode: provider.seamanBookNoFocusNode,
+                                    hintText: "Enter Seaman's Book No.",
                                     textInputType: TextInputType.text,
                                     obscureText: false,
                                     autovalidateMode: provider.autovalidateMode,
@@ -921,7 +930,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
-                                          return '      Please select Country';
+                                          return '      please select Country';
                                         }
                                         return null;
                                       },
@@ -970,6 +979,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     context: context,
                                     controller: provider
                                         .seamanIssuingAuthorityController,
+                                    focusNode: provider.seamanIssuingAuthorityFocusNode,
                                     hintText: 'Enter Issuing Authority',
                                     textInputType: TextInputType.text,
                                     obscureText: false,
@@ -1010,6 +1020,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       final DateTime? picked =
                                           await showDatePicker(
                                         context: context,
@@ -1028,6 +1040,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller:
                                             provider.seamanIssueDateController,
+                                        focusNode: provider.seamanIssueDateFocusNode,
                                         hintText: 'Select Issue Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -1035,7 +1048,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Issue Date';
+                                            return 'please select Issue Date';
                                           }
                                           return null;
                                         },
@@ -1071,6 +1084,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       if (provider.seamanIssueDateController
                                           .text.isNotEmpty) {
                                         final String startDateString = provider
@@ -1102,7 +1117,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         }
                                       } else {
                                         ShowToast("Error",
-                                            "Please select Issue Date First");
+                                            "please select Issue Date First");
                                       }
                                     },
                                     child: AbsorbPointer(
@@ -1110,6 +1125,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller:
                                             provider.seamanExpiryDateController,
+                                        focusNode: provider.seamanExpiryDateFocusNode,
                                         hintText: 'Select Expiry Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -1119,7 +1135,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                           if ((value == null ||
                                                   value.isEmpty) &&
                                               !provider.seamanNeverExpire) {
-                                            return 'Please select Expiry Date';
+                                            return 'please select Expiry Date';
                                           }
                                           return null;
                                         },
@@ -1188,7 +1204,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         if ((value == null || value.isEmpty) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
-                                          return '      Please select Nationality';
+                                          return '      please select Nationality';
                                         }
                                         return null;
                                       },
@@ -1285,7 +1301,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       padding:
                                           EdgeInsets.only(top: 1.h, left: 4.w),
                                       child: Text(
-                                        "Please select Seaman Document",
+                                        "please select Seaman Document",
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontSize: AppFontSize.fontSize12,
@@ -1506,10 +1522,11 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             autovalidateMode:
                                                 provider.autovalidateMode,
                                             validator: (value) {
-                                              if ((value == null) &&
+                                              if (provider.validSeafarerVisa &&
+                                                  (value == null) &&
                                                   provider.autovalidateMode ==
                                                       AutovalidateMode.always) {
-                                                return '      Please select Country';
+                                                return '      please select Country';
                                               }
                                               return null;
                                             },
@@ -1563,6 +1580,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                           context: context,
                                           controller:
                                               provider.seafarerVisaNoController,
+                                          focusNode: provider.seafarerVisaNoFocusNode,
                                           hintText: 'Enter Visa No.',
                                           textInputType: TextInputType.text,
                                           obscureText: false,
@@ -1608,6 +1626,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
+                                            // Clear focus from all fields before opening date picker
+                                            FocusScope.of(context).unfocus();
                                             final DateTime? picked =
                                                 await showDatePicker(
                                               context: context,
@@ -1627,6 +1647,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                               context: context,
                                               controller: provider
                                                   .seafarerVisaIssueDateController,
+                                              focusNode: provider.seafarerVisaIssueDateFocusNode,
                                               hintText: 'Select Issue Date',
                                               textInputType:
                                                   TextInputType.datetime,
@@ -1638,7 +1659,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                                         .validSeafarerVisa &&
                                                     (value == null ||
                                                         value.isEmpty)) {
-                                                  return 'Please select Issue Date';
+                                                  return 'please select Issue Date';
                                                 }
                                                 return null;
                                               },
@@ -1680,6 +1701,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
+                                            // Clear focus from all fields before opening date picker
+                                            FocusScope.of(context).unfocus();
                                             if (provider
                                                 .seafarerVisaIssueDateController
                                                 .text
@@ -1719,7 +1742,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                               }
                                             } else {
                                               ShowToast("Error",
-                                                  "Please select Issue Date First");
+                                                  "please select Issue Date First");
                                             }
                                           },
                                           child: AbsorbPointer(
@@ -1727,6 +1750,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                               context: context,
                                               controller: provider
                                                   .seafarerVisaExpiryDateController,
+                                              focusNode: provider.seafarerVisaExpiryDateFocusNode,
                                               hintText: 'Select Expiry Date',
                                               textInputType:
                                                   TextInputType.datetime,
@@ -1738,7 +1762,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                                         .validSeafarerVisa &&
                                                     (value == null ||
                                                         value.isEmpty)) {
-                                                  return 'Please select Expiry Date';
+                                                  return 'please select Expiry Date';
                                                 }
                                                 return null;
                                               },
@@ -1824,7 +1848,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             ),
                                           ),
                                         ),
-                                        if (provider.seafarerVisaDocument ==
+                                        if (provider.validSeafarerVisa &&
+                                            provider.seafarerVisaDocument ==
                                                 null &&
                                             !provider
                                                 .hasExistingSeafarerVisaDocument &&
@@ -1834,7 +1859,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             padding: EdgeInsets.only(
                                                 top: 1.h, left: 4.w),
                                             child: Text(
-                                              "Please select Seafarer Visa Document",
+                                              "please select Seafarer Visa Document",
                                               style: TextStyle(
                                                 color: Colors.red,
                                                 fontSize:
@@ -2036,7 +2061,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
-                                          return '      Please select Country';
+                                          return '      please select Country';
                                         }
                                         return null;
                                       },
@@ -2084,6 +2109,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   customTextField(
                                     context: context,
                                     controller: provider.visaNoController,
+                                    focusNode: provider.visaNoFocusNode,
                                     hintText: 'Enter Visa No.',
                                     textInputType: TextInputType.text,
                                     obscureText: false,
@@ -2122,6 +2148,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       final DateTime? picked =
                                           await showDatePicker(
                                         context: context,
@@ -2140,6 +2168,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller:
                                             provider.visaIssueDateController,
+                                        focusNode: provider.visaIssueDateFocusNode,
                                         hintText: 'Select Issue Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -2147,7 +2176,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Issue Date';
+                                            return 'please select Issue Date';
                                           }
                                           return null;
                                         },
@@ -2182,6 +2211,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       if (provider.visaIssueDateController.text
                                           .isNotEmpty) {
                                         final String startDateString = provider
@@ -2213,7 +2244,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         }
                                       } else {
                                         ShowToast("Error",
-                                            "Please select Issue Date First");
+                                            "please select Issue Date First");
                                       }
                                     },
                                     child: AbsorbPointer(
@@ -2221,6 +2252,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller:
                                             provider.visaExpiryDateController,
+                                        focusNode: provider.visaExpiryDateFocusNode,
                                         hintText: 'Select Expiry Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -2228,7 +2260,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Expiry Date';
+                                            return 'please select Expiry Date';
                                           }
                                           return null;
                                         },
@@ -2314,7 +2346,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       padding:
                                           EdgeInsets.only(top: 1.h, left: 4.w),
                                       child: Text(
-                                        "Please select Visa Document",
+                                        "please select Visa Document",
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontSize: AppFontSize.fontSize12,
@@ -2505,7 +2537,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         if ((value == null) &&
                                             provider.autovalidateMode ==
                                                 AutovalidateMode.always) {
-                                          return '      Please select Country';
+                                          return '      please select Country';
                                         }
                                         return null;
                                       },
@@ -2556,6 +2588,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     context: context,
                                     controller:
                                         provider.residencePermitNoController,
+                                    focusNode: provider.residencePermitNoFocusNode,
                                     hintText: 'Enter No.',
                                     textInputType: TextInputType.text,
                                     obscureText: false,
@@ -2595,6 +2628,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       final DateTime? picked =
                                           await showDatePicker(
                                         context: context,
@@ -2614,6 +2649,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller: provider
                                             .residencePermitIssueDateController,
+                                        focusNode: provider.residencePermitIssueDateFocusNode,
                                         hintText: 'Select Issue Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -2621,7 +2657,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Issue Date';
+                                            return 'please select Issue Date';
                                           }
                                           return null;
                                         },
@@ -2657,6 +2693,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
                                       if (provider
                                           .residencePermitIssueDateController
                                           .text
@@ -2692,7 +2730,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         }
                                       } else {
                                         ShowToast("Error",
-                                            "Please select Issue Date First");
+                                            "please select Issue Date First");
                                       }
                                     },
                                     child: AbsorbPointer(
@@ -2700,6 +2738,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         context: context,
                                         controller: provider
                                             .residencePermitExpiryDateController,
+                                        focusNode: provider.residencePermitExpiryDateFocusNode,
                                         hintText: 'Select Expiry Date',
                                         textInputType: TextInputType.datetime,
                                         obscureText: false,
@@ -2707,7 +2746,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             provider.autovalidateMode,
                                         voidCallback: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please select Expiry Date';
+                                            return 'please select Expiry Date';
                                           }
                                           return null;
                                         },
@@ -2795,7 +2834,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       padding:
                                           EdgeInsets.only(top: 1.h, left: 4.w),
                                       child: Text(
-                                        "Please select Residence Permit Document",
+                                        "please select Residence Permit Document",
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontSize: AppFontSize.fontSize12,

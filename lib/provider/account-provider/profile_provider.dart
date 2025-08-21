@@ -159,14 +159,14 @@ class ProfileProvider with ChangeNotifier {
         break;
       case 'date':
         if (value.isEmpty || value == 'Date of Birth') {
-          error = 'Date of birth is required';
+          error = 'date of birth is required';
         } else {
           error = validateAgeRequirement(value);
         }
         break;
       case 'rank':
         error =
-        (value.isEmpty || value == 'Select Rank') ? 'Rank is required' : null;
+        (value.isEmpty || value == 'Select Rank') ? 'rank is required' : null;
         break;
       default:
         error = null;
@@ -192,15 +192,15 @@ class ProfileProvider with ChangeNotifier {
         }
 
         if (age < 18) {
-          return 'You must be at least 18 years old to register';
+          return 'you must be at least 18 years old to register';
         }
 
         return null;
       }
     } catch (e) {
-      return 'Invalid date format';
+      return 'invalid date format';
     }
-    return 'Invalid date format';
+    return 'invalid date format';
   }
 
   DateTime getMaxAllowedDate() {
@@ -245,7 +245,7 @@ class ProfileProvider with ChangeNotifier {
         break;
       case 'date':
         if (value.isEmpty || value == 'Date of Birth') {
-          error = 'Date of birth is required';
+          error = 'date of birth is required';
         } else {
           error = validateAgeRequirement(value);
         }
@@ -253,7 +253,7 @@ class ProfileProvider with ChangeNotifier {
         break;
       case 'rank':
         error =
-        (value.isEmpty || value == 'Select Rank') ? 'Rank is required' : null;
+        (value.isEmpty || value == 'Select Rank') ? 'rank is required' : null;
         rankError = error;
         break;
       default:
@@ -275,7 +275,7 @@ class ProfileProvider with ChangeNotifier {
 
   String? validateGender(String value, {bool notify = true}) {
     if (!hasSubmitted) return null;
-    genderError = value == 'Gender' ? 'Please select a gender' : null;
+    genderError = value == 'Gender' ? 'please select a gender' : null;
     if (notify) {
       notifyListeners();
     }
@@ -418,6 +418,21 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Method to clear only validation errors without clearing form data
+  void clearValidationErrors() {
+    firstNameError = null;
+    lastNameError = null;
+    emailError = null;
+    phoneError = null;
+    dateError = null;
+    genderError = null;
+    rankError = null;
+    isShowDateError = false;
+    hasSubmitted = false;
+    autoValidateMode = AutovalidateMode.disabled;
+    notifyListeners();
+  }
+
 
   Future<void> showImageSourceBottomSheet(BuildContext context) async {
     showModalBottomSheet(
@@ -549,7 +564,7 @@ class ProfileProvider with ChangeNotifier {
         if (mimeType == null || !mimeType.startsWith('image/')) {
           if (context.mounted) {
             stopLoading(context);
-            ShowToast("Error", "Invalid file type. Please select a valid image file.");
+            ShowToast("Error", "invalid file type. Please select a valid image file.");
           }
           return;
         }
@@ -577,7 +592,7 @@ class ProfileProvider with ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {
           print('Response of Profile Post ==> ${response.data}');
-          ShowToast("Success", response.data['message'] ?? "Saved successfully");
+          ShowToast("Success", response.data['message'] ?? "saved successfully");
           if (context.mounted) stopLoading(context);
           ChooseCountryProvider.clearGlobalSelectedCountry();
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -610,7 +625,7 @@ class ProfileProvider with ChangeNotifier {
       } else {
         if (context.mounted) {
           if (context.mounted) stopLoading(context);
-          ShowToast("Error", response.data['message'] ?? "Something went wrong");
+          ShowToast("Error", response.data['message'] ?? "something went wrong");
         }
       }
     } on DioException catch (e) {
@@ -618,23 +633,23 @@ class ProfileProvider with ChangeNotifier {
         if (context.mounted) stopLoading(context);
 
         if (e.response?.statusCode == 401) {
-          ShowToast("Error", "Session expired. Please log in again.");
+          ShowToast("Error", "session expired. Please log in again.");
           var loginProvider = Provider.of<LoginProvider>(context, listen: false);
           await loginProvider.clearStoredLoginData();
           NetworkHelper().removeToken(context);
           Navigator.of(context).pushReplacementNamed(login);
         } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
           print(e.response?.data);
-          ShowToast("Error", e.response?.data['message'] ?? "Something went wrong");
+          ShowToast("Error", e.response?.data['message'] ?? "something went wrong");
         } else {
-          ShowToast("Error", "Something went wrong");
+          ShowToast("Error", "something went wrong");
         }
       }
     } catch (e) {
       print("Seafarer Profile Update Error: $e");
       if (context.mounted) {
         if (context.mounted) stopLoading(context);
-        ShowToast("Error", "Something went wrong");
+        ShowToast("Error", "something went wrong");
       }
     }
     notifyListeners();

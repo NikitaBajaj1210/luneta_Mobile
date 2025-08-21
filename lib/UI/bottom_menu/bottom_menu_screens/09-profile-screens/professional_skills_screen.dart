@@ -194,7 +194,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               padding: EdgeInsets.only(right: 10.0, top: 10),
               child: GestureDetector(
                 onTap: () {
-                  provider.setComputerAndSoftwareVisibility(true);
+               provider.showAddSection_computerAndSoftware = !provider.showAddSection_computerAndSoftware;
+                  provider.setComputerAndSoftwareVisibility( provider.showAddSection_computerAndSoftware );
                 },
                 child: Container(
                   padding: EdgeInsets.all(2.5.w),
@@ -853,7 +854,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10),
                     child: GestureDetector(
                       onTap: () {
-                        provider.setCargoGearExperienceVisibility(true);
+                        provider.showAddSection_cargoGearExperience = !provider.showAddSection_cargoGearExperience;
+                        provider.setCargoGearExperienceVisibility(provider.showAddSection_cargoGearExperience);
                       },
                       child: Container(
                         padding: EdgeInsets.all(2.5.w),
@@ -993,18 +995,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       child: customTextField(
                         context: context,
                         controller: provider.cargoGearMakerController,
+                        focusNode: provider.cargoGearMakerFocusNode,
                         hintText: 'Enter Maker',
                         textInputType: TextInputType.text,
                         obscureText: false,
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: AppColors.Color_FAFAFA,
+                        backgroundColor: provider.cargoGearMakerFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: AppColors.Color_FAFAFA,
+                        fillColor: provider.cargoGearMakerFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1015,18 +1022,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       child: customTextField(
                         context: context,
                         controller: provider.cargoGearSWLController,
+                        focusNode: provider.cargoGearSWLFocusNode,
                         hintText: 'Enter SWL',
                         textInputType: TextInputType.text,
                         obscureText: false,
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: AppColors.Color_FAFAFA,
+                        backgroundColor: provider.cargoGearSWLFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: AppColors.Color_FAFAFA,
+                        fillColor: provider.cargoGearSWLFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1097,7 +1109,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10),
                     child: GestureDetector(
                       onTap: () {
-                        provider.setMetalWorkingSkillsVisibility(true);
+                        provider.showAddSection_metalWorkingSkills =!provider.showAddSection_metalWorkingSkills;
+                        provider.setMetalWorkingSkillsVisibility(provider.showAddSection_metalWorkingSkills);
                       },
                       child: Container(
                         padding: EdgeInsets.all(2.5.w),
@@ -1513,7 +1526,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10),
                     child: GestureDetector(
                       onTap: () {
-                        provider.setTankCoatingExperienceVisibility(true);
+                        provider.showAddSection_tankCoatingExperience =!provider.showAddSection_tankCoatingExperience;
+                        provider.setTankCoatingExperienceVisibility(provider.showAddSection_tankCoatingExperience);
                       },
                       child: Container(
                         padding: EdgeInsets.all(2.5.w),
@@ -1669,7 +1683,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                     padding: EdgeInsets.only(right: 10.0, top: 10),
                     child: GestureDetector(
                       onTap: () {
-                        provider.setPortStateControlExperienceVisibility(true);
+                        provider.showAddSection_portStateControlExperience=!provider.showAddSection_portStateControlExperience;
+                        provider.setPortStateControlExperienceVisibility(provider.showAddSection_portStateControlExperience);
                       },
                       child: Container(
                         padding: EdgeInsets.all(2.5.w),
@@ -1871,18 +1886,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           child: customTextField(
                             context: context,
                             controller: provider.dateController,
+                            focusNode: provider.dateFocusNode,
                             hintText: 'Select Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
                             voidCallback: (value) {},
                             fontSize: AppFontSize.fontSize16,
                             inputFontSize: AppFontSize.fontSize16,
-                            backgroundColor: AppColors.Color_FAFAFA,
+                            backgroundColor: provider.dateFocusNode.hasFocus
+                                ? AppColors.activeFieldBgColor
+                                : AppColors.Color_FAFAFA,
                             borderColor: AppColors.buttonColor,
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: AppColors.Color_FAFAFA,
+                            fillColor: provider.dateFocusNode.hasFocus
+                                ? AppColors.activeFieldBgColor
+                                : AppColors.Color_FAFAFA,
                             onFieldSubmitted: (String) {},
                           ),
                         ),
@@ -1895,18 +1915,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       child: customTextField(
                         context: context,
                         controller: provider.observationsController,
+                        focusNode: provider.observationsFocusNode,
                         hintText: 'Enter Observations',
                         textInputType: TextInputType.text,
                         obscureText: false,
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: AppColors.Color_FAFAFA,
+                        backgroundColor: provider.observationsFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: AppColors.Color_FAFAFA,
+                        fillColor: provider.observationsFocusNode.hasFocus
+                            ? AppColors.activeFieldBgColor
+                            : AppColors.Color_FAFAFA,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1950,18 +1975,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           child: customTextField(
             context: context,
             controller: provider.inspectionByController,
+            focusNode: provider.inspectionByFocusNode,
             hintText: 'Enter Inspection By',
             textInputType: TextInputType.text,
             obscureText: false,
             voidCallback: (value) {},
             fontSize: AppFontSize.fontSize16,
             inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
+            backgroundColor: provider.inspectionByFocusNode.hasFocus
+                ? AppColors.activeFieldBgColor
+                : AppColors.Color_FAFAFA,
             borderColor: AppColors.buttonColor,
             textColor: Colors.black,
             labelColor: AppColors.Color_9E9E9E,
             cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
+            fillColor: provider.inspectionByFocusNode.hasFocus
+                ? AppColors.activeFieldBgColor
+                : AppColors.Color_FAFAFA,
             onFieldSubmitted: (String) {},
           ),
         ),
@@ -2012,18 +2042,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               child: customTextField(
                 context: context,
                 controller: provider.vettingDateController,
+                focusNode: provider.vettingDateFocusNode,
                 hintText: 'Select Date',
                 textInputType: TextInputType.datetime,
                 obscureText: false,
                 voidCallback: (value) {},
                 fontSize: AppFontSize.fontSize16,
                 inputFontSize: AppFontSize.fontSize16,
-                backgroundColor: AppColors.Color_FAFAFA,
+                backgroundColor: provider.vettingDateFocusNode.hasFocus
+                    ? AppColors.activeFieldBgColor
+                    : AppColors.Color_FAFAFA,
                 borderColor: AppColors.buttonColor,
                 textColor: Colors.black,
                 labelColor: AppColors.Color_9E9E9E,
                 cursorColor: AppColors.Color_212121,
-                fillColor: AppColors.Color_FAFAFA,
+                fillColor: provider.vettingDateFocusNode.hasFocus
+                    ? AppColors.activeFieldBgColor
+                    : AppColors.Color_FAFAFA,
                 onFieldSubmitted: (String) {},
               ),
             ),
@@ -2036,18 +2071,23 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           child: customTextField(
             context: context,
             controller: provider.vettingObservationsController,
+            focusNode: provider.vettingObservationsFocusNode,
             hintText: 'Enter Observations',
             textInputType: TextInputType.text,
             obscureText: false,
             voidCallback: (value) {},
             fontSize: AppFontSize.fontSize16,
             inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
+            backgroundColor: provider.vettingObservationsFocusNode.hasFocus
+                ? AppColors.activeFieldBgColor
+                : AppColors.Color_FAFAFA,
             borderColor: AppColors.buttonColor,
             textColor: Colors.black,
             labelColor: AppColors.Color_9E9E9E,
             cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
+            fillColor: provider.vettingObservationsFocusNode.hasFocus
+                ? AppColors.activeFieldBgColor
+                : AppColors.Color_FAFAFA,
             onFieldSubmitted: (String) {},
           ),
         ),
@@ -2202,7 +2242,6 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               decoration: BoxDecoration(
                 color: AppColors.Color_FAFAFA,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.buttonColor, width: 1),
               ),
               buttonIcon:
                   Icon(Icons.arrow_drop_down, color: AppColors.buttonColor),

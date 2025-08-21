@@ -160,7 +160,7 @@ class SignUpProvider with ChangeNotifier {
         RegisterModel registerModel = RegisterModel.fromJson(response);
         
         // Show success message
-        ShowToast("Success", registerModel.message ?? "Registration successful");
+        ShowToast("Success", registerModel.message ?? "registration successful");
         
         // Navigate to profile screen or next step
         if (context.mounted) {
@@ -170,7 +170,7 @@ class SignUpProvider with ChangeNotifier {
       }
     } catch (e) {
       print("Registration Error: $e");
-      ShowToast("Error", "Something went wrong during registration");
+      ShowToast("Error", "something went wrong during registration");
     }
   }
 }

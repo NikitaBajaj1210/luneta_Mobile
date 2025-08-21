@@ -581,11 +581,11 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Success", response.data['message'] ?? "Saved successfully");
+      ShowToast("Success", response.data['message'] ?? "saved successfully");
       return response.data;
     } else {
       if (showLoading && context.mounted) stopLoading(context);
-      ShowToast("Error", response.data['message'] ?? "Something went wrong");
+      ShowToast("Error", response.data['message'] ?? "something went wrong");
       return response.data;
     }
   } on DioException catch (e) {
@@ -598,22 +598,22 @@ Future<Map<String, dynamic>> multipartDocumentsDio(BuildContext context, String 
       Navigator.of(context).pushReplacementNamed(login);
       return e.response?.data ?? {};
     } else if (e.response?.statusCode == 400 || e.response?.statusCode == 404) {
-      ShowToast("Error", e.response?.data['message'] ?? "Bad request");
+      ShowToast("Error", e.response?.data['message'] ?? "bad request");
       return e.response?.data ?? {};
     } else if (e.response?.statusCode == 403) {
-      ShowToast("Error", e.response?.data['message'] ?? "Access forbidden");
+      ShowToast("Error", e.response?.data['message'] ?? "access forbidden");
       return e.response?.data ?? {};
     } else if (e.response?.statusCode == 500) {
-      ShowToast("Error", e.response?.data['message'] ?? "Internal server error");
+      ShowToast("Error", e.response?.data['message'] ?? "internal server error");
       return e.response?.data ?? {};
     } else {
-      ShowToast("Error", e.response?.data['message'] ?? "Something went wrong");
+      ShowToast("Error", e.response?.data['message'] ?? "something went wrong");
       return e.response?.data ?? {};
     }
   } catch (e) {
     if (showLoading && context.mounted) stopLoading(context);
     print(e);
-    ShowToast("Error", "Something went wrong");
+    ShowToast("Error", "something went wrong");
     return {};
   }
 }

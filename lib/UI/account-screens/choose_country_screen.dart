@@ -159,7 +159,7 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
                         }
                       } else {
                         print("please select");
-                        ShowToast("Error", "Please select a country first");
+                        ShowToast("Error", "please select a country first");
                       }
                     },
                     buttonText: "Continue",

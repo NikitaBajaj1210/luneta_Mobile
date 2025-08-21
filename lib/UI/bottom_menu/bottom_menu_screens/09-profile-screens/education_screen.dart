@@ -99,8 +99,13 @@ class _EducationScreenState extends State<EducationScreen> {
               ),
               child: customButton(
                   voidCallback: () async {
-                  if (provider.languagesSpokenFormKey.currentState!.validate()) {
-                    if(provider.academicQualificationList.length>0){
+                  // Validate languages form first
+                  bool isLanguagesFormValid = provider.languagesSpokenFormKey.currentState!.validate();
+                  
+                  // Check if at least one academic qualification exists
+                  bool hasAcademicQualification = provider.academicQualificationList.length > 0;
+                  
+                  if (isLanguagesFormValid && hasAcademicQualification) {
                     NetworkService.loading = 0;
                     setState(() {}); // Trigger UI update to show loader
 
@@ -121,14 +126,15 @@ class _EducationScreenState extends State<EducationScreen> {
                       NetworkService.loading = 2;
                       setState(() {}); // Trigger UI update
                     }
-                  }else{
-                      ShowToast("Error",
-                          "Please add at least one Academic Qualification");
-                    }
                   } else {
-                    setState(() {
+                    // Set validation errors
+                    if (!isLanguagesFormValid) {
                       provider.autovalidateModeLanguages = AutovalidateMode.always;
-                    });
+                    }
+                    if (!hasAcademicQualification) {
+                      ShowToast("Error", "please add at least one Academic Qualification");
+                    }
+                    setState(() {}); // Update UI to show errors
                   }
                 },
                 buttonText: "Save",
@@ -451,7 +457,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   },
                                   validator: (value) {
                                     if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                      return 'Please select a degree';
+                                      return 'please select a degree';
                                     }
                                     return null;
                                   },
@@ -583,7 +589,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   },
                                   validator: (value) {
                                     if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                      return 'Please select a country';
+                                      return 'please select a country';
                                     }
                                     return null;
                                   },
@@ -624,7 +630,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     autovalidateMode: provider.autovalidateModeAcademic,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please select Graduation Date';
+                                        return 'please select Graduation Date';
                                       }
                                       return null;
                                     },
@@ -693,7 +699,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(top: 1.h, left: 4.w),
                                   child: Text(
-                                    "Please select a document",
+                                    "please select a document",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: AppFontSize.fontSize12,
@@ -1152,7 +1158,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   },
                                   validator: (value) {
                                     if ((value == null || value=='') && provider.autovalidateModeCertification== AutovalidateMode.always) {
-                                      return 'Please select certification type';
+                                      return 'please select certification type';
                                     }
                                     return null;
                                   },
@@ -1258,7 +1264,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     autovalidateMode: provider.autovalidateModeCertification,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please select issue date';
+                                        return 'please select issue date';
                                       }
                                       return null;
                                     },                                  ),
@@ -1308,7 +1314,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     autovalidateMode: provider.autovalidateModeCertification,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please select expiry date';
+                                        return 'please select expiry date';
                                       }
                                       return null;
                                     },
@@ -1368,7 +1374,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(top: 1.h, left: 4.w),
                                   child: Text(
-                                    "Please select a document",
+                                    "please select a document",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: AppFontSize.fontSize12,
@@ -1621,7 +1627,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please select at least one native language';
+                                    return 'please select at least one native language';
                                   }
                                   return null;
                                 },
@@ -1657,7 +1663,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 searchHint: "Search for a language",
                                 validator: (value) {
                                   if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
-                                    return 'Please select language';
+                                    return 'please select language';
                                   }
                                   return null;
                                 },
@@ -1741,7 +1747,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 },
                                 validator: (value) {
                                   if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
-                                    return 'Please select a level';
+                                    return 'please select a level';
                                   }
                                   return null;
                                 },

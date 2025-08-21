@@ -69,14 +69,18 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
 
   bool _showAddSection_employmentHistory = false;
 
-  bool get showAddSection_employmentHistory =>
-      _showAddSection_employmentHistory;
+  bool get showAddSection_employmentHistory => _showAddSection_employmentHistory;
+  set showAddSection_employmentHistory(bool value) {
+    _showAddSection_employmentHistory = value;
+  }
   bool employment_IsEdit = false;
   int? employment_Edit_Index;
 
   bool _showAddSection_reference = false;
-
   bool get showAddSection_reference => _showAddSection_reference;
+  set showAddSection_reference(bool value){
+    _showAddSection_reference = value;
+  }
   bool reference_IsEdit = false;
   int? reference_Edit_Index;
 

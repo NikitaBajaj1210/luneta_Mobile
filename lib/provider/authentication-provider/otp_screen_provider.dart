@@ -177,7 +177,7 @@ class OtpScreenProvider with ChangeNotifier {
               'isFromForgotPassword': true, // Pass forgot password flag
             });
           } else {
-            ShowToast("Error", "Invalid response format");
+            ShowToast("Error", "invalid response format");
           }
         }
       } else {
@@ -187,7 +187,7 @@ class OtpScreenProvider with ChangeNotifier {
       }
     } catch (e) {
       print("Verify OTP Error: $e");
-      ShowToast("Error", "Something went wrong. Please try again.");
+      ShowToast("Error", "something went wrong. Please try again.");
     }
     notifyListeners();
   }

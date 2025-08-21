@@ -39,7 +39,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
               // Validate required fields
               if (provider.selectedLanguage == null || provider.selectedProficiency == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Please select both language and proficiency')),
+                  SnackBar(content: Text('please select both language and proficiency')),
                 );
                 return;
               }

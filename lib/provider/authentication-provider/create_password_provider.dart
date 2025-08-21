@@ -103,7 +103,7 @@ class CreatePasswordProvider with ChangeNotifier {
       }
     } catch (e) {
       print("CreatePasswordProvider - Reset password error: $e");
-      ShowToast("Error", "Something went wrong. Please try again.");
+      ShowToast("Error", "something went wrong. Please try again.");
     }
   }
 

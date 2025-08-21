@@ -372,7 +372,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 if(value!.length>0) {
                                   return null;
                                 }else{
-                                  return 'Please select at least a position';
+                                  return 'please select at least a position';
                                 }
                               },
                               initialValue: provider.positionsHeld,
@@ -429,7 +429,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   if(value!.length>0) {
                                     return null;
                                   }else{
-                                    return 'Please select at least a Vessel Type';
+                                    return 'please select at least a Vessel Type';
                                   }
                                 },
                                 initialValue: provider.vesselTypeExperience,
@@ -565,8 +565,9 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.endDate.clear();
                                   provider.responsibilitiesController.clear();
                                   provider.setEmpHisPositionsHeld(null);
+                                  provider.showAddSection_employmentHistory = !provider.showAddSection_employmentHistory;
 
-                                  provider.setEmploymentHistoryVisibility(true);
+                                  provider.setEmploymentHistoryVisibility(provider.showAddSection_employmentHistory);
                                   provider.employment_Edit_Index=null;
                                   provider.employment_IsEdit=false;
                                 },
@@ -1005,7 +1006,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                     }
                                   }
                                 }else{
-                                  ShowToast("Error", "Please select Start Date First");
+                                  ShowToast("Error", "please select Start Date First");
                                 }
                               },
                               child: AbsorbPointer(
@@ -1234,7 +1235,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   provider.referenceDocumentController.clear();
                                   provider.referenceIssuedBy = null;
 
-                                  provider.setReferenceVisibility(true);
+                                  provider.showAddSection_reference = !provider.showAddSection_reference;
+                                  provider.setReferenceVisibility( provider.showAddSection_reference);
                                   provider.reference_Edit_Index=null;
                                   provider.reference_IsEdit=false;
                                 },
@@ -1639,7 +1641,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 padding:
                                 EdgeInsets.only(top: 1.h, left: 4.w),
                                 child: Text(
-                                  "Please select Reference",
+                                  "please select Reference",
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: AppFontSize.fontSize12,
@@ -1656,7 +1658,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 padding:
                                 EdgeInsets.only(top: 1.h, left: 4.w),
                                 child: Text(
-                                  "Please select Reference",
+                                  "please select Reference",
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: AppFontSize.fontSize12,
