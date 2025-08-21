@@ -105,9 +105,8 @@ class _VolunteeringScreenState extends State<VolunteeringScreen> {
                     hintText: "Nature Expedition",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.titleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.titleFocusNode.unfocus();
                     },
@@ -125,9 +124,8 @@ class _VolunteeringScreenState extends State<VolunteeringScreen> {
                     hintText: "Nature Lovers Organization",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.organizationFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.organizationFocusNode.unfocus();
                     },
@@ -145,9 +143,8 @@ class _VolunteeringScreenState extends State<VolunteeringScreen> {
                     hintText: "Role",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => null,
-                    fillColor: provider.roleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.roleFocusNode.unfocus();
                     },
@@ -211,9 +208,8 @@ class _VolunteeringScreenState extends State<VolunteeringScreen> {
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {},
                   ),
 
@@ -228,9 +224,8 @@ class _VolunteeringScreenState extends State<VolunteeringScreen> {
                     hintText: "URL Link",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.websiteFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.websiteFocusNode.unfocus();
                     },

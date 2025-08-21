@@ -40,6 +40,8 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
   final FocusNode referenceIssuedDateFocusNode = FocusNode();
   final FocusNode referenceDocumentFocusNode = FocusNode();
 
+  // No need for focus listeners anymore - handled automatically by ValueListenableBuilder in customTextField
+
   // Employment History List (Repeater) - Using API models
   List<ProfessionalEmploymentHistory> _employmentHistory = [];
 
@@ -411,7 +413,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             mappedPositions.add('SECOND_OFFICER');
             break;
           default:
-            mappedPositions.add('OTHER');
+            mappedPositions.add(position); // Keep actual value instead of converting to 'OTHER'
             break;
         }
       }
@@ -421,7 +423,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     // Populate Vessel Type Experience
     if (professionalExperienceData!.vesselTypeExperience != null &&
         professionalExperienceData!.vesselTypeExperience!.isNotEmpty) {
-      // Map API values to dropdown keys
+            // Map API values to dropdown keys
       List<String> mappedVessels = [];
       for (String vessel in professionalExperienceData!.vesselTypeExperience!) {
         switch (vessel) {
@@ -438,9 +440,9 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             mappedVessels.add('PASSENGER_SHIP');
             break;
           default:
-            mappedVessels.add('OTHER');
+            mappedVessels.add(vessel); // Keep actual value instead of converting to 'OTHER'
             break;
-        }
+}
       }
       setVesselTypeExperience(mappedVessels);
     }
@@ -454,7 +456,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
           print('Processing history item: ${history.runtimeType}');
           
           // Map position to dropdown key
-          String mappedPosition = 'OTHER';
+          String mappedPosition = history.position ?? '';
           if (history.position != null) {
             switch (history.position!) {
               case 'Captain':
@@ -467,7 +469,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
                 mappedPosition = 'SECOND_OFFICER';
                 break;
               default:
-                mappedPosition = 'OTHER';
+                mappedPosition = history.position!; // Keep actual value instead of converting to 'OTHER'
                 break;
             }
           }
@@ -571,7 +573,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             case 'SECOND_OFFICER':
               return 'Second Officer';
             default:
-              return 'Other';
+              return position; // Return actual value instead of defaulting to 'Other'
           }
         }).toList(),
         'vesselTypeExperience': vesselTypeExperience.map((vessel) {
@@ -586,7 +588,7 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
             case 'PASSENGER_SHIP':
               return 'Passenger Ship';
             default:
-              return 'Other';
+              return vessel; // Return actual value instead of defaulting to 'Other'
           }
         }).toList(),
         'employmentHistory': employmentHistory.map((history) => {
@@ -712,14 +714,28 @@ class ProfessionalExperienceProvider extends ChangeNotifier {
     }
   }
 
-    @override
-    void dispose() {
-      companyController.dispose();
-      // positionController.dispose();
-      responsibilitiesController.dispose();
-      // referenceCompanyController.dispose();
-      // referencePositionController.dispose();
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    // Dispose all text controllers
+    companyController.dispose();
+    responsibilitiesController.dispose();
+    referenceVesselController.dispose();
+    referenceDocumentController.dispose();
+    startDate.dispose();
+    endDate.dispose();
+    referenceIssuedDate.dispose();
+    
+    // Dispose all focus nodes
+    companyFocusNode.dispose();
+    responsibilitiesFocusNode.dispose();
+    startDateFocusNode.dispose();
+    endDateFocusNode.dispose();
+    referenceVesselFocusNode.dispose();
+    referenceIssuedByFocusNode.dispose();
+    referenceIssuedDateFocusNode.dispose();
+    referenceDocumentFocusNode.dispose();
+    
+    super.dispose();
+  }
   }
 

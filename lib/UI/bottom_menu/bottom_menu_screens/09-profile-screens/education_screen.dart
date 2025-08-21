@@ -479,6 +479,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               customTextField(
                                 context: context,
                                 controller: provider.fieldOfStudyController,
+                                focusNode: provider.fieldOfStudyFocusNode,
                                 hintText: 'Enter Field of Study',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
@@ -497,6 +498,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: AppColors.Color_FAFAFA,
+                                activeFillColor: AppColors.activeFieldBgColor,
                                 onFieldSubmitted: (String) {},
                               ),
                               SizedBox(height: 1.h),
@@ -515,6 +517,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               customTextField(
                                 context: context,
                                 controller: provider.educationalInstitutionController,
+                                focusNode: provider.educationalInstitutionFocusNode,
                                 hintText: 'Enter Educational Institution',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
@@ -533,6 +536,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: AppColors.Color_FAFAFA,
+                                activeFillColor: AppColors.activeFieldBgColor,
                                 onFieldSubmitted: (String) {},
                               ),
                               SizedBox(height: 1.h),
@@ -610,6 +614,8 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus from all fields before opening date picker
+                                  FocusScope.of(context).unfocus();
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
@@ -624,6 +630,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   child: customTextField(
                                     context: context,
                                     controller: provider.graduationDateController,
+                                    focusNode: provider.graduationDateFocusNode,
                                     hintText: 'Select Graduation Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
@@ -642,6 +649,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
                                     fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
                                 ),
@@ -661,6 +669,8 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus to dismiss keyboard before showing bottom sheet
+                                  FocusScope.of(context).unfocus();
                                   await provider.showAttachmentOptions(context, 'academic');
                                 },
                                 child: DottedBorder(
@@ -1153,6 +1163,8 @@ class _EducationScreenState extends State<EducationScreen> {
                                   value: provider.typeOfCertification,
                                   hint: "Select Type",
                                   searchHint: "Search for a type",
+                                  isCaseSensitiveSearch: false,
+                                  closeButton: "Close",
                                   onClear: (){
                                     provider.setTypeOfCertification('');
                                   },
@@ -1168,6 +1180,26 @@ class _EducationScreenState extends State<EducationScreen> {
                                   autovalidateMode: provider.autovalidateModeCertification,
                                   isExpanded: true,
                                   underline: SizedBox(),
+                                  searchFn: (String keyword, items) {
+                                    List<int> ret = <int>[];
+                                    if (items != null) {
+                                      // If keyword is null, empty, or just whitespace, show all items
+                                      if (keyword == null || keyword.trim().isEmpty) {
+                                        for (int i = 0; i < items.length; i++) {
+                                          ret.add(i);
+                                        }
+                                      } else {
+                                        // Search with trimmed, lowercase keyword
+                                        String searchTerm = keyword.toLowerCase().trim();
+                                        for (int i = 0; i < items.length; i++) {
+                                          if (items[i].value.toString().toLowerCase().contains(searchTerm)) {
+                                            ret.add(i);
+                                          }
+                                        }
+                                      }
+                                    }
+                                    return ret;
+                                  },
                                   displayItem: (item, selected) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -1201,6 +1233,7 @@ class _EducationScreenState extends State<EducationScreen> {
                               customTextField(
                                 context: context,
                                 controller: provider.issuingAuthorityController,
+                                focusNode: provider.issuingAuthorityFocusNode,
                                 hintText: 'Enter Issuing Authority',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
@@ -1212,6 +1245,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
                                 fillColor: AppColors.Color_FAFAFA,
+                                activeFillColor: AppColors.activeFieldBgColor,
                                 onFieldSubmitted: (String) {},
                                 autovalidateMode: provider.autovalidateModeCertification,
                                 voidCallback: (value) {
@@ -1235,6 +1269,8 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus from all fields before opening date picker
+                                  FocusScope.of(context).unfocus();
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
@@ -1249,6 +1285,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   child: customTextField(
                                     context: context,
                                     controller: provider.issueDateController,
+                                    focusNode: provider.issueDateFocusNode,
                                     hintText: 'Select Issue Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
@@ -1260,6 +1297,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
                                     fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                     autovalidateMode: provider.autovalidateModeCertification,
                                     voidCallback: (value) {
@@ -1285,6 +1323,8 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus from all fields before opening date picker
+                                  FocusScope.of(context).unfocus();
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
@@ -1299,6 +1339,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                   child: customTextField(
                                     context: context,
                                     controller: provider.expiryDateController,
+                                    focusNode: provider.expiryDateFocusNode,
                                     hintText: 'Select Expiry Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
@@ -1310,6 +1351,7 @@ class _EducationScreenState extends State<EducationScreen> {
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
                                     fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                     autovalidateMode: provider.autovalidateModeCertification,
                                     voidCallback: (value) {
@@ -1336,6 +1378,8 @@ class _EducationScreenState extends State<EducationScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus to dismiss keyboard before showing bottom sheet
+                                  FocusScope.of(context).unfocus();
                                   await provider.showAttachmentOptions(context, 'certification');
                                 },
                                 child: DottedBorder(

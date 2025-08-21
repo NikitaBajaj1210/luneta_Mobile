@@ -319,7 +319,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                   borderRadius: BorderRadius.circular(2.h),
                 ),
                 child: SearchChoices.single(
-                  items: provider.softwareList.map((item) {
+                  items: provider.getAvailableSoftwareList().map((item) {
                     return DropdownMenuItem(
                       child: Text(item),
                       value: item,
@@ -971,7 +971,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.cargoGearTypes.map((item) {
+                          items: provider.getAvailableCargoGearTypes().map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -1002,16 +1002,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.cargoGearMakerFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.cargoGearMakerFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1029,16 +1026,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.cargoGearSWLFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.cargoGearSWLFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1271,7 +1265,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.metalWorkingSkillsTypes.map((item) {
+                          items: provider.getAvailableMetalWorkingSkillsTypes().map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -1599,7 +1593,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.tankCoatingTypes.map((item) {
+                          items: provider.getAvailableTankCoatingTypes().map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -1822,7 +1816,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.regionalAgreements.map((item) {
+                          items: provider.getAvailableRegionalAgreements().map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -1849,7 +1843,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                           borderRadius: BorderRadius.circular(2.h),
                         ),
                         child: SearchChoices.single(
-                          items: provider.ports.map((item) {
+                          items: provider.getAvailablePorts().map((item) {
                             return DropdownMenuItem(
                               child: Text(item),
                               value: item,
@@ -1872,6 +1866,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                       padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
@@ -1893,16 +1889,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                             voidCallback: (value) {},
                             fontSize: AppFontSize.fontSize16,
                             inputFontSize: AppFontSize.fontSize16,
-                            backgroundColor: provider.dateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA,
+                            backgroundColor: AppColors.Color_FAFAFA,
                             borderColor: AppColors.buttonColor,
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: provider.dateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA,
+                            fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
                             onFieldSubmitted: (String) {},
                           ),
                         ),
@@ -1922,16 +1915,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                         voidCallback: (value) {},
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.observationsFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.observationsFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                     ),
@@ -1982,16 +1972,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
             voidCallback: (value) {},
             fontSize: AppFontSize.fontSize16,
             inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: provider.inspectionByFocusNode.hasFocus
-                ? AppColors.activeFieldBgColor
-                : AppColors.Color_FAFAFA,
+            backgroundColor: AppColors.Color_FAFAFA,
             borderColor: AppColors.buttonColor,
             textColor: Colors.black,
             labelColor: AppColors.Color_9E9E9E,
             cursorColor: AppColors.Color_212121,
-            fillColor: provider.inspectionByFocusNode.hasFocus
-                ? AppColors.activeFieldBgColor
-                : AppColors.Color_FAFAFA,
+            fillColor: AppColors.Color_FAFAFA,
+            activeFillColor: AppColors.activeFieldBgColor,
             onFieldSubmitted: (String) {},
           ),
         ),
@@ -2005,7 +1992,7 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
               borderRadius: BorderRadius.circular(2.h),
             ),
             child: SearchChoices.single(
-              items: provider.vettingPorts.map((item) {
+              items: provider.getAvailableVettingPorts().map((item) {
                 return DropdownMenuItem(
                   child: Text(item),
                   value: item,
@@ -2028,6 +2015,8 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
           padding: EdgeInsets.symmetric(vertical: 1.h),
           child: GestureDetector(
             onTap: () async {
+              // Clear focus from all fields before opening date picker
+              FocusScope.of(context).unfocus();
               final DateTime? picked = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
@@ -2049,16 +2038,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
                 voidCallback: (value) {},
                 fontSize: AppFontSize.fontSize16,
                 inputFontSize: AppFontSize.fontSize16,
-                backgroundColor: provider.vettingDateFocusNode.hasFocus
-                    ? AppColors.activeFieldBgColor
-                    : AppColors.Color_FAFAFA,
+                backgroundColor: AppColors.Color_FAFAFA,
                 borderColor: AppColors.buttonColor,
                 textColor: Colors.black,
                 labelColor: AppColors.Color_9E9E9E,
                 cursorColor: AppColors.Color_212121,
-                fillColor: provider.vettingDateFocusNode.hasFocus
-                    ? AppColors.activeFieldBgColor
-                    : AppColors.Color_FAFAFA,
+                fillColor: AppColors.Color_FAFAFA,
+                activeFillColor: AppColors.activeFieldBgColor,
                 onFieldSubmitted: (String) {},
               ),
             ),
@@ -2078,16 +2064,13 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
             voidCallback: (value) {},
             fontSize: AppFontSize.fontSize16,
             inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: provider.vettingObservationsFocusNode.hasFocus
-                ? AppColors.activeFieldBgColor
-                : AppColors.Color_FAFAFA,
+            backgroundColor: AppColors.Color_FAFAFA,
             borderColor: AppColors.buttonColor,
             textColor: Colors.black,
             labelColor: AppColors.Color_9E9E9E,
             cursorColor: AppColors.Color_212121,
-            fillColor: provider.vettingObservationsFocusNode.hasFocus
-                ? AppColors.activeFieldBgColor
-                : AppColors.Color_FAFAFA,
+            fillColor: AppColors.Color_FAFAFA,
+            activeFillColor: AppColors.activeFieldBgColor,
             onFieldSubmitted: (String) {},
           ),
         ),

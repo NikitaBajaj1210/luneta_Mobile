@@ -82,9 +82,8 @@ class AwardsAchievementsScreen extends StatelessWidget {
                     hintText: "Best Employee of the Year",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.titleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.titleFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.issuerFocusNode);
@@ -101,9 +100,8 @@ class AwardsAchievementsScreen extends StatelessWidget {
                     hintText: "Company Name",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.issuerFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.issuerFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.descriptionFocusNode);
@@ -114,6 +112,8 @@ class AwardsAchievementsScreen extends StatelessWidget {
                     context,
                     provider.dateAwarded,
                     (BuildContext context) async {
+                      // Clear focus from all fields before opening date picker
+                      FocusScope.of(context).unfocus();
                       final DateTime? picked = await showDatePicker(
                         context: context,
                         initialDate: provider.dateAwarded ?? DateTime.now(),
@@ -137,9 +137,8 @@ class AwardsAchievementsScreen extends StatelessWidget {
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.descriptionFocusNode.unfocus();
                     },

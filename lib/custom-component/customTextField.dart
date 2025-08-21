@@ -32,41 +32,54 @@ Widget customTextField({
   FocusNode? focusNode,
   String? FontFamily,
   bool isReadOnly = false, // New optional parameter for read-only
-  required Color fillColor,
+  Color? fillColor, // Make optional
+  Color? activeFillColor, // New parameter for active state
   required Function(String)? onFieldSubmitted,
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled, // New parameter
+  VoidCallback? onTap, // New parameter for onTap functionality
 }) {
   final FocusNode _focusNode = focusNode ?? FocusNode();
-  return Container(
-    width: width,
-    padding: EdgeInsets.symmetric(horizontal: 0.1.w),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(2.h),
-    ),
-    child: TextFormField(
-      controller: controller,
-      enabled: isEditable ?? true,
-      readOnly: isReadOnly,
-      cursorColor: AppColors.Color_212121,
-      textInputAction: textInputAction,
-      maxLength: maxLength,
-      validator: voidCallback,
-      keyboardType: textInputType,
-      inputFormatters: inputFormatter,
-      onChanged: onChange,
-      obscureText: obscureText,
-      focusNode: _focusNode,
-      onFieldSubmitted: onFieldSubmitted,
-      autovalidateMode: autovalidateMode, // Use provided autovalidateMode
-      style: TextStyle(
-        fontSize: AppFontSize.fontSize16,
-        color: textColor ?? AppColors.buttonColor,
-        fontFamily:AppColors.fontFamilySemiBold,
-        fontWeight: FontWeight.w600,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: fillColor,
+  
+  return ListenableBuilder(
+    listenable: _focusNode,
+    builder: (context, child) {
+      // Determine fill color based on focus state
+      Color currentFillColor = fillColor ?? AppColors.Color_FAFAFA;
+      if (_focusNode.hasFocus && activeFillColor != null) {
+        currentFillColor = activeFillColor!;
+      }
+      
+      return Container(
+        width: width,
+        padding: EdgeInsets.symmetric(horizontal: 0.1.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2.h),
+        ),
+        child: TextFormField(
+          controller: controller,
+          enabled: isEditable ?? true,
+          readOnly: isReadOnly,
+          cursorColor: AppColors.Color_212121,
+          textInputAction: textInputAction,
+          maxLength: maxLength,
+          validator: voidCallback,
+          keyboardType: textInputType,
+          inputFormatters: inputFormatter,
+          onChanged: onChange,
+          obscureText: obscureText,
+          focusNode: _focusNode,
+          onFieldSubmitted: onFieldSubmitted,
+          autovalidateMode: autovalidateMode, // Use provided autovalidateMode
+          onTap: onTap, // Add onTap functionality
+          style: TextStyle(
+            fontSize: AppFontSize.fontSize16,
+            color: textColor ?? AppColors.buttonColor,
+            fontFamily:AppColors.fontFamilySemiBold,
+            fontWeight: FontWeight.w600,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: currentFillColor,
         counterText: '',
         isDense: true,
         contentPadding: EdgeInsets.symmetric(vertical: 2.5.h, horizontal: 4.w),
@@ -109,7 +122,9 @@ Widget customTextField({
           onPressed: onPrefixIconPressed,
         )
             : null,
-      ),
-    ),
+          ),
+        ),
+      );
+    },
   );
 }

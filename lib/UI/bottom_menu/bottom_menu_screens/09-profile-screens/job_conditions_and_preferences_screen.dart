@@ -27,62 +27,124 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
     });
   }
 
+  String? _validateAgencyName(String value) {
+    // First check: empty string
+    if (value.isEmpty) {
+      return 'please enter Agency Name';
+    }
+    
+    // Second check: only whitespace
+    if (value.trim().isEmpty) {
+      return 'please enter valid Agency Name';
+    }
+    
+    // Third check: contains only whitespace characters
+    if (value.replaceAll(RegExp(r'\s+'), '').isEmpty) {
+      return 'please enter valid Agency Name';
+    }
+    
+    // Fourth check: emojis
+    final emojiRegex = RegExp(r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]', unicode: true);
+    if (emojiRegex.hasMatch(value)) {
+      return 'emojis are not allowed';
+    }
+    
+    return null;
+  }
+
   void _showAddAgencyDialog(JobConditionsAndPreferencesProvider provider) {
     final TextEditingController agencyNameController = TextEditingController();
+    final FocusNode _focusNode = FocusNode(); // Add focus node to maintain focus
+    String? errorMessage; // Move outside builder to persist state
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Manning Agency'),
-          content: customTextField(
-            context: context,
-            controller: agencyNameController,
-            hintText: 'Enter agency name',
-            textInputType: TextInputType.text,
-            obscureText: false,
-            voidCallback: (value) {},
-            fontSize: AppFontSize.fontSize16,
-            inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
-            borderColor: AppColors.buttonColor,
-            textColor: Colors.black,
-            labelColor: AppColors.Color_9E9E9E,
-            cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
-            onFieldSubmitted: (String) {},
-          ),
-          actions: <Widget>[
-            TextButton(
-              child:  Text("Cancel",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Add",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () async {
-                if (agencyNameController.text.toString().trim().isNotEmpty) {
-                  bool success = await provider.addManningAgency(context, agencyNameController.text.toString().trim());
-                  if (success) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text('Add Manning Agency'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextField(
+                    context: context,
+                    controller: agencyNameController,
+                    focusNode: _focusNode, // Add focus node
+                    hintText: 'Enter agency name',
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                    voidCallback: (value) {},
+                    fontSize: AppFontSize.fontSize16,
+                    inputFontSize: AppFontSize.fontSize16,
+                    backgroundColor: AppColors.Color_FAFAFA,
+                    borderColor: AppColors.buttonColor,
+                    textColor: Colors.black,
+                    labelColor: AppColors.Color_9E9E9E,
+                    cursorColor: AppColors.Color_212121,
+                    fillColor: AppColors.Color_FAFAFA,
+                    onFieldSubmitted: (String) {},
+                    onChange: (value) {
+                      setDialogState(() {
+                        errorMessage = _validateAgencyName(value);
+                      });
+                    },
+                  ),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.h, left: 1.w),
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: AppFontSize.fontSize12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child:  Text("Cancel",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () {
                     Navigator.of(context).pop();
-                  }
-                }
-              },
-            ),
-          ],
+                  },
+                ),
+                TextButton(
+                  child: Text("Add",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () async {
+                    final validation = _validateAgencyName(agencyNameController.text);
+                    if (validation == null) {
+                      bool success = await provider.addManningAgency(context, agencyNameController.text.toString().trim());
+                      if (success) {
+                        Navigator.of(context).pop();
+                      }
+                    } else {
+                      setDialogState(() {
+                        errorMessage = validation;
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      _focusNode.dispose(); // Dispose focus node when dialog closes
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -563,6 +625,8 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       ),
                       GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
@@ -580,6 +644,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                                 text: provider.availableFrom == null
                                     ? ''
                                     : "${provider.availableFrom!.toLocal()}".split(' ')[0]),
+                            focusNode: provider.availableFromFocusNode,
                             hintText: 'Select Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -597,6 +662,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
                             fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
                             onFieldSubmitted: (String) {},
                           ),
                         ),
@@ -619,6 +685,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       customTextField(
                         context: context,
                         controller: provider.minOnBoardDurationController,
+                        focusNode: provider.minOnBoardDurationFocusNode,
                         hintText: 'Enter Duration',
                         textInputType: TextInputType.number,
                         obscureText: false,
@@ -636,6 +703,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
                         fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                       SizedBox(height: 1.h),
@@ -656,6 +724,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       customTextField(
                         context: context,
                         controller: provider.maxOnBoardDurationController,
+                        focusNode: provider.maxOnBoardDurationFocusNode,
                         hintText: 'Enter Duration',
                         textInputType: TextInputType.number,
                         obscureText: false,
@@ -673,6 +742,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
                         fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                       SizedBox(height: 1.h),
@@ -693,6 +763,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       customTextField(
                         context: context,
                         controller: provider.minAtHomeDurationController,
+                        focusNode: provider.minAtHomeDurationFocusNode,
                         hintText: 'Enter Duration',
                         textInputType: TextInputType.number,
                         obscureText: false,
@@ -705,6 +776,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
                         fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                       SizedBox(height: 1.h),
@@ -725,6 +797,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       customTextField(
                         context: context,
                         controller: provider.maxAtHomeDurationController,
+                        focusNode: provider.maxAtHomeDurationFocusNode,
                         hintText: 'Enter Duration',
                         textInputType: TextInputType.number,
                         obscureText: false,
@@ -737,6 +810,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
                         fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                       SizedBox(height: 1.h),
@@ -892,6 +966,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       customTextField(
                         context: context,
                         controller: provider.lastJobSalaryController,
+                        focusNode: provider.lastJobSalaryFocusNode,
                         hintText: 'Enter Salary',
                         textInputType: TextInputType.number,
                         obscureText: false,
@@ -909,6 +984,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
                         fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (String) {},
                       ),
                       SizedBox(height: 1.h),
@@ -976,6 +1052,8 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       ),
                       GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           final DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
@@ -993,6 +1071,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                                 text: provider.lastPromotedDate == null
                                     ? ''
                                     : "${provider.lastPromotedDate!.toLocal()}".split(' ')[0]),
+                            focusNode: provider.lastPromotedDateFocusNode,
                             hintText: 'Select Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -1005,6 +1084,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
                             fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
                             onFieldSubmitted: (String) {},
                           ),
                         ),

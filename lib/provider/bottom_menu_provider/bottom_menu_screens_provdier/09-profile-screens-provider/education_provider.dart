@@ -144,6 +144,14 @@ class EducationProvider with ChangeNotifier {
   String? certificationDocumentPath_temp;
   String? certificationDocumentOriginalName_temp;
 
+  // Focus Nodes
+  final FocusNode fieldOfStudyFocusNode = FocusNode();
+  final FocusNode educationalInstitutionFocusNode = FocusNode();
+  final FocusNode graduationDateFocusNode = FocusNode();
+  final FocusNode issuingAuthorityFocusNode = FocusNode();
+  final FocusNode issueDateFocusNode = FocusNode();
+  final FocusNode expiryDateFocusNode = FocusNode();
+
   List<String> certificationTypes = ["Safety", "Technical", "Language","Management","Other"];
 
   void setTypeOfCertification(String value) {
@@ -668,6 +676,27 @@ class EducationProvider with ChangeNotifier {
     autovalidateModeCertification = AutovalidateMode.disabled;
     autovalidateModeLanguages = AutovalidateMode.disabled;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    // Dispose Focus Nodes
+    fieldOfStudyFocusNode.dispose();
+    educationalInstitutionFocusNode.dispose();
+    graduationDateFocusNode.dispose();
+    issuingAuthorityFocusNode.dispose();
+    issueDateFocusNode.dispose();
+    expiryDateFocusNode.dispose();
+    
+    // Dispose Text Controllers
+    fieldOfStudyController.dispose();
+    educationalInstitutionController.dispose();
+    graduationDateController.dispose();
+    issuingAuthorityController.dispose();
+    issueDateController.dispose();
+    expiryDateController.dispose();
+    
+    super.dispose();
   }
 }
 

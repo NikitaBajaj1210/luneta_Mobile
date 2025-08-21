@@ -75,6 +75,19 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   List<String> softwareList = ["Danaos", "Benefit", "BASS net","Other"];
   List<String> levelList = ["Fair", "Good", "Very Good", "Excellent","Beginner","Intermediate","Advanced"];
 
+  // Get available software options excluding already selected ones
+  List<String> getAvailableSoftwareList() {
+    List<String> selectedSoftware = computerAndSoftwareList.map((e) => e.software).toList();
+    
+    // If editing, include the current item's software in available options
+    if (computerAndSoftware_IsEdit && computerAndSoftware_Edit_Index != null) {
+      String currentSoftware = computerAndSoftwareList[computerAndSoftware_Edit_Index!].software;
+      selectedSoftware.remove(currentSoftware);
+    }
+    
+    return softwareList.where((software) => !selectedSoftware.contains(software)).toList();
+  }
+
   void setSoftware(String value) {
     software = value;
     notifyListeners();
@@ -259,65 +272,127 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     }
   }
 
+  String? _validateCargoName(String value) {
+    // First check: empty string
+    if (value.isEmpty) {
+      return 'please enter Cargo Name';
+    }
+    
+    // Second check: only whitespace
+    if (value.trim().isEmpty) {
+      return 'please enter valid Cargo Name';
+    }
+    
+    // Third check: contains only whitespace characters
+    if (value.replaceAll(RegExp(r'\s+'), '').isEmpty) {
+      return 'please enter valid Cargo Name';
+    }
+    
+    // Fourth check: emojis
+    final emojiRegex = RegExp(r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]', unicode: true);
+    if (emojiRegex.hasMatch(value)) {
+      return 'emojis are not allowed';
+    }
+    
+    return null;
+  }
+
   void showAddCargoDialog(BuildContext context, String title, String endpoint,
       Function onSave) {
     final nameController = TextEditingController();
+    final FocusNode _focusNode = FocusNode(); // Add focus node to maintain focus
+    String? errorMessage; // Move outside builder to persist state
+    
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: customTextField(
-            context: context,
-            controller: nameController,
-            hintText: 'Enter Name',
-            textInputType: TextInputType.text,
-            obscureText: false,
-            voidCallback: (value) {},
-            fontSize: AppFontSize.fontSize16,
-            inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
-            borderColor: AppColors.buttonColor,
-            textColor: Colors.black,
-            labelColor: AppColors.Color_9E9E9E,
-            cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
-            onFieldSubmitted: (String) {},
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child:  Text("Cancel",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (nameController.text.toString().trim().isNotEmpty) {
-                  bool success = await createOrUpdateCargo(
-                      endpoint, nameController.text.toString().trim(), context);
-                  if (success) {
-                    onSave();
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextField(
+                    context: context,
+                    controller: nameController,
+                    focusNode: _focusNode, // Add focus node
+                    hintText: 'Enter Name',
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                    voidCallback: (value) {},
+                    fontSize: AppFontSize.fontSize16,
+                    inputFontSize: AppFontSize.fontSize16,
+                    backgroundColor: AppColors.Color_FAFAFA,
+                    borderColor: AppColors.buttonColor,
+                    textColor: Colors.black,
+                    labelColor: AppColors.Color_9E9E9E,
+                    cursorColor: AppColors.Color_212121,
+                    fillColor: AppColors.Color_FAFAFA,
+                    onFieldSubmitted: (String) {},
+                    onChange: (value) {
+                      setDialogState(() {
+                        errorMessage = _validateCargoName(value);
+                      });
+                    },
+                  ),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.0, left: 4.0),
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: AppFontSize.fontSize12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
                     Navigator.pop(context);
-                  }
-                }
-              },
-              child: Text("Add",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-            ),
-          ],
+                  },
+                  child:  Text("Cancel",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final validation = _validateCargoName(nameController.text);
+                    if (validation == null) {
+                      bool success = await createOrUpdateCargo(
+                          endpoint, nameController.text.toString().trim(), context);
+                      if (success) {
+                        onSave();
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      setDialogState(() {
+                        errorMessage = validation;
+                      });
+                    }
+                  },
+                  child: Text("Add",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                ),
+              ],
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      _focusNode.dispose(); // Dispose focus node when dialog closes
+    });
   }
 
   // Cargo Gear Experience
@@ -341,6 +416,19 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   final cargoGearSWLFocusNode = FocusNode();
   
   List<String> cargoGearTypes = ["Cranes", "Grabs"];
+
+  // Get available cargo gear types excluding already selected ones
+  List<String> getAvailableCargoGearTypes() {
+    List<String> selectedTypes = cargoGearExperienceList.map((e) => e.type).toList();
+    
+    // If editing, include the current item's type in available options
+    if (cargoGearExperience_IsEdit && cargoGearExperience_Edit_Index != null) {
+      String currentType = cargoGearExperienceList[cargoGearExperience_Edit_Index!].type;
+      selectedTypes.remove(currentType);
+    }
+    
+    return cargoGearTypes.where((type) => !selectedTypes.contains(type)).toList();
+  }
 
   void setCargoGearExperience(bool value) {
     cargoGearExperience = value;
@@ -421,6 +509,19 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     "Lathe"
   ];
   // List<String> metalWorkingSkillLevelList = ["Beginner", "Intermediate"];
+
+  // Get available metal working skills types excluding already selected ones
+  List<String> getAvailableMetalWorkingSkillsTypes() {
+    List<String> selectedSkills = metalWorkingSkillsList.map((e) => e.skillSelection).toList();
+    
+    // If editing, include the current item's skill in available options
+    if (metalWorkingSkills_IsEdit && metalWorkingSkills_Edit_Index != null) {
+      String currentSkill = metalWorkingSkillsList[metalWorkingSkills_Edit_Index!].skillSelection;
+      selectedSkills.remove(currentSkill);
+    }
+    
+    return metalWorkingSkillsTypes.where((skill) => !selectedSkills.contains(skill)).toList();
+  }
 
   void setMetalWorkingSkills(bool value) {
     metalWorkingSkills = value;
@@ -568,6 +669,19 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   String? tankCoatingType;
   List<String> tankCoatingTypes = ["Epoxy", "Steel", "Stainless Steel"];
 
+  // Get available tank coating types excluding already selected ones
+  List<String> getAvailableTankCoatingTypes() {
+    List<String> selectedTypes = tankCoatingExperienceList.map((e) => e.type).toList();
+    
+    // If editing, include the current item's type in available options
+    if (tankCoatingExperience_IsEdit && tankCoatingExperience_Edit_Index != null) {
+      String currentType = tankCoatingExperienceList[tankCoatingExperience_Edit_Index!].type;
+      selectedTypes.remove(currentType);
+    }
+    
+    return tankCoatingTypes.where((type) => !selectedTypes.contains(type)).toList();
+  }
+
   void setTankCoatingExperience(bool value) {
     tankCoatingExperience = value;
     notifyListeners();
@@ -636,6 +750,32 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   
   List<String> regionalAgreements = ["AMSA", "China Federation"];
   List<String> ports = ["DOCKED", "AT_SEA", "ANCHORAGE","IN_TRANSIT","IN_PORT","LOADING","UNLOADING","MAINTENANCE"];
+
+  // Get available regional agreements excluding already selected ones
+  List<String> getAvailableRegionalAgreements() {
+    List<String> selectedAgreements = portStateControlExperienceList.map((e) => e.regionalAgreement).toList();
+    
+    // If editing, include the current item's agreement in available options
+    if (portStateControlExperience_IsEdit && portStateControlExperience_Edit_Index != null) {
+      String currentAgreement = portStateControlExperienceList[portStateControlExperience_Edit_Index!].regionalAgreement;
+      selectedAgreements.remove(currentAgreement);
+    }
+    
+    return regionalAgreements.where((agreement) => !selectedAgreements.contains(agreement)).toList();
+  }
+
+  // Get available ports excluding already selected ones
+  List<String> getAvailablePorts() {
+    List<String> selectedPorts = portStateControlExperienceList.map((e) => e.port).toList();
+    
+    // If editing, include the current item's port in available options
+    if (portStateControlExperience_IsEdit && portStateControlExperience_Edit_Index != null) {
+      String currentPort = portStateControlExperienceList[portStateControlExperience_Edit_Index!].port;
+      selectedPorts.remove(currentPort);
+    }
+    
+    return ports.where((port) => !selectedPorts.contains(port)).toList();
+  }
 
   void setPortStateControlExperience(bool value) {
     portStateControlExperience = value;
@@ -720,6 +860,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   final vettingObservationsFocusNode = FocusNode();
   
   List<String> vettingPorts = ["New York", "Los Angeles", "Shanghai"];
+
+  // Get available vetting ports (no filtering needed as this is a single item, not a list)
+  List<String> getAvailableVettingPorts() {
+    return vettingPorts;
+  }
 
   void setVettingPort(String value) {
     vettingPort = value;

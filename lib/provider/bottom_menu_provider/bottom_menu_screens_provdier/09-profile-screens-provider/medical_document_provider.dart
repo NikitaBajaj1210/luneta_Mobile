@@ -788,6 +788,7 @@ class MedicalDocumentProvider extends ChangeNotifier {
   final FocusNode drugAndAlcoholTestIssuingAuthorityFocusNode = FocusNode();
   final FocusNode drugAndAlcoholTestIssueDateFocusNode = FocusNode();
   final FocusNode drugAndAlcoholTestExpiryDateFocusNode = FocusNode();
+  final FocusNode vaccinationCertificateCertificateNoFocusNode = FocusNode();
   final FocusNode vaccinationCertificateIssuingAuthorityFocusNode = FocusNode();
   final FocusNode vaccinationCertificateIssueDateFocusNode = FocusNode();
   final FocusNode vaccinationCertificateExpiryDateFocusNode = FocusNode();
@@ -1192,6 +1193,39 @@ class MedicalDocumentProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  @override
+  void dispose() {
+    // Dispose Focus Nodes
+    medicalFitnessCertificateNoFocusNode.dispose();
+    medicalFitnessIssuingAuthorityFocusNode.dispose();
+    medicalFitnessIssueDateFocusNode.dispose();
+    medicalFitnessExpiryDateFocusNode.dispose();
+    drugAndAlcoholTestCertificateNoFocusNode.dispose();
+    drugAndAlcoholTestIssuingAuthorityFocusNode.dispose();
+    drugAndAlcoholTestIssueDateFocusNode.dispose();
+    drugAndAlcoholTestExpiryDateFocusNode.dispose();
+    vaccinationCertificateCertificateNoFocusNode.dispose();
+    vaccinationCertificateIssuingAuthorityFocusNode.dispose();
+    vaccinationCertificateIssueDateFocusNode.dispose();
+    vaccinationCertificateExpiryDateFocusNode.dispose();
+    
+    // Dispose Text Controllers
+    medicalFitnessCertificateNoController.dispose();
+    medicalFitnessIssuingAuthorityController.dispose();
+    medicalFitnessIssueDateController.dispose();
+    medicalFitnessExpiryDateController.dispose();
+    drugAndAlcoholTestCertificateNoController.dispose();
+    drugAndAlcoholTestIssuingAuthorityController.dispose();
+    drugAndAlcoholTestIssueDateController.dispose();
+    drugAndAlcoholTestExpiryDateController.dispose();
+    vaccinationCertificateCertificateNoController.dispose();
+    vaccinationCertificateIssuingAuthorityController.dispose();
+    vaccinationCertificateIssueDateController.dispose();
+    vaccinationCertificateExpiryDateController.dispose();
+    
+    super.dispose();
   }
 }
 

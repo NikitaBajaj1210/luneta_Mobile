@@ -559,6 +559,8 @@ class ProfileProvider with ChangeNotifier {
         "sex": selectedGender == 'Gender' ? '' : selectedGender,
       });
 
+
+
       if (profileImage != null) {
         String? mimeType = lookupMimeType(profileImage!.path);
         if (mimeType == null || !mimeType.startsWith('image/')) {
@@ -580,6 +582,7 @@ class ProfileProvider with ChangeNotifier {
           ),
         );
       }
+      print("Profile Body ${formData}");
       var response = await dio.post(
         seafarerProfileBasicInfo,
         data: formData,
@@ -588,6 +591,8 @@ class ProfileProvider with ChangeNotifier {
           contentType: 'multipart/form-data',
         ),
       );
+
+
       if (context.mounted) stopLoading(context);
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (context.mounted) {

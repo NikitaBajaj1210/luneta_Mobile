@@ -102,9 +102,8 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                     hintText: "David Alexander",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.nameFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       provider.nameFocusNode.unfocus();
                     },
@@ -118,9 +117,8 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                     focusNode: provider.companyFocusNode,
                     hintText: "Paypal Inc.",
                     textInputType: TextInputType.text,
-                    fillColor: provider.companyFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
                     onFieldSubmitted: (value) {
                       provider.companyFocusNode.unfocus();
@@ -135,9 +133,8 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                     focusNode: provider.occupationFocusNode,
                     hintText: "Supervisor",
                     textInputType: TextInputType.text,
-                    fillColor: provider.occupationFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
                     onFieldSubmitted: (value) {
                       provider.occupationFocusNode.unfocus();
@@ -156,9 +153,7 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                     voidCallback: validateEmail,
                     fontSize: AppFontSize.fontSize16,
                     inputFontSize: AppFontSize.fontSize16,
-                    backgroundColor: provider.emailFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    backgroundColor: AppColors.Color_FAFAFA,
                     borderColor: AppColors.buttonColor,
                     labelColor: AppColors.Color_9E9E9E,
                     cursorColor: AppColors.Color_212121,
@@ -166,15 +161,12 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                       "assets/images/emailIcon.png",
                       width: 2.5.h,
                       height: 2.5.h,
-                      color: provider.emailFocusNode.hasFocus
-                          ? AppColors.buttonColor
-                          : (provider.emailController.text.isNotEmpty
+                      color: provider.emailController.text.isNotEmpty
                           ? AppColors.Color_212121
-                          : AppColors.Color_BDBDBD),
+                          : AppColors.Color_BDBDBD,
                     ),
-                    fillColor: provider.emailFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       FocusScope.of(context).unfocus();
                     },
@@ -193,12 +185,8 @@ class _ReferencesScreenState extends State<ReferencesScreen> {
                       provider.phoneNumber = newNumber;
                     },
                     maxLength: 10,
-                    backgroundColor: provider.phoneFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
-                    borderColor: provider.phoneFocusNode.hasFocus
-                        ? AppColors.buttonColor
-                        : Colors.transparent,
+                    backgroundColor: AppColors.Color_FAFAFA,
+                    borderColor: Colors.transparent,
                     isEditable: true,
                     focusNode: provider.phoneFocusNode,
                   ),

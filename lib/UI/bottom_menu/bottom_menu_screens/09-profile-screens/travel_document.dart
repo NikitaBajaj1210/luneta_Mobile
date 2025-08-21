@@ -71,7 +71,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
 
   Future<void> _handleSaveButton(TravelDocumentProvider provider) async {
       provider.autovalidateMode = AutovalidateMode.always;
-    if (provider.formKey.currentState!.validate() && validateAttachment(provider)) {
+      provider.validateDropdownFields(); // Validate dropdown fields
+    if (provider.formKey.currentState!.validate() && !provider.hasDropdownErrors && validateAttachment(provider)) {
       // Show loading indicator
       showDialog(
         context: context,
@@ -330,7 +331,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     autovalidateMode: provider.autovalidateMode,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter Seafarer’s Registration No.';
+                                        return "Please enter Seafarer's Registration No.";
                                       }
                                       return null;
                                     },
@@ -341,12 +342,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider
-                                            .seafarerRegistrationNoFocusNode
-                                            .hasFocus
-                                        ? AppColors.activeFieldBgColor
-                                        : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.seafarerRegistrationNoFocusNode);
+                                    },
                                   ),
 
                                   // Passport
@@ -398,11 +400,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor:
-                                        provider.passportNoFocusNode.hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.passportNoFocusNode);
+                                    },
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -423,58 +427,63 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       color: AppColors.Color_FAFAFA,
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: SearchChoices.single(
-                                      items: countries.map((country) {
-                                        return DropdownMenuItem(
-                                          child: Text(country['name']),
-                                          value: country['name'],
-                                        );
-                                      }).toList(),
-                                      value: provider.passportCountry,
-                                      hint: "Select Country",
-                                      onClear: () {
-                                        provider.setPassportCountry('');
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Clear focus from all text fields when dropdown is tapped
+                                        FocusScope.of(context).unfocus();
                                       },
-                                      autovalidateMode:
-                                          provider.autovalidateMode,
-                                      validator: (value) {
-                                        
-                                        print(value);
-                                        print(provider.autovalidateMode);
-                                        if ((value == null || value=='') &&
-                                            provider.autovalidateMode ==
-                                                AutovalidateMode.always) {
-                                          return '      please select Country';
-                                        }
-                                        return null;
-                                      },
-                                      searchHint: "Search for a country",
-                                      onChanged: (value) {
-                                        provider.setPassportCountry(
-                                            value as String);
-                                      },
-                                      isExpanded: true,
-                                      underline: SizedBox(),
-                                      displayItem: (item, selected) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: selected
-                                                ? AppColors.activeFieldBgColor
-                                                : AppColors.Color_FAFAFA,
-                                            borderRadius:
-                                                BorderRadius.circular(2.h),
-                                            border: Border.all(
-                                              color: AppColors.transparent,
-                                              width: 1,
+                                      child: SearchChoices.single(
+                                        items: countries.map((country) {
+                                          return DropdownMenuItem(
+                                            child: Text(country['name']),
+                                            value: country['name'],
+                                          );
+                                        }).toList(),
+                                        value: provider.passportCountry,
+                                        hint: "Select Country",
+                                        onClear: () {
+                                          provider.setPassportCountry('');
+                                        },
+                                        searchHint: "Search for a country",
+                                        onChanged: (value) {
+                                          provider.setPassportCountry(
+                                              value as String);
+                                        },
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        displayItem: (item, selected) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: selected
+                                                  ? AppColors.activeFieldBgColor
+                                                  : AppColors.Color_FAFAFA,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.h),
+                                              border: Border.all(
+                                                color: AppColors.transparent,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: ListTile(
-                                            title: Text(item.child.data),
-                                          ),
-                                        );
-                                      },
+                                            child: ListTile(
+                                              title: Text(item.child.data),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
+                                  // Show passport country error outside dropdown
+                                  if (provider.passportCountryError != null)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        provider.passportCountryError!,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding:
@@ -530,11 +539,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .passportIssueDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -616,11 +622,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .passportExpiryDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -641,6 +644,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus to dismiss keyboard before showing bottom sheet
+                                      FocusScope.of(context).unfocus();
                                       await provider.showAttachmentOptions(
                                           context, 'passport');
                                     },
@@ -876,7 +881,7 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     autovalidateMode: provider.autovalidateMode,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter Seaman’s Book No.';
+                                        return "Please enter Seaman's Book No.";
                                       }
                                       return null;
                                     },
@@ -887,11 +892,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor:
-                                        provider.seamanBookNoFocusNode.hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.seamanBookNoFocusNode);
+                                    },
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -912,55 +919,63 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       color: AppColors.Color_FAFAFA,
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: SearchChoices.single(
-                                      items: countries.map((country) {
-                                        return DropdownMenuItem(
-                                          child: Text(country['name']),
-                                          value: country['name'],
-                                        );
-                                      }).toList(),
-                                      value: provider.seamanIssuingCountry,
-                                      hint: "Select Country",
-                                      onClear: () {
-                                        provider.setSeamanIssuingCountry('');
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Clear focus from all text fields when dropdown is tapped
+                                        FocusScope.of(context).unfocus();
                                       },
-                                      autovalidateMode:
-                                          provider.autovalidateMode,
-                                      validator: (value) {
-                                        if ((value == null) &&
-                                            provider.autovalidateMode ==
-                                                AutovalidateMode.always) {
-                                          return '      please select Country';
-                                        }
-                                        return null;
-                                      },
-                                      searchHint: "Search for a country",
-                                      onChanged: (value) {
-                                        provider.setSeamanIssuingCountry(
-                                            value as String);
-                                      },
-                                      isExpanded: true,
-                                      underline: SizedBox(),
-                                      displayItem: (item, selected) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: selected
-                                                ? AppColors.activeFieldBgColor
-                                                : AppColors.Color_FAFAFA,
-                                            borderRadius:
-                                                BorderRadius.circular(2.h),
-                                            border: Border.all(
-                                              color: AppColors.transparent,
-                                              width: 1,
+                                      child: SearchChoices.single(
+                                        items: countries.map((country) {
+                                          return DropdownMenuItem(
+                                            child: Text(country['name']),
+                                            value: country['name'],
+                                          );
+                                        }).toList(),
+                                        value: provider.seamanIssuingCountry,
+                                        hint: "Select Country",
+                                        onClear: () {
+                                          provider.setSeamanIssuingCountry('');
+                                        },
+                                        searchHint: "Search for a country",
+                                        onChanged: (value) {
+                                          provider.setSeamanIssuingCountry(
+                                              value as String);
+                                        },
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        displayItem: (item, selected) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: selected
+                                                  ? AppColors.activeFieldBgColor
+                                                  : AppColors.Color_FAFAFA,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.h),
+                                              border: Border.all(
+                                                color: AppColors.transparent,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: ListTile(
-                                            title: Text(item.child.data),
-                                          ),
-                                        );
-                                      },
+                                            child: ListTile(
+                                              title: Text(item.child.data),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
+                                  // Show seaman issuing country error outside dropdown
+                                  if (provider.seamanIssuingCountryError != null)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        provider.seamanIssuingCountryError!,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding:
@@ -997,12 +1012,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider
-                                            .seamanIssuingAuthorityFocusNode
-                                            .hasFocus
-                                        ? AppColors.activeFieldBgColor
-                                        : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.seamanIssuingAuthorityFocusNode);
+                                    },
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -1059,11 +1075,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .seamanIssueDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -1146,26 +1159,31 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .seamanExpiryDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 1.h),
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        value: provider.seamanNeverExpire,
-                                        onChanged: (value) {
-                                          provider.setSeamanNeverExpire(value!);
-                                        },
-                                      ),
-                                      Text('Never expire'),
-                                    ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Clear focus from all text fields when checkbox is tapped
+                                      FocusScope.of(context).unfocus();
+                                      provider.setSeamanNeverExpire(!provider.seamanNeverExpire);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Checkbox(
+                                          value: provider.seamanNeverExpire,
+                                          onChanged: (value) {
+                                            FocusScope.of(context).unfocus();
+                                            provider.setSeamanNeverExpire(value!);
+                                          },
+                                        ),
+                                        Text('Never expire'),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -1186,55 +1204,63 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       color: AppColors.Color_FAFAFA,
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: SearchChoices.single(
-                                      items: nationalityList.map((nationality) {
-                                        return DropdownMenuItem(
-                                          child: Text(nationality['value']!),
-                                          value: nationality['value'],
-                                        );
-                                      }).toList(),
-                                      value: provider.seamanNationality,
-                                      hint: "Select Nationality",
-                                      onClear: () {
-                                        provider.setSeamanNationality('');
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Clear focus from all text fields when dropdown is tapped
+                                        FocusScope.of(context).unfocus();
                                       },
-                                      autovalidateMode:
-                                          provider.autovalidateMode,
-                                      validator: (value) {
-                                        if ((value == null || value.isEmpty) &&
-                                            provider.autovalidateMode ==
-                                                AutovalidateMode.always) {
-                                          return '      please select Nationality';
-                                        }
-                                        return null;
-                                      },
-                                      searchHint: "Search for a nationality",
-                                      onChanged: (value) {
-                                        provider.setSeamanNationality(
-                                            value as String);
-                                      },
-                                      isExpanded: true,
-                                      underline: SizedBox(),
-                                      displayItem: (item, selected) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: selected
-                                                ? AppColors.activeFieldBgColor
-                                                : AppColors.Color_FAFAFA,
-                                            borderRadius:
-                                                BorderRadius.circular(2.h),
-                                            border: Border.all(
-                                              color: AppColors.transparent,
-                                              width: 1,
+                                      child: SearchChoices.single(
+                                        items: nationalityList.map((nationality) {
+                                          return DropdownMenuItem(
+                                            child: Text(nationality['value']!),
+                                            value: nationality['value'],
+                                          );
+                                        }).toList(),
+                                        value: provider.seamanNationality,
+                                        hint: "Select Nationality",
+                                        onClear: () {
+                                          provider.setSeamanNationality('');
+                                        },
+                                        searchHint: "Search for a nationality",
+                                        onChanged: (value) {
+                                          provider.setSeamanNationality(
+                                              value as String);
+                                        },
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        displayItem: (item, selected) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: selected
+                                                  ? AppColors.activeFieldBgColor
+                                                  : AppColors.Color_FAFAFA,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.h),
+                                              border: Border.all(
+                                                color: AppColors.transparent,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: ListTile(
-                                            title: Text(item.child.data),
-                                          ),
-                                        );
-                                      },
+                                            child: ListTile(
+                                              title: Text(item.child.data),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
+                                  // Show seaman nationality error outside dropdown
+                                  if (provider.seamanNationalityError != null)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        provider.seamanNationalityError!,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding:
@@ -1249,11 +1275,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await provider.showAttachmentOptions(
-                                          context, 'seaman');
-                                    },
+                                                                          GestureDetector(
+                                          onTap: () async {
+                                            // Clear focus to dismiss keyboard before showing bottom sheet
+                                            FocusScope.of(context).unfocus();
+                                            await provider.showAttachmentOptions(
+                                                context, 'seaman');
+                                          },
                                     child: DottedBorder(
                                       borderType: BorderType.RRect,
                                       radius: Radius.circular(15),
@@ -1457,24 +1485,50 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   // Valid Seafarer’s Visa UI
                                   Row(
                                     children: [
-                                      Radio(
-                                        activeColor: AppColors.buttonColor,
-                                        value: true,
-                                        groupValue: provider.validSeafarerVisa,
-                                        onChanged: (value) {
-                                          provider.setValidSeafarerVisa(value!);
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Clear focus from all text fields when radio is tapped
+                                          FocusScope.of(context).unfocus();
+                                          provider.setValidSeafarerVisa(true);
                                         },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Radio(
+                                              activeColor: AppColors.buttonColor,
+                                              value: true,
+                                              groupValue: provider.validSeafarerVisa,
+                                              onChanged: (value) {
+                                                FocusScope.of(context).unfocus();
+                                                provider.setValidSeafarerVisa(value!);
+                                              },
+                                            ),
+                                            Text('Yes'),
+                                          ],
+                                        ),
                                       ),
-                                      Text('Yes'),
-                                      Radio(
-                                        activeColor: AppColors.buttonColor,
-                                        value: false,
-                                        groupValue: provider.validSeafarerVisa,
-                                        onChanged: (value) {
-                                          provider.setValidSeafarerVisa(value!);
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Clear focus from all text fields when radio is tapped
+                                          FocusScope.of(context).unfocus();
+                                          provider.setValidSeafarerVisa(false);
                                         },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Radio(
+                                              activeColor: AppColors.buttonColor,
+                                              value: false,
+                                              groupValue: provider.validSeafarerVisa,
+                                              onChanged: (value) {
+                                                FocusScope.of(context).unfocus();
+                                                provider.setValidSeafarerVisa(value!);
+                                              },
+                                            ),
+                                            Text('No'),
+                                          ],
+                                        ),
                                       ),
-                                      Text('No'),
                                     ],
                                   ),
                                   if (provider.validSeafarerVisa)
@@ -1503,64 +1557,71 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(2.h),
                                           ),
-                                          child: SearchChoices.single(
-                                            items: countries
-                                                .map((country) {
-                                              return DropdownMenuItem(
-                                                child: Text(country['name']),
-                                                value: country['name'],
-                                              );
-                                            }).toList(),
-                                            value: provider
-                                                .seafarerVisaIssuingCountry,
-                                            hint: "Select Country",
-                                            onClear: () {
-                                              provider
-                                                  .setSeafarerVisaIssuingCountry(
-                                                      '');
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // Clear focus from all text fields when dropdown is tapped
+                                              FocusScope.of(context).unfocus();
                                             },
-                                            autovalidateMode:
-                                                provider.autovalidateMode,
-                                            validator: (value) {
-                                              if (provider.validSeafarerVisa &&
-                                                  (value == null) &&
-                                                  provider.autovalidateMode ==
-                                                      AutovalidateMode.always) {
-                                                return '      please select Country';
-                                              }
-                                              return null;
-                                            },
-                                            searchHint: "Search for a country",
-                                            onChanged: (value) {
-                                              provider
-                                                  .setSeafarerVisaIssuingCountry(
-                                                      value as String);
-                                            },
-                                            isExpanded: true,
-                                            underline: SizedBox(),
-                                            displayItem: (item, selected) {
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  color: selected
-                                                      ? AppColors
-                                                          .activeFieldBgColor
-                                                      : AppColors.Color_FAFAFA,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          2.h),
-                                                  border: Border.all(
-                                                    color:
-                                                        AppColors.transparent,
-                                                    width: 1,
+                                            child: SearchChoices.single(
+                                              items: countries
+                                                  .map((country) {
+                                                return DropdownMenuItem(
+                                                  child: Text(country['name']),
+                                                  value: country['name'],
+                                                );
+                                              }).toList(),
+                                              value: provider
+                                                  .seafarerVisaIssuingCountry,
+                                              hint: "Select Country",
+                                              onClear: () {
+                                                provider
+                                                    .setSeafarerVisaIssuingCountry(
+                                                        '');
+                                              },
+                                              searchHint: "Search for a country",
+                                              onChanged: (value) {
+                                                provider
+                                                    .setSeafarerVisaIssuingCountry(
+                                                        value as String);
+                                              },
+                                              isExpanded: true,
+                                              underline: SizedBox(),
+                                              displayItem: (item, selected) {
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: selected
+                                                        ? AppColors
+                                                            .activeFieldBgColor
+                                                        : AppColors.Color_FAFAFA,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2.h),
+                                                    border: Border.all(
+                                                      color:
+                                                          AppColors.transparent,
+                                                      width: 1,
+                                                    ),
                                                   ),
-                                                ),
-                                                child: ListTile(
-                                                  title: Text(item.child.data),
-                                                ),
-                                              );
-                                            },
+                                                  child: ListTile(
+                                                    title: Text(item.child.data),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
+                                        // Show seafarer visa issuing country error outside dropdown
+                                        if (provider.seafarerVisaIssuingCountryError != null)
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                            child: Text(
+                                              provider.seafarerVisaIssuingCountryError!,
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: AppFontSize.fontSize12,
+                                              ),
+                                            ),
+                                          ),
                                         SizedBox(height: 1.h),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
@@ -1602,12 +1663,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                           textColor: Colors.black,
                                           labelColor: AppColors.Color_9E9E9E,
                                           cursorColor: AppColors.Color_212121,
-                                          fillColor: provider
-                                                  .seafarerVisaNoFocusNode
-                                                  .hasFocus
-                                              ? AppColors.activeFieldBgColor
-                                              : AppColors.Color_FAFAFA,
+                                          fillColor: AppColors.Color_FAFAFA,
+                                          activeFillColor: AppColors.activeFieldBgColor,
                                           onFieldSubmitted: (String) {},
+                                          onTap: () {
+                                            // Clear focus from other fields when this field is tapped
+                                            FocusScope.of(context).requestFocus(provider.seafarerVisaNoFocusNode);
+                                          },
                                         ),
                                         SizedBox(height: 1.h),
                                         Padding(
@@ -1675,11 +1737,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                                   AppColors.Color_9E9E9E,
                                               cursorColor:
                                                   AppColors.Color_212121,
-                                              fillColor: provider
-                                                      .seafarerVisaIssueDateFocusNode
-                                                      .hasFocus
-                                                  ? AppColors.activeFieldBgColor
-                                                  : AppColors.Color_FAFAFA,
+                                              fillColor: AppColors.Color_FAFAFA,
+                                              activeFillColor: AppColors.activeFieldBgColor,
                                               onFieldSubmitted: (String) {},
                                             ),
                                           ),
@@ -1778,11 +1837,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                                   AppColors.Color_9E9E9E,
                                               cursorColor:
                                                   AppColors.Color_212121,
-                                              fillColor: provider
-                                                      .seafarerVisaExpiryDateFocusNode
-                                                      .hasFocus
-                                                  ? AppColors.activeFieldBgColor
-                                                  : AppColors.Color_FAFAFA,
+                                              fillColor: AppColors.Color_FAFAFA,
+                                              activeFillColor: AppColors.activeFieldBgColor,
                                               onFieldSubmitted: (String) {},
                                             ),
                                           ),
@@ -1804,6 +1860,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
+                                            // Clear focus to dismiss keyboard before showing bottom sheet
+                                            FocusScope.of(context).unfocus();
                                             await provider
                                                 .showAttachmentOptions(
                                                     context, 'seafarer_visa');
@@ -2043,55 +2101,63 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       color: AppColors.Color_FAFAFA,
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: SearchChoices.single(
-                                      items: countries.map((country) {
-                                        return DropdownMenuItem(
-                                          child: Text(country['name']),
-                                          value: country['name'],
-                                        );
-                                      }).toList(),
-                                      value: provider.visaIssuingCountry,
-                                      hint: "Select Country",
-                                      onClear: () {
-                                        provider.setVisaIssuingCountry('');
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Clear focus from all text fields when dropdown is tapped
+                                        FocusScope.of(context).unfocus();
                                       },
-                                      autovalidateMode:
-                                          provider.autovalidateMode,
-                                      validator: (value) {
-                                        if ((value == null) &&
-                                            provider.autovalidateMode ==
-                                                AutovalidateMode.always) {
-                                          return '      please select Country';
-                                        }
-                                        return null;
-                                      },
-                                      searchHint: "Search for a country",
-                                      onChanged: (value) {
-                                        provider.setVisaIssuingCountry(
-                                            value as String);
-                                      },
-                                      isExpanded: true,
-                                      underline: SizedBox(),
-                                      displayItem: (item, selected) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: selected
-                                                ? AppColors.activeFieldBgColor
-                                                : AppColors.Color_FAFAFA,
-                                            borderRadius:
-                                                BorderRadius.circular(2.h),
-                                            border: Border.all(
-                                              color: AppColors.transparent,
-                                              width: 1,
+                                      child: SearchChoices.single(
+                                        items: countries.map((country) {
+                                          return DropdownMenuItem(
+                                            child: Text(country['name']),
+                                            value: country['name'],
+                                          );
+                                        }).toList(),
+                                        value: provider.visaIssuingCountry,
+                                        hint: "Select Country",
+                                        onClear: () {
+                                          provider.setVisaIssuingCountry('');
+                                        },
+                                        searchHint: "Search for a country",
+                                        onChanged: (value) {
+                                          provider.setVisaIssuingCountry(
+                                              value as String);
+                                        },
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        displayItem: (item, selected) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: selected
+                                                  ? AppColors.activeFieldBgColor
+                                                  : AppColors.Color_FAFAFA,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.h),
+                                              border: Border.all(
+                                                color: AppColors.transparent,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: ListTile(
-                                            title: Text(item.child.data),
-                                          ),
-                                        );
-                                      },
+                                            child: ListTile(
+                                              title: Text(item.child.data),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
+                                  // Show visa issuing country error outside dropdown
+                                  if (provider.visaIssuingCountryError != null)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        provider.visaIssuingCountryError!,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding:
@@ -2127,10 +2193,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider.visaNoFocusNode.hasFocus
-                                        ? AppColors.activeFieldBgColor
-                                        : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.visaNoFocusNode);
+                                    },
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -2187,10 +2256,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .visaIssueDateFocusNode.hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -2271,11 +2338,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .visaExpiryDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -2296,6 +2360,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus to dismiss keyboard before showing bottom sheet
+                                      FocusScope.of(context).unfocus();
                                       await provider.showAttachmentOptions(
                                           context, 'visa');
                                     },
@@ -2516,60 +2582,68 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                       color: AppColors.Color_FAFAFA,
                                       borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: SearchChoices.single(
-                                      items: countries.map((country) {
-                                        return DropdownMenuItem(
-                                          child: Text(country['name']),
-                                          value: country['name'],
-                                        );
-                                      }).toList(),
-                                      value: provider
-                                          .residencePermitIssuingCountry,
-                                      hint: "Select Country",
-                                      onClear: () {
-                                        provider
-                                            .setResidencePermitIssuingCountry(
-                                                '');
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Clear focus from all text fields when dropdown is tapped
+                                        FocusScope.of(context).unfocus();
                                       },
-                                      autovalidateMode:
-                                          provider.autovalidateMode,
-                                      validator: (value) {
-                                        if ((value == null) &&
-                                            provider.autovalidateMode ==
-                                                AutovalidateMode.always) {
-                                          return '      please select Country';
-                                        }
-                                        return null;
-                                      },
-                                      // padding:EdgeInsets.only(top: 1.h, left: 4.w),
-                                      searchHint: "Search for a country",
-                                      onChanged: (value) {
-                                        provider
-                                            .setResidencePermitIssuingCountry(
-                                                value as String);
-                                      },
-                                      isExpanded: true,
-                                      underline: SizedBox(),
-                                      displayItem: (item, selected) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: selected
-                                                ? AppColors.activeFieldBgColor
-                                                : AppColors.Color_FAFAFA,
-                                            borderRadius:
-                                                BorderRadius.circular(2.h),
-                                            border: Border.all(
-                                              color: AppColors.transparent,
-                                              width: 1,
+                                      child: SearchChoices.single(
+                                        items: countries.map((country) {
+                                          return DropdownMenuItem(
+                                            child: Text(country['name']),
+                                            value: country['name'],
+                                          );
+                                        }).toList(),
+                                        value: provider
+                                            .residencePermitIssuingCountry,
+                                        hint: "Select Country",
+                                        onClear: () {
+                                          provider
+                                              .setResidencePermitIssuingCountry(
+                                                  '');
+                                        },
+                                        // padding:EdgeInsets.only(top: 1.h, left: 4.w),
+                                        searchHint: "Search for a country",
+                                        onChanged: (value) {
+                                          provider
+                                              .setResidencePermitIssuingCountry(
+                                                  value as String);
+                                        },
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        displayItem: (item, selected) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: selected
+                                                  ? AppColors.activeFieldBgColor
+                                                  : AppColors.Color_FAFAFA,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.h),
+                                              border: Border.all(
+                                                color: AppColors.transparent,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: ListTile(
-                                            title: Text(item.child.data),
-                                          ),
-                                        );
-                                      },
+                                            child: ListTile(
+                                              title: Text(item.child.data),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
+                                  // Show residence permit issuing country error outside dropdown
+                                  if (provider.residencePermitIssuingCountryError != null)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        provider.residencePermitIssuingCountryError!,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding:
@@ -2606,11 +2680,13 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider
-                                            .residencePermitNoFocusNode.hasFocus
-                                        ? AppColors.activeFieldBgColor
-                                        : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
+                                    onTap: () {
+                                      // Clear focus from other fields when this field is tapped
+                                      FocusScope.of(context).requestFocus(provider.residencePermitNoFocusNode);
+                                    },
                                   ),
                                   SizedBox(height: 1.h),
                                   Padding(
@@ -2668,11 +2744,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .residencePermitIssueDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -2757,11 +2830,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                         textColor: Colors.black,
                                         labelColor: AppColors.Color_9E9E9E,
                                         cursorColor: AppColors.Color_212121,
-                                        fillColor: provider
-                                                .residencePermitExpiryDateFocusNode
-                                                .hasFocus
-                                            ? AppColors.activeFieldBgColor
-                                            : AppColors.Color_FAFAFA,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
                                         onFieldSubmitted: (String) {},
                                       ),
                                     ),
@@ -2782,6 +2852,8 @@ class _TravelDocumentScreenState extends State<TravelDocumentScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
+                                      // Clear focus to dismiss keyboard before showing bottom sheet
+                                      FocusScope.of(context).unfocus();
                                       await provider.showAttachmentOptions(
                                           context, 'residence_permit');
                                     },

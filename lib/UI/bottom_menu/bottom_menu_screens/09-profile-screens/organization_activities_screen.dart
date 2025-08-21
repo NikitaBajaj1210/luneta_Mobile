@@ -102,9 +102,8 @@ class _OrganizationActivitiesScreenState extends State<OrganizationActivitiesScr
                     hintText: "Reddit United States",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.organizationFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       provider.organizationFocusNode.unfocus();
                     },
@@ -122,9 +121,8 @@ class _OrganizationActivitiesScreenState extends State<OrganizationActivitiesScr
                     hintText: "Community Officer",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.roleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       provider.roleFocusNode.unfocus();
                     },
@@ -194,9 +192,8 @@ class _OrganizationActivitiesScreenState extends State<OrganizationActivitiesScr
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       provider.descriptionFocusNode.unfocus();
                     },

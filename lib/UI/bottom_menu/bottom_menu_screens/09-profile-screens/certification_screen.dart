@@ -130,9 +130,8 @@ class _CertificationScreenState extends State<CertificationScreen> {
                       hintText: "UI Designer Professional",
                       textInputType: TextInputType.text,
                       voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                      fillColor: provider.titleFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (String) {
                         FocusScope.of(context).requestFocus(provider.organizationFocusNode);
                       },
@@ -150,9 +149,8 @@ class _CertificationScreenState extends State<CertificationScreen> {
                       hintText: "Google Academy",
                       textInputType: TextInputType.text,
                       voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                      fillColor: provider.organizationFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (String) {
                         FocusScope.of(context).requestFocus(provider.credentialIdFocusNode);
                       },
@@ -218,9 +216,8 @@ class _CertificationScreenState extends State<CertificationScreen> {
                       hintText: "Credential ID",
                       textInputType: TextInputType.text,
                       voidCallback: (value) => null,
-                      fillColor: provider.credentialIdFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (String) {
                         FocusScope.of(context).requestFocus(provider.credentialUrlFocusNode);
                       },
@@ -236,9 +233,8 @@ class _CertificationScreenState extends State<CertificationScreen> {
                       hintText: "Credential URL",
                       textInputType: TextInputType.url,
                       voidCallback: (value) => null,
-                      fillColor: provider.credentialUrlFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (String) {
                         FocusScope.of(context).unfocus();
                       },

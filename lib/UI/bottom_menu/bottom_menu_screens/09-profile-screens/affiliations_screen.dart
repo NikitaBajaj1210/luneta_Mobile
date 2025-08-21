@@ -99,9 +99,8 @@ class AffiliationsScreen extends StatelessWidget {
                     hintText: "Reddit United States",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.organizationFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       provider.organizationFocusNode.unfocus();
                     },
@@ -115,9 +114,8 @@ class AffiliationsScreen extends StatelessWidget {
                     focusNode: provider.roleFocusNode,
                     hintText: "Content Writer",
                     textInputType: TextInputType.text,
-                    fillColor: provider.roleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
                     onFieldSubmitted: (value) {
                       provider.roleFocusNode.unfocus();
@@ -176,9 +174,8 @@ class AffiliationsScreen extends StatelessWidget {
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5, 
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                      ? AppColors.activeFieldBgColor
-                      : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String ) {  },
                   ),
                 ],

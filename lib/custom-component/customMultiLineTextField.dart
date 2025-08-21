@@ -29,39 +29,49 @@ Widget customMultilineTextField({
   Color? labelColor,
   Color? cursorColor,
   FocusNode? focusNode,
-  required Color fillColor,
+  Color? fillColor, // Make optional
+  Color? activeFillColor, // New parameter for active state
   required Function(String)? onFieldSubmitted,
 }) {
   final FocusNode _focusNode = focusNode ?? FocusNode();
-
-  return Container(
-    width: width,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(2.h),
-    ),
-    child: TextFormField(
-      controller: controller,
-      enabled: isEditable ?? true,
-      cursorColor: cursorColor ?? AppColors.Color_212121,
-      textInputAction: textInputAction ?? TextInputAction.newline,
-      keyboardType: TextInputType.multiline,
-      maxLength: maxLength,
-      maxLines: maxLines, // Allow multiline
-      minLines: 4, // Minimum lines to start with
-      validator: validator,
-      inputFormatters: inputFormatter,
-      onChanged: onChange,
-      focusNode: _focusNode,
-      onFieldSubmitted: onFieldSubmitted,
-      style: TextStyle(
-        fontSize: fontSize ?? AppFontSize.fontSize16,
-        color: textColor ?? AppColors.buttonColor,
-        fontFamily: AppColors.fontFamily,
-        fontWeight: FontWeight.w600,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: fillColor,
+  
+  return ListenableBuilder(
+    listenable: _focusNode,
+    builder: (context, child) {
+      // Determine fill color based on focus state
+      Color currentFillColor = fillColor ?? AppColors.Color_FAFAFA;
+      if (_focusNode.hasFocus && activeFillColor != null) {
+        currentFillColor = activeFillColor!;
+      }
+      
+      return Container(
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2.h),
+        ),
+        child: TextFormField(
+          controller: controller,
+          enabled: isEditable ?? true,
+          cursorColor: cursorColor ?? AppColors.Color_212121,
+          textInputAction: textInputAction ?? TextInputAction.newline,
+          keyboardType: TextInputType.multiline,
+          maxLength: maxLength,
+          maxLines: maxLines, // Allow multiline
+          minLines: 4, // Minimum lines to start with
+          validator: validator,
+          inputFormatters: inputFormatter,
+          onChanged: onChange,
+          focusNode: _focusNode,
+          onFieldSubmitted: onFieldSubmitted,
+          style: TextStyle(
+            fontSize: fontSize ?? AppFontSize.fontSize16,
+            color: textColor ?? AppColors.buttonColor,
+            fontFamily: AppColors.fontFamily,
+            fontWeight: FontWeight.w600,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: currentFillColor,
         counterText: '',
         isDense: true,
         contentPadding: EdgeInsets.symmetric(vertical: 2.5.h, horizontal: 4.w),
@@ -98,7 +108,9 @@ Widget customMultilineTextField({
           onPressed: onSuffixIconPressed,
         )
             : null,
-      ),
-    ),
+          ),
+        ),
+      );
+    },
   );
 }

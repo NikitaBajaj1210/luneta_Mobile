@@ -29,7 +29,7 @@ String? validateConfirmPassword(value, newPassword) {
   if (value.toString().trim().isEmpty) {
     return "please Enter Confirm Password";
   } else if (value.toString().trim() != newPassword.toString().trim()) {
-    return "new password & confirm password must be same";
+    return "passwords must match";
   } else {
     return null;
   }
@@ -40,7 +40,7 @@ String? validatePassword(value) {
   if (value.toString().trim().isEmpty) {
     return "please Enter old password";
   } else if (value.toString().contains(' ')){
-    return 'password should not contain whitespace';
+    return 'password cannot contain spaces';
   }
   // else if (!passwordRegex.hasMatch(value) || emojiRegex.hasMatch(value)) {
   //   return "password must contain an uppercase, lowercase, numeric digit and special character";
@@ -58,13 +58,13 @@ String? validateSignupPassword(value) {
   if (value.toString().trim().isEmpty) {
     return "please Enter password";
   } else if (value.toString().contains(' ')){
-    return 'password should not contain whitespace';
+    return 'password cannot contain spaces';
   }
   else if (!passwordRegex.hasMatch(value) || emojiRegex.hasMatch(value)) {
-    return "password must contain an uppercase, lowercase, numeric digit and special character";
+    return "password must have A-Z, a-z, 0-9 & special char";
   }
   else if (value.toString().contains(' ')){
-    return 'password should not contain whitespace';
+    return 'password cannot contain spaces';
   }
   else {
     return null;
@@ -75,11 +75,11 @@ String? validateNewPassword(value,oldPassword) {
   if (value.toString().trim().isEmpty) {
     return "please Enter new password";
   }  else if (!passwordRegex.hasMatch(value) || emojiRegex.hasMatch(value)) {
-    return "password must contain an uppercase, lowercase, numeric digit and special character";
+    return "password must have A-Z, a-z, 0-9 & special char";
   } else if (value.toString().contains(' ')){
-    return 'password should not contain whitespace';
+    return 'password cannot contain spaces';
   } else if(value.toString().trim() == oldPassword.toString().trim()){
-    return "old password and new password could not be same";
+    return "new password must be different";
 
   } else {
     return null;
@@ -92,7 +92,7 @@ String? validateFirstName(String? value) {
   if (value == null || value.trim().isEmpty) {
     return "please Enter First Name";
   } else if (!RegExp(r"^[^\s].*$").hasMatch(value)) {
-    return "first name should not start with a space";
+    return "first name cannot start with space";
   } else if (!RegExp(r"^[a-zA-Z]+$").hasMatch(value) || emojiRegex.hasMatch(value)) {
     return "please Enter a Valid First Name";
   } else {
@@ -105,7 +105,7 @@ String? validateName(String? value) {
     return "please Enter Name";
   }
   else if (!RegExp(r"^[^\s].*$").hasMatch(value)) {
-    return "name should not start with a space";
+    return "name cannot start with space";
   }
   else if (!RegExp(r"^[a-zA-Z]").hasMatch(value) || emojiRegex.hasMatch(value)) {
     return "please Enter a Valid Name";
@@ -118,7 +118,7 @@ String? validateLastName(value){
   if (value.trim().isEmpty) {
     return "please Enter Last Name";
   }else if (!RegExp(r"^[^\s].*$").hasMatch(value)) {
-    return "last name should not start with a space";
+    return "last name cannot start with space";
   } else if (!RegExp(r"^[a-zA-Z]+$").hasMatch(value)||emojiRegex.hasMatch(value)) {
     return "please Enter a Valid Last Name";
   }else{
@@ -143,7 +143,7 @@ String? validateAddress(value){
   if (value.toString().trim().isEmpty) {
     return "please Enter Address";
   } else if (!RegExp(r"^[^\s].*[^\s]$").hasMatch(value!)) {
-    return "address should not start with a space";
+    return "address cannot start with space";
   }else if(emojiRegex.hasMatch(value)){
     return 'please Enter valid Address';
   }

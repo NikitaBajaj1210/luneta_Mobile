@@ -121,6 +121,15 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
   File? justificationDocument;
   String? justificationDocumentPath;
 
+  // Focus Nodes
+  final FocusNode minOnBoardDurationFocusNode = FocusNode();
+  final FocusNode maxOnBoardDurationFocusNode = FocusNode();
+  final FocusNode minAtHomeDurationFocusNode = FocusNode();
+  final FocusNode maxAtHomeDurationFocusNode = FocusNode();
+  final FocusNode lastJobSalaryFocusNode = FocusNode();
+  final FocusNode availableFromFocusNode = FocusNode();
+  final FocusNode lastPromotedDateFocusNode = FocusNode();
+
   // Constructor to ensure proper initialization
   JobConditionsAndPreferencesProvider() {
     _lastRankJoined = null;
@@ -672,5 +681,26 @@ class JobConditionsAndPreferencesProvider with ChangeNotifier {
       ShowToast("Error", "something went wrong while adding the agency");
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    // Dispose Focus Nodes
+    minOnBoardDurationFocusNode.dispose();
+    maxOnBoardDurationFocusNode.dispose();
+    minAtHomeDurationFocusNode.dispose();
+    maxAtHomeDurationFocusNode.dispose();
+    lastJobSalaryFocusNode.dispose();
+    availableFromFocusNode.dispose();
+    lastPromotedDateFocusNode.dispose();
+    
+    // Dispose Text Controllers
+    minOnBoardDurationController.dispose();
+    maxOnBoardDurationController.dispose();
+    minAtHomeDurationController.dispose();
+    maxAtHomeDurationController.dispose();
+    lastJobSalaryController.dispose();
+    
+    super.dispose();
   }
 }

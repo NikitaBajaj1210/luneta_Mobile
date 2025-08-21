@@ -116,16 +116,13 @@ class ProfileEditScreen extends StatelessWidget {
                         voidCallback: validateName,
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.firstNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.firstNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (value) {
                           FocusScope.of(context)
                               .requestFocus(provider.firstNameFocusNode);
@@ -153,16 +150,13 @@ class ProfileEditScreen extends StatelessWidget {
                         voidCallback: validateName,
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.middleNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.middleNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (value) {
                           FocusScope.of(context)
                               .requestFocus(provider.middleNameFocusNode);
@@ -190,16 +184,13 @@ class ProfileEditScreen extends StatelessWidget {
                         voidCallback: validateName,
                         fontSize: AppFontSize.fontSize16,
                         inputFontSize: AppFontSize.fontSize16,
-                        backgroundColor: provider.lastNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        backgroundColor: AppColors.Color_FAFAFA,
                         borderColor: AppColors.buttonColor,
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.lastNameFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA,
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
                         onFieldSubmitted: (value) {
                           FocusScope.of(context)
                               .requestFocus(provider.lastNameFocusNode);

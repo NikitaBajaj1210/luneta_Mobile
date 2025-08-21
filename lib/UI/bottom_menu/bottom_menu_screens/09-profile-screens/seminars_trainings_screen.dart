@@ -106,9 +106,8 @@ class _SeminarsTrainingsScreenState extends State<SeminarsTrainingsScreen> {
                     hintText: "App Developer Training",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.topicFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.topicFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.organizerFocusNode);
@@ -127,9 +126,8 @@ class _SeminarsTrainingsScreenState extends State<SeminarsTrainingsScreen> {
                     hintText: "Apple Academy",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.organizerFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.organizerFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.descriptionFocusNode);
@@ -145,6 +143,8 @@ class _SeminarsTrainingsScreenState extends State<SeminarsTrainingsScreen> {
                         children: [
                           _buildLabel("From"),
                           _buildDateField(context, provider.fromDate, () async {
+                            // Clear focus from all fields before opening date picker
+                            FocusScope.of(context).unfocus();
                             final DateTime? picked = await showDatePicker(
                               context: context,
                               initialDate: provider.fromDate ?? DateTime.now(),
@@ -162,6 +162,8 @@ class _SeminarsTrainingsScreenState extends State<SeminarsTrainingsScreen> {
                         children: [
                           _buildLabel("To"),
                           _buildDateField(context, provider.toDate, () async {
+                            // Clear focus from all fields before opening date picker
+                            FocusScope.of(context).unfocus();
                             final DateTime? picked = await showDatePicker(
                               context: context,
                               initialDate: provider.toDate ?? DateTime.now(),
@@ -216,9 +218,8 @@ class _SeminarsTrainingsScreenState extends State<SeminarsTrainingsScreen> {
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.descriptionFocusNode.unfocus();
                     },

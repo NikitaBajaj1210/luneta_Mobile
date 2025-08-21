@@ -587,6 +587,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               customTextField(
                                 context: context,
                                 controller: provider.medicalFitnessCertificateNoController,
+                                focusNode: provider.medicalFitnessCertificateNoFocusNode,
                                 hintText: 'Enter Certificate No.',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
@@ -604,7 +605,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 textColor: Colors.black,
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
-                                fillColor: provider.medicalFitnessCertificateNoFocusNode.hasFocus ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                fillColor: AppColors.Color_FAFAFA,
+                                activeFillColor: AppColors.activeFieldBgColor,
                                 onFieldSubmitted: (String) {},
                               ),
                               SizedBox(height: 1.h),
@@ -683,6 +685,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               customTextField(
                                 context: context,
                                 controller: provider.medicalFitnessIssuingAuthorityController,
+                                focusNode: provider.medicalFitnessIssuingAuthorityFocusNode,
                                 hintText: 'Enter Issuing Clinic/Hospital/Authority',
                                 textInputType: TextInputType.text,
                                 obscureText: false,
@@ -700,7 +703,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 textColor: Colors.black,
                                 labelColor: AppColors.Color_9E9E9E,
                                 cursorColor: AppColors.Color_212121,
-                                fillColor: provider.medicalFitnessIssuingAuthorityFocusNode.hasFocus ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                fillColor: AppColors.Color_FAFAFA,
+                                activeFillColor: AppColors.activeFieldBgColor,
                                 onFieldSubmitted: (String) {},
                               ),
                               SizedBox(height: 1.h),
@@ -718,6 +722,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus from all fields before opening date picker
+                                  FocusScope.of(context).unfocus();
                                   final DateTime? picked =
                                   await showDatePicker(
                                     context: context,
@@ -735,6 +741,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   child: customTextField(
                                     context: context,
                                     controller: provider.medicalFitnessIssueDateController,
+                                    focusNode: provider.medicalFitnessIssueDateFocusNode,
                                     hintText: 'Select Issue Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
@@ -752,7 +759,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider.medicalFitnessIssueDateFocusNode.hasFocus ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
                                 ),
@@ -772,6 +780,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  // Clear focus from all fields before opening date picker
+                                  FocusScope.of(context).unfocus();
                                   if (provider
                                       .medicalFitnessIssueDateController
                                       .text
@@ -815,6 +825,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                   child: customTextField(
                                     context: context,
                                     controller: provider.medicalFitnessExpiryDateController,
+                                    focusNode: provider.medicalFitnessExpiryDateFocusNode,
                                     hintText: 'Select Expiry Date',
                                     textInputType: TextInputType.datetime,
                                     obscureText: false,
@@ -832,7 +843,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     textColor: Colors.black,
                                     labelColor: AppColors.Color_9E9E9E,
                                     cursorColor: AppColors.Color_212121,
-                                    fillColor: provider.medicalFitnessExpiryDateFocusNode.hasFocus ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
                                 ),
@@ -1314,6 +1326,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       customTextField(
                         context: context,
                         controller: provider.drugAndAlcoholTestCertificateNoController,
+                        focusNode: provider.drugAndAlcoholTestCertificateNoFocusNode,
                         hintText: 'Enter Certificate No.',
                         textInputType: TextInputType.text,
                         obscureText: false,
@@ -1331,9 +1344,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.drugAndAlcoholTestCertificateNoFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
+                        onFieldSubmitted: (String ) {  },
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1411,6 +1424,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       customTextField(
                         context: context,
                         controller: provider.drugAndAlcoholTestIssuingAuthorityController,
+                        focusNode: provider.drugAndAlcoholTestIssuingAuthorityFocusNode,
                         hintText: 'Enter Issuing Clinic/Hospital/Authority',
                         textInputType: TextInputType.text,
                         obscureText: false,
@@ -1428,9 +1442,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.drugAndAlcoholTestIssuingAuthorityFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
+                        onFieldSubmitted: (String ) {  },
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -1447,6 +1461,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           final DateTime? picked =
                           await showDatePicker(
                             context: context,
@@ -1464,6 +1480,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           child: customTextField(
                             context: context,
                             controller: provider.drugAndAlcoholTestIssueDateController,
+                            focusNode: provider.drugAndAlcoholTestIssueDateFocusNode,
                             hintText: 'Select Issue Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -1481,9 +1498,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: provider.drugAndAlcoholTestIssueDateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
+                            onFieldSubmitted: (String ) {  },
                           ),
                         ),
                       ),
@@ -1502,6 +1519,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           if (provider
                               .drugAndAlcoholTestIssueDateController
                               .text
@@ -1546,6 +1565,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           child: customTextField(
                             context: context,
                             controller: provider.drugAndAlcoholTestExpiryDateController,
+                            focusNode: provider.drugAndAlcoholTestExpiryDateFocusNode,
                             hintText: 'Select Expiry Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -1563,9 +1583,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: provider.drugAndAlcoholTestExpiryDateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
+                            onFieldSubmitted: (String ) {  },
                           ),
                         ),
                       ),
@@ -1969,6 +1989,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       customTextField(
                         context: context,
                         controller: provider.vaccinationCertificateCertificateNoController,
+                        focusNode: provider.vaccinationCertificateCertificateNoFocusNode,
                         hintText: 'Enter Certificate No.',
                         textInputType: TextInputType.text,
                         obscureText: false,
@@ -1986,9 +2007,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.vaccinationCertificateIssuingAuthorityFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
+                        onFieldSubmitted: (String ) {  },
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -2066,6 +2087,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       customTextField(
                         context: context,
                         controller: provider.vaccinationCertificateIssuingAuthorityController,
+                        focusNode: provider.vaccinationCertificateIssuingAuthorityFocusNode,
                         hintText: 'Enter Issuing Clinic/Hospital/Authority',
                         textInputType: TextInputType.text,
                         obscureText: false,
@@ -2083,9 +2105,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         textColor: Colors.black,
                         labelColor: AppColors.Color_9E9E9E,
                         cursorColor: AppColors.Color_212121,
-                        fillColor: provider.vaccinationCertificateIssuingAuthorityFocusNode.hasFocus
-                            ? AppColors.activeFieldBgColor
-                            : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                        fillColor: AppColors.Color_FAFAFA,
+                        activeFillColor: AppColors.activeFieldBgColor,
+                        onFieldSubmitted: (String ) {  },
                       ),
                       SizedBox(height: 1.h),
                       Padding(
@@ -2102,6 +2124,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          // Clear focus from all fields before opening date picker
+                          FocusScope.of(context).unfocus();
                           final DateTime? picked =
                           await showDatePicker(
                             context: context,
@@ -2119,6 +2143,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           child: customTextField(
                             context: context,
                             controller: provider.vaccinationCertificateIssueDateController,
+                            focusNode: provider.vaccinationCertificateIssueDateFocusNode,
                             hintText: 'Select Issue Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -2136,9 +2161,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: provider.vaccinationCertificateIssueDateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
+                            onFieldSubmitted: (String ) {  },
                           ),
                         ),
                       ),
@@ -2157,6 +2182,8 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
+        // Clear focus from all fields before opening date picker
+        FocusScope.of(context).unfocus();
         if (provider
             .vaccinationCertificateIssueDateController
             .text
@@ -2201,6 +2228,7 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           child: customTextField(
                             context: context,
                             controller: provider.vaccinationCertificateExpiryDateController,
+                            focusNode: provider.vaccinationCertificateExpiryDateFocusNode,
                             hintText: 'Select Expiry Date',
                             textInputType: TextInputType.datetime,
                             obscureText: false,
@@ -2218,9 +2246,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             textColor: Colors.black,
                             labelColor: AppColors.Color_9E9E9E,
                             cursorColor: AppColors.Color_212121,
-                            fillColor: provider.vaccinationCertificateExpiryDateFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                            fillColor: AppColors.Color_FAFAFA,
+                            activeFillColor: AppColors.activeFieldBgColor,
+                            onFieldSubmitted: (String ) {  },
                           ),
                         ),
                       ),

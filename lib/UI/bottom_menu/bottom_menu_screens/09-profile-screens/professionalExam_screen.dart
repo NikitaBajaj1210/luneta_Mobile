@@ -91,9 +91,8 @@ class ProfessionalExamScreen extends StatelessWidget {
                     hintText: "IELTS Official Test",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.titleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.titleFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.scoreFocusNode);
@@ -110,9 +109,8 @@ class ProfessionalExamScreen extends StatelessWidget {
                     hintText: "7.5/9.0",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.scoreFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.scoreFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(provider.descriptionFocusNode);
@@ -123,6 +121,8 @@ class ProfessionalExamScreen extends StatelessWidget {
                     context,
                     provider.dateTaken,
                     (BuildContext context) async {
+                      // Clear focus from all fields before opening date picker
+                      FocusScope.of(context).unfocus();
                       final DateTime? picked = await showDatePicker(
                         context: context,
                         initialDate: provider.dateTaken ?? DateTime.now(),
@@ -146,9 +146,8 @@ class ProfessionalExamScreen extends StatelessWidget {
                     textInputType: TextInputType.multiline,
                     validator: (value) => null,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.descriptionFocusNode.unfocus();
                     },

@@ -96,9 +96,8 @@ class _SkillsScreenState extends State<SkillsScreen> {
                     hintText: "Type here",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.skillFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (value) {
                       if (value.isNotEmpty) {
                         provider.addSkill(value);

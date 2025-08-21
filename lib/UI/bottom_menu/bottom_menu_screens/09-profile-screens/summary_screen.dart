@@ -94,13 +94,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       textInputType: TextInputType.multiline,
                       validator: (value) =>
                       value!.isEmpty ? "This field cannot be empty" : null,
-                      borderColor:provider.summaryFocusNode.hasFocus?AppColors.buttonColor:AppColors.Color_EEEEEE,
+                      borderColor: AppColors.Color_EEEEEE,
                       textColor: AppColors.Color_212121,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.summaryFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       focusNode: provider.summaryFocusNode,
                       maxLength: provider.maxCharacters,
                       width: 100.w, // Make it fully responsive

@@ -25,116 +25,216 @@ class ProfessionalExperienceScreen extends StatefulWidget {
 
 class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScreen> {
 
+  // Validation function for position names
+  String? _validatePositionName(String value) {
+    // First check: empty string
+    if (value.isEmpty) {
+      return 'please enter Position Name';
+    }
+    
+    // Second check: only whitespace
+    if (value.trim().isEmpty) {
+      return 'please enter valid Position Name';
+    }
+    
+    // Third check: contains only whitespace characters  
+    if (value.replaceAll(RegExp(r'\s+'), '').isEmpty) {
+      return 'please enter valid Position Name';
+    }
+    
+    // Fourth check: emojis
+    final emojiRegex = RegExp(r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]', unicode: true);
+    if (emojiRegex.hasMatch(value)) {
+      return 'emojis are not allowed';
+    }
+    
+    return null;
+  }
+
   void _showAddPositionHeldDialog(ProfessionalExperienceProvider provider) {
     final TextEditingController _controller = TextEditingController();
+    final FocusNode _focusNode = FocusNode(); // Add focus node to maintain focus
+    String? errorMessage; // Remove test message
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Position'),
-          content:  customTextField(
-            context: context,
-            controller: _controller,
-            hintText: 'Enter position name',
-            textInputType: TextInputType.text,
-            obscureText: false,
-            voidCallback: (value) {},
-            fontSize: AppFontSize.fontSize16,
-            inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
-            borderColor: AppColors.buttonColor,
-            textColor: Colors.black,
-            labelColor: AppColors.Color_9E9E9E,
-            cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
-            onFieldSubmitted: (String) {},
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cancel",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Add",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () {
-                if (_controller.text.toString().trim().isNotEmpty) {
-                  provider.addPositionHeld(_controller.text.toString().trim(), context);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text('Add Position Held'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextField(
+                    context: context,
+                    controller: _controller,
+                    focusNode: _focusNode, // Add focus node
+                    hintText: 'Enter position name',
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                    voidCallback: (value) {},
+                    fontSize: AppFontSize.fontSize16,
+                    inputFontSize: AppFontSize.fontSize16,
+                    backgroundColor: AppColors.Color_FAFAFA,
+                    borderColor: AppColors.buttonColor,
+                    textColor: Colors.black,
+                    labelColor: AppColors.Color_9E9E9E,
+                    cursorColor: AppColors.Color_212121,
+                    fillColor: AppColors.Color_FAFAFA,
+                    onFieldSubmitted: (String) {},
+                    onChange: (value) {
+                      setDialogState(() {
+                        errorMessage = _validatePositionName(value);
+                      });
+                    },
+                  ),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.h, left: 1.w),
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: AppFontSize.fontSize12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text("Add",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () {
+                    final validation = _validatePositionName(_controller.text);
+                    if (validation == null) {
+                      provider.addPositionHeld(_controller.text.toString().trim(), context);
+                      Navigator.of(context).pop();
+                    } else {
+                      setDialogState(() {
+                        errorMessage = validation;
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      _focusNode.dispose(); // Dispose focus node when dialog closes
+    });
   }
 
   void _showAddEmploymentHistoryPositionDialog(ProfessionalExperienceProvider provider) {
     final TextEditingController _controller = TextEditingController();
+    final FocusNode _focusNode = FocusNode(); // Add focus node to maintain focus
+    String? errorMessage; // Move outside builder to persist state
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Position'),
-          content: customTextField(
-            context: context,
-            controller: _controller,
-            hintText: 'Enter position name',
-            textInputType: TextInputType.text,
-            obscureText: false,
-            voidCallback: (value) {},
-            fontSize: AppFontSize.fontSize16,
-            inputFontSize: AppFontSize.fontSize16,
-            backgroundColor: AppColors.Color_FAFAFA,
-            borderColor: AppColors.buttonColor,
-            textColor: Colors.black,
-            labelColor: AppColors.Color_9E9E9E,
-            cursorColor: AppColors.Color_212121,
-            fillColor: AppColors.Color_FAFAFA,
-            onFieldSubmitted: (String) {},
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cancel",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Add",style:TextStyle(
-                fontSize: AppFontSize.fontSize18,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppColors.fontFamilyMedium,
-                color: AppColors.buttonColor,
-              ),),
-              onPressed: () {
-                if (_controller.text.trim().isNotEmpty) {
-                  provider.addEmploymentHistoryPosition(_controller.text.trim(), context);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text('Add Employment Position'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextField(
+                    context: context,
+                    controller: _controller,
+                    focusNode: _focusNode, // Add focus node
+                    hintText: 'Enter position name',
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                    voidCallback: (value) {},
+                    fontSize: AppFontSize.fontSize16,
+                    inputFontSize: AppFontSize.fontSize16,
+                    backgroundColor: AppColors.Color_FAFAFA,
+                    borderColor: AppColors.buttonColor,
+                    textColor: Colors.black,
+                    labelColor: AppColors.Color_9E9E9E,
+                    cursorColor: AppColors.Color_212121,
+                    fillColor: AppColors.Color_FAFAFA,
+                    onFieldSubmitted: (String) {},
+                    onChange: (value) {
+                      setDialogState(() {
+                        errorMessage = _validatePositionName(value);
+                      });
+                    },
+                  ),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.h, left: 1.w),
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: AppFontSize.fontSize12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text("Add",style:TextStyle(
+                    fontSize: AppFontSize.fontSize18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppColors.fontFamilyMedium,
+                    color: AppColors.buttonColor,
+                  ),),
+                  onPressed: () {
+                    final validation = _validatePositionName(_controller.text);
+                    if (validation == null) {
+                      provider.addEmploymentHistoryPosition(_controller.text.trim(), context);
+                      Navigator.of(context).pop();
+                    } else {
+                      setDialogState(() {
+                        errorMessage = validation;
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      _focusNode.dispose(); // Dispose focus node when dialog closes
+    });
   }
 
   @override
@@ -804,6 +904,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             customTextField(
                               context: context,
                               controller: provider.companyController,
+                              focusNode: provider.companyFocusNode,
                               hintText: 'Enter Company Name',
                               textInputType: TextInputType.text,
                               obscureText: false,
@@ -815,9 +916,9 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               textColor: Colors.black,
                               labelColor: AppColors.Color_9E9E9E,
                               cursorColor: AppColors.Color_212121,
-                              fillColor: provider.companyFocusNode.hasFocus
-                                  ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              fillColor: AppColors.Color_FAFAFA,
+                              activeFillColor: AppColors.activeFieldBgColor,
+                              onFieldSubmitted: (String ) {  },
                             ),
 
                             Row(
@@ -907,7 +1008,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
-
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
@@ -934,6 +1038,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 child: customTextField(
                                   context: context,
                                   controller: provider.startDate,
+                                  focusNode: provider.startDateFocusNode,
                                   hintText: 'Select Start Date',
                                   textInputType: TextInputType.datetime,
                                   obscureText: false,
@@ -945,9 +1050,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   textColor: Colors.black,
                                   labelColor: AppColors.Color_9E9E9E,
                                   cursorColor: AppColors.Color_212121,
-                                  fillColor: provider.startDateFocusNode.hasFocus
-                                      ? AppColors.activeFieldBgColor
-                                      : AppColors.Color_FAFAFA,
+                                  fillColor: AppColors.Color_FAFAFA,
+                                  activeFillColor: AppColors.activeFieldBgColor,
                                   borderColor: AppColors.buttonColor,
                                   onFieldSubmitted: (String ) {  },
                                 ),
@@ -968,6 +1072,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
                                 if(provider.startDate.text.isNotEmpty)
                                   {
                                 final String startDateString = provider.startDate.text;
@@ -982,6 +1088,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   }
                                 }
 
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
@@ -1013,6 +1121,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 child: customTextField(
                                   context: context,
                                   controller: provider.endDate,
+                                  focusNode: provider.endDateFocusNode,
                                   hintText: 'Select End Date',
                                   textInputType: TextInputType.datetime,
                                   obscureText: false,
@@ -1024,9 +1133,8 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   textColor: Colors.black,
                                   labelColor: AppColors.Color_9E9E9E,
                                   cursorColor: AppColors.Color_212121,
-                                  fillColor: provider.endDateFocusNode.hasFocus
-                                      ? AppColors.activeFieldBgColor
-                                      : AppColors.Color_FAFAFA,
+                                  fillColor: AppColors.Color_FAFAFA,
+                                  activeFillColor: AppColors.activeFieldBgColor,
                                   borderColor: AppColors.buttonColor,
                                   onFieldSubmitted: (String ) {  },
                                 ),
@@ -1048,6 +1156,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             customTextField(
                               context: context,
                               controller: provider.responsibilitiesController,
+                              focusNode: provider.responsibilitiesFocusNode,
                               hintText: 'Enter Responsibilities',
                               textInputType: TextInputType.text,
                               obscureText: false,
@@ -1059,9 +1168,9 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               textColor: Colors.black,
                               labelColor: AppColors.Color_9E9E9E,
                               cursorColor: AppColors.Color_212121,
-                              fillColor: provider.responsibilitiesFocusNode.hasFocus
-                                ? AppColors.activeFieldBgColor
-                                : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              fillColor: AppColors.Color_FAFAFA,
+                              activeFillColor: AppColors.activeFieldBgColor,
+                              onFieldSubmitted: (String ) {  },
                             ),
 
                             Align(
@@ -1479,6 +1588,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             customTextField(
                               context: context,
                               controller: provider.referenceVesselController,
+                              focusNode: provider.referenceVesselFocusNode,
                               hintText: 'Enter Vessel/Company Name',
                               textInputType: TextInputType.text,
                               obscureText: false,
@@ -1490,9 +1600,9 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                               textColor: Colors.black,
                               labelColor: AppColors.Color_9E9E9E,
                               cursorColor: AppColors.Color_212121,
-                              fillColor: provider.referenceVesselFocusNode.hasFocus
-                                  ? AppColors.activeFieldBgColor
-                                  : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                              fillColor: AppColors.Color_FAFAFA,
+                              activeFillColor: AppColors.activeFieldBgColor,
+                              onFieldSubmitted: (String ) {  },
                             ),
 
                             Padding(
@@ -1553,6 +1663,10 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                             ),
                             GestureDetector(
                               onTap: () async {
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
+                                // Clear focus from all fields before opening date picker
+                                FocusScope.of(context).unfocus();
                                 final DateTime? picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
@@ -1567,6 +1681,7 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                 child: customTextField(
                                   context: context,
                                   controller: provider.referenceIssuedDate,
+                                  focusNode: provider.referenceIssuedDateFocusNode,
                                   hintText: 'Select Issued Date',
                                   textInputType: TextInputType.datetime,
                                   obscureText: false,
@@ -1578,9 +1693,9 @@ class _ProfessionalExperienceScreenState extends State<ProfessionalExperienceScr
                                   textColor: Colors.black,
                                   labelColor: AppColors.Color_9E9E9E,
                                   cursorColor: AppColors.Color_212121,
-                                  fillColor: provider.referenceIssuedDateFocusNode.hasFocus
-                                      ? AppColors.activeFieldBgColor
-                                      : AppColors.Color_FAFAFA, onFieldSubmitted: (String ) {  },
+                                  fillColor: AppColors.Color_FAFAFA,
+                                  activeFillColor: AppColors.activeFieldBgColor,
+                                  onFieldSubmitted: (String ) {  },
                                 ),
                               ),
                             ),

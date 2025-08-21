@@ -26,8 +26,6 @@ class PersonalInfoScreen extends StatefulWidget {
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   late var formKey = GlobalKey<FormState>();
-  String? countryOfBirthError;
-  String? nationalityError;
   @override
   void initState() {
     super.initState();
@@ -53,21 +51,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               child: customButton(
                 voidCallback: () async {
-                  setState(() {
-                    // Validate Country of Birth
-                    if (provider.countryOfBirthController.text.isEmpty) {
-                      countryOfBirthError = 'please select Country of Birth';
-                    } else {
-                      countryOfBirthError = null;
-                    }
-                    // Validate Nationality
-                    if (provider.nationalityController.text.isEmpty) {
-                      nationalityError = 'please select Nationality';
-                    } else {
-                      nationalityError = null;
-                    }
-                  });
-                  if (formKey.currentState!.validate() && countryOfBirthError == null && nationalityError == null) {
+                  provider.enableRealTimeValidation(); // Enable real-time validation
+                  provider.validateDropdownFields(); // Validate dropdown fields
+                  if (formKey.currentState!.validate() && !provider.hasDropdownErrors) {
                     provider.updatePersonalInfo(context);
                   }
                 },
@@ -145,24 +131,30 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'First Name',
                       textInputType: TextInputType.name,
                       obscureText: false,
+                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         if (value == null || value.toString().trim().isEmpty) {
                           return 'Please enter First Name';
                         }
                         return null;
                       },
+                      onChange: (value) {
+                        if (provider.autovalidateMode == AutovalidateMode.always) {
+                          // Trigger form validation on change
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            formKey.currentState?.validate();
+                          });
+                        }
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.firstNameFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.firstNameFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                         FocusScope.of(context).requestFocus(provider.lastNameFocusNode);
                       },
@@ -194,16 +186,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.lastNameFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.lastNameFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                         FocusScope.of(context).requestFocus(provider.dobFocusNode);
                       },
@@ -223,6 +212,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     // Date of Birth
                     GestureDetector(
                       onTap: () async {
+                        // Clear focus from all fields before opening date picker
+                        FocusScope.of(context).unfocus();
                         final DateTime today = DateTime.now();
                         final DateTime lastDate = DateTime(today.year - 18, today.month, today.day);
                         final DateTime firstDate = DateTime(today.year - 118, today.month, today.day); // 100 years range
@@ -246,6 +237,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           hintText: 'Date of Birth',
                           textInputType: TextInputType.datetime,
                           obscureText: false,
+                          autovalidateMode: provider.autovalidateMode,
                           voidCallback: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter Date of Birth';
@@ -254,16 +246,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           },
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: provider.dobFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA,
+                          backgroundColor: AppColors.Color_FAFAFA,
                           borderColor: AppColors.buttonColor,
                           textColor: Colors.black,
                           labelColor: AppColors.Color_9E9E9E,
                           cursorColor: AppColors.Color_212121,
-                          fillColor: provider.dobFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA,
+                          fillColor: AppColors.Color_FAFAFA,
+                          activeFillColor: AppColors.activeFieldBgColor,
                           onFieldSubmitted: (value) {
                             FocusScope.of(context).requestFocus(provider.countryOfBirthFocusNode);
                           },
@@ -304,13 +293,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         hint: "Select Country of Birth",
                         searchHint: "Search for a country",
                         onChanged: (value) {
-                          setState(() {
-                            provider.countryOfBirthController.text = value as String;
-                          });
+                          provider.setCountryOfBirth(value as String);
                         },
                         isExpanded: true,
                         onClear: () {
-                          provider.countryOfBirthController.clear();
+                          provider.setCountryOfBirth('');
                         },
                         underline: SizedBox(),
                         displayItem: (item, selected) {
@@ -330,12 +317,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         },
                       ),
                     ),
-                    if (countryOfBirthError != null)
+                    if (provider.countryOfBirthError != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
                         child: Text(
-                          countryOfBirthError!,
-                          style: TextStyle(color: Colors.red, fontSize: 12),
+                          provider.countryOfBirthError!,
+                          style: TextStyle(
+                            color: Colors.red, 
+                            fontSize: AppFontSize.fontSize12
+                          ),
                         ),
                       ),
 
@@ -421,14 +411,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         child: DropdownButtonFormField<dynamic>(
                           value: provider.sex,
                           onChanged: (dynamic newValue) {
-                            setState(() {
-                              provider.sex = newValue!;
-                            });
+                            provider.sex = newValue!;
+                            // Trigger validation if real-time validation is enabled
+                            if (provider.autovalidateMode == AutovalidateMode.always) {
+                              Future.delayed(Duration(milliseconds: 100), () {
+                                formKey.currentState?.validate();
+                              });
+                            }
                           },
                           isExpanded: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                           ),
+                          autovalidateMode: provider.autovalidateMode,
                           validator: (value) {
                             if (value == null) {
                               return 'please select a gender';
@@ -480,14 +475,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             : provider.nationalityController.text,
                         hint: "Select Nationality",
                         onClear: (){
-                          provider.nationalityController.clear();
-
+                          provider.setNationality('');
                         },
                         searchHint: "Search for a nationality",
                         onChanged: (value) {
-                          setState(() {
-                            provider.nationalityController.text = value as String;
-                          });
+                          provider.setNationality(value as String);
                         },
                         isExpanded: true,
                         underline: SizedBox(),
@@ -508,12 +500,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         },
                       ),
                     ),
-                    if (nationalityError != null)
+                    if (provider.nationalityError != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: 5.0, left: 12.0),
+                        padding: EdgeInsets.only(top: 1.h, left: 4.w),
                         child: Text(
-                          nationalityError!,
-                          style: TextStyle(color: Colors.red, fontSize: 12),
+                          provider.nationalityError!,
+                          style: TextStyle(
+                            color: Colors.red, 
+                            fontSize: AppFontSize.fontSize12
+                          ),
                         ),
                       ),
 
@@ -551,6 +546,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Email Address',
                       textInputType: TextInputType.text,
                       obscureText: false,
+                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         if (value == null || value.toString().trim().isEmpty) {
                           return 'Please enter Email Address';
@@ -560,18 +556,23 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }
                         return null;
                       },
+                      onChange: (value) {
+                        if (provider.autovalidateMode == AutovalidateMode.always) {
+                          // Trigger form validation on change
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            formKey.currentState?.validate();
+                          });
+                        }
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.emailFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.emailFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                         FocusScope.of(context).requestFocus(provider.phoneFocusNode);
                       },
@@ -598,6 +599,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       hintText: 'Phone Number',
                       textInputType: TextInputType.phone,
                       obscureText: false,
+                      autovalidateMode: provider.autovalidateMode,
                       voidCallback: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter Phone Number';
@@ -607,22 +609,26 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }
                         return null;
                       },
-                      
+                      onChange: (value) {
+                        if (provider.autovalidateMode == AutovalidateMode.always) {
+                          // Trigger form validation on change
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            formKey.currentState?.validate();
+                          });
+                        }
+                      },
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
                       inputFormatter: [
                         FilteringTextInputFormatter.allow(RegExp(r'^\+?[0-9-]*$')),
                       ],
-                      backgroundColor: provider.phoneFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.phoneFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                       },
                     ),
@@ -654,16 +660,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       inputFormatter: [
                         FilteringTextInputFormatter.allow(RegExp(r'^\+?[0-9-]*$')),
                       ],
-                      backgroundColor: provider.directPhoneFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.directPhoneFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                       },
                     ),
@@ -691,16 +694,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       voidCallback: (value){ return;},
                       fontSize: AppFontSize.fontSize16,
                       inputFontSize: AppFontSize.fontSize16,
-                      backgroundColor: provider.addressFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      backgroundColor: AppColors.Color_FAFAFA,
                       borderColor: AppColors.buttonColor,
                       textColor: Colors.black,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.addressFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                       },
                     ),
@@ -894,16 +894,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           voidCallback: (value){ return;},
                           fontSize: AppFontSize.fontSize16,
                           inputFontSize: AppFontSize.fontSize16,
-                          backgroundColor: provider.NumberOrIdFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA,
+                          backgroundColor: AppColors.Color_FAFAFA,
                           borderColor: AppColors.buttonColor,
                           textColor: Colors.black,
                           labelColor: AppColors.Color_9E9E9E,
                           cursorColor: AppColors.Color_212121,
-                          fillColor: provider.NumberOrIdFocusNode.hasFocus
-                              ? AppColors.activeFieldBgColor
-                              : AppColors.Color_FAFAFA,
+                          fillColor: AppColors.Color_FAFAFA,
+                          activeFillColor: AppColors.activeFieldBgColor,
                           onFieldSubmitted: (value) {
                           },
                         ),

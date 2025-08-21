@@ -88,6 +88,14 @@ class TravelDocumentProvider extends ChangeNotifier {
     seafarerVisaIssuingCountry = null;
     visaIssuingCountry = null;
     _residencePermitIssuingCountry = null;
+
+    // Clear dropdown error states
+    passportCountryError = null;
+    seamanIssuingCountryError = null;
+    seamanNationalityError = null;
+    seafarerVisaIssuingCountryError = null;
+    visaIssuingCountryError = null;
+    residencePermitIssuingCountryError = null;
     
     notifyListeners();
   }
@@ -421,6 +429,8 @@ class TravelDocumentProvider extends ChangeNotifier {
   final FocusNode residencePermitExpiryDateFocusNode = FocusNode();
   final FocusNode residencePermitDocumentFocusNode = FocusNode();
 
+  // No need for focus listeners anymore - handled automatically by ValueListenableBuilder in customTextField
+
   // Seaman's Book
   bool seamanNeverExpire = false;
   bool validSeafarerVisa = false;
@@ -489,39 +499,106 @@ class TravelDocumentProvider extends ChangeNotifier {
   String? _residencePermitIssuingCountry;
   String? get residencePermitIssuingCountry=>_residencePermitIssuingCountry;
 
+  // Error states for dropdown validations
+  String? passportCountryError;
+  String? seamanIssuingCountryError;
+  String? seamanNationalityError;
+  String? seafarerVisaIssuingCountryError;
+  String? visaIssuingCountryError;
+  String? residencePermitIssuingCountryError;
+
   void setPassportCountry(String country) {
     passportCountry = country;
+    passportCountryError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setSeamanIssuingCountry(String country) {
     seamanIssuingCountry = country;
+    seamanIssuingCountryError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setSeamanNationality(String country) {
     seamanNationality = country;
+    seamanNationalityError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setSeafarerVisaIssuingCountry(String country) {
     seafarerVisaIssuingCountry = country;
+    seafarerVisaIssuingCountryError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setVisaIssuingCountry(String country) {
     visaIssuingCountry = country;
+    visaIssuingCountryError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setResidencePermitIssuingCountry(String country) {
     _residencePermitIssuingCountry = country;
+    residencePermitIssuingCountryError = null; // Clear error when value is set
     notifyListeners();
   }
 
   void setResidencePermitExpiryDate(DateTime date) {
     residencePermitExpiryDateController.text = "${date.toLocal()}".split(' ')[0];
     notifyListeners();
+  }
+
+  // Method to validate dropdown fields and set error states
+  void validateDropdownFields() {
+    // Clear previous errors
+    passportCountryError = null;
+    seamanIssuingCountryError = null;
+    seafarerVisaIssuingCountryError = null;
+    visaIssuingCountryError = null;
+    residencePermitIssuingCountryError = null;
+    seamanNationalityError = null;
+
+    // Validate passport country
+    if (passportCountry == null || passportCountry!.isEmpty) {
+      passportCountryError = 'please select Country';
+    }
+
+    // Validate seaman issuing country
+    if (seamanIssuingCountry == null || seamanIssuingCountry!.isEmpty) {
+      seamanIssuingCountryError = 'please select Country';
+    }
+
+    // Validate seafarer visa issuing country (only if seafarer visa is selected)
+    if (validSeafarerVisa && (seafarerVisaIssuingCountry == null || seafarerVisaIssuingCountry!.isEmpty)) {
+      seafarerVisaIssuingCountryError = 'please select Country';
+    }
+
+    // Validate visa issuing country
+    if (visaIssuingCountry == null || visaIssuingCountry!.isEmpty) {
+      visaIssuingCountryError = 'please select Country';
+    }
+
+    // Validate residence permit issuing country
+    if (_residencePermitIssuingCountry == null || _residencePermitIssuingCountry!.isEmpty) {
+      residencePermitIssuingCountryError = 'please select Country';
+    }
+
+    // Validate seaman nationality
+    if (seamanNationality == null || seamanNationality!.isEmpty) {
+      seamanNationalityError = 'please select Nationality';
+    }
+
+    notifyListeners();
+  }
+
+  // Check if all dropdown validations pass
+  bool get hasDropdownErrors {
+    return passportCountryError != null ||
+           seamanIssuingCountryError != null ||
+           seamanNationalityError != null ||
+           seafarerVisaIssuingCountryError != null ||
+           visaIssuingCountryError != null ||
+           residencePermitIssuingCountryError != null;
   }
 
   String? validateManual() {

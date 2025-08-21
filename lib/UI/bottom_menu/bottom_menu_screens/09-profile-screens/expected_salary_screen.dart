@@ -90,15 +90,12 @@ class _ExpectedSalaryScreenState extends State<ExpectedSalaryScreen> {
                       controller: provider.minSalaryController,
                       hintText: "10,000",
                       textInputType: TextInputType.number,
-                      borderColor: provider.minSalaryFocusNode.hasFocus
-                          ? AppColors.buttonColor
-                          : AppColors.Color_EEEEEE,
+                      borderColor: AppColors.Color_EEEEEE,
                       textColor: AppColors.Color_212121,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.minSalaryFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                         FocusScope.of(context).requestFocus(provider.maxSalaryFocusNode);
                         setState(() {
@@ -119,15 +116,12 @@ class _ExpectedSalaryScreenState extends State<ExpectedSalaryScreen> {
                       controller: provider.maxSalaryController,
                       hintText: "25,000",
                       textInputType: TextInputType.number,
-                      borderColor: provider.maxSalaryFocusNode.hasFocus
-                          ? AppColors.buttonColor
-                          : AppColors.Color_EEEEEE,
+                      borderColor: AppColors.Color_EEEEEE,
                       textColor: AppColors.Color_212121,
                       labelColor: AppColors.Color_9E9E9E,
                       cursorColor: AppColors.Color_212121,
-                      fillColor: provider.maxSalaryFocusNode.hasFocus
-                          ? AppColors.activeFieldBgColor
-                          : AppColors.Color_FAFAFA,
+                      fillColor: AppColors.Color_FAFAFA,
+                      activeFillColor: AppColors.activeFieldBgColor,
                       onFieldSubmitted: (value) {
                         FocusScope.of(context).unfocus();
                         setState(() {

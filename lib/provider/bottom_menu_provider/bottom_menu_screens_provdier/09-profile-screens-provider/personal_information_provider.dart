@@ -34,6 +34,10 @@ class PersonalInformationProvider extends ChangeNotifier {
 notifyListeners();
   }
 
+  // Dropdown validation error states
+  String? countryOfBirthError;
+  String? nationalityError;
+
 
   List<String> countries = [];
 
@@ -55,6 +59,7 @@ notifyListeners();
 
   PersonalInformationProvider() {
     countries = CountryService().getAll().map((country) => country.name).toList();
+    // No need for focus listeners anymore - handled automatically by ValueListenableBuilder in customTextField
   }
 
   // Controllers for text fields
@@ -206,6 +211,9 @@ notifyListeners();
   }
 
   void resetForm() {
+    // Ensure validation is disabled during reset
+    autovalidateMode = AutovalidateMode.disabled;
+    
     firstNameController.clear();
     lastNameController.clear();
     dobController.clear();
@@ -220,10 +228,69 @@ notifyListeners();
     _profileImage = null;
     _communicationList.clear();
     setcommunicationVisibility(false);
+    
+    // Clear dropdown validation errors
+    countryOfBirthError = null;
+    nationalityError = null;
+    
+    notifyListeners();
+  }
+
+  // Method to set country of birth and clear error
+  void setCountryOfBirth(String country, {bool fromAPI = false}) {
+    countryOfBirthController.text = country;
+    // Only clear error if this is user interaction, not API loading
+    if (!fromAPI) {
+      countryOfBirthError = null;
+    }
+    notifyListeners();
+  }
+
+  // Method to set nationality and clear error
+  void setNationality(String nationality, {bool fromAPI = false}) {
+    nationalityController.text = nationality;
+    // Only clear error if this is user interaction, not API loading
+    if (!fromAPI) {
+      nationalityError = null;
+    }
+    notifyListeners();
+  }
+
+  // Method to validate dropdown fields and set error states
+  void validateDropdownFields() {
+    // Clear previous errors
+    countryOfBirthError = null;
+    nationalityError = null;
+
+    // Validate country of birth
+    if (countryOfBirthController.text.isEmpty) {
+      countryOfBirthError = 'please select Country of Birth';
+    }
+
+    // Validate nationality
+    if (nationalityController.text.isEmpty) {
+      nationalityError = 'please select Nationality';
+    }
+
+    notifyListeners();
+  }
+
+  // Check if all dropdown validations pass
+  bool get hasDropdownErrors {
+    return countryOfBirthError != null || nationalityError != null;
+  }
+
+  // Method to enable real-time validation
+  void enableRealTimeValidation() {
+    autovalidateMode = AutovalidateMode.always;
     notifyListeners();
   }
 
   Future<void> getPersonalInfo(BuildContext context) async {
+    // Ensure validation is disabled while loading data from API
+    autovalidateMode = AutovalidateMode.disabled;
+    countryOfBirthError = null;
+    nationalityError = null;
     resetForm(); // Reset form before fetching new data
     try {
       var response = await NetworkService().getResponse(
@@ -242,9 +309,9 @@ notifyListeners();
           phoneController.text = profileData['mobilePhone'] ?? '';
           directPhoneController.text = profileData['directLinePhone'] ?? '';
           sex = profileData['sex'] ?? 'Male';
-          nationalityController.text = profileData['nationality'] ?? '';
+          setNationality(profileData['nationality'] ?? '', fromAPI: true);
           religionController.text = profileData['religion'] ?? '';
-          countryOfBirthController.text = profileData['countryOfBirth'] ?? '';
+          setCountryOfBirth(profileData['countryOfBirth'] ?? '', fromAPI: true);
           maritalStatus = profileData['maritalStatus'] ?? 'Single';
           numberOfChildren = profileData['numberOfChildren'] ?? 0;
           addressController.text = profileData['homeAddress']==null?'':profileData['homeAddress']['street'] ?? '';

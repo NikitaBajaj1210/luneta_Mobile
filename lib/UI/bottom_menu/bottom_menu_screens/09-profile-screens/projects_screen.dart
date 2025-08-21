@@ -179,9 +179,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     hintText: "Project Title",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.titleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.titleFocusNode.unfocus();
                     },
@@ -197,9 +196,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     hintText: "Your Role",
                     textInputType: TextInputType.text,
                     voidCallback: (value) => value!.isEmpty ? "Field cannot be empty" : null,
-                    fillColor: provider.roleFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.roleFocusNode.unfocus();
                     },
@@ -305,9 +303,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     hintText: "Description",
                     textInputType: TextInputType.multiline,
                     maxLines: 5,
-                    fillColor: provider.descriptionFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.descriptionFocusNode.unfocus();
                     },
@@ -323,9 +320,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     focusNode: provider.projectUrlFocusNode,
                     hintText: "www.yourdomain.com/Project URL/",
                     textInputType: TextInputType.url,
-                    fillColor: provider.projectUrlFocusNode.hasFocus
-                        ? AppColors.activeFieldBgColor
-                        : AppColors.Color_FAFAFA,
+                    fillColor: AppColors.Color_FAFAFA,
+                    activeFillColor: AppColors.activeFieldBgColor,
                     onFieldSubmitted: (String) {
                       provider.projectUrlFocusNode.unfocus();
                     }, voidCallback: (_) {  },
