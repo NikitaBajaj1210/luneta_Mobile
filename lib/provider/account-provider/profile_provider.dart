@@ -485,28 +485,9 @@ class ProfileProvider with ChangeNotifier {
   }
 
   String _formatPhoneNumber() {
-    if (phoneNumber.phoneNumber != null && phoneNumber.phoneNumber!.isNotEmpty) {
-      // String countryCode = '';
-      // switch (phoneNumber.isoCode) {
-      //   case 'IN':
-      //     countryCode = '+91';
-      //     break;
-      //   case 'US':
-      //     countryCode = '+1';
-      //     break;
-      //   case 'GB':
-      //     countryCode = '+44';
-      //     break;
-      //   case 'FR':
-      //     countryCode = '+33';
-      //     break;
-      //   case 'DE':
-      //     countryCode = '+49';
-      //     break;
-      //   default:
-      //     countryCode = '+1';
-      // }
-      return '${phoneNumber.phoneNumber}';
+    if (_phoneController.text.trim().isNotEmpty) {
+      // Return the phone number from the text controller
+      return _phoneController.text.trim();
     }
     return '';
   }
@@ -582,7 +563,12 @@ class ProfileProvider with ChangeNotifier {
           ),
         );
       }
-      print("Profile Body ${formData}");
+      // Print the form data fields
+      print("Profile API Request Body:");
+      formData.fields.forEach((field) {
+        print("${field.key}: ${field.value}");
+      });
+      
       var response = await dio.post(
         seafarerProfileBasicInfo,
         data: formData,
@@ -622,7 +608,6 @@ class ProfileProvider with ChangeNotifier {
           if (name != '') {
             await prefs.setString('fullName', name);
           }
-
 
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
