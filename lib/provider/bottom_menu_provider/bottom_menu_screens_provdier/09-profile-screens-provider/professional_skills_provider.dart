@@ -108,15 +108,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             .add(ComputerAndSoftware(software: software!, level: level!));
       }
       setComputerAndSoftwareVisibility(false);
+      software = null;
+      level = null;
+      computerAndSoftware_IsEdit = false;
+      computerAndSoftware_Edit_Index = null;
     }
-  }
-
-  void editComputerAndSoftware(int index) {
-    computerAndSoftware_Edit_Index = index;
-    computerAndSoftware_IsEdit = true;
-    software = computerAndSoftwareList[index].software;
-    level = computerAndSoftwareList[index].level;
-    setComputerAndSoftwareVisibility(true);
   }
 
   void removeComputerAndSoftware(int index) {
@@ -126,12 +122,6 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void setComputerAndSoftwareVisibility(bool value) {
     showAddSection_computerAndSoftware = value;
-    if (!value) {
-      software = null;
-      level = null;
-      computerAndSoftware_IsEdit = false;
-      computerAndSoftware_Edit_Index = null;
-    }
     notifyListeners();
   }
 
@@ -457,6 +447,11 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             swl: cargoGearSWLController.text));
       }
       setCargoGearExperienceVisibility(false);
+      cargoGearType = null;
+      cargoGearMakerController.clear();
+      cargoGearSWLController.clear();
+      cargoGearExperience_IsEdit = false;
+      cargoGearExperience_Edit_Index = null;
     }
   }
 
@@ -476,13 +471,6 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void setCargoGearExperienceVisibility(bool value) {
     showAddSection_cargoGearExperience = value;
-    if (!value) {
-      cargoGearType = null;
-      cargoGearMakerController.clear();
-      cargoGearSWLController.clear();
-      cargoGearExperience_IsEdit = false;
-      cargoGearExperience_Edit_Index = null;
-    }
     notifyListeners();
   }
 
@@ -591,6 +579,12 @@ class ProfessionalSkillsProvider with ChangeNotifier {
         ));
       }
       setMetalWorkingSkillsVisibility(false);
+      metalWorkingSkill = null;
+      metalWorkingSkillLevel = null;
+      metalWorkingSkillCertificate = false;
+      metalWorkingSkillDocument = null;
+      metalWorkingSkills_IsEdit = false;
+      metalWorkingSkills_Edit_Index = null;
     }
   }
 
@@ -643,14 +637,6 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void setMetalWorkingSkillsVisibility(bool value) {
     showAddSection_metalWorkingSkills = value;
-    if (!value) {
-      metalWorkingSkill = null;
-      metalWorkingSkillLevel = null;
-      metalWorkingSkillCertificate = false;
-      metalWorkingSkillDocument = null;
-      metalWorkingSkills_IsEdit = false;
-      metalWorkingSkills_Edit_Index = null;
-    }
     notifyListeners();
   }
 
@@ -702,6 +688,9 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             .add(TankCoatingExperience(type: tankCoatingType!));
       }
       setTankCoatingExperienceVisibility(false);
+      tankCoatingType = null;
+      tankCoatingExperience_IsEdit = false;
+      tankCoatingExperience_Edit_Index = null;
     }
   }
 
@@ -719,11 +708,6 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void setTankCoatingExperienceVisibility(bool value) {
     showAddSection_tankCoatingExperience = value;
-    if (!value) {
-      tankCoatingType = null;
-      tankCoatingExperience_IsEdit = false;
-      tankCoatingExperience_Edit_Index = null;
-    }
     notifyListeners();
   }
 
@@ -816,6 +800,12 @@ class ProfessionalSkillsProvider with ChangeNotifier {
             observations: observationsController.text));
       }
       setPortStateControlExperienceVisibility(false);
+      regionalAgreement = null;
+      port = null;
+      dateController.clear();
+      observationsController.clear();
+      portStateControlExperience_IsEdit = false;
+      portStateControlExperience_Edit_Index = null;
     }
   }
 
@@ -837,14 +827,6 @@ class ProfessionalSkillsProvider with ChangeNotifier {
 
   void setPortStateControlExperienceVisibility(bool value) {
     showAddSection_portStateControlExperience = value;
-    if (!value) {
-      regionalAgreement = null;
-      port = null;
-      dateController.clear();
-      observationsController.clear();
-      portStateControlExperience_IsEdit = false;
-      portStateControlExperience_Edit_Index = null;
-    }
     notifyListeners();
   }
 

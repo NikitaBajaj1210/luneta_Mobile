@@ -1174,7 +1174,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: Image.asset(
                 "assets/images/Delete.png",
                 height: 2.5.h,
-                color: AppColors.buttonColor,
               ),
             ),
           )

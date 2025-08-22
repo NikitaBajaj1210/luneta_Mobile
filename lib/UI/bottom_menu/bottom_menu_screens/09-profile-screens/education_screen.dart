@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/education_provider.dart';
+import '../../../../Utils/helper.dart';
 import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
@@ -185,7 +186,17 @@ class _EducationScreenState extends State<EducationScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                provider.setAcademicQualificationVisibility(!provider.showAddSection_academicQualification);
+                                if(provider.academicQualification_IsEdit) {
+                                  provider.setAcademicQualificationVisibility(true);
+                                  provider.showAddSection_academicQualification = true;
+                                }else if (provider.showAddSection_academicQualification){
+                                  provider.setAcademicQualificationVisibility(false);
+                                  provider.showAddSection_academicQualification = false;
+                                }else{
+                                  provider.setAcademicQualificationVisibility(true);
+                                  provider.showAddSection_academicQualification = true;
+                                }
+                                // provider.setAcademicQualificationVisibility(!provider.showAddSection_academicQualification);
                                 provider.academicQualification_Edit_Index = null;
                                 provider.academicQualification_IsEdit = false;
                                 provider.educationalDegree = null;
@@ -291,8 +302,12 @@ class _EducationScreenState extends State<EducationScreen> {
                                                   SizedBox(width: 2.w),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      provider.removeAcademicQualification(index);
-                                                    },
+                          if(provider.academicQualification_IsEdit){
+                          showToast("Updating or cancel the current record before continuing.");
+                          }else {
+                          provider.removeAcademicQualification(index);
+                          }
+                          },
                                                     child: Image.asset(
                                                       "assets/images/Delete.png",
                                                       height: 2.h,
@@ -322,71 +337,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                               fontFamily: AppColors.fontFamilyMedium,
                                             ),
                                           ),
-                                          // Display existing document if it exists
-                                          // if (qualification.document != null || (qualification.documentPath != null && qualification.documentPath!.isNotEmpty))
-                                          //   Container(
-                                          //     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                          //     margin: EdgeInsets.only(top: 1.h),
-                                          //     decoration: BoxDecoration(
-                                          //       color: Colors.red.shade100,
-                                          //       borderRadius: BorderRadius.circular(1.h),
-                                          //     ),
-                                          //     child: Row(
-                                          //       children: [
-                                          //         Image.asset("assets/images/Paper.png", height: 3.h),
-                                          //         SizedBox(width: 2.w),
-                                          //         Expanded(
-                                          //           child: Column(
-                                          //             crossAxisAlignment: CrossAxisAlignment.start,
-                                          //             children: [
-                                          //               Text(
-                                          //                 qualification.document != null
-                                          //                   ? qualification.document!.path.split('/').last
-                                          //                   : qualification.documentPath!.split('/').last,
-                                          //                 style: TextStyle(
-                                          //                   fontSize: AppFontSize.fontSize14,
-                                          //                   fontWeight: FontWeight.w700,
-                                          //                   color: AppColors.Color_212121,
-                                          //                   fontFamily: AppColors.fontFamilyBold,
-                                          //                 ),
-                                          //                 overflow: TextOverflow.ellipsis,
-                                          //               ),
-                                          //               if (qualification.document != null)
-                                          //                 FutureBuilder<int>(
-                                          //                   future: qualification.document!.length(),
-                                          //                   builder: (context, snapshot) {
-                                          //                     if (snapshot.hasData) {
-                                          //                       return Text(
-                                          //                         "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                          //                         style: TextStyle(
-                                          //                           fontSize: AppFontSize.fontSize12,
-                                          //                           color: AppColors.Color_616161,
-                                          //                           fontWeight: FontWeight.w500,
-                                          //                           fontFamily: AppColors.fontFamilyMedium,
-                                          //                         ),
-                                          //                       );
-                                          //                     }
-                                          //                     return SizedBox();
-                                          //                   },
-                                          //                 ),
-                                          //             ],
-                                          //           ),
-                                          //         ),
-                                          //         GestureDetector(
-                                          //           onTap: () {
-                                          //             // Remove document from existing qualification
-                                          //             Provider.of<EducationProvider>(context, listen: false)
-                                          //                 .removeAcademicQualificationDocument(index);
-                                          //           },
-                                          //           child: Icon(
-                                          //             Icons.close,
-                                          //             color: Colors.red,
-                                          //             size: 20,
-                                          //           ),
-                                          //         ),
-                                          //       ],
-                                          //     ),
-                                          //   ),
                                         ],
                                       ),
                                     ),
@@ -398,246 +348,126 @@ class _EducationScreenState extends State<EducationScreen> {
                         },
                       ),
                       if (provider.showAddSection_academicQualification)
-                        Form(
-                          key: provider.academicQualificationFormKey,
-                          autovalidateMode: provider.autovalidateModeAcademic,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Educational Degree',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                                blurRadius: 0,   // how soft the shadow is
+                                spreadRadius: 0, // how wide it spreads
+                                // offset: const Offset(4, 4), // X, Y position of shadow
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                ),
-                                child: SearchChoices.single(
-                                  items: provider.educationalDegrees.map((degree) {
-                                    return DropdownMenuItem(
-                                      child: Text(degree),
-                                      value: degree,
-                                    );
-                                  }).toList(),
-                                  value: provider.educationalDegree,
-                                  hint: "Select Degree",
-                                  onClear: (){
-                                    provider.setEducationalDegree('');
-                                  },
-                                  searchHint: "Search for a degree",
-                                  onChanged: (value) {
-                                    provider.setEducationalDegree(value as String);
-                                  },
-                                  isExpanded: true,
-                                  underline: SizedBox(),
-                                  autovalidateMode: provider.autovalidateModeAcademic,
-                                  displayItem: (item, selected) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                        borderRadius: BorderRadius.circular(2.h),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
-                                        ),
+                            ],
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.buttonColor, // Set the border color here
+                              width: 1, // You can adjust the width of the border
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                              key: provider.academicQualificationFormKey,
+                              autovalidateMode: provider.autovalidateModeAcademic,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      provider.academicQualification_IsEdit?'Edit Academic Qualification Detail':'Add Academic Qualification Detail',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize19,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                      child: ListTile(
-                                        title: Text(item.child.data),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Educational Degree',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                    );
-                                  },
-                                  validator: (value) {
-                                    if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                      return 'please select a degree';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Field of Study',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              customTextField(
-                                context: context,
-                                controller: provider.fieldOfStudyController,
-                                focusNode: provider.fieldOfStudyFocusNode,
-                                hintText: 'Enter Field of Study',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                autovalidateMode: provider.autovalidateModeAcademic,
-                                voidCallback: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Please enter Field of Study';
-                                  }
-                                  return null;
-                                },
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: AppColors.Color_FAFAFA,
-                                activeFillColor: AppColors.activeFieldBgColor,
-                                onFieldSubmitted: (String) {},
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Educational Institution',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                    ),
+                                    child: SearchChoices.single(
+                                      items: provider.educationalDegrees.map((degree) {
+                                        return DropdownMenuItem(
+                                          child: Text(degree),
+                                          value: degree,
+                                        );
+                                      }).toList(),
+                                      value: provider.educationalDegree,
+                                      hint: "Select Degree",
+                                      onClear: (){
+                                        provider.setEducationalDegree('');
+                                      },
+                                      searchHint: "Search for a degree",
+                                      onChanged: (value) {
+                                        provider.setEducationalDegree(value as String);
+                                      },
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      autovalidateMode: provider.autovalidateModeAcademic,
+                                      displayItem: (item, selected) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                            borderRadius: BorderRadius.circular(2.h),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(item.child.data),
+                                          ),
+                                        );
+                                      },
+                                      validator: (value) {
+                                        if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
+                                          return 'please select a degree';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ),
-                              customTextField(
-                                context: context,
-                                controller: provider.educationalInstitutionController,
-                                focusNode: provider.educationalInstitutionFocusNode,
-                                hintText: 'Enter Educational Institution',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                autovalidateMode: provider.autovalidateModeAcademic,
-                                voidCallback: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Please enter Educational Institution';
-                                  }
-                                  return null;
-                                },
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: AppColors.Color_FAFAFA,
-                                activeFillColor: AppColors.activeFieldBgColor,
-                                onFieldSubmitted: (String) {},
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Country',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                ),
-                                child: SearchChoices.single(
-                                  items: countries.map((country) {
-                                    return DropdownMenuItem(
-                                      child: Text(country['name']),
-                                      value: country['name'],
-                                    );
-                                  }).toList(),
-                                  value: provider.country,
-                                  hint: "Select Country",
-                                  autovalidateMode: provider.autovalidateModeAcademic,
-                                  onClear: (){
-                                    provider.setCountry('');
-                                  },
-                                  searchHint: "Search for a country",
-                                  onChanged: (value) {
-                                    provider.setCountry(value as String);
-                                  },
-                                  isExpanded: true,
-                                  underline: SizedBox(),
-                                  displayItem: (item, selected) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                        borderRadius: BorderRadius.circular(2.h),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
-                                        ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Field of Study',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                      child: ListTile(
-                                        title: Text(item.child.data),
-                                      ),
-                                    );
-                                  },
-                                  validator: (value) {
-                                    if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                      return 'please select a country';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Graduation Date',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus from all fields before opening date picker
-                                  FocusScope.of(context).unfocus();
-                                  final DateTime? picked = await showDatePicker(
+                                  customTextField(
                                     context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 100),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (picked != null) {
-                                    provider.setGraduationDate(picked);
-                                  }
-                                },
-                                child: AbsorbPointer(
-                                  child: customTextField(
-                                    context: context,
-                                    controller: provider.graduationDateController,
-                                    focusNode: provider.graduationDateFocusNode,
-                                    hintText: 'Select Graduation Date',
-                                    textInputType: TextInputType.datetime,
+                                    controller: provider.fieldOfStudyController,
+                                    focusNode: provider.fieldOfStudyFocusNode,
+                                    hintText: 'Enter Field of Study',
+                                    textInputType: TextInputType.text,
                                     obscureText: false,
                                     autovalidateMode: provider.autovalidateModeAcademic,
                                     voidCallback: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'please select Graduation Date';
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'Please enter Field of Study';
                                       }
                                       return null;
                                     },
@@ -652,259 +482,445 @@ class _EducationScreenState extends State<EducationScreen> {
                                     activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Attach Document',
-                                  style: TextStyle(
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Educational Institution',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  customTextField(
+                                    context: context,
+                                    controller: provider.educationalInstitutionController,
+                                    focusNode: provider.educationalInstitutionFocusNode,
+                                    hintText: 'Enter Educational Institution',
+                                    textInputType: TextInputType.text,
+                                    obscureText: false,
+                                    autovalidateMode: provider.autovalidateModeAcademic,
+                                    voidCallback: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'Please enter Educational Institution';
+                                      }
+                                      return null;
+                                    },
                                     fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                    inputFontSize: AppFontSize.fontSize16,
+                                    backgroundColor: AppColors.Color_FAFAFA,
+                                    borderColor: AppColors.buttonColor,
+                                    textColor: Colors.black,
+                                    labelColor: AppColors.Color_9E9E9E,
+                                    cursorColor: AppColors.Color_212121,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
+                                    onFieldSubmitted: (String) {},
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus to dismiss keyboard before showing bottom sheet
-                                  FocusScope.of(context).unfocus();
-                                  await provider.showAttachmentOptions(context, 'academic');
-                                },
-                                child: DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(15),
-                                  dashPattern: [10, 10],
-                                  color: AppColors.buttonColor,
-                                  strokeWidth: 1,
-                                  child: Container(
-                                    width: 100.w,
-                                    padding: EdgeInsets.symmetric(vertical: 3.h),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Country',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1.h),
                                       color: AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset("assets/images/Upload.png", height: 5.h),
-                                        SizedBox(height: 1.h),
-                                        Text(
-                                          "Browse File",
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: AppColors.fontFamilySemiBold,
-                                            color: AppColors.Color_9E9E9E,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (provider.academicDocument == null && provider.autovalidateModeAcademic == AutovalidateMode.always)
-                                Padding(
-                                  padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                                  child: Text(
-                                    "please select a document",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: AppFontSize.fontSize12,
-                                    ),
-                                  ),
-                                ),
-                              SizedBox(height: 3.h),
-                              if (provider.academicDocument != null)
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider.academicDocument!.path,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.academicDocument!
-                                                    .path
-                                                    .split('/')
-                                                    .last,
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      AppFontSize.fontSize16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color:
-                                                      AppColors.Color_212121,
-                                                  fontFamily:
-                                                      AppColors.fontFamilyBold,
-                                                ),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                              FutureBuilder<int>(
-                                                future: provider
-                                                    .academicDocument!
-                                                    .length(),
-                                                builder:
-                                                    (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                      style: TextStyle(
-                                                        fontSize: AppFontSize
-                                                            .fontSize12,
-                                                        color: AppColors
-                                                            .Color_616161,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: AppColors
-                                                            .fontFamilyMedium,
-                                                      ),
-                                                    );
-                                                  }
-                                                  return SizedBox();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider.removeAttachment(
-                                                'academic');
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              else if (provider.hasExistingAcademicQualificationDocument(
-                                  provider.academicQualification_Edit_Index))
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider.academicDocumentPath_temp!,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.academicDocumentOriginalName_temp ??
-                                                    "Document",
-                                                style: TextStyle(
-                                                    fontSize: AppFontSize
-                                                        .fontSize16,
-                                                    fontWeight:
-                                                        FontWeight.w700,
-                                                    color: AppColors
-                                                        .Color_212121,
-                                                    fontFamily: AppColors
-                                                        .fontFamilyBold),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider.removeExistingAcademicQualificationAttachment(
-                                                    provider.academicQualification_Edit_Index!);
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  child: customButton(
-                                    voidCallback: () {
-                                      setState(() {
-                                        provider.autovalidateModeAcademic = AutovalidateMode.always;
-                                      });
-                                      if (provider.academicQualificationFormKey.currentState!.validate()) {
-                                        AcademicQualification qualification = AcademicQualification(
-                                          educationalDegree: provider.educationalDegree!,
-                                          fieldOfStudy: provider.fieldOfStudyController.text,
-                                          educationalInstitution: provider.educationalInstitutionController.text,
-                                          country: provider.country!,
-                                          graduationDate: provider.graduationDateController.text,
-                                          document: provider.academicDocument,
-                                          documentOriginalName: provider.academicDocumentOriginalName_temp
+                                    child: SearchChoices.single(
+                                      items: countries.map((country) {
+                                        return DropdownMenuItem(
+                                          child: Text(country['name']),
+                                          value: country['name'],
                                         );
-                                        if (provider.academicQualification_IsEdit) {
-                                          provider.updateAcademicQualification(provider.academicQualification_Edit_Index!, qualification);
-                                        } else {
-                                          provider.addAcademicQualification(qualification);
+                                      }).toList(),
+                                      value: provider.country,
+                                      hint: "Select Country",
+                                      autovalidateMode: provider.autovalidateModeAcademic,
+                                      onClear: (){
+                                        provider.setCountry('');
+                                      },
+                                      searchHint: "Search for a country",
+                                      onChanged: (value) {
+                                        provider.setCountry(value as String);
+                                      },
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      displayItem: (item, selected) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                            borderRadius: BorderRadius.circular(2.h),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(item.child.data),
+                                          ),
+                                        );
+                                      },
+                                      validator: (value) {
+                                        if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
+                                          return 'please select a country';
                                         }
-                                        provider.setAcademicQualificationVisibility(false);
-                                        provider.educationalDegree = null;
-                                        provider.fieldOfStudyController.clear();
-                                        provider.educationalInstitutionController.clear();
-                                        provider.country = null;
-                                        provider.graduationDateController.clear();
-                                        provider.academicDocument = null;
-                                        provider.autovalidateModeAcademic = AutovalidateMode.disabled;
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Graduation Date',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
+                                      final DateTime? picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(DateTime.now().year - 100),
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (picked != null) {
+                                        provider.setGraduationDate(picked);
                                       }
                                     },
-                                    buttonText: provider.academicQualification_IsEdit ? "Update" : "Add",
-                                    width: 30.w,
-                                    height: 10.w,
-                                    color: AppColors.buttonColor,
-                                    buttonTextColor: AppColors.buttonTextWhiteColor,
-                                    shadowColor: AppColors.buttonBorderColor,
-                                    fontSize: AppFontSize.fontSize18,
-                                    showShadow: true,
+                                    child: AbsorbPointer(
+                                      child: customTextField(
+                                        context: context,
+                                        controller: provider.graduationDateController,
+                                        focusNode: provider.graduationDateFocusNode,
+                                        hintText: 'Select Graduation Date',
+                                        textInputType: TextInputType.datetime,
+                                        obscureText: false,
+                                        autovalidateMode: provider.autovalidateModeAcademic,
+                                        voidCallback: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'please select Graduation Date';
+                                          }
+                                          return null;
+                                        },
+                                        fontSize: AppFontSize.fontSize16,
+                                        inputFontSize: AppFontSize.fontSize16,
+                                        backgroundColor: AppColors.Color_FAFAFA,
+                                        borderColor: AppColors.buttonColor,
+                                        textColor: Colors.black,
+                                        labelColor: AppColors.Color_9E9E9E,
+                                        cursorColor: AppColors.Color_212121,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
+                                        onFieldSubmitted: (String) {},
+                                      ),
+                                    ),
                                   ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Attach Document',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus to dismiss keyboard before showing bottom sheet
+                                      FocusScope.of(context).unfocus();
+                                      await provider.showAttachmentOptions(context, 'academic');
+                                    },
+                                    child: DottedBorder(
+                                      borderType: BorderType.RRect,
+                                      radius: Radius.circular(15),
+                                      dashPattern: [10, 10],
+                                      color: AppColors.buttonColor,
+                                      strokeWidth: 1,
+                                      child: Container(
+                                        width: 100.w,
+                                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(1.h),
+                                          color: AppColors.Color_FAFAFA,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset("assets/images/Upload.png", height: 5.h),
+                                            SizedBox(height: 1.h),
+                                            Text(
+                                              "Browse File",
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: AppColors.fontFamilySemiBold,
+                                                color: AppColors.Color_9E9E9E,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (provider.academicDocument == null && provider.autovalidateModeAcademic == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        "please select a document",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(height: 3.h),
+                                  if (provider.academicDocument != null)
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider.academicDocument!.path,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.academicDocument!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          AppFontSize.fontSize16,
+                                                      fontWeight: FontWeight.w700,
+                                                      color:
+                                                          AppColors.Color_212121,
+                                                      fontFamily:
+                                                          AppColors.fontFamilyBold,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  FutureBuilder<int>(
+                                                    future: provider
+                                                        .academicDocument!
+                                                        .length(),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Text(
+                                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                          style: TextStyle(
+                                                            fontSize: AppFontSize
+                                                                .fontSize12,
+                                                            color: AppColors
+                                                                .Color_616161,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: AppColors
+                                                                .fontFamilyMedium,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return SizedBox();
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.removeAttachment(
+                                                    'academic');
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  else if (provider.hasExistingAcademicQualificationDocument(
+                                      provider.academicQualification_Edit_Index))
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider.academicDocumentPath_temp!,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.academicDocumentOriginalName_temp ??
+                                                        "Document",
+                                                    style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize16,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: AppColors
+                                                            .Color_212121,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyBold),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.removeExistingAcademicQualificationAttachment(
+                                                        provider.academicQualification_Edit_Index!);
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        // height: 9.h,
+                                        // width: 30.w,
+                                        padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                        child: customButton(
+                                          voidCallback: () {
+                                            // Clear form data
+                                            provider.setAcademicQualificationVisibility(false);
+                                            provider.educationalDegree = null;
+                                            provider.fieldOfStudyController.clear();
+                                            provider.educationalInstitutionController.clear();
+                                            provider.country = null;
+                                            provider.graduationDateController.clear();
+                                            provider.academicDocument = null;
+                                            provider.autovalidateModeAcademic = AutovalidateMode.disabled;
+                                            provider.academicQualification_IsEdit=false;
+                                            provider.academicQualification_Edit_Index=null;
+                                          },
+                                          buttonText: "Cancel",
+                                          width: 30.w,
+                                          height: 10.w,
+                                          color: AppColors.Color_BDBDBD,
+                                          buttonTextColor: AppColors.buttonTextWhiteColor,
+                                          shadowColor: AppColors.buttonBorderColor,
+                                          fontSize: AppFontSize.fontSize18,
+                                          showShadow: true,
+                                        ),
+                                      ),
+                                    Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                          child: customButton(
+                                            voidCallback: () {
+                                              setState(() {
+                                                provider.autovalidateModeAcademic = AutovalidateMode.always;
+                                              });
+                                              if (provider.academicQualificationFormKey.currentState!.validate()) {
+                                                AcademicQualification qualification = AcademicQualification(
+                                                  educationalDegree: provider.educationalDegree!,
+                                                  fieldOfStudy: provider.fieldOfStudyController.text,
+                                                  educationalInstitution: provider.educationalInstitutionController.text,
+                                                  country: provider.country!,
+                                                  graduationDate: provider.graduationDateController.text,
+                                                  document: provider.academicDocument,
+                                                  documentOriginalName: provider.academicDocumentOriginalName_temp
+                                                );
+                                                if (provider.academicQualification_IsEdit) {
+                                                  provider.updateAcademicQualification(provider.academicQualification_Edit_Index!, qualification);
+                                                } else {
+                                                  provider.addAcademicQualification(qualification);
+                                                }
+                                                provider.setAcademicQualificationVisibility(false);
+                                                provider.educationalDegree = null;
+                                                provider.fieldOfStudyController.clear();
+                                                provider.educationalInstitutionController.clear();
+                                                provider.country = null;
+                                                provider.graduationDateController.clear();
+                                                provider.academicDocument = null;
+                                                provider.autovalidateModeAcademic = AutovalidateMode.disabled;
+                                                provider.academicQualification_IsEdit=false;
+                                                provider.academicQualification_Edit_Index=null;
+                                              }
+                                            },
+                                            buttonText: provider.academicQualification_IsEdit ? "Update" : "Add",
+                                            width: 30.w,
+                                            height: 10.w,
+                                            color: AppColors.buttonColor,
+                                            buttonTextColor: AppColors.buttonTextWhiteColor,
+                                            shadowColor: AppColors.buttonBorderColor,
+                                            fontSize: AppFontSize.fontSize18,
+                                            showShadow: true,
+                                          ),
+                                        ),
+                                  ],
                                 ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
 
@@ -928,7 +944,17 @@ class _EducationScreenState extends State<EducationScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                provider.setCertificationVisibility(!provider.showAddSection_certification);
+                                if(provider.certification_IsEdit) {
+                                  provider.setCertificationVisibility(true);
+                                  provider.showAddSection_certification = true;
+                                }else if (provider.showAddSection_certification){
+                                  provider.setCertificationVisibility(false);
+                                  provider.showAddSection_certification = false;
+                                }else{
+                                  provider.setCertificationVisibility(true);
+                                  provider.showAddSection_certification = true;
+                                }
+                                // provider.setCertificationVisibility(!provider.showAddSection_certification);
                                 provider.certification_Edit_Index = null;
                                 provider.certification_IsEdit = false;
 
@@ -1033,7 +1059,11 @@ class _EducationScreenState extends State<EducationScreen> {
                                                   SizedBox(width: 2.w),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      provider.removeCertification(index);
+                          if(provider.certification_IsEdit){
+                          showToast("Updating or cancel the current record before continuing.");
+                          }else {
+                            provider.removeCertification(index);
+                          }
                                                     },
                                                     child: Image.asset(
                                                       "assets/images/Delete.png",
@@ -1054,71 +1084,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                               fontFamily: AppColors.fontFamilyMedium,
                                             ),
                                           ),
-                                        // Display existing document if it exists
-                                        // if (certification.document != null || (certification.documentPath != null && certification.documentPath!.isNotEmpty))
-                                        //   Container(
-                                        //     padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                                        //     margin: EdgeInsets.only(top: 1.h),
-                                        //     decoration: BoxDecoration(
-                                        //       color: Colors.red.shade100,
-                                        //       borderRadius: BorderRadius.circular(1.h),
-                                        //     ),
-                                        //     child: Row(
-                                        //       children: [
-                                        //         Image.asset("assets/images/Paper.png", height: 3.h),
-                                        //         SizedBox(width: 2.w),
-                                        //         Expanded(
-                                        //           child: Column(
-                                        //             crossAxisAlignment: CrossAxisAlignment.start,
-                                        //             children: [
-                                        //               Text(
-                                        //                 certification.document != null
-                                        //                   ? certification.document!.path.split('/').last
-                                        //                   : certification.documentPath!.split('/').last,
-                                        //                 style: TextStyle(
-                                        //                   fontSize: AppFontSize.fontSize14,
-                                        //                   fontWeight: FontWeight.w700,
-                                        //                   color: AppColors.Color_212121,
-                                        //                   fontFamily: AppColors.fontFamilyBold,
-                                        //                 ),
-                                        //                 overflow: TextOverflow.ellipsis,
-                                        //               ),
-                                        //               if (certification.document != null)
-                                        //                 FutureBuilder<int>(
-                                        //                   future: certification.document!.length(),
-                                        //                   builder: (context, snapshot) {
-                                        //                     if (snapshot.hasData) {
-                                        //                       return Text(
-                                        //                         "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                        //                         style: TextStyle(
-                                        //                           fontSize: AppFontSize.fontSize12,
-                                        //                           color: AppColors.Color_616161,
-                                        //                           fontWeight: FontWeight.w500,
-                                        //                           fontFamily: AppColors.fontFamilyMedium,
-                                        //                         ),
-                                        //                       );
-                                        //                     }
-                                        //                     return SizedBox();
-                                        //                   },
-                                        //                 ),
-                                        //             ],
-                                        //           ),
-                                        //         ),
-                                        //         GestureDetector(
-                                        //           onTap: () {
-                                        //             // Remove document from existing certification
-                                        //             Provider.of<EducationProvider>(context, listen: false)
-                                        //                 .removeCertificationDocument(index);
-                                        //           },
-                                        //           child: Icon(
-                                        //             Icons.close,
-                                        //             color: Colors.red,
-                                        //             size: 20,
-                                        //           ),
-                                        //         ),
-                                        //       ],
-                                        //     ),
-                                        //   ),
                                         ],
                                       ),
                                     ),
@@ -1130,490 +1095,554 @@ class _EducationScreenState extends State<EducationScreen> {
                         },
                       ),
                       if (provider.showAddSection_certification)
-                        Form(
-                          key: provider.certificationFormKey,
-                          autovalidateMode: provider.autovalidateModeCertification,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Type of Certification',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                ),
-                                child: SearchChoices.single(
-                                  items: provider.certificationTypes.map((type) {
-                                    return DropdownMenuItem(
-                                      child: Text(type),
-                                      value: type,
-                                    );
-                                  }).toList(),
-                                  value: provider.typeOfCertification,
-                                  hint: "Select Type",
-                                  searchHint: "Search for a type",
-                                  isCaseSensitiveSearch: false,
-                                  closeButton: "Close",
-                                  onClear: (){
-                                    provider.setTypeOfCertification('');
-                                  },
-                                  validator: (value) {
-                                    if ((value == null || value=='') && provider.autovalidateModeCertification== AutovalidateMode.always) {
-                                      return 'please select certification type';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    provider.setTypeOfCertification(value as String);
-                                  },
-                                  autovalidateMode: provider.autovalidateModeCertification,
-                                  isExpanded: true,
-                                  underline: SizedBox(),
-                                  searchFn: (String keyword, items) {
-                                    List<int> ret = <int>[];
-                                    if (items != null) {
-                                      // If keyword is null, empty, or just whitespace, show all items
-                                      if (keyword == null || keyword.trim().isEmpty) {
-                                        for (int i = 0; i < items.length; i++) {
-                                          ret.add(i);
-                                        }
-                                      } else {
-                                        // Search with trimmed, lowercase keyword
-                                        String searchTerm = keyword.toLowerCase().trim();
-                                        for (int i = 0; i < items.length; i++) {
-                                          if (items[i].value.toString().toLowerCase().contains(searchTerm)) {
-                                            ret.add(i);
-                                          }
-                                        }
-                                      }
-                                    }
-                                    return ret;
-                                  },
-                                  displayItem: (item, selected) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                        borderRadius: BorderRadius.circular(2.h),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(item.child.data),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Issuing Authority',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              customTextField(
-                                context: context,
-                                controller: provider.issuingAuthorityController,
-                                focusNode: provider.issuingAuthorityFocusNode,
-                                hintText: 'Enter Issuing Authority',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: AppColors.Color_FAFAFA,
-                                activeFillColor: AppColors.activeFieldBgColor,
-                                onFieldSubmitted: (String) {},
-                                autovalidateMode: provider.autovalidateModeCertification,
-                                voidCallback: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Please enter issuing authority';
-                                  }
-                                  return null;
-                                },                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Issue Date',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus from all fields before opening date picker
-                                  FocusScope.of(context).unfocus();
-                                  final DateTime? picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 100),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (picked != null) {
-                                    provider.setIssueDate(picked);
-                                  }
-                                },
-                                child: AbsorbPointer(
-                                  child: customTextField(
-                                    context: context,
-                                    controller: provider.issueDateController,
-                                    focusNode: provider.issueDateFocusNode,
-                                    hintText: 'Select Issue Date',
-                                    textInputType: TextInputType.datetime,
-                                    obscureText: false,
-                                    fontSize: AppFontSize.fontSize16,
-                                    inputFontSize: AppFontSize.fontSize16,
-                                    backgroundColor: AppColors.Color_FAFAFA,
-                                    borderColor: AppColors.buttonColor,
-                                    textColor: Colors.black,
-                                    labelColor: AppColors.Color_9E9E9E,
-                                    cursorColor: AppColors.Color_212121,
-                                    fillColor: AppColors.Color_FAFAFA,
-                                    activeFillColor: AppColors.activeFieldBgColor,
-                                    onFieldSubmitted: (String) {},
-                                    autovalidateMode: provider.autovalidateModeCertification,
-                                    voidCallback: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'please select issue date';
-                                      }
-                                      return null;
-                                    },                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Expiry Date',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus from all fields before opening date picker
-                                  FocusScope.of(context).unfocus();
-                                  final DateTime? picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
-                                    lastDate: DateTime(DateTime.now().year+100),
-                                  );
-                                  if (picked != null) {
-                                    provider.setExpiryDate(picked);
-                                  }
-                                },
-                                child: AbsorbPointer(
-                                  child: customTextField(
-                                    context: context,
-                                    controller: provider.expiryDateController,
-                                    focusNode: provider.expiryDateFocusNode,
-                                    hintText: 'Select Expiry Date',
-                                    textInputType: TextInputType.datetime,
-                                    obscureText: false,
-                                    fontSize: AppFontSize.fontSize16,
-                                    inputFontSize: AppFontSize.fontSize16,
-                                    backgroundColor: AppColors.Color_FAFAFA,
-                                    borderColor: AppColors.buttonColor,
-                                    textColor: Colors.black,
-                                    labelColor: AppColors.Color_9E9E9E,
-                                    cursorColor: AppColors.Color_212121,
-                                    fillColor: AppColors.Color_FAFAFA,
-                                    activeFillColor: AppColors.activeFieldBgColor,
-                                    onFieldSubmitted: (String) {},
-                                    autovalidateMode: provider.autovalidateModeCertification,
-                                    voidCallback: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'please select expiry date';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Attach Document',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus to dismiss keyboard before showing bottom sheet
-                                  FocusScope.of(context).unfocus();
-                                  await provider.showAttachmentOptions(context, 'certification');
-                                },
-                                child: DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(15),
-                                  dashPattern: [10, 10],
-                                  color: AppColors.buttonColor,
-                                  strokeWidth: 1,
-                                  child: Container(
-                                    width: 100.w,
-                                    padding: EdgeInsets.symmetric(vertical: 3.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1.h),
-                                      color: AppColors.Color_FAFAFA,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset("assets/images/Upload.png", height: 5.h),
-                                        SizedBox(height: 1.h),
-                                        Text(
-                                          "Browse File",
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: AppColors.fontFamilySemiBold,
-                                            color: AppColors.Color_9E9E9E,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (provider.certificationDocument == null && provider.autovalidateModeCertification == AutovalidateMode.always)
-                                Padding(
-                                  padding: EdgeInsets.only(top: 1.h, left: 4.w),
-                                  child: Text(
-                                    "please select a document",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: AppFontSize.fontSize12,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 3.h),
-                              if (provider.certificationDocument != null)
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider.certificationDocument!.path,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.certificationDocument!
-                                                    .path
-                                                    .split('/')
-                                                    .last,
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      AppFontSize.fontSize16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color:
-                                                      AppColors.Color_212121,
-                                                  fontFamily:
-                                                      AppColors.fontFamilyBold,
-                                                ),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                              FutureBuilder<int>(
-                                                future: provider
-                                                    .certificationDocument!
-                                                    .length(),
-                                                builder:
-                                                    (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                      style: TextStyle(
-                                                        fontSize: AppFontSize
-                                                            .fontSize12,
-                                                        color: AppColors
-                                                            .Color_616161,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: AppColors
-                                                            .fontFamilyMedium,
-                                                      ),
-                                                    );
-                                                  }
-                                                  return SizedBox();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider.removeAttachment(
-                                                'certification');
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              else if (provider.hasExistingCertificationDocument(
-                                  provider.certification_Edit_Index))
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider.certificationDocumentPath_temp!,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.certificationDocumentOriginalName_temp ??
-                                                    "Document",
-                                                style: TextStyle(
-                                                    fontSize: AppFontSize
-                                                        .fontSize16,
-                                                    fontWeight:
-                                                        FontWeight.w700,
-                                                    color: AppColors
-                                                        .Color_212121,
-                                                    fontFamily: AppColors
-                                                        .fontFamilyBold),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider
-                                                .removeExistingCertificationAttachment(
-                                                    provider.certification_Edit_Index!);
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  child: customButton(
-                                    voidCallback: () {
-                                      provider.autovalidateModeCertification = AutovalidateMode.always;
-                                      if (provider.certificationFormKey.currentState!.validate()) {
-                                        Certification certification = Certification(
-                                          typeOfCertification: provider.typeOfCertification!,
-                                          issuingAuthority: provider.issuingAuthorityController.text,
-                                          issueDate: provider.issueDateController.text,
-                                          expiryDate: provider.expiryDateController.text,
-                                          document: provider.certificationDocument,
-                                        );
-                                        if (provider.certification_IsEdit) {
-                                          provider.updateCertification(provider.certification_Edit_Index!, certification);
-                                        } else {
-                                          provider.addCertification(certification);
-                                        }
-                                        provider.setCertificationVisibility(false);
-                                        provider.typeOfCertification = null;
-                                        provider.issuingAuthorityController.clear();
-                                        provider.issueDateController.clear();
-                                        provider.expiryDateController.clear();
-                                        provider.certificationDocument = null;
-                                        provider.autovalidateModeCertification = AutovalidateMode.disabled;
-                                      }
-                                        setState(() {
-                                        });
-
-                                    },
-                                    buttonText: provider.certification_IsEdit ? "Update" : "Add",
-                                    width: 30.w,
-                                    height: 10.w,
-                                    color: AppColors.buttonColor,
-                                    buttonTextColor: AppColors.buttonTextWhiteColor,
-                                    shadowColor: AppColors.buttonBorderColor,
-                                    fontSize: AppFontSize.fontSize18,
-                                    showShadow: true,
-                                  ),
-                                ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                                blurRadius: 0,   // how soft the shadow is
+                                spreadRadius: 0, // how wide it spreads
+                                // offset: const Offset(4, 4), // X, Y position of shadow
                               ),
                             ],
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.buttonColor, // Set the border color here
+                              width: 1, // You can adjust the width of the border
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                              key: provider.certificationFormKey,
+                              autovalidateMode: provider.autovalidateModeCertification,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      provider.certification_IsEdit?'Edit Certification and Training Detail':'Add Certification and Training Detail',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize19,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Type of Certification',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                    ),
+                                    child: SearchChoices.single(
+                                      items: provider.certificationTypes.map((type) {
+                                        return DropdownMenuItem(
+                                          child: Text(type),
+                                          value: type,
+                                        );
+                                      }).toList(),
+                                      value: provider.typeOfCertification,
+                                      hint: "Select Type",
+                                      searchHint: "Search for a type",
+                                      isCaseSensitiveSearch: false,
+                                      closeButton: "Close",
+                                      onClear: (){
+                                        provider.setTypeOfCertification('');
+                                      },
+                                      validator: (value) {
+                                        if ((value == null || value=='') && provider.autovalidateModeCertification== AutovalidateMode.always) {
+                                          return 'please select certification type';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {
+                                        provider.setTypeOfCertification(value as String);
+                                      },
+                                      autovalidateMode: provider.autovalidateModeCertification,
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      searchFn: (String keyword, items) {
+                                        List<int> ret = <int>[];
+                                        if (items != null) {
+                                          // If keyword is null, empty, or just whitespace, show all items
+                                          if (keyword == null || keyword.trim().isEmpty) {
+                                            for (int i = 0; i < items.length; i++) {
+                                              ret.add(i);
+                                            }
+                                          } else {
+                                            // Search with trimmed, lowercase keyword
+                                            String searchTerm = keyword.toLowerCase().trim();
+                                            for (int i = 0; i < items.length; i++) {
+                                              if (items[i].value.toString().toLowerCase().contains(searchTerm)) {
+                                                ret.add(i);
+                                              }
+                                            }
+                                          }
+                                        }
+                                        return ret;
+                                      },
+                                      displayItem: (item, selected) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                            borderRadius: BorderRadius.circular(2.h),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(item.child.data),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Issuing Authority',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  customTextField(
+                                    context: context,
+                                    controller: provider.issuingAuthorityController,
+                                    focusNode: provider.issuingAuthorityFocusNode,
+                                    hintText: 'Enter Issuing Authority',
+                                    textInputType: TextInputType.text,
+                                    obscureText: false,
+                                    fontSize: AppFontSize.fontSize16,
+                                    inputFontSize: AppFontSize.fontSize16,
+                                    backgroundColor: AppColors.Color_FAFAFA,
+                                    borderColor: AppColors.buttonColor,
+                                    textColor: Colors.black,
+                                    labelColor: AppColors.Color_9E9E9E,
+                                    cursorColor: AppColors.Color_212121,
+                                    fillColor: AppColors.Color_FAFAFA,
+                                    activeFillColor: AppColors.activeFieldBgColor,
+                                    onFieldSubmitted: (String) {},
+                                    autovalidateMode: provider.autovalidateModeCertification,
+                                    voidCallback: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'Please enter issuing authority';
+                                      }
+                                      return null;
+                                    },                              ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Issue Date',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
+                                      final DateTime? picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(DateTime.now().year - 100),
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (picked != null) {
+                                        provider.setIssueDate(picked);
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: customTextField(
+                                        context: context,
+                                        controller: provider.issueDateController,
+                                        focusNode: provider.issueDateFocusNode,
+                                        hintText: 'Select Issue Date',
+                                        textInputType: TextInputType.datetime,
+                                        obscureText: false,
+                                        fontSize: AppFontSize.fontSize16,
+                                        inputFontSize: AppFontSize.fontSize16,
+                                        backgroundColor: AppColors.Color_FAFAFA,
+                                        borderColor: AppColors.buttonColor,
+                                        textColor: Colors.black,
+                                        labelColor: AppColors.Color_9E9E9E,
+                                        cursorColor: AppColors.Color_212121,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
+                                        onFieldSubmitted: (String) {},
+                                        autovalidateMode: provider.autovalidateModeCertification,
+                                        voidCallback: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'please select issue date';
+                                          }
+                                          return null;
+                                        },                                  ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Expiry Date',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
+                                      final DateTime? picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(DateTime.now().year - 100), // 100 years ago
+                                        lastDate: DateTime(DateTime.now().year+100),
+                                      );
+                                      if (picked != null) {
+                                        provider.setExpiryDate(picked);
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: customTextField(
+                                        context: context,
+                                        controller: provider.expiryDateController,
+                                        focusNode: provider.expiryDateFocusNode,
+                                        hintText: 'Select Expiry Date',
+                                        textInputType: TextInputType.datetime,
+                                        obscureText: false,
+                                        fontSize: AppFontSize.fontSize16,
+                                        inputFontSize: AppFontSize.fontSize16,
+                                        backgroundColor: AppColors.Color_FAFAFA,
+                                        borderColor: AppColors.buttonColor,
+                                        textColor: Colors.black,
+                                        labelColor: AppColors.Color_9E9E9E,
+                                        cursorColor: AppColors.Color_212121,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
+                                        onFieldSubmitted: (String) {},
+                                        autovalidateMode: provider.autovalidateModeCertification,
+                                        voidCallback: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'please select expiry date';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Attach Document',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus to dismiss keyboard before showing bottom sheet
+                                      FocusScope.of(context).unfocus();
+                                      await provider.showAttachmentOptions(context, 'certification');
+                                    },
+                                    child: DottedBorder(
+                                      borderType: BorderType.RRect,
+                                      radius: Radius.circular(15),
+                                      dashPattern: [10, 10],
+                                      color: AppColors.buttonColor,
+                                      strokeWidth: 1,
+                                      child: Container(
+                                        width: 100.w,
+                                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(1.h),
+                                          color: AppColors.Color_FAFAFA,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset("assets/images/Upload.png", height: 5.h),
+                                            SizedBox(height: 1.h),
+                                            Text(
+                                              "Browse File",
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: AppColors.fontFamilySemiBold,
+                                                color: AppColors.Color_9E9E9E,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (provider.certificationDocument == null && provider.autovalidateModeCertification == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        "please select a document",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                  if (provider.certificationDocument != null)
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider.certificationDocument!.path,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.certificationDocument!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          AppFontSize.fontSize16,
+                                                      fontWeight: FontWeight.w700,
+                                                      color:
+                                                          AppColors.Color_212121,
+                                                      fontFamily:
+                                                          AppColors.fontFamilyBold,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  FutureBuilder<int>(
+                                                    future: provider
+                                                        .certificationDocument!
+                                                        .length(),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Text(
+                                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                          style: TextStyle(
+                                                            fontSize: AppFontSize
+                                                                .fontSize12,
+                                                            color: AppColors
+                                                                .Color_616161,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: AppColors
+                                                                .fontFamilyMedium,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return SizedBox();
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.removeAttachment(
+                                                    'certification');
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  else if (provider.hasExistingCertificationDocument(
+                                      provider.certification_Edit_Index))
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider.certificationDocumentPath_temp!,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.certificationDocumentOriginalName_temp ??
+                                                        "Document",
+                                                    style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize16,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: AppColors
+                                                            .Color_212121,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyBold),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider
+                                                    .removeExistingCertificationAttachment(
+                                                        provider.certification_Edit_Index!);
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        // height: 9.h,
+                                        // width: 30.w,
+                                        padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                        child: customButton(
+                                          voidCallback: () {
+                                            // Clear form data
+                                            provider.setCertificationVisibility(false);
+                                            provider.typeOfCertification = null;
+                                            provider.issuingAuthorityController.clear();
+                                            provider.issueDateController.clear();
+                                            provider.expiryDateController.clear();
+                                            provider.certificationDocument = null;
+                                            provider.autovalidateModeCertification = AutovalidateMode.disabled;
+                                            provider.certification_IsEdit=false;
+                                          },
+                                          buttonText: "Cancel",
+                                          width: 30.w,
+                                          height: 10.w,
+                                          color: AppColors.Color_BDBDBD,
+                                          buttonTextColor: AppColors.buttonTextWhiteColor,
+                                          shadowColor: AppColors.buttonBorderColor,
+                                          fontSize: AppFontSize.fontSize18,
+                                          showShadow: true,
+                                        ),
+                                      ),
+                                     Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                          child: customButton(
+                                            voidCallback: () {
+                                              provider.autovalidateModeCertification = AutovalidateMode.always;
+                                              if (provider.certificationFormKey.currentState!.validate()) {
+                                                Certification certification = Certification(
+                                                  typeOfCertification: provider.typeOfCertification!,
+                                                  issuingAuthority: provider.issuingAuthorityController.text,
+                                                  issueDate: provider.issueDateController.text,
+                                                  expiryDate: provider.expiryDateController.text,
+                                                  document: provider.certificationDocument,
+                                                );
+                                                if (provider.certification_IsEdit) {
+                                                  provider.updateCertification(provider.certification_Edit_Index!, certification);
+                                                } else {
+                                                  provider.addCertification(certification);
+                                                }
+                                                provider.setCertificationVisibility(false);
+                                                provider.typeOfCertification = null;
+                                                provider.issuingAuthorityController.clear();
+                                                provider.issueDateController.clear();
+                                                provider.expiryDateController.clear();
+                                                provider.certificationDocument = null;
+                                                provider.autovalidateModeCertification = AutovalidateMode.disabled;
+                                                provider.certification_IsEdit=false;
+                                                provider.certification_Edit_Index=null;
+                                              }
+                                                setState(() {
+                                                });
+
+                                            },
+                                            buttonText: provider.certification_IsEdit ? "Update" : "Add",
+                                            width: 30.w,
+                                            height: 10.w,
+                                            color: AppColors.buttonColor,
+                                            buttonTextColor: AppColors.buttonTextWhiteColor,
+                                            shadowColor: AppColors.buttonBorderColor,
+                                            fontSize: AppFontSize.fontSize18,
+                                            showShadow: true,
+                                          ),
+                                        ),
+                                   ],
+                                 ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
 

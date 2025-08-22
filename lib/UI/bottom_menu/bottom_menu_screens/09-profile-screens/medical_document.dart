@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:search_choices/search_choices.dart';
 import 'dart:io';
 import 'package:luneta/provider/bottom_menu_provider/bottom_menu_screens_provdier/09-profile-screens-provider/medical_document_provider.dart';
+import '../../../../Utils/helper.dart';
 import '../../../../const/Enums.dart';
 import '../../../../const/color.dart';
 import '../../../../const/font_size.dart';
@@ -255,6 +256,18 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                             padding: EdgeInsets.only(right: 10.0, top: 10),
                             child: GestureDetector(
                               onTap: () {
+
+                                if(provider.medicalFitness_IsEdit) {
+                                  provider.setMedicalFitnessVisibility(true);
+                                  provider.showAddSection_medicalFitness = true;
+                                }else if (provider.showAddSection_medicalFitness){
+                                  provider.setMedicalFitnessVisibility(false);
+                                  provider.showAddSection_medicalFitness = false;
+                                }else{
+                                  provider.setMedicalFitnessVisibility(true);
+                                  provider.showAddSection_medicalFitness = true;
+                                }
+
                                 provider.medicalFitnessDocumentType =  '';
                                 provider.medicalFitnessCertificateNoController.text =  '';
                                 provider.medicalFitnessIssuingCountry =  '';
@@ -264,9 +277,9 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                 provider.medicalFitnessNeverExpire = false;
                                 provider.medicalFitnessDocument = null;
 
-                              provider.showAddSection_medicalFitness = !provider.showAddSection_medicalFitness;
+                              // provider.showAddSection_medicalFitness = !provider.showAddSection_medicalFitness;
 
-                                provider.setMedicalFitnessVisibility(provider.showAddSection_medicalFitness);
+                                // provider.setMedicalFitnessVisibility(provider.showAddSection_medicalFitness);
                                 provider.medicalFitness_Edit_Index = null;
                                 provider.medicalFitness_IsEdit = false;
                               },
@@ -464,7 +477,11 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                                   SizedBox(width: 2.w),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      provider.removeMedicalFitness(index);
+                          if(provider.medicalFitness_IsEdit){
+                          showToast("Updating or cancel the current record before continuing.");
+                          }else {
+                            provider.removeMedicalFitness(index);
+                          }
                                                     },
                                                     child: Image.asset(
                                                       "assets/images/Delete.png",
@@ -506,249 +523,126 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                         },
                       ),
                       if (provider.showAddSection_medicalFitness)
-                        Form(
-                          key: provider.medicalFitnessFormKey,
-                          autovalidateMode: provider.autovalidateModeMedical,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Document type',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.buttonColor.withOpacity(0.15), // 👈 shadow color
+                                blurRadius: 0,   // how soft the shadow is
+                                spreadRadius: 0, // how wide it spreads
+                                // offset: const Offset(4, 4), // X, Y position of shadow
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                ),
-                                child: SearchChoices.single(
-                                  items: provider.medicalFitnessDocumentTypes.map((type) {
-                                    return DropdownMenuItem(
-                                      child: Text(type),
-                                      value: type,
-                                    );
-                                  }).toList(),
-                                  value: provider.medicalFitnessDocumentType,
-                                  onClear: (){
-                                    provider.setMedicalFitnessDocumentType('');
-                                  },
-                                  hint: "Select Document Type",
-                                  autovalidateMode: provider.autovalidateModeMedical,
-                                  validator: (value) {
-                                    if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                      return '      please select Document Type';
-                                    }
-                                    return null;
-                                  },
-                                  searchHint: "Search for a document type",
-                                  onChanged: (value) {
-                                    provider.setMedicalFitnessDocumentType(value as String);
-                                  },
-                                  isExpanded: true,
-                                  underline: SizedBox(),
-                                  displayItem: (item, selected) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                        borderRadius: BorderRadius.circular(2.h),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
-                                        ),
+                            ],
+                            borderRadius: BorderRadius.circular(2.h),
+                            border: Border.all(
+                              color: AppColors.buttonColor, // Set the border color here
+                              width: 1, // You can adjust the width of the border
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                              key: provider.medicalFitnessFormKey,
+                              autovalidateMode: provider.autovalidateModeMedical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      provider.medicalFitness_IsEdit?'Edit Medical Fitness Detail':'Add Medical Fitness Detail',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize19,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                      child: ListTile(
-                                        title: Text(item.child.data),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Document type',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Certificate No.',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              customTextField(
-                                context: context,
-                                controller: provider.medicalFitnessCertificateNoController,
-                                focusNode: provider.medicalFitnessCertificateNoFocusNode,
-                                hintText: 'Enter Certificate No.',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                autovalidateMode: provider.autovalidateModeMedical,
-                                voidCallback: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter Certificate No.';
-                                  }
-                                  return null;
-                                },
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: AppColors.Color_FAFAFA,
-                                activeFillColor: AppColors.activeFieldBgColor,
-                                onFieldSubmitted: (String) {},
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Issuing Country',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                    ),
+                                    child: SearchChoices.single(
+                                      items: provider.medicalFitnessDocumentTypes.map((type) {
+                                        return DropdownMenuItem(
+                                          child: Text(type),
+                                          value: type,
+                                        );
+                                      }).toList(),
+                                      value: provider.medicalFitnessDocumentType,
+                                      onClear: (){
+                                        provider.setMedicalFitnessDocumentType('');
+                                      },
+                                      hint: "Select Document Type",
+                                      autovalidateMode: provider.autovalidateModeMedical,
+                                      validator: (value) {
+                                        if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
+                                          return '      please select Document Type';
+                                        }
+                                        return null;
+                                      },
+                                      searchHint: "Search for a document type",
+                                      onChanged: (value) {
+                                        provider.setMedicalFitnessDocumentType(value as String);
+                                      },
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      displayItem: (item, selected) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                            borderRadius: BorderRadius.circular(2.h),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(item.child.data),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.Color_FAFAFA,
-                                  borderRadius: BorderRadius.circular(2.h),
-                                ),
-                                child: SearchChoices.single(
-                                  items: countries.map((country) {
-                                    return DropdownMenuItem(
-                                      child: Text(country['name']),
-                                      value: country['name'],
-                                    );
-                                  }).toList(),
-                                  value: provider.medicalFitnessIssuingCountry,
-                                  onClear: (){
-                                    provider.setMedicalFitnessIssuingCountry('');
-                                  },
-                                  hint: "Select Country",
-                                  autovalidateMode: provider.autovalidateModeMedical,
-                                  validator: (value) {
-                                    if ((value == null) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                      return '      please select Country';
-                                    }
-                                    return null;
-                                  },
-                                  searchHint: "Search for a country",
-                                  onChanged: (value) {
-                                    provider.setMedicalFitnessIssuingCountry(value as String);
-                                  },
-                                  isExpanded: true,
-                                  underline: SizedBox(),
-                                  displayItem: (item, selected) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
-                                        borderRadius: BorderRadius.circular(2.h),
-                                        border: Border.all(
-                                          color: AppColors.transparent,
-                                          width: 1,
-                                        ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Certificate No.',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
                                       ),
-                                      child: ListTile(
-                                        title: Text(item.child.data),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Issuing Clinic/Hospital/Authority',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              customTextField(
-                                context: context,
-                                controller: provider.medicalFitnessIssuingAuthorityController,
-                                focusNode: provider.medicalFitnessIssuingAuthorityFocusNode,
-                                hintText: 'Enter Issuing Clinic/Hospital/Authority',
-                                textInputType: TextInputType.text,
-                                obscureText: false,
-                                autovalidateMode: provider.autovalidateModeMedical,
-                                voidCallback: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter Issuing Clinic/Hospital/Authority';
-                                  }
-                                  return null;
-                                },
-                                fontSize: AppFontSize.fontSize16,
-                                inputFontSize: AppFontSize.fontSize16,
-                                backgroundColor: AppColors.Color_FAFAFA,
-                                borderColor: AppColors.buttonColor,
-                                textColor: Colors.black,
-                                labelColor: AppColors.Color_9E9E9E,
-                                cursorColor: AppColors.Color_212121,
-                                fillColor: AppColors.Color_FAFAFA,
-                                activeFillColor: AppColors.activeFieldBgColor,
-                                onFieldSubmitted: (String) {},
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Issue Date',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus from all fields before opening date picker
-                                  FocusScope.of(context).unfocus();
-                                  final DateTime? picked =
-                                  await showDatePicker(
+                                  customTextField(
                                     context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(
-                                        DateTime.now().year -
-                                            100), // 100 years ago
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (picked != null) {
-                                    provider.setMedicalFitnessIssueDate(picked);
-                                  }
-                                },
-                                child: AbsorbPointer(
-                                  child: customTextField(
-                                    context: context,
-                                    controller: provider.medicalFitnessIssueDateController,
-                                    focusNode: provider.medicalFitnessIssueDateFocusNode,
-                                    hintText: 'Select Issue Date',
-                                    textInputType: TextInputType.datetime,
+                                    controller: provider.medicalFitnessCertificateNoController,
+                                    focusNode: provider.medicalFitnessCertificateNoFocusNode,
+                                    hintText: 'Enter Certificate No.',
+                                    textInputType: TextInputType.text,
                                     obscureText: false,
                                     autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'please select Issue Date';
+                                        return 'Please enter Certificate No.';
                                       }
                                       return null;
                                     },
@@ -763,76 +657,90 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Expiry Date',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Issuing Country',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // Clear focus from all fields before opening date picker
-                                  FocusScope.of(context).unfocus();
-                                  if (provider
-                                      .medicalFitnessIssueDateController
-                                      .text
-                                      .isNotEmpty) {
-                                    final String startDateString =
-                                        provider
-                                            .medicalFitnessIssueDateController
-                                            .text;
-                                    DateTime firstDate = DateTime(
-                                        DateTime.now().year -
-                                            100); // default fallback
-
-                                    if (startDateString.isNotEmpty) {
-                                      try {
-                                        firstDate = DateTime.parse(
-                                            startDateString);
-                                      } catch (e) {
-                                        // handle invalid date format if necessary
-                                        print(
-                                            'Invalid date format: $e');
-                                      }
-                                    }
-
-                                    final DateTime? picked =
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: firstDate,
-                                      lastDate: DateTime(
-                                          DateTime.now().year + 100),
-                                    );
-                                  if (picked != null) {
-                                    provider.setMedicalFitnessExpiryDate(picked);
-                                  }
-                                  } else {
-                                    ShowToast("Error",
-                                        "please select Issue Date First");
-                                  }
-                                },
-                                child: AbsorbPointer(
-                                  child: customTextField(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.Color_FAFAFA,
+                                      borderRadius: BorderRadius.circular(2.h),
+                                    ),
+                                    child: SearchChoices.single(
+                                      items: countries.map((country) {
+                                        return DropdownMenuItem(
+                                          child: Text(country['name']),
+                                          value: country['name'],
+                                        );
+                                      }).toList(),
+                                      value: provider.medicalFitnessIssuingCountry,
+                                      onClear: (){
+                                        provider.setMedicalFitnessIssuingCountry('');
+                                      },
+                                      hint: "Select Country",
+                                      autovalidateMode: provider.autovalidateModeMedical,
+                                      validator: (value) {
+                                        if ((value == null) && provider.autovalidateModeMedical == AutovalidateMode.always) {
+                                          return '      please select Country';
+                                        }
+                                        return null;
+                                      },
+                                      searchHint: "Search for a country",
+                                      onChanged: (value) {
+                                        provider.setMedicalFitnessIssuingCountry(value as String);
+                                      },
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      displayItem: (item, selected) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: selected ? AppColors.activeFieldBgColor : AppColors.Color_FAFAFA,
+                                            borderRadius: BorderRadius.circular(2.h),
+                                            border: Border.all(
+                                              color: AppColors.transparent,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(item.child.data),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Issuing Clinic/Hospital/Authority',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  customTextField(
                                     context: context,
-                                    controller: provider.medicalFitnessExpiryDateController,
-                                    focusNode: provider.medicalFitnessExpiryDateFocusNode,
-                                    hintText: 'Select Expiry Date',
-                                    textInputType: TextInputType.datetime,
+                                    controller: provider.medicalFitnessIssuingAuthorityController,
+                                    focusNode: provider.medicalFitnessIssuingAuthorityFocusNode,
+                                    hintText: 'Enter Issuing Clinic/Hospital/Authority',
+                                    textInputType: TextInputType.text,
                                     obscureText: false,
                                     autovalidateMode: provider.autovalidateModeMedical,
                                     voidCallback: (value) {
-                                      if ((value == null || value.isEmpty) && !provider.medicalFitnessNeverExpire) {
-                                        return 'please select Expiry Date';
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter Issuing Clinic/Hospital/Authority';
                                       }
                                       return null;
                                     },
@@ -847,292 +755,469 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                     activeFillColor: AppColors.activeFieldBgColor,
                                     onFieldSubmitted: (String) {},
                                   ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: provider.medicalFitnessNeverExpire,
-                                    onChanged: (value) {
-                                      provider.setMedicalFitnessNeverExpire(value!);
-                                    },
-                                  ),
-                                  Text('Never expire'),
-                                ],
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  'Attach Document',
-                                  style: TextStyle(
-                                    fontSize: AppFontSize.fontSize16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: AppColors.fontFamilyMedium,
-                                    color: AppColors.Color_424242,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await provider.showAttachmentOptions(context, 'medical_fitness');
-                                },
-                                child: DottedBorder(
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(15),
-                                  dashPattern: [10, 10],
-                                  color: AppColors.buttonColor,
-                                  strokeWidth: 1,
-                                  child: Container(
-                                    width: 100.w,
-                                    padding: EdgeInsets.symmetric(vertical: 3.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1.h),
-                                      color: AppColors.Color_FAFAFA,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset("assets/images/Upload.png", height: 5.h),
-                                        SizedBox(height: 1.h),
-                                        Text(
-                                          "Browse File",
-                                          style: TextStyle(
-                                            fontSize: AppFontSize.fontSize14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: AppColors.fontFamilySemiBold,
-                                            color: AppColors.Color_9E9E9E,
-                                          ),
-                                        ),
-                                      ],
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Issue Date',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              if (provider.medicalFitnessDocument == null &&
-                                  !provider.hasExistingMedicalFitnessDocument(
-                                      provider.medicalFitness_Edit_Index) &&
-                                  provider.autovalidateModeMedical ==
-                                      AutovalidateMode.always)
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 1.h, left: 4.w),
-                                  child: Text(
-                                    "please select Medical Fitness Document",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: AppFontSize.fontSize12,
-                                    ),
-                                  ),
-                                ),
-                              SizedBox(height: 3.h),
-                              // Show existing medical fitness document from API
-                              if (provider.medicalFitnessDocument != null)
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider.medicalFitnessDocument!.path,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider.medicalFitnessDocument!
-                                                    .path
-                                                    .split('/')
-                                                    .last,
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      AppFontSize.fontSize16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color:
-                                                      AppColors.Color_212121,
-                                                  fontFamily:
-                                                      AppColors.fontFamilyBold,
-                                                ),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                              FutureBuilder<int>(
-                                                future: provider
-                                                    .medicalFitnessDocument!
-                                                    .length(),
-                                                builder:
-                                                    (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                      "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
-                                                      style: TextStyle(
-                                                        fontSize: AppFontSize
-                                                            .fontSize12,
-                                                        color: AppColors
-                                                            .Color_616161,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: AppColors
-                                                            .fontFamilyMedium,
-                                                      ),
-                                                    );
-                                                  }
-                                                  return SizedBox();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider.removeAttachment(
-                                                'medical_fitness');
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              else if (provider.hasExistingMedicalFitnessDocument(
-                                  provider.medicalFitness_Edit_Index))
-                                GestureDetector(
-                                  onTap: () {
-                                    OpenFile_View(
-                                        provider
-                                            .medicalDocumentData!
-                                            .medicalFitness![provider
-                                                .medicalFitness_Edit_Index!]
-                                            .documentPath,
-                                        context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade100,
-                                      borderRadius:
-                                          BorderRadius.circular(1.h),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
-
-                                        SizedBox(width: 2.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                provider
-                                                        .medicalDocumentData!
-                                                        .medicalFitness![provider
-                                                            .medicalFitness_Edit_Index!]
-                                                        .documentOriginalName ??
-                                                    "Medical Fitness Document",
-                                                style: TextStyle(
-                                                    fontSize: AppFontSize
-                                                        .fontSize16,
-                                                    fontWeight:
-                                                        FontWeight.w700,
-                                                    color: AppColors
-                                                        .Color_212121,
-                                                    fontFamily: AppColors
-                                                        .fontFamilyBold),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            provider
-                                                .removeExistingMedicalFitnessAttachment(
-                                                    provider
-                                                        .medicalFitness_Edit_Index!);
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                  child: customButton(
-                                    voidCallback: () {
-                                                                              if (provider.medicalFitnessFormKey.currentState!.validate()) {
-                                        MedicalFitness medicalFitness = MedicalFitness(
-                                          documentType: provider.medicalFitnessDocumentType ?? '',
-                                          certificateNo: provider.medicalFitnessCertificateNoController.text,
-                                          issuingCountry: provider.medicalFitnessIssuingCountry ?? '',
-                                          issuingAuthority: provider.medicalFitnessIssuingAuthorityController.text,
-                                          issueDate: provider.medicalFitnessIssueDateController.text,
-                                          expiryDate: provider.medicalFitnessExpiryDateController.text,
-                                          neverExpire: provider.medicalFitnessNeverExpire,
-                                          document: provider.medicalFitnessDocument,
-                                          documentPath: provider.medicalFitnessDocumentPath_temp,
-                                          documentOriginalName: provider.medicalFitnessDocumentOriginalName_temp,
-                                        );
-                                        if (provider.medicalFitness_IsEdit) {
-                                          provider.updateMedicalFitness(provider.medicalFitness_Edit_Index!, medicalFitness);
-                                        } else {
-                                          provider.addMedicalFitness(medicalFitness);
-                                        }
-                                        provider.setMedicalFitnessVisibility(false);
-                                        provider.medicalFitnessDocumentType = null;
-                                        provider.medicalFitnessCertificateNoController.clear();
-                                        provider.medicalFitnessIssuingCountry = null;
-                                        provider.medicalFitnessIssuingAuthorityController.clear();
-                                        provider.medicalFitnessIssueDateController.clear();
-                                        provider.medicalFitnessExpiryDateController.clear();
-                                        provider.medicalFitnessNeverExpire = false;
-                                        provider.medicalFitnessDocument = null;
-                                        provider.autovalidateModeMedical= AutovalidateMode.disabled;
-                                      } else {
-                                        setState(() {
-                                          provider.autovalidateModeMedical = AutovalidateMode.always;
-                                        });
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
+                                      final DateTime? picked =
+                                      await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(
+                                            DateTime.now().year -
+                                                100), // 100 years ago
+                                        lastDate: DateTime.now(),
+                                      );
+                                      if (picked != null) {
+                                        provider.setMedicalFitnessIssueDate(picked);
                                       }
                                     },
-                                    buttonText: provider.medicalFitness_IsEdit ? "Update" : "Add",
-                                    width: 30.w,
-                                    height: 10.w,
-                                    color: AppColors.buttonColor,
-                                    buttonTextColor: AppColors.buttonTextWhiteColor,
-                                    shadowColor: AppColors.buttonBorderColor,
-                                    fontSize: AppFontSize.fontSize18,
-                                    showShadow: true,
+                                    child: AbsorbPointer(
+                                      child: customTextField(
+                                        context: context,
+                                        controller: provider.medicalFitnessIssueDateController,
+                                        focusNode: provider.medicalFitnessIssueDateFocusNode,
+                                        hintText: 'Select Issue Date',
+                                        textInputType: TextInputType.datetime,
+                                        obscureText: false,
+                                        autovalidateMode: provider.autovalidateModeMedical,
+                                        voidCallback: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'please select Issue Date';
+                                          }
+                                          return null;
+                                        },
+                                        fontSize: AppFontSize.fontSize16,
+                                        inputFontSize: AppFontSize.fontSize16,
+                                        backgroundColor: AppColors.Color_FAFAFA,
+                                        borderColor: AppColors.buttonColor,
+                                        textColor: Colors.black,
+                                        labelColor: AppColors.Color_9E9E9E,
+                                        cursorColor: AppColors.Color_212121,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
+                                        onFieldSubmitted: (String) {},
+                                      ),
+                                    ),
                                   ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Expiry Date',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      // Clear focus from all fields before opening date picker
+                                      FocusScope.of(context).unfocus();
+                                      if (provider
+                                          .medicalFitnessIssueDateController
+                                          .text
+                                          .isNotEmpty) {
+                                        final String startDateString =
+                                            provider
+                                                .medicalFitnessIssueDateController
+                                                .text;
+                                        DateTime firstDate = DateTime(
+                                            DateTime.now().year -
+                                                100); // default fallback
+
+                                        if (startDateString.isNotEmpty) {
+                                          try {
+                                            firstDate = DateTime.parse(
+                                                startDateString);
+                                          } catch (e) {
+                                            // handle invalid date format if necessary
+                                            print(
+                                                'Invalid date format: $e');
+                                          }
+                                        }
+
+                                        final DateTime? picked =
+                                        await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: firstDate,
+                                          lastDate: DateTime(
+                                              DateTime.now().year + 100),
+                                        );
+                                      if (picked != null) {
+                                        provider.setMedicalFitnessExpiryDate(picked);
+                                      }
+                                      } else {
+                                        ShowToast("Error",
+                                            "please select Issue Date First");
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: customTextField(
+                                        context: context,
+                                        controller: provider.medicalFitnessExpiryDateController,
+                                        focusNode: provider.medicalFitnessExpiryDateFocusNode,
+                                        hintText: 'Select Expiry Date',
+                                        textInputType: TextInputType.datetime,
+                                        obscureText: false,
+                                        autovalidateMode: provider.autovalidateModeMedical,
+                                        voidCallback: (value) {
+                                          if ((value == null || value.isEmpty) && !provider.medicalFitnessNeverExpire) {
+                                            return 'please select Expiry Date';
+                                          }
+                                          return null;
+                                        },
+                                        fontSize: AppFontSize.fontSize16,
+                                        inputFontSize: AppFontSize.fontSize16,
+                                        backgroundColor: AppColors.Color_FAFAFA,
+                                        borderColor: AppColors.buttonColor,
+                                        textColor: Colors.black,
+                                        labelColor: AppColors.Color_9E9E9E,
+                                        cursorColor: AppColors.Color_212121,
+                                        fillColor: AppColors.Color_FAFAFA,
+                                        activeFillColor: AppColors.activeFieldBgColor,
+                                        onFieldSubmitted: (String) {},
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: provider.medicalFitnessNeverExpire,
+                                        onChanged: (value) {
+                                          provider.setMedicalFitnessNeverExpire(value!);
+                                        },
+                                      ),
+                                      Text('Never expire'),
+                                    ],
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                                    child: Text(
+                                      'Attach Document',
+                                      style: TextStyle(
+                                        fontSize: AppFontSize.fontSize16,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppColors.fontFamilyMedium,
+                                        color: AppColors.Color_424242,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await provider.showAttachmentOptions(context, 'medical_fitness');
+                                    },
+                                    child: DottedBorder(
+                                      borderType: BorderType.RRect,
+                                      radius: Radius.circular(15),
+                                      dashPattern: [10, 10],
+                                      color: AppColors.buttonColor,
+                                      strokeWidth: 1,
+                                      child: Container(
+                                        width: 100.w,
+                                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(1.h),
+                                          color: AppColors.Color_FAFAFA,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset("assets/images/Upload.png", height: 5.h),
+                                            SizedBox(height: 1.h),
+                                            Text(
+                                              "Browse File",
+                                              style: TextStyle(
+                                                fontSize: AppFontSize.fontSize14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: AppColors.fontFamilySemiBold,
+                                                color: AppColors.Color_9E9E9E,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (provider.medicalFitnessDocument == null &&
+                                      !provider.hasExistingMedicalFitnessDocument(
+                                          provider.medicalFitness_Edit_Index) &&
+                                      provider.autovalidateModeMedical ==
+                                          AutovalidateMode.always)
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 1.h, left: 4.w),
+                                      child: Text(
+                                        "please select Medical Fitness Document",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(height: 3.h),
+                                  // Show existing medical fitness document from API
+                                  if (provider.medicalFitnessDocument != null)
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider.medicalFitnessDocument!.path,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider.medicalFitnessDocument!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          AppFontSize.fontSize16,
+                                                      fontWeight: FontWeight.w700,
+                                                      color:
+                                                          AppColors.Color_212121,
+                                                      fontFamily:
+                                                          AppColors.fontFamilyBold,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  FutureBuilder<int>(
+                                                    future: provider
+                                                        .medicalFitnessDocument!
+                                                        .length(),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Text(
+                                                          "${(snapshot.data! / 1024).toStringAsFixed(2)} KB",
+                                                          style: TextStyle(
+                                                            fontSize: AppFontSize
+                                                                .fontSize12,
+                                                            color: AppColors
+                                                                .Color_616161,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: AppColors
+                                                                .fontFamilyMedium,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return SizedBox();
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.removeAttachment(
+                                                    'medical_fitness');
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  else if (provider.hasExistingMedicalFitnessDocument(
+                                      provider.medicalFitness_Edit_Index))
+                                    GestureDetector(
+                                      onTap: () {
+                                        OpenFile_View(
+                                            provider
+                                                .medicalDocumentData!
+                                                .medicalFitness![provider
+                                                    .medicalFitness_Edit_Index!]
+                                                .documentPath,
+                                            context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(1.h),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset("assets/images/Paper.png", height: 3.5.h,color: Colors.red,),
+
+                                            SizedBox(width: 2.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    provider
+                                                            .medicalDocumentData!
+                                                            .medicalFitness![provider
+                                                                .medicalFitness_Edit_Index!]
+                                                            .documentOriginalName ??
+                                                        "Medical Fitness Document",
+                                                    style: TextStyle(
+                                                        fontSize: AppFontSize
+                                                            .fontSize16,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: AppColors
+                                                            .Color_212121,
+                                                        fontFamily: AppColors
+                                                            .fontFamilyBold),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider
+                                                    .removeExistingMedicalFitnessAttachment(
+                                                        provider
+                                                            .medicalFitness_Edit_Index!);
+                                              },
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        // height: 9.h,
+                                        // width: 30.w,
+                                        padding: EdgeInsets.symmetric(horizontal: .5.w, vertical: 2.h),
+                                        child: customButton(
+                                          voidCallback: () {
+                                            // Clear form data
+                                            provider.setMedicalFitnessVisibility(false);
+                                            provider.medicalFitnessDocumentType = null;
+                                            provider.medicalFitnessCertificateNoController.clear();
+                                            provider.medicalFitnessIssuingCountry = null;
+                                            provider.medicalFitnessIssuingAuthorityController.clear();
+                                            provider.medicalFitnessIssueDateController.clear();
+                                            provider.medicalFitnessExpiryDateController.clear();
+                                            provider.medicalFitnessNeverExpire = false;
+                                            provider.medicalFitnessDocument = null;
+                                            provider.autovalidateModeMedical= AutovalidateMode.disabled;
+                                            provider.medicalFitness_IsEdit=false;
+                                            provider.medicalFitness_Edit_Index=null;
+                                          },
+                                          buttonText: "Cancel",
+                                          width: 30.w,
+                                          height: 10.w,
+                                          color: AppColors.Color_BDBDBD,
+                                          buttonTextColor: AppColors.buttonTextWhiteColor,
+                                          shadowColor: AppColors.buttonBorderColor,
+                                          fontSize: AppFontSize.fontSize18,
+                                          showShadow: true,
+                                        ),
+                                      ),
+                                    Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                          child: customButton(
+                                            voidCallback: () {
+                                                                                      if (provider.medicalFitnessFormKey.currentState!.validate()) {
+                                                MedicalFitness medicalFitness = MedicalFitness(
+                                                  documentType: provider.medicalFitnessDocumentType ?? '',
+                                                  certificateNo: provider.medicalFitnessCertificateNoController.text,
+                                                  issuingCountry: provider.medicalFitnessIssuingCountry ?? '',
+                                                  issuingAuthority: provider.medicalFitnessIssuingAuthorityController.text,
+                                                  issueDate: provider.medicalFitnessIssueDateController.text,
+                                                  expiryDate: provider.medicalFitnessExpiryDateController.text,
+                                                  neverExpire: provider.medicalFitnessNeverExpire,
+                                                  document: provider.medicalFitnessDocument,
+                                                  documentPath: provider.medicalFitnessDocumentPath_temp,
+                                                  documentOriginalName: provider.medicalFitnessDocumentOriginalName_temp,
+                                                );
+                                                if (provider.medicalFitness_IsEdit) {
+                                                  provider.updateMedicalFitness(provider.medicalFitness_Edit_Index!, medicalFitness);
+                                                } else {
+                                                  provider.addMedicalFitness(medicalFitness);
+                                                }
+                                                provider.setMedicalFitnessVisibility(false);
+                                                provider.medicalFitnessDocumentType = null;
+                                                provider.medicalFitnessCertificateNoController.clear();
+                                                provider.medicalFitnessIssuingCountry = null;
+                                                provider.medicalFitnessIssuingAuthorityController.clear();
+                                                provider.medicalFitnessIssueDateController.clear();
+                                                provider.medicalFitnessExpiryDateController.clear();
+                                                provider.medicalFitnessNeverExpire = false;
+                                                provider.medicalFitnessDocument = null;
+                                                provider.autovalidateModeMedical= AutovalidateMode.disabled;
+                                                provider.medicalFitness_IsEdit=false;
+                                                provider.medicalFitness_Edit_Index=null;
+                                              } else {
+                                                setState(() {
+                                                  provider.autovalidateModeMedical = AutovalidateMode.always;
+                                                });
+                                              }
+                                            },
+                                            buttonText: provider.medicalFitness_IsEdit ? "Update" : "Add",
+                                            width: 30.w,
+                                            height: 10.w,
+                                            color: AppColors.buttonColor,
+                                            buttonTextColor: AppColors.buttonTextWhiteColor,
+                                            shadowColor: AppColors.buttonBorderColor,
+                                            fontSize: AppFontSize.fontSize18,
+                                            showShadow: true,
+                                          ),
+                                        ),
+                                  ],
                                 ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
 
