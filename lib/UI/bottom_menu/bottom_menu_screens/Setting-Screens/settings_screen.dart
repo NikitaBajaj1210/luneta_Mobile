@@ -479,17 +479,8 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                 customButton(
                   voidCallback: () async {
                     Navigator.of(context).pop();
-                    
-                    // Clear stored login data
-                    await NetworkHelper.clearUserData();
-                    
-                    print("Logout - Cleared stored login data");
-                    
-                    // Navigate to login screen
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      login,
-                      (route) => false, // Remove all previous routes
-                    );
+                    provider.logoutAPI(context);
+
                   },
                   buttonText: "Yes, Logout",
                   width: 48.w,

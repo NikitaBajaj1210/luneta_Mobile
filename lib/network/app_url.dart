@@ -54,6 +54,7 @@ const getAllPositionsHeld = '${baseUrl}master-professional-experience-position/g
 const createOrUpdatePositionsHeld = '${baseUrl}master-professional-experience-position/create-or-update';
 const getAllEmploymentHistoryPosition = '${baseUrl}master-employment-history-position/get-all';
 const createOrUpdateEmploymentHistoryPosition = '${baseUrl}master-employment-history-position/create-or-update';
+const logoutUrl = '${baseUrl}user/logout';
 
 
 //USED  TO API
