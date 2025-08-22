@@ -13,6 +13,7 @@ import '../../../../const/color.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../provider/authentication-provider/login_provider.dart';
 import '../../../../network/network_helper.dart';
+import '../../../../Utils/helper.dart';
 
 // Custom Divider Widget
 class CustomDivider extends StatelessWidget {
@@ -480,16 +481,16 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                   voidCallback: () async {
                     Navigator.of(context).pop();
                     
-                    // Clear stored login data
-                    await NetworkHelper.clearUserData();
+                    // Start manual loading
+                    startLoading(context);
                     
-                    print("Logout - Cleared stored login data");
-                    
-                    // Navigate to login screen
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      login,
-                      (route) => false, // Remove all previous routes
-                    );
+                    try {
+                      await provider.logoutAPI(context);
+                    } catch (e) {
+                      print("Logout error: $e");
+                      // Stop loading on error
+                      if (context.mounted) stopLoading(context);
+                    }
                   },
                   buttonText: "Yes, Logout",
                   width: 48.w,

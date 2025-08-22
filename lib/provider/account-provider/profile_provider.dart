@@ -563,7 +563,12 @@ class ProfileProvider with ChangeNotifier {
           ),
         );
       }
-      print("Profile Body ${formData}");
+      // Print the form data fields
+      print("Profile API Request Body:");
+      formData.fields.forEach((field) {
+        print("${field.key}: ${field.value}");
+      });
+      
       var response = await dio.post(
         seafarerProfileBasicInfo,
         data: formData,
@@ -603,7 +608,6 @@ class ProfileProvider with ChangeNotifier {
           if (name != '') {
             await prefs.setString('fullName', name);
           }
-
 
           Navigator.of(context).pushNamed(bottomMenu);
           resetForm();
