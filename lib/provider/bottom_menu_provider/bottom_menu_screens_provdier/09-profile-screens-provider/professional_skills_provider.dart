@@ -240,6 +240,8 @@ class ProfessionalSkillsProvider with ChangeNotifier {
     await getGeneralCargo(context);
     await getWoodProducts(context);
     await getLashingExperience(context);
+    await fetchProfessionalSkillsData(context);
+
   }
 
   Future<bool> createOrUpdateCargo(

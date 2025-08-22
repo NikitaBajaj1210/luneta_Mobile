@@ -32,7 +32,6 @@ class _ProfessionalSkillsScreenState extends State<ProfessionalSkillsScreen> {
       // Clear only the form inputs first, preserving existing data
       provider.clearFormInputs();
       // Then fetch the data
-      provider.fetchProfessionalSkillsData(context);
       provider.fetchDropdownData(context);
     });
   }
