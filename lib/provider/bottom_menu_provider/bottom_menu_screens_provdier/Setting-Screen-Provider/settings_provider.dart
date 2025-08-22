@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luneta/Utils/helper.dart';
 
 import '../../../../network/app_url.dart';
 import '../../../../network/network_helper.dart';
@@ -38,12 +39,14 @@ class SettingsProvider with ChangeNotifier {
 
   Future<bool?> logoutAPI(BuildContext context) async {
     try {
+      print("Logout - Starting logout process");
+      
       // Make API call to get user's complete profile
       final response = await NetworkService().getResponse(
         logoutUrl,
         false, // showLoading
         context, // context
-            () => {}, // callback
+            notifyListeners, // callback
       );
 
       print("Logout API CALL Response$response");
@@ -54,20 +57,62 @@ class SettingsProvider with ChangeNotifier {
 
         print("Logout - Cleared stored login data");
 
-        // Navigate to login screen
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          login,
-              (route) => false, // Remove all previous routes
-        );
-        // Check if the response contains profile data
-      }
+        // Small delay to ensure context stabilizes
+        await Future.delayed(Duration(milliseconds: 100));
 
-      // Default to false if API call fails or data is missing
-      return null;
+        // Use global navigator to avoid context issues after async operations
+        try {
+          print("Logout - Attempting navigation (context.mounted: ${context.mounted})");
+          
+          // First try with the passed context
+          if (context.mounted) {
+            print("Logout - Using mounted context for navigation");
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              login,
+              (Route<dynamic> route) => false,
+            );
+            print("Logout - Navigation completed with context");
+          } else {
+            // Fallback to global navigator key
+            print("Logout - Context not mounted, trying global navigator");
+            if (Helper.navigatorKey.currentState != null) {
+              Helper.navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                login,
+                (Route<dynamic> route) => false,
+              );
+              print("Logout - Navigation completed with global navigator");
+            } else {
+              print("Logout - Global navigator is also null");
+              // Force stop loading if we can't navigate
+              try {
+                stopLoading(context);
+              } catch (e) {
+                print("Logout - Could not stop loading: $e");
+              }
+            }
+          }
+        } catch (e) {
+          print("Logout - Navigation error: $e");
+          // Try to stop loading on navigation error
+          try {
+            if (context.mounted) stopLoading(context);
+          } catch (loadingError) {
+            print("Logout - Could not stop loading: $loadingError");
+          }
+        }
+
+        return true;
+      } else {
+        print("Logout - API call failed with status: ${response['statusCode']}");
+        // Stop loading on API failure
+        if (context.mounted) stopLoading(context);
+        return false;
+      }
     } catch (e) {
       print("Logout - Logout completion check error: $e");
-      // Default to false on error
-      return null;
+      // Stop loading on error
+      if (context.mounted) stopLoading(context);
+      return false;
     }
   }
 

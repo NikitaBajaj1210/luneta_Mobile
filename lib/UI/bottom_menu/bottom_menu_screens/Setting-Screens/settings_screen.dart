@@ -13,6 +13,7 @@ import '../../../../const/color.dart';
 import '../../../../custom-component/custom-button.dart';
 import '../../../../provider/authentication-provider/login_provider.dart';
 import '../../../../network/network_helper.dart';
+import '../../../../Utils/helper.dart';
 
 // Custom Divider Widget
 class CustomDivider extends StatelessWidget {
@@ -479,8 +480,17 @@ void _showApplyJobBottomSheet(BuildContext context,SettingsProvider provider) {
                 customButton(
                   voidCallback: () async {
                     Navigator.of(context).pop();
-                    provider.logoutAPI(context);
-
+                    
+                    // Start manual loading
+                    startLoading(context);
+                    
+                    try {
+                      await provider.logoutAPI(context);
+                    } catch (e) {
+                      print("Logout error: $e");
+                      // Stop loading on error
+                      if (context.mounted) stopLoading(context);
+                    }
                   },
                   buttonText: "Yes, Logout",
                   width: 48.w,
