@@ -29,7 +29,9 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSCameraUsageDescription</key>
-    <string>We need access to your camera to allow photo or video capture</string>
+    <string>We need access to your camera to take profile picture and attachments</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to upload or attach images.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

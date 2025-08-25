@@ -495,7 +495,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   List<String> metalWorkingSkillsTypes = [
     "Arc welding",
     "Gas welding",
-    // "Inert gas welding",
+    "Inert gas welding",
     "Lathe"
   ];
   // List<String> metalWorkingSkillLevelList = ["Beginner", "Intermediate"];
@@ -734,7 +734,7 @@ class ProfessionalSkillsProvider with ChangeNotifier {
   final dateFocusNode = FocusNode();
   final observationsFocusNode = FocusNode();
   
-  List<String> regionalAgreements = ["AMSA", "China Federation"];
+  List<String> regionalAgreements = ["AMSA", "China Federation",'USCG'];
   List<String> ports = ["DOCKED", "AT_SEA", "ANCHORAGE","IN_TRANSIT","IN_PORT","LOADING","UNLOADING","MAINTENANCE"];
 
   // Get available regional agreements excluding already selected ones

@@ -673,7 +673,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Min. on Board Duration* (Months)',
+                          'Min. on Board Duration (Months)',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
@@ -712,7 +712,7 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
                         child: Text(
-                          'Max. on Board Duration* (Months)',
+                          'Max. on Board Duration (Months)',
                           style: TextStyle(
                             fontSize: AppFontSize.fontSize16,
                             fontWeight: FontWeight.w500,
