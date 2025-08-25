@@ -190,7 +190,11 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
                 ),
               ),
             ) :
-            Scaffold(
+            GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Scaffold(
             backgroundColor: AppColors.Color_FFFFFF,
             bottomNavigationBar: Container(
               height: 11.h,
@@ -1270,7 +1274,8 @@ class _JobConditionsAndPreferencesScreenState extends State<JobConditionsAndPref
               ),
             ),
           ),
-        ));
+        ),
+));
       },
     );
   }
