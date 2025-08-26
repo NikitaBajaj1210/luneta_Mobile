@@ -1,4 +1,4 @@
-package com.costamare.luneta
+package com.navilands.luneta
 
 import io.flutter.embedding.android.FlutterActivity
 

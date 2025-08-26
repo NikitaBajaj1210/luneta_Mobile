@@ -8,7 +8,7 @@ class HomeScreenProvider with ChangeNotifier {
   List<Map<String, dynamic>> _recommendations = [
     {
       'jobTitle': '2nd Officer',
-      'companyName': 'Costamare',
+      'companyName': 'Navilands',
       'companyLogo': 'assets/images/companyLogo.png',
       'jobType': 'Container',
       'salaryRange': 'Competitive Salary \$',

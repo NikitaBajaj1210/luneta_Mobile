@@ -16,7 +16,7 @@ class RecentJobProvider with ChangeNotifier {
     },
     {
       'jobTitle': '3rd Officer',
-      'companyName': 'Costamare',
+      'companyName': 'Navilands',
       'companyLogo': 'assets/images/companyLogo.png',
       'jobType': 'Container',
       'salaryRange': 'Salary Negotiable',
@@ -26,7 +26,7 @@ class RecentJobProvider with ChangeNotifier {
     },
     {
       'jobTitle': '2nd Officer',
-      'companyName': 'Costamare',
+      'companyName': 'Navilands',
       'companyLogo': 'assets/images/companyLogo.png',
       'jobType': 'Container',
       'salaryRange': '\$8,000 - \$10,000 /month',
