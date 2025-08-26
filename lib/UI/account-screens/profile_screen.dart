@@ -65,6 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     if (context.mounted) {
       var provider = Provider.of<ProfileProvider>(context, listen: false);
+      
+      // Force stop any active loading state before disposing
+      provider.forceStopLoadingState();
+      
+      // Dispose focus nodes as usual
       provider.firstNameFocusNode.dispose();
       provider.lastNameFocusNode.dispose();
       provider.emailFocusNode.dispose();

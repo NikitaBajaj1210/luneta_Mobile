@@ -176,8 +176,29 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
               ),
               child: customButton(
                 voidCallback: () async {
-                  if (provider.formKey.currentState!.validate()) {
-                    if(provider.medicalFitnessList.length>0){
+                  // Validate form fields first
+                  bool formValid = provider.formKey.currentState!.validate();
+                  
+                  // Check if at least one medical fitness record exists
+                  bool hasMedicalFitness = provider.medicalFitnessList.length > 0;
+                  
+                  // Check document attachments for Drug & Alcohol Test
+                  bool drugAlcoholDocumentValid = true;
+                  if (provider.drugAndAlcoholTestDocumentType != null && 
+                      provider.drugAndAlcoholTestDocumentType!.isNotEmpty) {
+                    drugAlcoholDocumentValid = provider.drugAndAlcoholTestDocument != null || 
+                                             provider.hasExistingDrugAndAlcoholTestDocument();
+                  }
+                  
+                  // Check document attachments for Vaccination Certificate
+                  bool vaccinationDocumentValid = true;
+                  if (provider.vaccinationCertificateDocumentType != null && 
+                      provider.vaccinationCertificateDocumentType!.isNotEmpty) {
+                    vaccinationDocumentValid = provider.vaccinationCertificateDocument != null || 
+                                              provider.hasExistingVaccinationCertificateDocument();
+                  }
+                  
+                  if (formValid && hasMedicalFitness && drugAlcoholDocumentValid && vaccinationDocumentValid) {
                     // NetworkService.loading = 0;
                     // Call the create/update API
                     bool success = await provider
@@ -199,13 +220,20 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                               ? provider.errorMessage
                               : "Failed to save medical documents");
                     }
-                  }else{
-                      ShowToast("Error","Please add at least one medical fitness detail");
-                    }
                   } else {
+                    // Enable validation mode to show all errors
                     setState(() {
                       provider.autovalidateMode = AutovalidateMode.always;
                     });
+                    
+                    // Show specific error messages
+                    if (!hasMedicalFitness) {
+                      ShowToast("Error", "Please add at least one medical fitness detail");
+                    } else if (!drugAlcoholDocumentValid) {
+                      ShowToast("Error", "Please attach a drug & alcohol test document");
+                    } else if (!vaccinationDocumentValid) {
+                      ShowToast("Error", "Please attach a vaccination certificate document");
+                    }
                   }
                 },
                 buttonText: "Save",
@@ -589,13 +617,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                         provider.setMedicalFitnessDocumentType('');
                                       },
                                       hint: "Select Document Type",
-                                      autovalidateMode: provider.autovalidateModeMedical,
-                                      validator: (value) {
-                                        if ((value == null || value.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                          return '      please select Document Type';
-                                        }
-                                        return null;
-                                      },
                                       searchHint: "Search for a document type",
                                       onChanged: (value) {
                                         provider.setMedicalFitnessDocumentType(value as String);
@@ -619,6 +640,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                       },
                                     ),
                                   ),
+                                  if ((provider.medicalFitnessDocumentType == null || provider.medicalFitnessDocumentType!.isEmpty) && provider.autovalidateModeMedical == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                      child: Text(
+                                        "Please select Document Type",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -687,13 +719,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                         provider.setMedicalFitnessIssuingCountry('');
                                       },
                                       hint: "Select Country",
-                                      autovalidateMode: provider.autovalidateModeMedical,
-                                      validator: (value) {
-                                        if ((value == null) && provider.autovalidateModeMedical == AutovalidateMode.always) {
-                                          return '      please select Country';
-                                        }
-                                        return null;
-                                      },
                                       searchHint: "Search for a country",
                                       onChanged: (value) {
                                         provider.setMedicalFitnessIssuingCountry(value as String);
@@ -717,6 +742,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                       },
                                     ),
                                   ),
+                                  if (provider.medicalFitnessIssuingCountry == null && provider.autovalidateModeMedical == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                      child: Text(
+                                        "Please select Country",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1167,7 +1203,14 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                           child: customButton(
                                             voidCallback: () {
-                                                                                      if (provider.medicalFitnessFormKey.currentState!.validate()) {
+                                              // Validate form fields first
+                                              bool formValid = provider.medicalFitnessFormKey.currentState!.validate();
+                                              
+                                              // Check document attachment validation
+                                              bool documentValid = provider.medicalFitnessDocument != null || 
+                                                                 provider.hasExistingMedicalFitnessDocument(provider.medicalFitness_Edit_Index);
+                                              
+                                              if (formValid && documentValid) {
                                                 MedicalFitness medicalFitness = MedicalFitness(
                                                   documentType: provider.medicalFitnessDocumentType ?? '',
                                                   certificateNo: provider.medicalFitnessCertificateNoController.text,
@@ -1198,9 +1241,15 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                                                 provider.medicalFitness_IsEdit=false;
                                                 provider.medicalFitness_Edit_Index=null;
                                               } else {
+                                                // Enable validation mode to show all errors
                                                 setState(() {
                                                   provider.autovalidateModeMedical = AutovalidateMode.always;
                                                 });
+                                                
+                                                // Show specific error for document if missing
+                                                if (!documentValid) {
+                                                  ShowToast("Error", "Please attach a medical fitness document");
+                                                }
                                               }
                                             },
                                             buttonText: provider.medicalFitness_IsEdit ? "Update" : "Add",
@@ -1365,13 +1414,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           onClear: (){
                             provider.setDrugAndAlcoholTestDocumentType('');
                           },
-                          autovalidateMode: provider.autovalidateMode,
-                          validator: (value){
-                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      please select Document Type';
-                            }
-                            return null;
-                          },
                           searchHint: "Search for a document type",
                           onChanged: (value) {
                             provider.setDrugAndAlcoholTestDocumentType(value as String);
@@ -1395,6 +1437,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                         ),
                       ),
+                      if ((provider.drugAndAlcoholTestDocumentType == null || provider.drugAndAlcoholTestDocumentType!.isEmpty) && provider.autovalidateMode == AutovalidateMode.always)
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                          child: Text(
+                            "Please select Document Type",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1463,13 +1516,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           onClear: (){
                             provider.setDrugAndAlcoholTestIssuingCountry('');
                           },
-                          autovalidateMode: provider.autovalidateMode,
-                          validator: (value){
-                            if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      please select Country';
-                            }
-                            return null;
-                          },
                           searchHint: "Search for a country",
                           onChanged: (value) {
                             provider.setDrugAndAlcoholTestIssuingCountry(value as String);
@@ -1493,6 +1539,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                         ),
                       ),
+                      if (provider.drugAndAlcoholTestIssuingCountry == null && provider.autovalidateMode == AutovalidateMode.always)
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                          child: Text(
+                            "Please select Country",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -2028,13 +2085,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           onClear: (){
                             provider.setVaccinationCertificateDocumentType('');
                           },
-                          autovalidateMode: provider.autovalidateMode,
-                          validator: (value){
-                            if ((value == null || value.isEmpty) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      please select Document Type';
-                            }
-                            return null;
-                          },
                           searchHint: "Search for a document type",
                           onChanged: (value) {
                             provider.setVaccinationCertificateDocumentType(value as String);
@@ -2058,6 +2108,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                         ),
                       ),
+                      if ((provider.vaccinationCertificateDocumentType == null || provider.vaccinationCertificateDocumentType!.isEmpty) && provider.autovalidateMode == AutovalidateMode.always)
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                          child: Text(
+                            "Please select Document Type",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -2126,13 +2187,6 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           onClear: (){
                             provider.setVaccinationCertificateIssuingCountry('');
                           },
-                          autovalidateMode: provider.autovalidateMode,
-                          validator: (value){
-                            if ((value == null) &&  provider.autovalidateMode== AutovalidateMode.always) {
-                              return '      please select Country';
-                            }
-                            return null;
-                          },
                           searchHint: "Search for a country",
                           onChanged: (value) {
                             provider.setVaccinationCertificateIssuingCountry(value as String);
@@ -2156,6 +2210,17 @@ class _MedicalDocumentScreenState extends State<MedicalDocumentScreen> {
                           },
                         ),
                       ),
+                      if (provider.vaccinationCertificateIssuingCountry == null && provider.autovalidateMode == AutovalidateMode.always)
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                          child: Text(
+                            "Please select Country",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: AppFontSize.fontSize12,
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.h),

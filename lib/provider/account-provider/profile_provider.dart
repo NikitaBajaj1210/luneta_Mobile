@@ -584,14 +584,12 @@ class ProfileProvider with ChangeNotifier {
         if (context.mounted) {
           print('Response of Profile Post ==> ${response.data}');
           ShowToast("Success", response.data['message'] ?? "saved successfully");
-          if (context.mounted) stopLoading(context);
+          
+          // Ensure loading is stopped before any navigation
+          await safeStopLoadingWithContext(context);
+          
           ChooseCountryProvider.clearGlobalSelectedCountry();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Provider.of<BottomMenuProvider>(
-                context,
-                listen: false).updateSelectedIndex(0);
-          });
-
+          
           String name = [
             _firstNameController.text.trim(),
             _lastNameController.text.trim()
@@ -609,8 +607,23 @@ class ProfileProvider with ChangeNotifier {
             await prefs.setString('fullName', name);
           }
 
-          Navigator.of(context).pushNamed(bottomMenu);
-          resetForm();
+          // Add a small delay to ensure loading is fully stopped before navigation
+          await Future.delayed(const Duration(milliseconds: 100));
+          
+          if (context.mounted) {
+            // Reset form before navigation
+            resetForm();
+            
+            // Update bottom menu provider and navigate
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) {
+                Provider.of<BottomMenuProvider>(
+                    context,
+                    listen: false).updateSelectedIndex(0);
+                Navigator.of(context).pushNamed(bottomMenu);
+              }
+            });
+          }
         }
       } else {
         if (context.mounted) {
@@ -645,8 +658,23 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Method to forcefully stop loading if still active
+  void forceStopLoadingState() {
+    if (Helper.isLoading) {
+      Helper.isLoading = false;
+    }
+  }
+
+  // Safe method to stop loading with context
+  Future<void> safeStopLoadingWithContext(BuildContext? context) async {
+    await safeStopLoading(context);
+  }
+
   @override
   void dispose() {
+    // Force stop any active loading state
+    forceStopLoadingState();
+    
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();

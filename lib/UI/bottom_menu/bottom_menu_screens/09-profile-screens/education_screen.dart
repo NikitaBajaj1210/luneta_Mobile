@@ -420,7 +420,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                       },
                                       isExpanded: true,
                                       underline: SizedBox(),
-                                      autovalidateMode: provider.autovalidateModeAcademic,
                                       displayItem: (item, selected) {
                                         return Container(
                                           decoration: BoxDecoration(
@@ -436,14 +435,19 @@ class _EducationScreenState extends State<EducationScreen> {
                                           ),
                                         );
                                       },
-                                      validator: (value) {
-                                        if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                          return 'please select a degree';
-                                        }
-                                        return null;
-                                      },
                                     ),
                                   ),
+                                  if (provider.educationalDegree == null && provider.autovalidateModeAcademic == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                      child: Text(
+                                        "Please select a degree",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -547,7 +551,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                       }).toList(),
                                       value: provider.country,
                                       hint: "Select Country",
-                                      autovalidateMode: provider.autovalidateModeAcademic,
                                       onClear: (){
                                         provider.setCountry('');
                                       },
@@ -572,14 +575,19 @@ class _EducationScreenState extends State<EducationScreen> {
                                           ),
                                         );
                                       },
-                                      validator: (value) {
-                                        if (value == null && provider.autovalidateModeAcademic == AutovalidateMode.always) {
-                                          return 'please select a country';
-                                        }
-                                        return null;
-                                      },
                                     ),
                                   ),
+                                  if (provider.country == null && provider.autovalidateModeAcademic == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                      child: Text(
+                                        "Please select a country",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -876,10 +884,14 @@ class _EducationScreenState extends State<EducationScreen> {
                                           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                           child: customButton(
                                             voidCallback: () {
-                                              setState(() {
-                                                provider.autovalidateModeAcademic = AutovalidateMode.always;
-                                              });
-                                              if (provider.academicQualificationFormKey.currentState!.validate()) {
+                                              // Validate form fields first
+                                              bool formValid = provider.academicQualificationFormKey.currentState!.validate();
+                                              
+                                              // Check document attachment validation
+                                              bool documentValid = provider.academicDocument != null || 
+                                                                 provider.hasExistingAcademicQualificationDocument(provider.academicQualification_Edit_Index);
+                                              
+                                              if (formValid && documentValid) {
                                                 AcademicQualification qualification = AcademicQualification(
                                                   educationalDegree: provider.educationalDegree!,
                                                   fieldOfStudy: provider.fieldOfStudyController.text,
@@ -904,6 +916,16 @@ class _EducationScreenState extends State<EducationScreen> {
                                                 provider.autovalidateModeAcademic = AutovalidateMode.disabled;
                                                 provider.academicQualification_IsEdit=false;
                                                 provider.academicQualification_Edit_Index=null;
+                                              } else {
+                                                // Enable validation mode to show all errors
+                                                setState(() {
+                                                  provider.autovalidateModeAcademic = AutovalidateMode.always;
+                                                });
+                                                
+                                                // Show specific error for document if missing
+                                                if (!documentValid) {
+                                                  ShowToast("Error", "Please attach an academic document");
+                                                }
                                               }
                                             },
                                             buttonText: provider.academicQualification_IsEdit ? "Update" : "Add",
@@ -1164,16 +1186,9 @@ class _EducationScreenState extends State<EducationScreen> {
                                       onClear: (){
                                         provider.setTypeOfCertification('');
                                       },
-                                      validator: (value) {
-                                        if ((value == null || value=='') && provider.autovalidateModeCertification== AutovalidateMode.always) {
-                                          return 'please select certification type';
-                                        }
-                                        return null;
-                                      },
                                       onChanged: (value) {
                                         provider.setTypeOfCertification(value as String);
                                       },
-                                      autovalidateMode: provider.autovalidateModeCertification,
                                       isExpanded: true,
                                       underline: SizedBox(),
                                       searchFn: (String keyword, items) {
@@ -1213,6 +1228,17 @@ class _EducationScreenState extends State<EducationScreen> {
                                       },
                                     ),
                                   ),
+                                  if ((provider.typeOfCertification == null || provider.typeOfCertification == '') && provider.autovalidateModeCertification == AutovalidateMode.always)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                      child: Text(
+                                        "Please select certification type",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: AppFontSize.fontSize12,
+                                        ),
+                                      ),
+                                    ),
                                   SizedBox(height: 1.h),
                                   Padding(
                                     padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1600,8 +1626,14 @@ class _EducationScreenState extends State<EducationScreen> {
                                           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                                           child: customButton(
                                             voidCallback: () {
-                                              provider.autovalidateModeCertification = AutovalidateMode.always;
-                                              if (provider.certificationFormKey.currentState!.validate()) {
+                                              // Validate form fields first
+                                              bool formValid = provider.certificationFormKey.currentState!.validate();
+                                              
+                                              // Check document attachment validation
+                                              bool documentValid = provider.certificationDocument != null || 
+                                                                 provider.hasExistingCertificationDocument(provider.certification_Edit_Index);
+                                              
+                                              if (formValid && documentValid) {
                                                 Certification certification = Certification(
                                                   typeOfCertification: provider.typeOfCertification!,
                                                   issuingAuthority: provider.issuingAuthorityController.text,
@@ -1623,10 +1655,17 @@ class _EducationScreenState extends State<EducationScreen> {
                                                 provider.autovalidateModeCertification = AutovalidateMode.disabled;
                                                 provider.certification_IsEdit=false;
                                                 provider.certification_Edit_Index=null;
-                                              }
+                                              } else {
+                                                // Enable validation mode to show all errors
                                                 setState(() {
+                                                  provider.autovalidateModeCertification = AutovalidateMode.always;
                                                 });
-
+                                                
+                                                // Show specific error for document if missing
+                                                if (!documentValid) {
+                                                  ShowToast("Error", "Please attach a certification document");
+                                                }
+                                              }
                                             },
                                             buttonText: provider.certification_IsEdit ? "Update" : "Add",
                                             width: 30.w,
@@ -1734,13 +1773,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                 value: provider.additionalLanguage,
                                 hint: "Select Language",
                                 searchHint: "Search for a language",
-                                validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
-                                    return 'please select language';
-                                  }
-                                  return null;
-                                },
-                                autovalidateMode: provider.autovalidateModeLanguages,
                                 onChanged: (value) {
                                   provider.setAdditionalLanguage(value as String);
                                 },
@@ -1766,6 +1798,17 @@ class _EducationScreenState extends State<EducationScreen> {
                                 },
                               ),
                             ),
+                            if ((provider.additionalLanguage == null || provider.additionalLanguage!.isEmpty) && provider.autovalidateModeLanguages == AutovalidateMode.always)
+                              Padding(
+                                padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                child: Text(
+                                  "Please select language",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: AppFontSize.fontSize12,
+                                  ),
+                                ),
+                              ),
                             SizedBox(height: 1.h),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -1797,7 +1840,6 @@ class _EducationScreenState extends State<EducationScreen> {
                                   provider.setAdditionalLanguageLevel('');
                                 },
                                 searchHint: "Search for a level",
-                           autovalidateMode: provider.autovalidateModeLanguages,
                                 onChanged: (value) {
                                   provider.setAdditionalLanguageLevel(value as String);
                                 },
@@ -1818,14 +1860,19 @@ class _EducationScreenState extends State<EducationScreen> {
                                     ),
                                   );
                                 },
-                                validator: (value) {
-                                  if ((value == null || value.isEmpty) && provider.autovalidateModeLanguages== AutovalidateMode.always) {
-                                    return 'please select a level';
-                                  }
-                                  return null;
-                                },
                               ),
                             ),
+                            if ((provider.additionalLanguageLevel == null || provider.additionalLanguageLevel!.isEmpty) && provider.autovalidateModeLanguages == AutovalidateMode.always)
+                              Padding(
+                                padding: EdgeInsets.only(top: 0.5.h, left: 4.w),
+                                child: Text(
+                                  "Please select a level",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: AppFontSize.fontSize12,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       )

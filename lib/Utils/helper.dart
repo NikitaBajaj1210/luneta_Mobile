@@ -42,6 +42,29 @@ Future<void> stopLoading(BuildContext context) async {
     Navigator.of(context).pop();
   }
 }
+
+// Force stop loading without context dependency
+void forceStopLoading() {
+  if(Helper.isLoading) {
+    Helper.isLoading = false;
+  }
+}
+
+// Safe method to stop loading with context checking
+Future<void> safeStopLoading(BuildContext? context) async {
+  if(Helper.isLoading && context != null && context.mounted) {
+    Helper.isLoading = false;
+    try {
+      Navigator.of(context).pop();
+    } catch (e) {
+      // If navigation fails, just reset the flag
+      Helper.isLoading = false;
+    }
+  } else {
+    // Just reset the flag if context is invalid
+    Helper.isLoading = false;
+  }
+}
 //
 void showToast(String message){
   Fluttertoast.showToast(

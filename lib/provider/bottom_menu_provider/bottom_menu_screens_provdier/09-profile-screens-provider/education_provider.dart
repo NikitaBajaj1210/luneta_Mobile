@@ -443,7 +443,7 @@ class EducationProvider with ChangeNotifier {
     errorMessage = '';
     notifyListeners();
 
-    try {
+    // try {
       String userId = NetworkHelper.loggedInUserId;
       if (userId.isEmpty) {
         hasError = true;
@@ -480,15 +480,15 @@ class EducationProvider with ChangeNotifier {
         NetworkService.loading = 1; // Set error state
         print("Education API Error: $errorMessage");
       }
-    } catch (e) {
-      hasError = true;
-      errorMessage = 'Network error: ${e.toString()}';
-      NetworkService.loading = 1; // Set error state
-      print("Education API Exception: $e");
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+    // } catch (e) {
+    //   hasError = true;
+    //   errorMessage = 'Network error: ${e.toString()}';
+    //   NetworkService.loading = 1; // Set error state
+    //   print("Education API Exception: $e");
+    // } finally {
+    //   isLoading = false;
+    //   notifyListeners();
+    // }
   }
 
   // Populate form data from API response
