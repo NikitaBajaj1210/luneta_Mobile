@@ -11,9 +11,9 @@ class EducationResponse {
 
   factory EducationResponse.fromJson(Map<String, dynamic> json) {
     return EducationResponse(
-      statusCode: json['statusCode'] ?? 0,
-      message: json['message'],
-      data: json['data'] != null ? EducationData.fromJson(json['data']) : null,
+      statusCode: json['statusCode'] is int ? json['statusCode'] : (int.tryParse(json['statusCode']?.toString() ?? '0') ?? 0),
+      message: json['message']?.toString(),
+      data: json['data'] != null && json['data'] is Map<String, dynamic> ? EducationData.fromJson(json['data']) : null,
     );
   }
 }
@@ -43,24 +43,24 @@ class EducationData {
 
   factory EducationData.fromJson(Map<String, dynamic> json) {
     return EducationData(
-      id: json['id'],
-      userId: json['userId'],
-      academicQualification: json['academicQualification'] != null
+      id: json['id']?.toString(),
+      userId: json['userId']?.toString(),
+      academicQualification: json['academicQualification'] != null && json['academicQualification'] is List
           ? List<AcademicQualificationModel>.from(
               json['academicQualification'].map((x) => AcademicQualificationModel.fromJson(x)))
           : null,
-      certificationsAndTrainings: json['certificationsAndTrainings'] != null
+      certificationsAndTrainings: json['certificationsAndTrainings'] != null && json['certificationsAndTrainings'] is List
           ? List<CertificationModel>.from(
               json['certificationsAndTrainings'].map((x) => CertificationModel.fromJson(x)))
           : null,
-      languagesSpoken: json['languagesSpoken'] != null
+      languagesSpoken: json['languagesSpoken'] != null && json['languagesSpoken'] is List
           ? List<LanguageModel>.from(
               json['languagesSpoken'].map((x) => LanguageModel.fromJson(x)))
           : null,
-      degreeDocumentPath: json['degreeDocumentPath'],
-      certificateDocumentPath: json['certificateDocumentPath'],
-      degreeDocumentOriginalName: json['degreeDocumentOriginalName'],
-      certificateDocumentOriginalName: json['certificateDocumentOriginalName'],
+      degreeDocumentPath: json['degreeDocumentPath']?.toString(),
+      certificateDocumentPath: json['certificateDocumentPath']?.toString(),
+      degreeDocumentOriginalName: json['degreeDocumentOriginalName']?.toString(),
+      certificateDocumentOriginalName: json['certificateDocumentOriginalName']?.toString(),
     );
   }
 }
@@ -88,14 +88,14 @@ class AcademicQualificationModel {
 
   factory AcademicQualificationModel.fromJson(Map<String, dynamic> json) {
     return AcademicQualificationModel(
-      educationalDegree: json['educationalDegree'],
-      fieldOfStudy: json['fieldOfStudy'],
-      educationalInstitution: json['educationalInstitution'],
-      country: json['country'],
-      graduationDate: json['graduationDate'],
-      degreeDocumentOriginalName: json['degreeDocumentOriginalName'],
-      document: json['document'],
-      degreeDocumentPath: json['degreeDocumentPath'],
+      educationalDegree: json['educationalDegree']?.toString(),
+      fieldOfStudy: json['fieldOfStudy']?.toString(),
+      educationalInstitution: json['educationalInstitution']?.toString(),
+      country: json['country']?.toString(),
+      graduationDate: json['graduationDate']?.toString(),
+      degreeDocumentOriginalName: json['degreeDocumentOriginalName']?.toString(),
+      document: json['document']?.toString(),
+      degreeDocumentPath: json['degreeDocumentPath']?.toString(),
     );
   }
 }
@@ -124,16 +124,26 @@ class CertificationModel {
   });
 
   factory CertificationModel.fromJson(Map<String, dynamic> json) {
+    // Handle certificationType which might come as List or String
+    String? certificationType;
+    if (json['certificationType'] is List) {
+      // If it's a list, take the first element or join them
+      List<dynamic> certTypes = json['certificationType'];
+      certificationType = certTypes.isNotEmpty ? certTypes.first?.toString() : null;
+    } else {
+      certificationType = json['certificationType']?.toString();
+    }
+    
     return CertificationModel(
-      certificationType: json['certificationType'],
-      issuingAuthority: json['issuingAuthority'],
-      issueDate: json['issueDate'],
-      expiryDate: json['expiryDate'],
-      neverExpire: json['neverExpire'],
-      certificationsAndTrainingsDocumentOriginalName: json['certificationsAndTrainingsDocumentOriginalName'],
-      document: json['document'],
-      certificateDocumentPath: json['certificateDocumentPath'],
-      certificateDocumentOriginalName: json['certificateDocumentOriginalName'],
+      certificationType: certificationType,
+      issuingAuthority: json['issuingAuthority']?.toString(),
+      issueDate: json['issueDate']?.toString(),
+      expiryDate: json['expiryDate']?.toString(),
+      neverExpire: json['neverExpire'] is bool ? json['neverExpire'] : false,
+      certificationsAndTrainingsDocumentOriginalName: json['certificationsAndTrainingsDocumentOriginalName']?.toString(),
+      document: json['document']?.toString(),
+      certificateDocumentPath: json['certificateDocumentPath']?.toString(),
+      certificateDocumentOriginalName: json['certificateDocumentOriginalName']?.toString(),
     );
   }
 }
@@ -150,10 +160,21 @@ class LanguageModel {
   });
 
   factory LanguageModel.fromJson(Map<String, dynamic> json) {
+    // Handle native languages list safely
+    List<String>? nativeLanguages;
+    if (json['native'] != null) {
+      if (json['native'] is List) {
+        nativeLanguages = List<String>.from(json['native'].map((e) => e?.toString() ?? ''));
+      } else {
+        // If it's a single string, convert to list
+        nativeLanguages = [json['native'].toString()];
+      }
+    }
+    
     return LanguageModel(
-      native: json['native'] != null ? List<String>.from(json['native']) : null,
-      additionalLanguage: json['additionalLanguage'],
-      level: json['level'],
+      native: nativeLanguages,
+      additionalLanguage: json['additionalLanguage']?.toString(),
+      level: json['level']?.toString(),
     );
   }
 } 
