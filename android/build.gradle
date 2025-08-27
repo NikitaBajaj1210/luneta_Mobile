@@ -1,3 +1,18 @@
+// Top-level build.gradle
+
+buildscript {
+    ext.kotlin_version = '1.9.10' // latest compatible with AGP 8.x
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.1.1"  // AGP version
+        classpath "com.google.gms:google-services:4.3.14" // Google Services plugin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,10 +21,9 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 

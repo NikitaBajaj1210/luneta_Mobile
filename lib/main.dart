@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:luneta/const/color.dart';
@@ -61,10 +63,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_screen.dart';
 import 'Utils/helper.dart';
 import 'custom-component/globalComponent.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setStatusBarColor(true);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
 
   // Load and sync user data from SharedPreferences
   await NetworkHelper.syncUserData();
@@ -142,6 +147,11 @@ Future<void> main() async {
       child:  InitRoutes(),
     ),
   );
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 class InitRoutes extends StatelessWidget {

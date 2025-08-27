@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "389656881772",
+    "project_id": "lueta-staging",
+    "storage_bucket": "lueta-staging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389656881772:android:147c6f1cfe47bd4dd84649",
+        "android_client_info": {
+          "package_name": "com.navilands.luneta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCheHp1aXLk6U_B2d1KY2Tw89hbD8Pg8Zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
