@@ -64,10 +64,12 @@ import 'UI/bottom_menu/bottom_menu_screens/Setting-Screens/language_settings_scr
 import 'Utils/helper.dart';
 import 'custom-component/globalComponent.dart';
 import 'firebase_options.dart';
+import 'notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setStatusBarColor(true);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
@@ -156,8 +158,20 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class InitRoutes extends StatelessWidget {
 
+  final NotificationServices notificationServices = NotificationServices();
+
   @override
   Widget build(BuildContext context) {
+    notificationServices.requestNotificationPermission();
+    notificationServices.firebaseInit(context);
+    notificationServices.iosForegroundSettings();
+    // notificationServices.setupInteractMessage(context);
+    notificationServices.getFcmToken().then((token) {
+      print("FCM Token:==========================> $token");
+      NetworkHelper.fcmToken = token;
+      notificationServices.checkToken();
+    });
+    notificationServices.isTokenRefresh();
     // Precache images
     precacheImage(AssetImage("assets/images/LunetaLogo.png"), context);
     precacheImage(AssetImage("assets/images/LogoSubTitle.png"), context);
